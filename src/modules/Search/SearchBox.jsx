@@ -6,28 +6,37 @@ import { Plane, Hotel, Sparkles, ArrowRight } from "lucide-react";
 const SearchBox = () => {
   const [activeTab, setActiveTab] = useState("flights");
   const navigate = useNavigate();
+
+  const handleTabChange = (tabId) => {
+    if (tabId === "packages") {
+      navigate("/packages");
+      return;
+    }
+
+    setActiveTab(tabId);
+  };
+
   const ComingSoonCard = ({ type }) => {
     const isFlight = type === "flights";
 
     return (
       <div
         className="
-        relative overflow-hidden
-        min-h-47.5
-        rounded-2xl
-        border
-        p-4 md:p-6
-        flex flex-col items-center justify-center
-        text-center
-        shadow-[0_18px_55px_rgba(0,0,0,0.45)]
-      "
+          relative overflow-hidden
+          min-h-47.5
+          rounded-2xl
+          border
+          p-4 md:p-6
+          flex flex-col items-center justify-center
+          text-center
+          shadow-[0_18px_55px_rgba(0,0,0,0.45)]
+        "
         style={{
           background:
             "linear-gradient(135deg, rgba(18,24,33,0.95), rgba(31,38,52,0.9))",
           borderColor: "rgba(234, 168, 42, 0.22)",
         }}
       >
-        {/* Background Glow */}
         <div
           className="absolute -top-16 -right-16 w-44 h-44 rounded-full blur-3xl opacity-20"
           style={{
@@ -44,18 +53,17 @@ const SearchBox = () => {
           }}
         />
 
-        {/* Badge */}
         <div
           className="
-          relative z-10
-          inline-flex items-center gap-2
-          px-3 py-1.5
-          rounded-full
-          border
-          text-[10px] md:text-xs
-          uppercase tracking-[0.2em]
-          mb-3
-        "
+            relative z-10
+            inline-flex items-center gap-2
+            px-3 py-1.5
+            rounded-full
+            border
+            text-[10px] md:text-xs
+            uppercase tracking-[0.2em]
+            mb-3
+          "
           style={{
             color: "var(--gold-main)",
             borderColor: "rgba(234, 168, 42, 0.35)",
@@ -66,16 +74,15 @@ const SearchBox = () => {
           Premium Feature
         </div>
 
-        {/* Icon */}
         <div
           className="
-          relative z-10
-          w-12 h-12 md:w-14 md:h-14
-          rounded-2xl
-          flex items-center justify-center
-          mb-3
-          shadow-[0_14px_35px_rgba(234,168,42,0.18)]
-        "
+            relative z-10
+            w-12 h-12 md:w-14 md:h-14
+            rounded-2xl
+            flex items-center justify-center
+            mb-3
+            shadow-[0_14px_35px_rgba(234,168,42,0.18)]
+          "
           style={{
             background:
               "linear-gradient(135deg, var(--color-start), var(--color-end))",
@@ -94,12 +101,12 @@ const SearchBox = () => {
 
         <h3
           className="
-          relative z-10
-          mt-2
-          text-2xl md:text-4xl
-          font-bold
-          leading-tight
-        "
+            relative z-10
+            mt-2
+            text-2xl md:text-4xl
+            font-bold
+            leading-tight
+          "
           style={{
             fontFamily: "var(--font-heading)",
             color: "var(--gold-main)",
@@ -110,12 +117,12 @@ const SearchBox = () => {
 
         <p
           className="
-          relative z-10
-          mt-2
-          max-w-md
-          text-xs md:text-sm
-          leading-relaxed
-        "
+            relative z-10
+            mt-2
+            max-w-md
+            text-xs md:text-sm
+            leading-relaxed
+          "
           style={{ color: "var(--text-muted)" }}
         >
           We are preparing a smoother premium{" "}
@@ -124,15 +131,15 @@ const SearchBox = () => {
 
         <div
           className="
-          relative z-10
-          mt-4
-          inline-flex items-center gap-2
-          px-4 py-2
-          rounded-full
-          text-xs font-semibold
-          cursor-not-allowed
-          opacity-80
-        "
+            relative z-10
+            mt-4
+            inline-flex items-center gap-2
+            px-4 py-2
+            rounded-full
+            text-xs font-semibold
+            cursor-not-allowed
+            opacity-80
+          "
           style={{
             background:
               "linear-gradient(90deg, var(--color-start), var(--color-end))",
@@ -154,18 +161,13 @@ const SearchBox = () => {
       case "hotels":
         return <ComingSoonCard type="hotels" />;
 
-      case "packages":
-        navigate("/packages");
-        return null;
-
       default:
-        return null;
+        return <ComingSoonCard type="flights" />;
     }
   };
 
   return (
     <div className="relative w-full max-w-6xl mx-auto group">
-      {/* Outer Glow Effect */}
       <div
         className="absolute -inset-px rounded-3xl blur-xl opacity-30 group-hover:opacity-50 transition duration-500"
         style={{
@@ -174,7 +176,6 @@ const SearchBox = () => {
         }}
       />
 
-      {/* Main Card */}
       <div
         className="
           relative
@@ -192,7 +193,6 @@ const SearchBox = () => {
           color: "var(--text-main)",
         }}
       >
-        {/* Decorative Gold Highlight */}
         <div
           className="absolute top-0 right-0 w-36 h-32 rounded-full opacity-10 blur-3xl"
           style={{
@@ -201,7 +201,6 @@ const SearchBox = () => {
           }}
         />
 
-        {/* Heading */}
         <div className="mb-3">
           <h2
             className="text-2xl md:text-3xl tracking-wide"
@@ -214,10 +213,8 @@ const SearchBox = () => {
           </h2>
         </div>
 
-        {/* Tabs */}
-        <Tabs activeTab={activeTab} setActiveTab={setActiveTab} />
+        <Tabs activeTab={activeTab} setActiveTab={handleTabChange} />
 
-        {/* Form Area */}
         <div className="mt-8 transition-all duration-500">{renderForm()}</div>
       </div>
     </div>
