@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
@@ -31,17 +31,26 @@ const fetchPackages = async (page = 1, limit = 8, destination = "") => {
 
 const PackageSection = ({ limit = 8 }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [searchParams] = useSearchParams();
+
+  const isPackagesPage = location.pathname === "/packages";
 
   const pageFromUrl = Number(searchParams.get("page")) || 1;
   const destinationFromUrl = searchParams.get("destination") || "";
 
-  const [page, setPage] = useState(pageFromUrl);
-  const [destination, setDestination] = useState(destinationFromUrl);
-  const [debouncedDestination, setDebouncedDestination] =
-    useState(destinationFromUrl);
+  const [page, setPage] = useState(isPackagesPage ? pageFromUrl : 1);
+  const [destination, setDestination] = useState(
+    isPackagesPage ? destinationFromUrl : "",
+  );
+  const [debouncedDestination, setDebouncedDestination] = useState(
+    isPackagesPage ? destinationFromUrl : "",
+  );
 
   const updateUrl = (newPage, newDestination = debouncedDestination) => {
+    // ✅ Do not redirect homepage to /packages
+    if (!isPackagesPage) return;
+
     const params = new URLSearchParams();
 
     if (newPage > 1) {
@@ -64,20 +73,25 @@ const PackageSection = ({ limit = 8 }) => {
     updateUrl(validPage);
   };
 
-  // ✅ Sync state if URL changes
+  // ✅ Sync state only on packages page
   useEffect(() => {
+    if (!isPackagesPage) return;
+
     setPage(pageFromUrl);
     setDestination(destinationFromUrl);
     setDebouncedDestination(destinationFromUrl);
-  }, [pageFromUrl, destinationFromUrl]);
+  }, [pageFromUrl, destinationFromUrl, isPackagesPage]);
 
-  // ✅ Debounce search + update URL
+  // ✅ Debounce search + update URL only on /packages
   useEffect(() => {
     const timer = setTimeout(() => {
       const trimmedDestination = destination.trim();
 
       setDebouncedDestination(trimmedDestination);
       setPage(1);
+
+      // ✅ Do not navigate when PackageSection is used on homepage
+      if (!isPackagesPage) return;
 
       const params = new URLSearchParams();
 
@@ -91,7 +105,7 @@ const PackageSection = ({ limit = 8 }) => {
     }, 500);
 
     return () => clearTimeout(timer);
-  }, [destination, navigate]);
+  }, [destination, navigate, isPackagesPage]);
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ["packages", page, debouncedDestination, limit],
