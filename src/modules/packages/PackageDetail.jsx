@@ -328,7 +328,7 @@ Please share the best quote and itinerary.`;
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-(--bg-main) flex items-center justify-center text-white">
+      <div className="min-h-screen bg-(--bg-main) flex items-center justify-center text-white px-4">
         <div className="text-center">
           <div className="w-14 h-14 mx-auto mb-4 rounded-full border-2 border-(--gold-main) border-t-transparent animate-spin" />
           <p className="text-gray-300">Loading package...</p>
@@ -339,7 +339,7 @@ Please share the best quote and itinerary.`;
 
   if (isError || !pkg) {
     return (
-      <div className="min-h-screen bg-(--bg-main) flex items-center justify-center text-red-400">
+      <div className="min-h-screen bg-(--bg-main) flex items-center justify-center text-red-400 px-4 text-center">
         Package not found
       </div>
     );
@@ -354,80 +354,82 @@ Please share the best quote and itinerary.`;
   ];
 
   return (
-    <div className="bg-(--bg-main) text-white min-h-screen pb-28 overflow-hidden">
+    <div className="bg-(--bg-main) text-white min-h-screen pb-24 md:pb-28 overflow-hidden">
       {/* HERO */}
-      <section className="relative min-h-180 overflow-hidden">
+      <section className="relative min-h-[690px] sm:min-h-[780px] lg:min-h-[860px] overflow-hidden">
         <img
           src={heroImage}
           alt={packageTitle}
-          className="absolute inset-0 w-full h-full object-cover scale-105"
+          className="absolute inset-0 w-full h-full object-cover object-center scale-105"
         />
-        
 
-        <div className="absolute inset-0 bg-black/55" />
-        <div className="absolute inset-0 bg-linear-to-r from-[#03070d] via-[#07101acc] to-black/40" />
-        <div className="absolute inset-0 bg-linear-to-b from-black/20 via-transparent to-(--bg-main)" />
+        <div className="absolute inset-0 bg-black/65 sm:bg-black/60" />
+        <div className="absolute inset-0 bg-linear-to-r from-[#020617] via-[#020617cc] to-black/30" />
+        <div className="absolute inset-0 bg-linear-to-b from-black/10 via-transparent to-(--bg-main)" />
 
-        <div className="absolute -top-32 -left-32 w-96 h-96 bg-yellow-500/20 blur-[120px] rounded-full" />
-        <div className="absolute top-40 -right-32 w-96 h-96 bg-blue-500/10 blur-[120px] rounded-full" />
+        <div className="absolute -top-36 -left-36 w-[420px] h-[420px] bg-yellow-500/20 blur-[130px] rounded-full" />
+        <div className="absolute top-40 -right-40 w-[420px] h-[420px] bg-cyan-500/10 blur-[130px] rounded-full" />
 
-        <div className="relative max-w-7xl mx-auto px-4 pt-24 pb-16">
-          <div className="flex items-center justify-between mb-10">
+        <div className="relative max-w-7xl mx-auto px-3 sm:px-6 pt-16 sm:pt-24 pb-12 sm:pb-16">
+          <div className="flex items-center justify-between gap-2 mb-6 sm:mb-12">
             <button
               onClick={() => navigate("/packages")}
-              className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/15 border border-white/15 rounded-full px-5 py-2.5 text-sm transition backdrop-blur-md"
+              className="inline-flex items-center gap-1.5 bg-white/10 hover:bg-white/15 border border-white/15 rounded-full px-3 sm:px-5 py-2 sm:py-2.5 text-[11px] sm:text-sm transition backdrop-blur-md"
             >
-              <ArrowLeft size={17} />
-              Back to Packages
-2            </button>
+              <ArrowLeft size={15} />
+              <span className="sm:hidden">Back</span>
+              <span className="hidden sm:inline">Back to Packages</span>
+            </button>
 
-            <div className="flex items-center gap-3">
-              <button className="w-11 h-11 rounded-full bg-white/10 border border-white/15 backdrop-blur-md flex items-center justify-center text-(--gold-main) hover:scale-105 transition">
-                <Heart size={21} />
+            <div className="flex items-center gap-2 sm:gap-3">
+              <button className="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white/10 border border-white/15 backdrop-blur-md flex items-center justify-center text-(--gold-main) hover:scale-105 transition">
+                <Heart size={18} />
               </button>
 
               <button
                 onClick={handleShare}
-                className="w-11 h-11 rounded-full bg-white/10 border border-white/15 backdrop-blur-md flex items-center justify-center text-(--gold-main) hover:scale-105 transition"
+                className="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white/10 border border-white/15 backdrop-blur-md flex items-center justify-center text-(--gold-main) hover:scale-105 transition"
               >
-                <Share2 size={21} />
+                <Share2 size={18} />
               </button>
             </div>
           </div>
 
-          <div className="grid lg:grid-cols-[1fr_380px] gap-10 items-start">
+          <div className="grid lg:grid-cols-[1fr_390px] gap-8 lg:gap-10 items-start">
             <motion.div
               initial={{ opacity: 0, y: 35 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.65 }}
               className="max-w-4xl"
             >
-              <div className="flex flex-wrap items-center gap-3 mb-5">
-                <div className="inline-flex items-center gap-2 bg-yellow-400/15 border border-yellow-400/30 text-(--gold-main) px-4 py-2 rounded-full text-sm font-semibold backdrop-blur-md">
-                  <Sparkles size={16} />
-                  Best Selling Package
+              <div className="flex flex-wrap items-center gap-2 mb-4">
+                <div className="inline-flex items-center gap-1.5 bg-yellow-400/15 border border-yellow-400/30 text-(--gold-main) px-3 py-1.5 rounded-full text-[11px] sm:text-sm font-semibold backdrop-blur-md">
+                  <Sparkles size={14} />
+                  Best Selling
                 </div>
 
-                <div className="inline-flex items-center gap-2 bg-red-500/15 border border-red-400/30 text-red-200 px-4 py-2 rounded-full text-sm font-semibold backdrop-blur-md">
-                  <BadgePercent size={16} />
-                  Limited Seats Available
+                <div className="inline-flex items-center gap-1.5 bg-red-500/15 border border-red-400/30 text-red-200 px-3 py-1.5 rounded-full text-[11px] sm:text-sm font-semibold backdrop-blur-md">
+                  <BadgePercent size={14} />
+                  Limited Seats
                 </div>
 
-                <div className="inline-flex items-center gap-2 bg-white/10 border border-white/15 text-white px-4 py-2 rounded-full text-sm backdrop-blur-md">
-                  <MapPin size={16} className="text-(--gold-main)" />
-                  {destination}
+                <div className="inline-flex items-center gap-1.5 bg-white/10 border border-white/15 text-white px-3 py-1.5 rounded-full text-[11px] sm:text-sm backdrop-blur-md max-w-full">
+                  <MapPin size={14} className="text-(--gold-main) shrink-0" />
+                  <span className="truncate max-w-[230px] sm:max-w-none">
+                    {destination}
+                  </span>
                 </div>
               </div>
 
-              <h1 className="text-4xl sm:text-5xl md:text-7xl font-(--font-hero) leading-[1.05] mb-5">
+              <h1 className="text-[32px] sm:text-5xl md:text-6xl lg:text-7xl font-(--font-hero) leading-[1.05] mb-4">
                 {packageTitle}
               </h1>
 
-              <p className="text-base md:text-xl text-gray-200 max-w-3xl leading-relaxed mb-7">
+              <p className="text-sm sm:text-base md:text-xl text-gray-200 max-w-3xl leading-relaxed mb-5 sm:mb-7 line-clamp-3 sm:line-clamp-4">
                 {shortDescription}
               </p>
 
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 max-w-4xl mb-8">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-3 max-w-4xl mb-5 sm:mb-8">
                 <HeroInfo
                   icon={<CalendarDays />}
                   title={`${pkg.days} Days`}
@@ -446,22 +448,28 @@ Please share the best quote and itinerary.`;
                 />
               </div>
 
-              <div className="bg-black/30 border border-white/15 rounded-3xl p-5 md:p-6 backdrop-blur-xl max-w-3xl mb-7">
-                <div className="grid md:grid-cols-[1fr_auto] gap-5 items-center">
-                  <div>
-                    <p className="text-gray-300 text-sm mb-1">Starting From</p>
+              <div className="relative bg-black/40 border border-white/15 rounded-[24px] sm:rounded-[28px] p-4 sm:p-6 backdrop-blur-2xl max-w-3xl mb-5 sm:mb-7 overflow-hidden shadow-2xl">
+                <div className="absolute -top-16 -right-16 w-44 h-44 rounded-full bg-yellow-400/15 blur-[70px]" />
 
-                    <div className="flex items-end gap-2">
-                      <span className="text-4xl md:text-6xl font-black text-(--gold-main)">
+                <div className="relative grid md:grid-cols-[1fr_auto] gap-4 sm:gap-5 items-center">
+                  <div>
+                    <p className="text-gray-300 text-xs sm:text-sm mb-1">
+                      Starting From
+                    </p>
+
+                    <div className="flex flex-wrap items-end gap-1.5 sm:gap-2">
+                      <span className="text-3xl sm:text-5xl md:text-6xl font-black text-(--gold-main)">
                         ₹{formatPrice(pkg.price)}
                       </span>
-                      <span className="text-gray-200 mb-2">/ Per Person</span>
+                      <span className="text-gray-200 mb-1 sm:mb-2 text-xs sm:text-base">
+                        / Per Person
+                      </span>
                     </div>
 
-                    <div className="flex flex-wrap items-center gap-4 mt-4 text-sm text-gray-200">
+                    <div className="flex flex-wrap items-center gap-2.5 sm:gap-4 mt-3 sm:mt-4 text-[11px] sm:text-sm text-gray-200">
                       <span className="inline-flex items-center gap-1.5">
                         <Star
-                          size={17}
+                          size={15}
                           fill="currentColor"
                           className="text-(--gold-main)"
                         />
@@ -469,33 +477,33 @@ Please share the best quote and itinerary.`;
                       </span>
 
                       <span className="inline-flex items-center gap-1.5">
-                        <Award size={17} className="text-(--gold-main)" />
-                        Trusted by 1000+ Travelers
+                        <Award size={15} className="text-(--gold-main)" />
+                        Trusted Travelers
                       </span>
                     </div>
                   </div>
 
-                  <div className="grid gap-3 min-w-57.5">
+                  <div className="grid grid-cols-1 gap-2.5 md:min-w-58">
                     <button
                       onClick={handleBookClick}
-                      className="relative overflow-hidden bg-linear-to-r from-start to-end text-black font-bold py-4 rounded-2xl flex items-center justify-center gap-2 hover:scale-[1.02] transition shadow-[0_15px_40px_rgba(245,186,74,0.25)]"
+                      className="relative overflow-hidden bg-linear-to-r from-start to-end text-black font-bold py-3.5 sm:py-4 rounded-2xl flex items-center justify-center gap-2 hover:scale-[1.02] transition shadow-[0_15px_40px_rgba(245,186,74,0.25)]"
                     >
-                      <CalendarDays size={19} />
+                      <CalendarDays size={18} />
                       Book Now
                     </button>
 
                     <button
                       onClick={handleWhatsappInquiry}
-                      className="bg-green-600/95 hover:bg-green-600 text-white font-bold py-4 rounded-2xl flex items-center justify-center gap-2 transition"
+                      className="bg-green-600/95 hover:bg-green-600 text-white font-bold py-3.5 sm:py-4 rounded-2xl flex items-center justify-center gap-2 transition"
                     >
-                      <MessageCircle size={19} />
+                      <MessageCircle size={18} />
                       WhatsApp Enquiry
                     </button>
                   </div>
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 max-w-4xl">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-3 max-w-4xl">
                 <TrustPill icon={<ShieldCheck />} title="Secure Booking" />
                 <TrustPill icon={<Wallet />} title="Best Price" />
                 <TrustPill icon={<Clock3 />} title="24/7 Support" />
@@ -512,8 +520,8 @@ Please share the best quote and itinerary.`;
               transition={{ duration: 0.65 }}
               className="hidden lg:block"
             >
-              <div className="relative bg-black/55 backdrop-blur-2xl border border-white/15 rounded-[28px] p-6 shadow-2xl overflow-hidden">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-400/20 blur-[70px] rounded-full" />
+              <div className="relative bg-black/55 backdrop-blur-2xl border border-white/15 rounded-[30px] p-6 shadow-2xl overflow-hidden">
+                <div className="absolute top-0 right-0 w-36 h-36 bg-yellow-400/20 blur-[75px] rounded-full" />
 
                 <div className="relative">
                   <div className="w-14 h-14 rounded-2xl bg-yellow-400/15 border border-yellow-400/30 flex items-center justify-center text-(--gold-main) mb-4">
@@ -553,7 +561,7 @@ Please share the best quote and itinerary.`;
 
                     <QuoteInput
                       name="budget"
-                      placeholder="Your Budget (Optional)"
+                      placeholder="Your Budget Optional"
                       value={formData.budget}
                       onChange={handleChange}
                     />
@@ -587,79 +595,85 @@ Please share the best quote and itinerary.`;
       </section>
 
       {/* MINI GALLERY */}
-      <section className="max-w-7xl mx-auto px-4 mt-10 relative z-10">
-        <div className="flex items-center justify-between mb-5">
-          <div>
-            <h2 className="text-xl md:text-2xl font-bold text-white">
-              Trip Gallery
-            </h2>
-            <p className="text-sm text-gray-400 mt-1">
-              Explore beautiful moments from this package
-            </p>
+      <section className="max-w-7xl mx-auto px-3 sm:px-6 mt-6 sm:-mt-16 relative z-10">
+        <div className="bg-white/[0.03] border border-white/10 rounded-[24px] sm:rounded-[28px] p-3 sm:p-5 backdrop-blur-xl shadow-2xl">
+          <div className="flex items-center justify-between gap-4 mb-4 sm:mb-5">
+            <div>
+              <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-white">
+                Trip Gallery
+              </h2>
+              <p className="text-xs sm:text-sm text-gray-400 mt-1">
+                Explore beautiful moments from this package
+              </p>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setActiveTab("gallery")}
+              className="hidden md:inline-flex items-center gap-2 border border-(--gold-main)/50 text-(--gold-main) px-4 py-2 rounded-full text-sm font-semibold hover:bg-(--gold-main) hover:text-black transition"
+            >
+              <Camera size={16} />
+              View All
+            </button>
           </div>
 
-          <button
-            type="button"
-            onClick={() => setActiveTab("gallery")}
-            className="hidden md:inline-flex items-center gap-2 border border-(--gold-main)/50 text-(--gold-main) px-4 py-2 rounded-full text-sm font-semibold hover:bg-(--gold-main) hover:text-black transition"
-          >
-            <Camera size={16} />
-            View All
-          </button>
+          {images.length > 0 ? (
+            <div className="flex sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 overflow-x-auto sm:overflow-visible pb-1">
+              {images.slice(0, 4).map((img, index) => (
+                <motion.button
+                  key={img.id || index}
+                  type="button"
+                  onClick={() => setSelectedImage(img.image)}
+                  whileHover={{ y: -6 }}
+                  whileTap={{ scale: 0.97 }}
+                  transition={{ duration: 0.25 }}
+                  className={`relative overflow-hidden group border border-white/10 bg-black/30 shadow-xl rounded-3xl shrink-0 w-[82vw] sm:w-auto ${
+                    index === 0
+                      ? "h-56 sm:h-72 lg:h-64 lg:col-span-2"
+                      : "h-56 sm:h-64"
+                  }`}
+                >
+                  <img
+                    src={img.image}
+                    alt={`Package ${index + 1}`}
+                    className="w-full h-full object-cover group-hover:scale-110 transition duration-700"
+                  />
+
+                  <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/25 to-transparent" />
+
+                  <div className="absolute top-4 right-4 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-black/60 border border-white/15 backdrop-blur-md flex items-center justify-center text-(--gold-main)">
+                    <Camera size={17} />
+                  </div>
+
+                  <div className="absolute bottom-4 left-4 right-4 text-left">
+                    <p className="text-white font-bold text-sm sm:text-base">
+                      {index === 0
+                        ? "Destination View"
+                        : index === 1
+                          ? "Sightseeing"
+                          : index === 2
+                            ? "Tour Highlight"
+                            : "Memorable Trip"}
+                    </p>
+
+                    <p className="text-[11px] sm:text-xs text-gray-300 mt-1">
+                      Tap to preview image
+                    </p>
+                  </div>
+                </motion.button>
+              ))}
+            </div>
+          ) : (
+            <div className="bg-(--bg-card) border border-white/10 rounded-2xl p-6 sm:p-8 text-center text-gray-400 text-sm">
+              No gallery images available.
+            </div>
+          )}
         </div>
-
-        {images.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {images.slice(0, 4).map((img, index) => (
-              <motion.button
-                key={img.id || index}
-                type="button"
-                onClick={() => setSelectedImage(img.image)}
-                whileHover={{ y: -6 }}
-                whileTap={{ scale: 0.97 }}
-                transition={{ duration: 0.25 }}
-                className="relative h-56 rounded-3xl overflow-hidden group border border-white/10 bg-black/30 shadow-xl"
-              >
-                <img
-                  src={img.image}
-                  alt={`Package ${index + 1}`}
-                  className="w-full h-full object-cover group-hover:scale-110 transition duration-700"
-                />
-
-                <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/25 to-transparent" />
-
-                <div className="absolute top-4 right-4 w-10 h-10 rounded-full bg-black/60 border border-white/15 backdrop-blur-md flex items-center justify-center text-(--gold-main)">
-                  <Camera size={18} />
-                </div>
-
-                <div className="absolute bottom-4 left-4 right-4 text-left">
-                  <p className="text-white font-bold text-base">
-                    {index === 0
-                      ? "Destination View"
-                      : index === 1
-                        ? "Sightseeing"
-                        : index === 2
-                          ? "Tour Highlight"
-                          : "Memorable Trip"}
-                  </p>
-
-                  <p className="text-xs text-gray-300 mt-1">
-                    Click to preview image
-                  </p>
-                </div>
-              </motion.button>
-            ))}
-          </div>
-        ) : (
-          <div className="bg-(--bg-card) border border-white/10 rounded-2xl p-8 text-center text-gray-400">
-            No gallery images available.
-          </div>
-        )}
       </section>
 
       {/* FEATURE STRIP */}
-      <section className="max-w-7xl mx-auto px-4 mt-8">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 bg-(--bg-card) border border-white/10 rounded-2xl p-4">
+      <section className="max-w-7xl mx-auto px-3 sm:px-6 mt-6 sm:mt-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 bg-(--bg-card) border border-white/10 rounded-[24px] sm:rounded-[26px] p-3 sm:p-4 shadow-xl">
           <FeatureCard
             icon={<Building2 />}
             title="Hotels Included"
@@ -684,37 +698,44 @@ Please share the best quote and itinerary.`;
       </section>
 
       {/* MAIN CONTENT */}
-      <section className="max-w-7xl mx-auto px-4 mt-8 grid lg:grid-cols-[1fr_360px] gap-8">
-        <div className="space-y-8">
-          <div className="bg-(--bg-card) border border-white/10 rounded-2xl overflow-hidden">
-            <div className="flex overflow-x-auto border-b border-white/10">
+      <section className="max-w-7xl mx-auto px-3 sm:px-6 mt-6 sm:mt-8 grid lg:grid-cols-[1fr_360px] gap-8">
+        <div className="space-y-6 sm:space-y-8">
+          <div className="bg-(--bg-card) border border-white/10 rounded-[24px] sm:rounded-[26px] overflow-hidden shadow-2xl">
+            <div className="flex overflow-x-auto border-b border-white/10 bg-black/20">
               {tabs.map((tab) => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`min-w-max px-5 py-4 text-sm md:text-base font-semibold transition ${
+                  className={`relative min-w-max px-4 sm:px-5 py-3.5 sm:py-4 text-xs sm:text-sm md:text-base font-semibold transition ${
                     activeTab === tab.id
-                      ? "text-(--gold-main) border-b-2 border-(--gold-main)"
+                      ? "text-(--gold-main)"
                       : "text-gray-400 hover:text-white"
                   }`}
                 >
                   {tab.label}
+
+                  {activeTab === tab.id && (
+                    <motion.span
+                      layoutId="activePackageTab"
+                      className="absolute left-4 right-4 bottom-0 h-0.5 rounded-full bg-(--gold-main)"
+                    />
+                  )}
                 </button>
               ))}
             </div>
 
-            <div className="p-6 md:p-8">
+            <div className="p-4 sm:p-6 md:p-8">
               {activeTab === "overview" && (
                 <div>
-                  <h2 className="text-2xl font-(--font-heading) text-(--gold-main) mb-4">
+                  <h2 className="text-xl sm:text-2xl font-(--font-heading) text-(--gold-main) mb-4">
                     Tour Overview
                   </h2>
 
-                  <p className="text-gray-300 leading-relaxed">
+                  <p className="text-gray-300 leading-relaxed text-sm sm:text-base">
                     {pkg.description}
                   </p>
 
-                  <div className="grid md:grid-cols-3 gap-4 mt-7">
+                  <div className="grid md:grid-cols-3 gap-3 sm:gap-4 mt-6 sm:mt-7">
                     <SmallBenefit
                       title="Customized Packages"
                       text="As per your needs"
@@ -733,31 +754,37 @@ Please share the best quote and itinerary.`;
 
               {activeTab === "itinerary" && (
                 <div>
-                  <h2 className="text-2xl font-(--font-heading) text-(--gold-main) mb-6">
+                  <h2 className="text-xl sm:text-2xl font-(--font-heading) text-(--gold-main) mb-5 sm:mb-6">
                     Itinerary Highlights
                   </h2>
 
-                  <div className="space-y-5">
-                    {itineraryDays.map((item, index) => (
-                      <div
-                        key={index}
-                        className="grid md:grid-cols-[90px_1fr] gap-4"
-                      >
-                        <div className="bg-black/30 border border-white/10 rounded-xl px-4 py-3 text-center text-(--gold-main) font-bold h-fit">
-                          Day {item.day}
-                        </div>
+                  {itineraryDays.length > 0 ? (
+                    <div className="space-y-4 sm:space-y-5">
+                      {itineraryDays.map((item, index) => (
+                        <div
+                          key={index}
+                          className="grid md:grid-cols-[90px_1fr] gap-3 sm:gap-4"
+                        >
+                          <div className="bg-black/30 border border-white/10 rounded-2xl px-4 py-2.5 sm:py-3 text-center text-(--gold-main) font-bold h-fit text-sm sm:text-base">
+                            Day {item.day}
+                          </div>
 
-                        <div>
-                          <h3 className="font-semibold text-white mb-1">
-                            {item.title}
-                          </h3>
-                          <p className="text-gray-300 leading-relaxed text-sm md:text-base">
-                            {item.description}
-                          </p>
+                          <div className="bg-black/20 border border-white/10 rounded-2xl p-4">
+                            <h3 className="font-semibold text-white mb-1 text-sm sm:text-base">
+                              {item.title}
+                            </h3>
+                            <p className="text-gray-300 leading-relaxed text-sm md:text-base">
+                              {item.description}
+                            </p>
+                          </div>
                         </div>
-                      </div>
-                    ))}
-                  </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-gray-400 text-sm">
+                      No itinerary available.
+                    </p>
+                  )}
                 </div>
               )}
 
@@ -779,28 +806,28 @@ Please share the best quote and itinerary.`;
 
               {activeTab === "gallery" && (
                 <div>
-                  <h2 className="text-2xl font-(--font-heading) text-(--gold-main) mb-6">
+                  <h2 className="text-xl sm:text-2xl font-(--font-heading) text-(--gold-main) mb-5 sm:mb-6">
                     Gallery
                   </h2>
 
                   {images.length > 0 ? (
-                    <div className="grid sm:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                       {images.map((img, index) => (
                         <button
                           key={img.id || index}
                           onClick={() => setSelectedImage(img.image)}
-                          className="h-56 rounded-2xl overflow-hidden border border-white/10 bg-black/30"
+                          className="h-52 sm:h-64 rounded-3xl overflow-hidden border border-white/10 bg-black/30 group"
                         >
                           <img
                             src={img.image}
                             alt={`Gallery ${index + 1}`}
-                            className="w-full h-full object-cover hover:scale-110 transition duration-500"
+                            className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
                           />
                         </button>
                       ))}
                     </div>
                   ) : (
-                    <p className="text-gray-400">
+                    <p className="text-gray-400 text-sm">
                       No gallery images available.
                     </p>
                   )}
@@ -810,16 +837,16 @@ Please share the best quote and itinerary.`;
           </div>
 
           {pkg.faqs?.length > 0 && (
-            <div className="bg-(--bg-card) border border-white/10 rounded-2xl p-6 md:p-8">
-              <h2 className="text-2xl font-(--font-heading) text-(--gold-main) mb-6">
+            <div className="bg-(--bg-card) border border-white/10 rounded-[24px] sm:rounded-[26px] p-4 sm:p-6 md:p-8 shadow-xl">
+              <h2 className="text-xl sm:text-2xl font-(--font-heading) text-(--gold-main) mb-5 sm:mb-6">
                 Frequently Asked Questions
               </h2>
 
-              <div className="grid md:grid-cols-2 gap-4">
+              <div className="grid md:grid-cols-2 gap-3 sm:gap-4">
                 {pkg.faqs.map((faq, index) => (
                   <div
                     key={faq.id || index}
-                    className="bg-black/25 border border-white/10 rounded-xl overflow-hidden"
+                    className="bg-black/25 border border-white/10 rounded-2xl overflow-hidden"
                   >
                     <button
                       onClick={() =>
@@ -827,10 +854,12 @@ Please share the best quote and itinerary.`;
                       }
                       className="w-full flex items-center justify-between gap-3 p-4 text-left"
                     >
-                      <span className="font-semibold">{faq.question}</span>
+                      <span className="font-semibold text-sm sm:text-base">
+                        {faq.question}
+                      </span>
                       <ChevronDown
                         size={18}
-                        className={`transition ${
+                        className={`transition shrink-0 ${
                           openFaq === index ? "rotate-180" : ""
                         }`}
                       />
@@ -854,7 +883,7 @@ Please share the best quote and itinerary.`;
             </div>
           )}
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 bg-(--bg-card) border border-white/10 rounded-2xl p-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 bg-(--bg-card) border border-white/10 rounded-[24px] sm:rounded-[26px] p-4 sm:p-5 shadow-xl">
             <TrustCard
               icon={<ShieldCheck />}
               title="100% Secure Booking"
@@ -880,7 +909,7 @@ Please share the best quote and itinerary.`;
 
         <aside className="hidden lg:block">
           <div className="sticky top-24 space-y-5">
-            <div className="bg-(--bg-card) border border-white/10 rounded-2xl p-6">
+            <div className="bg-(--bg-card) border border-white/10 rounded-[26px] p-6 shadow-xl">
               <p className="text-gray-400 text-sm mb-1">Starting From</p>
               <p className="text-4xl font-bold text-(--gold-main)">
                 ₹{formatPrice(pkg.price)}
@@ -893,7 +922,7 @@ Please share the best quote and itinerary.`;
               <div className="space-y-3 mt-6">
                 <button
                   onClick={handleBookClick}
-                  className="w-full bg-linear-to-r from-start to-end text-black font-bold py-4 rounded-xl flex items-center justify-center gap-2"
+                  className="w-full bg-linear-to-r from-start to-end text-black font-bold py-4 rounded-2xl flex items-center justify-center gap-2 hover:scale-[1.02] transition"
                 >
                   <CalendarDays size={18} />
                   Book Now
@@ -901,7 +930,7 @@ Please share the best quote and itinerary.`;
 
                 <button
                   onClick={handleWhatsappInquiry}
-                  className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2"
+                  className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 rounded-2xl flex items-center justify-center gap-2 transition"
                 >
                   <MessageCircle size={18} />
                   Enquire Now
@@ -909,14 +938,14 @@ Please share the best quote and itinerary.`;
 
                 <button
                   onClick={handleBookClick}
-                  className="w-full border border-(--gold-main) text-(--gold-main) font-bold py-4 rounded-xl"
+                  className="w-full border border-(--gold-main) text-(--gold-main) font-bold py-4 rounded-2xl hover:bg-(--gold-main) hover:text-black transition"
                 >
                   Customize This Trip
                 </button>
               </div>
             </div>
 
-            <div className="bg-(--bg-card) border border-white/10 rounded-2xl p-6">
+            <div className="bg-(--bg-card) border border-white/10 rounded-[26px] p-6 shadow-xl">
               <h3 className="text-xl font-bold text-(--gold-main) mb-4">
                 Why Book With FlyingLyte?
               </h3>
@@ -931,7 +960,7 @@ Please share the best quote and itinerary.`;
               </div>
             </div>
 
-            <div className="bg-(--bg-card) border border-white/10 rounded-2xl p-6">
+            <div className="bg-(--bg-card) border border-white/10 rounded-[26px] p-6 shadow-xl">
               <h3 className="font-bold mb-2">Trusted Travel Partner</h3>
               <div className="flex text-(--gold-main) gap-1 mb-2">
                 {[...Array(5)].map((_, i) => (
@@ -946,34 +975,36 @@ Please share the best quote and itinerary.`;
         </aside>
       </section>
 
-      <div className="fixed bottom-0 left-0 right-0 z-40 bg-(--bg-main)/95 backdrop-blur-xl border-t border-white/10 p-3 lg:hidden">
-        <div className="grid grid-cols-3 gap-2">
+      {/* MOBILE BOTTOM CTA */}
+      <div className="fixed bottom-0 left-0 right-0 z-40 bg-[#050812]/95 backdrop-blur-xl border-t border-white/10 px-3 pt-2 pb-[calc(0.6rem+env(safe-area-inset-bottom))] lg:hidden">
+        <div className="grid grid-cols-[0.85fr_0.85fr_1.25fr] gap-2">
           <button
             onClick={handleWhatsappInquiry}
-            className="border border-white/10 rounded-xl py-3 flex items-center justify-center gap-2 text-green-400 font-semibold"
+            className="border border-green-500/30 bg-green-500/10 rounded-2xl py-2.5 flex flex-col items-center justify-center gap-1 text-green-400 font-semibold text-[11px]"
           >
-            <MessageCircle size={18} />
+            <MessageCircle size={17} />
             WhatsApp
           </button>
 
           <a
             href="tel:+919667455591"
-            className="border border-white/10 rounded-xl py-3 flex items-center justify-center gap-2 text-(--gold-main) font-semibold"
+            className="border border-white/10 bg-white/5 rounded-2xl py-2.5 flex flex-col items-center justify-center gap-1 text-(--gold-main) font-semibold text-[11px]"
           >
-            <Phone size={18} />
+            <Phone size={17} />
             Call
           </a>
 
           <button
             onClick={handleBookClick}
-            className="border border-(--gold-main) rounded-xl py-3 flex items-center justify-center gap-2 text-(--gold-main) font-semibold"
+            className="bg-linear-to-r from-start to-end rounded-2xl py-2.5 flex flex-col items-center justify-center gap-1 text-black font-bold text-[11px] shadow-[0_10px_30px_rgba(245,186,74,0.25)]"
           >
-            <Plane size={18} />
+            <Plane size={17} />
             Plan Trip
           </button>
         </div>
       </div>
 
+      {/* BOOKING MODAL */}
       <AnimatePresence>
         {openBookingForm && (
           <motion.div
@@ -987,7 +1018,7 @@ Please share the best quote and itinerary.`;
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: 80, opacity: 0 }}
               transition={{ duration: 0.35 }}
-              className="bg-(--bg-card) border border-white/10 w-full max-w-2xl max-h-[92vh] overflow-hidden rounded-2xl shadow-2xl flex flex-col"
+              className="bg-(--bg-card) border border-white/10 w-full max-w-2xl max-h-[92vh] overflow-hidden rounded-[24px] sm:rounded-[26px] shadow-2xl flex flex-col"
             >
               <div className="flex items-center justify-between border-b border-white/10 p-4 md:p-6 sticky top-0 bg-(--bg-card) z-10">
                 <h2 className="text-xl md:text-2xl font-(--font-heading) text-(--gold-main)">
@@ -1003,7 +1034,7 @@ Please share the best quote and itinerary.`;
               </div>
 
               <div className="overflow-y-auto p-4 md:p-6 space-y-6">
-                <div className="bg-black/30 border border-white/10 p-4 rounded-xl space-y-2 text-sm">
+                <div className="bg-black/30 border border-white/10 p-4 rounded-2xl space-y-2 text-sm">
                   <p>
                     <span className="text-gray-400">Package:</span>{" "}
                     <span className="font-semibold">{packageTitle}</span>
@@ -1055,7 +1086,7 @@ Please share the best quote and itinerary.`;
                     />
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 gap-3 sm:gap-4">
                     <CounterBox
                       label="Adults"
                       value={formData.adults}
@@ -1088,11 +1119,11 @@ Please share the best quote and itinerary.`;
                       onChange={handleChange}
                       rows="3"
                       placeholder="Optional message..."
-                      className="w-full mt-1 p-3 rounded-lg bg-black/30 border border-white/10 focus:border-(--gold-main) outline-none"
+                      className="w-full mt-1 p-3 rounded-xl bg-black/30 border border-white/10 focus:border-(--gold-main) outline-none text-white placeholder:text-gray-500 transition"
                     />
                   </div>
 
-                  <div className="bg-black/30 border border-white/10 p-4 rounded-xl text-sm space-y-2">
+                  <div className="bg-black/30 border border-white/10 p-4 rounded-2xl text-sm space-y-2">
                     <p>
                       <span className="text-gray-400">Passengers:</span>{" "}
                       {totalPassengers}
@@ -1113,7 +1144,7 @@ Please share the best quote and itinerary.`;
                     disabled={bookingMutation.isPending}
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.97 }}
-                    className="bg-linear-to-r from-start to-end text-black py-3 rounded-xl font-semibold w-full disabled:opacity-60"
+                    className="bg-linear-to-r from-start to-end text-black py-3 rounded-2xl font-semibold w-full disabled:opacity-60"
                   >
                     {bookingMutation.isPending
                       ? "Processing..."
@@ -1126,6 +1157,7 @@ Please share the best quote and itinerary.`;
         )}
       </AnimatePresence>
 
+      {/* IMAGE PREVIEW */}
       <AnimatePresence>
         {selectedImage && (
           <motion.div
@@ -1159,52 +1191,58 @@ Please share the best quote and itinerary.`;
 };
 
 const HeroInfo = ({ icon, title, subtitle }) => (
-  <div className="bg-black/35 backdrop-blur-xl border border-white/15 rounded-2xl p-4 hover:bg-white/10 transition group">
-    <div className="text-(--gold-main) mb-3 group-hover:scale-110 transition [&>svg]:w-7 [&>svg]:h-7">
+  <div className="bg-black/35 backdrop-blur-xl border border-white/15 rounded-2xl p-3 sm:p-4 hover:bg-white/10 transition group shadow-lg">
+    <div className="text-(--gold-main) mb-2 sm:mb-3 group-hover:scale-110 transition [&>svg]:w-5 sm:[&>svg]:w-7 [&>svg]:h-5 sm:[&>svg]:h-7">
       {icon}
     </div>
 
-    <p className="font-bold text-white">{title}</p>
-    <p className="text-sm text-gray-300">{subtitle}</p>
+    <p className="font-bold text-white text-xs sm:text-base leading-tight">
+      {title}
+    </p>
+    <p className="text-[11px] sm:text-sm text-gray-300 mt-0.5">{subtitle}</p>
   </div>
 );
 
 const TrustPill = ({ icon, title }) => (
-  <div className="bg-white/8 border border-white/10 backdrop-blur-md rounded-2xl px-4 py-3 flex items-center gap-3 hover:bg-white/12 transition">
-    <div className="text-(--gold-main) shrink-0 [&>svg]:w-5 [&>svg]:h-5">
+  <div className="bg-white/[0.06] border border-white/10 backdrop-blur-md rounded-2xl px-3 py-2.5 sm:py-3 flex items-center gap-2 sm:gap-3 hover:bg-white/[0.1] transition shadow-lg">
+    <div className="text-(--gold-main) shrink-0 [&>svg]:w-4 sm:[&>svg]:w-5 [&>svg]:h-4 sm:[&>svg]:h-5">
       {icon}
     </div>
-    <p className="text-sm font-semibold">{title}</p>
+    <p className="text-[11px] sm:text-sm font-semibold leading-tight">
+      {title}
+    </p>
   </div>
 );
 
 const TrustCard = ({ icon, title, small }) => (
-  <div className="flex items-center gap-3">
-    <div className="text-(--gold-main) shrink-0 [&>svg]:w-7 [&>svg]:h-7">
+  <div className="bg-black/20 border border-white/10 rounded-2xl p-4 flex items-start gap-3 hover:bg-white/[0.05] transition">
+    <div className="text-(--gold-main) shrink-0 [&>svg]:w-6 sm:[&>svg]:w-7 [&>svg]:h-6 sm:[&>svg]:h-7">
       {icon}
     </div>
     <div>
-      <p className="font-semibold text-sm md:text-base">{title}</p>
+      <p className="font-semibold text-sm md:text-base leading-tight">
+        {title}
+      </p>
       {small && <p className="text-xs text-gray-400 mt-1">{small}</p>}
     </div>
   </div>
 );
 
 const FeatureCard = ({ icon, title, text }) => (
-  <div className="flex gap-4 items-start p-3">
-    <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center text-(--gold-main) shrink-0 [&>svg]:w-6 [&>svg]:h-6">
+  <div className="flex gap-3 sm:gap-4 items-start p-3 sm:p-4 rounded-2xl hover:bg-white/[0.04] transition">
+    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-(--gold-main) shrink-0 [&>svg]:w-5 sm:[&>svg]:w-6 [&>svg]:h-5 sm:[&>svg]:h-6">
       {icon}
     </div>
     <div>
-      <h3 className="font-bold">{title}</h3>
-      <p className="text-sm text-gray-300 mt-1">{text}</p>
+      <h3 className="font-bold text-sm sm:text-base">{title}</h3>
+      <p className="text-xs sm:text-sm text-gray-300 mt-1">{text}</p>
     </div>
   </div>
 );
 
 const SmallBenefit = ({ title, text }) => (
-  <div className="bg-black/25 border border-white/10 rounded-xl p-4">
-    <div className="flex items-center gap-2 text-(--gold-main) font-semibold">
+  <div className="bg-black/25 border border-white/10 rounded-2xl p-4 hover:border-(--gold-main)/30 transition">
+    <div className="flex items-center gap-2 text-(--gold-main) font-semibold text-sm sm:text-base">
       <CheckCircle2 size={18} />
       {title}
     </div>
@@ -1214,18 +1252,18 @@ const SmallBenefit = ({ title, text }) => (
 
 const ListSection = ({ title, items, type }) => (
   <div>
-    <h2 className="text-2xl font-(--font-heading) text-(--gold-main) mb-6">
+    <h2 className="text-xl sm:text-2xl font-(--font-heading) text-(--gold-main) mb-5 sm:mb-6">
       {title}
     </h2>
 
     {items.length === 0 ? (
-      <p className="text-gray-400">No details available.</p>
+      <p className="text-gray-400 text-sm">No details available.</p>
     ) : (
       <div className="grid md:grid-cols-2 gap-3">
         {items.map((item, index) => (
           <div
             key={index}
-            className="bg-black/25 border border-white/10 rounded-xl p-4 flex gap-3"
+            className="bg-black/25 border border-white/10 rounded-2xl p-4 flex gap-3 hover:bg-white/[0.04] transition"
           >
             {type === "include" ? (
               <CheckCircle2
@@ -1258,7 +1296,7 @@ const QuoteInput = ({ type = "text", name, value, onChange, placeholder }) => (
     value={value}
     onChange={onChange}
     placeholder={placeholder}
-    className="w-full bg-black/35 border border-white/10 rounded-xl px-4 py-3 outline-none focus:border-(--gold-main) text-sm"
+    className="w-full bg-black/35 border border-white/10 rounded-2xl px-4 py-3 outline-none focus:border-(--gold-main) text-sm text-white placeholder:text-gray-500 transition"
   />
 );
 
@@ -1278,23 +1316,23 @@ const InputField = ({
       onChange={onChange}
       type={type}
       placeholder={placeholder}
-      className="w-full mt-1 p-3 rounded-lg bg-black/30 border border-white/10 focus:border-(--gold-main) outline-none"
+      className="w-full mt-1 p-3 rounded-xl bg-black/30 border border-white/10 focus:border-(--gold-main) outline-none text-white placeholder:text-gray-500 transition"
     />
   </div>
 );
 
 const CounterBox = ({ label, value, onMinus, onPlus }) => (
-  <div className="bg-black/30 border border-white/10 rounded-xl p-3 flex items-center justify-between">
+  <div className="bg-black/30 border border-white/10 rounded-2xl p-3 flex items-center justify-between">
     <div>
-      <p className="text-sm text-gray-400">{label}</p>
-      <p className="text-lg font-semibold">{value}</p>
+      <p className="text-xs sm:text-sm text-gray-400">{label}</p>
+      <p className="text-base sm:text-lg font-semibold">{value}</p>
     </div>
 
-    <div className="flex gap-2">
+    <div className="flex gap-1.5 sm:gap-2">
       <button
         type="button"
         onClick={onMinus}
-        className="w-8 h-8 rounded bg-white/10 hover:bg-white/15"
+        className="w-8 h-8 rounded-xl bg-white/10 hover:bg-white/15"
       >
         −
       </button>
@@ -1302,7 +1340,7 @@ const CounterBox = ({ label, value, onMinus, onPlus }) => (
       <button
         type="button"
         onClick={onPlus}
-        className="w-8 h-8 rounded bg-(--gold-main) text-black font-bold"
+        className="w-8 h-8 rounded-xl bg-(--gold-main) text-black font-bold"
       >
         +
       </button>
