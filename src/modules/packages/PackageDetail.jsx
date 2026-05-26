@@ -362,6 +362,7 @@ Please share the best quote and itinerary.`;
           alt={packageTitle}
           className="absolute inset-0 w-full h-full object-cover scale-105"
         />
+        
 
         <div className="absolute inset-0 bg-black/55" />
         <div className="absolute inset-0 bg-linear-to-r from-[#03070d] via-[#07101acc] to-black/40" />
@@ -378,7 +379,7 @@ Please share the best quote and itinerary.`;
             >
               <ArrowLeft size={17} />
               Back to Packages
-            </button>
+2            </button>
 
             <div className="flex items-center gap-3">
               <button className="w-11 h-11 rounded-full bg-white/10 border border-white/15 backdrop-blur-md flex items-center justify-center text-(--gold-main) hover:scale-105 transition">

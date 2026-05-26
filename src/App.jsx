@@ -32,6 +32,7 @@ import HotelBookingDetails from "./modules/hotels/pages/HotelBookingDetails";
 import FlightBookingDetails from "./modules/flights/pages/FlightBookingDetails";
 import Blogs from "./Pages/Blogs";
 import BlogDetails from "./Pages/BlogDetails";
+import CancellationPolicyPage from "./Pages/CancellationPolicyPage";
 
 const App = () => {
   return (
@@ -79,6 +80,7 @@ const App = () => {
         <Route path="/terms" element={<TermsConditions />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/refund-policy" element={<RefundPolicy />} />
+        <Route path="/cancellation" element={<CancellationPolicyPage />} />
         {/* <Route path="/hotels" element={<HotelPage />} /> */}
         {/* <Route path="/railways" element={<RailwayPage />} /> */}
         {/* Optional: 404 Page */}
