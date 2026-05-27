@@ -354,24 +354,25 @@ Please share the best quote and itinerary.`;
   ];
 
   return (
-    <div className="bg-(--bg-main) text-white min-h-screen pb-24 md:pb-28 overflow-hidden">
+    <div className="bg-(--bg-main) text-white min-h-screen pb-28 lg:pb-12 overflow-hidden">
       {/* HERO */}
-      <section className="relative min-h-172.5 sm:min-h-195 lg:min-h-215 overflow-hidden">
-        <img
-          src={heroImage}
-          alt={packageTitle}
-          className="absolute inset-0 w-full h-full object-cover object-center scale-105"
-        />
+      <section className="relative overflow-hidden">
+        <div className="absolute inset-0">
+          <img
+            src={heroImage}
+            alt={packageTitle}
+            className="w-full h-full object-cover object-center scale-105"
+          />
+          <div className="absolute inset-0 bg-black/70 sm:bg-black/60" />
+          <div className="absolute inset-0 bg-linear-to-b from-black/25 via-[#020617]/80 to-(--bg-main)" />
+          <div className="absolute inset-0 bg-linear-to-r from-[#020617] via-[#020617cc] to-black/20" />
+        </div>
 
-        <div className="absolute inset-0 bg-black/65 sm:bg-black/60" />
-        <div className="absolute inset-0 bg-linear-to-r from-[#020617] via-[#020617cc] to-black/30" />
-        <div className="absolute inset-0 bg-linear-to-b from-black/10 via-transparent to-(--bg-main)" />
+        <div className="absolute -top-28 -left-28 w-[320px] h-[320px] bg-yellow-500/20 blur-[110px] rounded-full" />
+        <div className="absolute top-40 -right-28 w-[320px] h-[320px] bg-cyan-500/10 blur-[110px] rounded-full" />
 
-        <div className="absolute -top-36 -left-36 w-105 h-105 bg-yellow-500/20 blur-[130px] rounded-full" />
-        <div className="absolute top-40 -right-40 w-105 h-105 bg-cyan-500/10 blur-[130px] rounded-full" />
-
-        <div className="relative max-w-7xl mx-auto px-3 sm:px-6 pt-16 sm:pt-24 pb-12 sm:pb-16">
-          <div className="flex items-center justify-between gap-2 mb-6 sm:mb-12">
+        <div className="relative max-w-7xl mx-auto px-3 sm:px-6 pt-14 sm:pt-20 lg:pt-24 pb-8 sm:pb-12 lg:pb-16">
+          <div className="flex items-center justify-between gap-2 mb-5 sm:mb-10 lg:mb-12">
             <button
               onClick={() => navigate("/packages")}
               className="inline-flex items-center gap-1.5 bg-white/10 hover:bg-white/15 border border-white/15 rounded-full px-3 sm:px-5 py-2 sm:py-2.5 text-[11px] sm:text-sm transition backdrop-blur-md"
@@ -415,13 +416,13 @@ Please share the best quote and itinerary.`;
 
                 <div className="inline-flex items-center gap-1.5 bg-white/10 border border-white/15 text-white px-3 py-1.5 rounded-full text-[11px] sm:text-sm backdrop-blur-md max-w-full">
                   <MapPin size={14} className="text-(--gold-main) shrink-0" />
-                  <span className="truncate max-w-57.5 sm:max-w-none">
+                  <span className="truncate max-w-[220px] sm:max-w-none">
                     {destination}
                   </span>
                 </div>
               </div>
 
-              <h1 className="text-[32px] sm:text-5xl md:text-6xl lg:text-7xl font-(--font-hero) leading-[1.05] mb-4">
+              <h1 className="text-[28px] sm:text-5xl md:text-6xl lg:text-7xl font-(--font-hero) leading-[1.08] mb-3 sm:mb-5 break-words">
                 {packageTitle}
               </h1>
 
@@ -448,7 +449,7 @@ Please share the best quote and itinerary.`;
                 />
               </div>
 
-              <div className="relative bg-black/40 border border-white/15 rounded-3xl sm:rounded-[28px] p-4 sm:p-6 backdrop-blur-2xl max-w-3xl mb-5 sm:mb-7 overflow-hidden shadow-2xl">
+              <div className="relative bg-black/45 border border-white/15 rounded-[22px] sm:rounded-3xl p-4 sm:p-6 backdrop-blur-2xl max-w-3xl mb-5 sm:mb-7 overflow-hidden shadow-2xl">
                 <div className="absolute -top-16 -right-16 w-44 h-44 rounded-full bg-yellow-400/15 blur-[70px]" />
 
                 <div className="relative grid md:grid-cols-[1fr_auto] gap-4 sm:gap-5 items-center">
@@ -483,7 +484,7 @@ Please share the best quote and itinerary.`;
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 gap-2.5 md:min-w-58">
+                  <div className="grid grid-cols-1 gap-2.5 md:min-w-[230px]">
                     <button
                       onClick={handleBookClick}
                       className="relative overflow-hidden bg-linear-to-r from-start to-end text-black font-bold py-3.5 sm:py-4 rounded-2xl flex items-center justify-center gap-2 hover:scale-[1.02] transition shadow-[0_15px_40px_rgba(245,186,74,0.25)]"
@@ -595,8 +596,8 @@ Please share the best quote and itinerary.`;
       </section>
 
       {/* MINI GALLERY */}
-      <section className="max-w-7xl mx-auto px-3 sm:px-6 mt-6 sm:-mt-16 relative z-10">
-        <div className="bg-white/3 border border-white/10 rounded-3xl sm:rounded-[28px] p-3 sm:p-5 backdrop-blur-xl shadow-2xl">
+      <section className="max-w-7xl mx-auto px-3 sm:px-6 mt-5 sm:mt-8 relative z-10">
+        <div className="bg-white/[0.03] border border-white/10 rounded-[22px] sm:rounded-[28px] p-3 sm:p-5 backdrop-blur-xl shadow-2xl">
           <div className="flex items-center justify-between gap-4 mb-4 sm:mb-5">
             <div>
               <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-white">
@@ -618,19 +619,17 @@ Please share the best quote and itinerary.`;
           </div>
 
           {images.length > 0 ? (
-            <div className="flex sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 overflow-x-auto sm:overflow-visible pb-1">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
               {images.slice(0, 4).map((img, index) => (
                 <motion.button
                   key={img.id || index}
                   type="button"
                   onClick={() => setSelectedImage(img.image)}
-                  whileHover={{ y: -6 }}
                   whileTap={{ scale: 0.97 }}
-                  transition={{ duration: 0.25 }}
-                  className={`relative overflow-hidden group border border-white/10 bg-black/30 shadow-xl rounded-3xl shrink-0 w-[82vw] sm:w-auto ${
+                  className={`relative overflow-hidden group border border-white/10 bg-black/30 shadow-xl rounded-2xl sm:rounded-3xl ${
                     index === 0
-                      ? "h-56 sm:h-72 lg:h-64 lg:col-span-2"
-                      : "h-56 sm:h-64"
+                      ? "h-48 col-span-2 sm:h-72 lg:h-64 lg:col-span-2"
+                      : "h-36 sm:h-64"
                   }`}
                 >
                   <img
@@ -641,12 +640,12 @@ Please share the best quote and itinerary.`;
 
                   <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/25 to-transparent" />
 
-                  <div className="absolute top-4 right-4 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-black/60 border border-white/15 backdrop-blur-md flex items-center justify-center text-(--gold-main)">
-                    <Camera size={17} />
+                  <div className="absolute top-3 right-3 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-black/60 border border-white/15 backdrop-blur-md flex items-center justify-center text-(--gold-main)">
+                    <Camera size={16} />
                   </div>
 
-                  <div className="absolute bottom-4 left-4 right-4 text-left">
-                    <p className="text-white font-bold text-sm sm:text-base">
+                  <div className="absolute bottom-3 left-3 right-3 text-left">
+                    <p className="text-white font-bold text-xs sm:text-base">
                       {index === 0
                         ? "Destination View"
                         : index === 1
@@ -654,10 +653,6 @@ Please share the best quote and itinerary.`;
                           : index === 2
                             ? "Tour Highlight"
                             : "Memorable Trip"}
-                    </p>
-
-                    <p className="text-[11px] sm:text-xs text-gray-300 mt-1">
-                      Tap to preview image
                     </p>
                   </div>
                 </motion.button>
@@ -672,8 +667,8 @@ Please share the best quote and itinerary.`;
       </section>
 
       {/* FEATURE STRIP */}
-      <section className="max-w-7xl mx-auto px-3 sm:px-6 mt-6 sm:mt-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 bg-(--bg-card) border border-white/10 rounded-3xl sm:rounded-[26px] p-3 sm:p-4 shadow-xl">
+      <section className="max-w-7xl mx-auto px-3 sm:px-6 mt-5 sm:mt-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3 bg-(--bg-card) border border-white/10 rounded-3xl sm:rounded-[26px] p-3 sm:p-4 shadow-xl">
           <FeatureCard
             icon={<Building2 />}
             title="Hotels Included"
@@ -698,8 +693,8 @@ Please share the best quote and itinerary.`;
       </section>
 
       {/* MAIN CONTENT */}
-      <section className="max-w-7xl mx-auto px-3 sm:px-6 mt-6 sm:mt-8 grid lg:grid-cols-[1fr_360px] gap-8">
-        <div className="space-y-6 sm:space-y-8">
+      <section className="max-w-7xl mx-auto px-3 sm:px-6 mt-5 sm:mt-8 grid lg:grid-cols-[1fr_360px] gap-8">
+        <div className="space-y-5 sm:space-y-8">
           <div className="bg-(--bg-card) border border-white/10 rounded-3xl sm:rounded-[26px] overflow-hidden shadow-2xl">
             <div className="flex overflow-x-auto border-b border-white/10 bg-black/20">
               {tabs.map((tab) => (
@@ -728,7 +723,7 @@ Please share the best quote and itinerary.`;
               {activeTab === "overview" && (
                 <div>
                   <div className="mb-5">
-                    <p className="text-[11px] sm:text-xs uppercase tracking-[0.25em] text-(--gold-main)/80 mb-2">
+                    <p className="text-[11px] sm:text-xs uppercase tracking-[0.25em] text-(--gold-main) mb-2">
                       Package Details
                     </p>
 
@@ -763,7 +758,7 @@ Please share the best quote and itinerary.`;
               {activeTab === "itinerary" && (
                 <div>
                   <div className="mb-5 sm:mb-6">
-                    <p className="text-[11px] sm:text-xs uppercase tracking-[0.25em] text-(--gold-main)/80 mb-2">
+                    <p className="text-[11px] sm:text-xs uppercase tracking-[0.25em] text-(--gold-main) mb-2">
                       Day Wise Plan
                     </p>
 
@@ -780,12 +775,12 @@ Please share the best quote and itinerary.`;
                           className="relative grid grid-cols-1 md:grid-cols-[96px_1fr] gap-3 sm:gap-4"
                         >
                           <div className="md:sticky md:top-24 h-fit">
-                            <div className="inline-flex md:flex w-fit md:w-full items-center justify-center bg-(--gold-main)/10 border border-(--gold-main)/30 rounded-full md:rounded-2xl px-4 py-2.5 text-(--gold-main) font-bold text-xs sm:text-sm md:text-base">
+                            <div className="inline-flex md:flex w-fit md:w-full items-center justify-center bg-yellow-400/10 border border-yellow-400/30 rounded-full md:rounded-2xl px-4 py-2.5 text-(--gold-main) font-bold text-xs sm:text-sm md:text-base">
                               Day {item.day}
                             </div>
                           </div>
 
-                          <div className="bg-black/25 border border-white/10 rounded-2xl p-4 sm:p-5 hover:border-(--gold-main)/30 transition">
+                          <div className="bg-black/25 border border-white/10 rounded-2xl p-4 sm:p-5 hover:border-yellow-400/30 transition">
                             <h3 className="font-semibold text-white mb-2 text-sm sm:text-base md:text-lg leading-snug">
                               {item.title}
                             </h3>
@@ -826,7 +821,7 @@ Please share the best quote and itinerary.`;
               {activeTab === "gallery" && (
                 <div>
                   <div className="mb-5 sm:mb-6">
-                    <p className="text-[11px] sm:text-xs uppercase tracking-[0.25em] text-(--gold-main)/80 mb-2">
+                    <p className="text-[11px] sm:text-xs uppercase tracking-[0.25em] text-(--gold-main) mb-2">
                       Trip Photos
                     </p>
 
@@ -1048,14 +1043,14 @@ Please share the best quote and itinerary.`;
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex justify-center items-end md:items-center p-3 md:p-6 overflow-y-auto"
+            className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex justify-center items-end md:items-center p-2 sm:p-6 overflow-y-auto"
           >
             <motion.div
               initial={{ y: 80, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: 80, opacity: 0 }}
               transition={{ duration: 0.35 }}
-              className="bg-(--bg-card) border border-white/10 w-full max-w-2xl max-h-[92vh] overflow-hidden rounded-3xl sm:rounded-[26px] shadow-2xl flex flex-col"
+              className="bg-(--bg-card) border border-white/10 w-full max-w-2xl max-h-[94vh] overflow-hidden rounded-3xl sm:rounded-[26px] shadow-2xl flex flex-col"
             >
               <div className="flex items-center justify-between border-b border-white/10 p-4 md:p-6 sticky top-0 bg-(--bg-card) z-10">
                 <h2 className="text-xl md:text-2xl font-(--font-heading) text-(--gold-main)">
@@ -1228,7 +1223,7 @@ Please share the best quote and itinerary.`;
 };
 
 const HeroInfo = ({ icon, title, subtitle }) => (
-  <div className="bg-black/35 backdrop-blur-xl border border-white/15 rounded-2xl p-3 sm:p-4 hover:bg-white/10 transition group shadow-lg">
+  <div className="bg-black/40 backdrop-blur-xl border border-white/15 rounded-2xl p-3 sm:p-4 transition group shadow-lg min-h-[86px] sm:min-h-0">
     <div className="text-(--gold-main) mb-2 sm:mb-3 group-hover:scale-110 transition [&>svg]:w-5 sm:[&>svg]:w-7 [&>svg]:h-5 sm:[&>svg]:h-7">
       {icon}
     </div>
@@ -1241,7 +1236,7 @@ const HeroInfo = ({ icon, title, subtitle }) => (
 );
 
 const TrustPill = ({ icon, title }) => (
-  <div className="bg-white/6 border border-white/10 backdrop-blur-md rounded-2xl px-3 py-2.5 sm:py-3 flex items-center gap-2 sm:gap-3 hover:bg-white/10 transition shadow-lg">
+  <div className="bg-white/[0.06] border border-white/10 backdrop-blur-md rounded-2xl px-3 py-2.5 sm:py-3 flex items-center gap-2 sm:gap-3 transition shadow-lg min-h-[48px]">
     <div className="text-(--gold-main) shrink-0 [&>svg]:w-4 sm:[&>svg]:w-5 [&>svg]:h-4 sm:[&>svg]:h-5">
       {icon}
     </div>
@@ -1252,7 +1247,7 @@ const TrustPill = ({ icon, title }) => (
 );
 
 const TrustCard = ({ icon, title, small }) => (
-  <div className="bg-black/20 border border-white/10 rounded-2xl p-4 flex items-start gap-3 hover:bg-white/5 transition">
+  <div className="bg-black/20 border border-white/10 rounded-2xl p-4 flex items-start gap-3 hover:bg-white/[0.05] transition">
     <div className="text-(--gold-main) shrink-0 [&>svg]:w-6 sm:[&>svg]:w-7 [&>svg]:h-6 sm:[&>svg]:h-7">
       {icon}
     </div>
@@ -1266,7 +1261,7 @@ const TrustCard = ({ icon, title, small }) => (
 );
 
 const FeatureCard = ({ icon, title, text }) => (
-  <div className="flex gap-3 sm:gap-4 items-start p-3 sm:p-4 rounded-2xl hover:bg-white/4 transition">
+  <div className="flex gap-3 sm:gap-4 items-start p-3 sm:p-4 rounded-2xl hover:bg-white/[0.04] transition">
     <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-(--gold-main) shrink-0 [&>svg]:w-5 sm:[&>svg]:w-6 [&>svg]:h-5 sm:[&>svg]:h-6">
       {icon}
     </div>
@@ -1278,7 +1273,7 @@ const FeatureCard = ({ icon, title, text }) => (
 );
 
 const SmallBenefit = ({ title, text }) => (
-  <div className="bg-black/25 border border-white/10 rounded-2xl p-4 hover:border-(--gold-main)/30 transition">
+  <div className="bg-black/25 border border-white/10 rounded-2xl p-4 hover:border-yellow-400/30 transition">
     <div className="flex items-start gap-2 text-(--gold-main) font-semibold text-sm sm:text-base">
       <CheckCircle2 size={18} className="shrink-0 mt-0.5" />
       <span>{title}</span>
@@ -1302,7 +1297,7 @@ const ListSection = ({ title, items, type }) => (
         {items.map((item, index) => (
           <div
             key={index}
-            className="bg-black/25 border border-white/10 rounded-2xl p-4 flex gap-3 hover:bg-white/4 transition"
+            className="bg-black/25 border border-white/10 rounded-2xl p-4 flex gap-3 hover:bg-white/[0.04] transition"
           >
             {type === "include" ? (
               <CheckCircle2
