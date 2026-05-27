@@ -363,15 +363,15 @@ Please share the best quote and itinerary.`;
             alt={packageTitle}
             className="w-full h-full object-cover object-center scale-105"
           />
-          <div className="absolute inset-0 bg-black/70 sm:bg-black/60" />
-          <div className="absolute inset-0 bg-linear-to-b from-black/25 via-[#020617]/80 to-(--bg-main)" />
-          <div className="absolute inset-0 bg-linear-to-r from-[#020617] via-[#020617cc] to-black/20" />
+          <div className="absolute inset-0 bg-black/40 sm:bg-black/20" />
+          <div className="absolute inset-0 bg-linear-to-b from-black/02 via-[#020617]/40 to-(--bg-main)" />
+          <div className="absolute inset-0 bg-linear-to-r from-[#020617] via-[#020617cc] to-black/10" />
         </div>
 
         <div className="absolute -top-28 -left-28 w-[320px] h-[320px] bg-yellow-500/20 blur-[110px] rounded-full" />
         <div className="absolute top-40 -right-28 w-[320px] h-[320px] bg-cyan-500/10 blur-[110px] rounded-full" />
 
-        <div className="relative max-w-7xl mx-auto px-3 sm:px-6 pt-14 sm:pt-20 lg:pt-24 pb-8 sm:pb-12 lg:pb-16">
+        <div className="relative max-w-7xl mx-auto px-3 sm:px-6 pt-24 sm:pt-20 lg:pt-24 pb-8 sm:pb-12 lg:pb-16">
           <div className="flex items-center justify-between gap-2 mb-5 sm:mb-10 lg:mb-12">
             <button
               onClick={() => navigate("/packages")}
