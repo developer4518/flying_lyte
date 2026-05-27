@@ -329,3 +329,4 @@ const HotelBooking = () => {
 };
 
 export default HotelBooking;
+

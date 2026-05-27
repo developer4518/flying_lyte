@@ -356,7 +356,7 @@ Please share the best quote and itinerary.`;
   return (
     <div className="bg-(--bg-main) text-white min-h-screen pb-24 md:pb-28 overflow-hidden">
       {/* HERO */}
-      <section className="relative min-h-[690px] sm:min-h-[780px] lg:min-h-[860px] overflow-hidden">
+      <section className="relative min-h-172.5 sm:min-h-195 lg:min-h-215 overflow-hidden">
         <img
           src={heroImage}
           alt={packageTitle}
@@ -367,8 +367,8 @@ Please share the best quote and itinerary.`;
         <div className="absolute inset-0 bg-linear-to-r from-[#020617] via-[#020617cc] to-black/30" />
         <div className="absolute inset-0 bg-linear-to-b from-black/10 via-transparent to-(--bg-main)" />
 
-        <div className="absolute -top-36 -left-36 w-[420px] h-[420px] bg-yellow-500/20 blur-[130px] rounded-full" />
-        <div className="absolute top-40 -right-40 w-[420px] h-[420px] bg-cyan-500/10 blur-[130px] rounded-full" />
+        <div className="absolute -top-36 -left-36 w-105 h-105 bg-yellow-500/20 blur-[130px] rounded-full" />
+        <div className="absolute top-40 -right-40 w-105 h-105 bg-cyan-500/10 blur-[130px] rounded-full" />
 
         <div className="relative max-w-7xl mx-auto px-3 sm:px-6 pt-16 sm:pt-24 pb-12 sm:pb-16">
           <div className="flex items-center justify-between gap-2 mb-6 sm:mb-12">
@@ -415,7 +415,7 @@ Please share the best quote and itinerary.`;
 
                 <div className="inline-flex items-center gap-1.5 bg-white/10 border border-white/15 text-white px-3 py-1.5 rounded-full text-[11px] sm:text-sm backdrop-blur-md max-w-full">
                   <MapPin size={14} className="text-(--gold-main) shrink-0" />
-                  <span className="truncate max-w-[230px] sm:max-w-none">
+                  <span className="truncate max-w-57.5 sm:max-w-none">
                     {destination}
                   </span>
                 </div>
@@ -448,7 +448,7 @@ Please share the best quote and itinerary.`;
                 />
               </div>
 
-              <div className="relative bg-black/40 border border-white/15 rounded-[24px] sm:rounded-[28px] p-4 sm:p-6 backdrop-blur-2xl max-w-3xl mb-5 sm:mb-7 overflow-hidden shadow-2xl">
+              <div className="relative bg-black/40 border border-white/15 rounded-3xl sm:rounded-[28px] p-4 sm:p-6 backdrop-blur-2xl max-w-3xl mb-5 sm:mb-7 overflow-hidden shadow-2xl">
                 <div className="absolute -top-16 -right-16 w-44 h-44 rounded-full bg-yellow-400/15 blur-[70px]" />
 
                 <div className="relative grid md:grid-cols-[1fr_auto] gap-4 sm:gap-5 items-center">
@@ -596,7 +596,7 @@ Please share the best quote and itinerary.`;
 
       {/* MINI GALLERY */}
       <section className="max-w-7xl mx-auto px-3 sm:px-6 mt-6 sm:-mt-16 relative z-10">
-        <div className="bg-white/[0.03] border border-white/10 rounded-[24px] sm:rounded-[28px] p-3 sm:p-5 backdrop-blur-xl shadow-2xl">
+        <div className="bg-white/3 border border-white/10 rounded-3xl sm:rounded-[28px] p-3 sm:p-5 backdrop-blur-xl shadow-2xl">
           <div className="flex items-center justify-between gap-4 mb-4 sm:mb-5">
             <div>
               <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-white">
@@ -673,7 +673,7 @@ Please share the best quote and itinerary.`;
 
       {/* FEATURE STRIP */}
       <section className="max-w-7xl mx-auto px-3 sm:px-6 mt-6 sm:mt-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 bg-(--bg-card) border border-white/10 rounded-[24px] sm:rounded-[26px] p-3 sm:p-4 shadow-xl">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 bg-(--bg-card) border border-white/10 rounded-3xl sm:rounded-[26px] p-3 sm:p-4 shadow-xl">
           <FeatureCard
             icon={<Building2 />}
             title="Hotels Included"
@@ -700,7 +700,7 @@ Please share the best quote and itinerary.`;
       {/* MAIN CONTENT */}
       <section className="max-w-7xl mx-auto px-3 sm:px-6 mt-6 sm:mt-8 grid lg:grid-cols-[1fr_360px] gap-8">
         <div className="space-y-6 sm:space-y-8">
-          <div className="bg-(--bg-card) border border-white/10 rounded-[24px] sm:rounded-[26px] overflow-hidden shadow-2xl">
+          <div className="bg-(--bg-card) border border-white/10 rounded-3xl sm:rounded-[26px] overflow-hidden shadow-2xl">
             <div className="flex overflow-x-auto border-b border-white/10 bg-black/20">
               {tabs.map((tab) => (
                 <button
@@ -724,18 +724,26 @@ Please share the best quote and itinerary.`;
               ))}
             </div>
 
-            <div className="p-4 sm:p-6 md:p-8">
+            <div className="p-3 sm:p-5 md:p-8">
               {activeTab === "overview" && (
                 <div>
-                  <h2 className="text-xl sm:text-2xl font-(--font-heading) text-(--gold-main) mb-4">
-                    Tour Overview
-                  </h2>
+                  <div className="mb-5">
+                    <p className="text-[11px] sm:text-xs uppercase tracking-[0.25em] text-(--gold-main)/80 mb-2">
+                      Package Details
+                    </p>
 
-                  <p className="text-gray-300 leading-relaxed text-sm sm:text-base">
-                    {pkg.description}
-                  </p>
+                    <h2 className="text-xl sm:text-2xl md:text-3xl font-(--font-heading) text-(--gold-main)">
+                      Tour Overview
+                    </h2>
+                  </div>
 
-                  <div className="grid md:grid-cols-3 gap-3 sm:gap-4 mt-6 sm:mt-7">
+                  <div className="bg-black/20 border border-white/10 rounded-2xl p-4 sm:p-5">
+                    <p className="text-gray-300 leading-7 text-sm sm:text-base break-words">
+                      {pkg.description}
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mt-5 sm:mt-7">
                     <SmallBenefit
                       title="Customized Packages"
                       text="As per your needs"
@@ -754,26 +762,35 @@ Please share the best quote and itinerary.`;
 
               {activeTab === "itinerary" && (
                 <div>
-                  <h2 className="text-xl sm:text-2xl font-(--font-heading) text-(--gold-main) mb-5 sm:mb-6">
-                    Itinerary Highlights
-                  </h2>
+                  <div className="mb-5 sm:mb-6">
+                    <p className="text-[11px] sm:text-xs uppercase tracking-[0.25em] text-(--gold-main)/80 mb-2">
+                      Day Wise Plan
+                    </p>
+
+                    <h2 className="text-xl sm:text-2xl md:text-3xl font-(--font-heading) text-(--gold-main)">
+                      Itinerary Highlights
+                    </h2>
+                  </div>
 
                   {itineraryDays.length > 0 ? (
-                    <div className="space-y-4 sm:space-y-5">
+                    <div className="relative space-y-4 sm:space-y-5">
                       {itineraryDays.map((item, index) => (
                         <div
                           key={index}
-                          className="grid md:grid-cols-[90px_1fr] gap-3 sm:gap-4"
+                          className="relative grid grid-cols-1 md:grid-cols-[96px_1fr] gap-3 sm:gap-4"
                         >
-                          <div className="bg-black/30 border border-white/10 rounded-2xl px-4 py-2.5 sm:py-3 text-center text-(--gold-main) font-bold h-fit text-sm sm:text-base">
-                            Day {item.day}
+                          <div className="md:sticky md:top-24 h-fit">
+                            <div className="inline-flex md:flex w-fit md:w-full items-center justify-center bg-(--gold-main)/10 border border-(--gold-main)/30 rounded-full md:rounded-2xl px-4 py-2.5 text-(--gold-main) font-bold text-xs sm:text-sm md:text-base">
+                              Day {item.day}
+                            </div>
                           </div>
 
-                          <div className="bg-black/20 border border-white/10 rounded-2xl p-4">
-                            <h3 className="font-semibold text-white mb-1 text-sm sm:text-base">
+                          <div className="bg-black/25 border border-white/10 rounded-2xl p-4 sm:p-5 hover:border-(--gold-main)/30 transition">
+                            <h3 className="font-semibold text-white mb-2 text-sm sm:text-base md:text-lg leading-snug">
                               {item.title}
                             </h3>
-                            <p className="text-gray-300 leading-relaxed text-sm md:text-base">
+
+                            <p className="text-gray-300 leading-7 text-sm sm:text-base break-words">
                               {item.description}
                             </p>
                           </div>
@@ -781,9 +798,11 @@ Please share the best quote and itinerary.`;
                       ))}
                     </div>
                   ) : (
-                    <p className="text-gray-400 text-sm">
-                      No itinerary available.
-                    </p>
+                    <div className="bg-black/20 border border-white/10 rounded-2xl p-5 text-center">
+                      <p className="text-gray-400 text-sm">
+                        No itinerary available.
+                      </p>
+                    </div>
                   )}
                 </div>
               )}
@@ -806,30 +825,48 @@ Please share the best quote and itinerary.`;
 
               {activeTab === "gallery" && (
                 <div>
-                  <h2 className="text-xl sm:text-2xl font-(--font-heading) text-(--gold-main) mb-5 sm:mb-6">
-                    Gallery
-                  </h2>
+                  <div className="mb-5 sm:mb-6">
+                    <p className="text-[11px] sm:text-xs uppercase tracking-[0.25em] text-(--gold-main)/80 mb-2">
+                      Trip Photos
+                    </p>
+
+                    <h2 className="text-xl sm:text-2xl md:text-3xl font-(--font-heading) text-(--gold-main)">
+                      Gallery
+                    </h2>
+                  </div>
 
                   {images.length > 0 ? (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                    <div className="grid grid-cols-2 lg:grid-cols-3 gap-2.5 sm:gap-4">
                       {images.map((img, index) => (
                         <button
                           key={img.id || index}
                           onClick={() => setSelectedImage(img.image)}
-                          className="h-52 sm:h-64 rounded-3xl overflow-hidden border border-white/10 bg-black/30 group"
+                          className={`relative overflow-hidden border border-white/10 bg-black/30 group shadow-lg ${
+                            index === 0
+                              ? "col-span-2 h-48 sm:h-72 lg:h-80 rounded-2xl sm:rounded-3xl"
+                              : "h-36 sm:h-56 lg:h-64 rounded-2xl sm:rounded-3xl"
+                          }`}
                         >
                           <img
                             src={img.image}
                             alt={`Gallery ${index + 1}`}
                             className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
                           />
+
+                          <div className="absolute inset-0 bg-linear-to-t from-black/70 via-transparent to-transparent opacity-80" />
+
+                          <div className="absolute top-3 right-3 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-black/60 border border-white/15 backdrop-blur-md flex items-center justify-center text-(--gold-main)">
+                            <Camera size={16} />
+                          </div>
                         </button>
                       ))}
                     </div>
                   ) : (
-                    <p className="text-gray-400 text-sm">
-                      No gallery images available.
-                    </p>
+                    <div className="bg-black/20 border border-white/10 rounded-2xl p-5 text-center">
+                      <p className="text-gray-400 text-sm">
+                        No gallery images available.
+                      </p>
+                    </div>
                   )}
                 </div>
               )}
@@ -837,7 +874,7 @@ Please share the best quote and itinerary.`;
           </div>
 
           {pkg.faqs?.length > 0 && (
-            <div className="bg-(--bg-card) border border-white/10 rounded-[24px] sm:rounded-[26px] p-4 sm:p-6 md:p-8 shadow-xl">
+            <div className="bg-(--bg-card) border border-white/10 rounded-3xl sm:rounded-[26px] p-4 sm:p-6 md:p-8 shadow-xl">
               <h2 className="text-xl sm:text-2xl font-(--font-heading) text-(--gold-main) mb-5 sm:mb-6">
                 Frequently Asked Questions
               </h2>
@@ -1018,7 +1055,7 @@ Please share the best quote and itinerary.`;
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: 80, opacity: 0 }}
               transition={{ duration: 0.35 }}
-              className="bg-(--bg-card) border border-white/10 w-full max-w-2xl max-h-[92vh] overflow-hidden rounded-[24px] sm:rounded-[26px] shadow-2xl flex flex-col"
+              className="bg-(--bg-card) border border-white/10 w-full max-w-2xl max-h-[92vh] overflow-hidden rounded-3xl sm:rounded-[26px] shadow-2xl flex flex-col"
             >
               <div className="flex items-center justify-between border-b border-white/10 p-4 md:p-6 sticky top-0 bg-(--bg-card) z-10">
                 <h2 className="text-xl md:text-2xl font-(--font-heading) text-(--gold-main)">
@@ -1204,7 +1241,7 @@ const HeroInfo = ({ icon, title, subtitle }) => (
 );
 
 const TrustPill = ({ icon, title }) => (
-  <div className="bg-white/[0.06] border border-white/10 backdrop-blur-md rounded-2xl px-3 py-2.5 sm:py-3 flex items-center gap-2 sm:gap-3 hover:bg-white/[0.1] transition shadow-lg">
+  <div className="bg-white/6 border border-white/10 backdrop-blur-md rounded-2xl px-3 py-2.5 sm:py-3 flex items-center gap-2 sm:gap-3 hover:bg-white/10 transition shadow-lg">
     <div className="text-(--gold-main) shrink-0 [&>svg]:w-4 sm:[&>svg]:w-5 [&>svg]:h-4 sm:[&>svg]:h-5">
       {icon}
     </div>
@@ -1215,7 +1252,7 @@ const TrustPill = ({ icon, title }) => (
 );
 
 const TrustCard = ({ icon, title, small }) => (
-  <div className="bg-black/20 border border-white/10 rounded-2xl p-4 flex items-start gap-3 hover:bg-white/[0.05] transition">
+  <div className="bg-black/20 border border-white/10 rounded-2xl p-4 flex items-start gap-3 hover:bg-white/5 transition">
     <div className="text-(--gold-main) shrink-0 [&>svg]:w-6 sm:[&>svg]:w-7 [&>svg]:h-6 sm:[&>svg]:h-7">
       {icon}
     </div>
@@ -1229,7 +1266,7 @@ const TrustCard = ({ icon, title, small }) => (
 );
 
 const FeatureCard = ({ icon, title, text }) => (
-  <div className="flex gap-3 sm:gap-4 items-start p-3 sm:p-4 rounded-2xl hover:bg-white/[0.04] transition">
+  <div className="flex gap-3 sm:gap-4 items-start p-3 sm:p-4 rounded-2xl hover:bg-white/4 transition">
     <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-(--gold-main) shrink-0 [&>svg]:w-5 sm:[&>svg]:w-6 [&>svg]:h-5 sm:[&>svg]:h-6">
       {icon}
     </div>
@@ -1242,11 +1279,13 @@ const FeatureCard = ({ icon, title, text }) => (
 
 const SmallBenefit = ({ title, text }) => (
   <div className="bg-black/25 border border-white/10 rounded-2xl p-4 hover:border-(--gold-main)/30 transition">
-    <div className="flex items-center gap-2 text-(--gold-main) font-semibold text-sm sm:text-base">
-      <CheckCircle2 size={18} />
-      {title}
+    <div className="flex items-start gap-2 text-(--gold-main) font-semibold text-sm sm:text-base">
+      <CheckCircle2 size={18} className="shrink-0 mt-0.5" />
+      <span>{title}</span>
     </div>
-    <p className="text-sm text-gray-300 mt-1">{text}</p>
+    <p className="text-xs sm:text-sm text-gray-300 mt-1.5 leading-relaxed">
+      {text}
+    </p>
   </div>
 );
 
@@ -1263,7 +1302,7 @@ const ListSection = ({ title, items, type }) => (
         {items.map((item, index) => (
           <div
             key={index}
-            className="bg-black/25 border border-white/10 rounded-2xl p-4 flex gap-3 hover:bg-white/[0.04] transition"
+            className="bg-black/25 border border-white/10 rounded-2xl p-4 flex gap-3 hover:bg-white/4 transition"
           >
             {type === "include" ? (
               <CheckCircle2
