@@ -370,10 +370,10 @@ Please share the best quote and itinerary.`;
           <div className="absolute inset-0 bg-linear-to-r from-[#020617] via-[#020617cc] to-black/10" />
         </div>
 
-        <div className="absolute -top-24 -left-24 w-[260px] h-[260px] sm:w-[320px] sm:h-[320px] bg-yellow-500/20 blur-[100px] sm:blur-[110px] rounded-full" />
-        <div className="absolute top-40 -right-24 w-[260px] h-[260px] sm:w-[320px] sm:h-[320px] bg-cyan-500/10 blur-[100px] sm:blur-[110px] rounded-full" />
+        <div className="absolute -top-24 -left-24 w-65 h-65 sm:w-[320px] sm:h-80 bg-yellow-500/20 blur-[100px] sm:blur-[110px] rounded-full" />
+        <div className="absolute top-40 -right-24 w-65 h-65 sm:w-[320px] sm:h-80 bg-cyan-500/10 blur-[100px] sm:blur-[110px] rounded-full" />
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-5 md:px-6 lg:px-8 pt-[88px] sm:pt-24 md:pt-28 lg:pt-[120px] pb-7 sm:pb-10 md:pb-12 lg:pb-16">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-5 md:px-6 lg:px-8 pt-22 sm:pt-24 md:pt-28 lg:pt-30 pb-7 sm:pb-10 md:pb-12 lg:pb-16">
           <div className="flex items-center justify-between gap-3 mb-6 sm:mb-8 md:mb-10 lg:mb-12">
             <button
               onClick={() => navigate("/packages")}
@@ -418,7 +418,7 @@ Please share the best quote and itinerary.`;
 
                 <div className="inline-flex items-center gap-1.5 bg-white/10 border border-white/15 text-white px-3 py-1.5 rounded-full text-[11px] sm:text-sm backdrop-blur-md max-w-full">
                   <MapPin size={14} className="text-(--gold-main) shrink-0" />
-                  <span className="truncate max-w-[220px] sm:max-w-[320px] md:max-w-none">
+                  <span className="truncate max-w-55 sm:max-w-[320px] md:max-w-none">
                     {destination}
                   </span>
                 </div>
@@ -486,7 +486,7 @@ Please share the best quote and itinerary.`;
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 gap-2.5 md:min-w-[230px]">
+                  <div className="grid grid-cols-1 gap-2.5 md:min-w-57.5">
                     <button
                       onClick={handleBookClick}
                       className="relative overflow-hidden bg-linear-to-r from-start to-end text-black font-bold py-3.5 sm:py-4 rounded-2xl flex items-center justify-center gap-2 hover:scale-[1.02] transition shadow-[0_15px_40px_rgba(245,186,74,0.25)]"
@@ -599,7 +599,7 @@ Please share the best quote and itinerary.`;
 
       {/* MINI GALLERY */}
       <section className="max-w-7xl mx-auto px-4 sm:px-5 md:px-6 lg:px-8 mt-6 sm:mt-8 md:mt-10 relative z-10">
-        <div className="bg-white/[0.03] border border-white/10 rounded-[22px] sm:rounded-[28px] p-3.5 sm:p-5 md:p-6 backdrop-blur-xl shadow-2xl">
+        <div className="bg-white/3 border border-white/10 rounded-[22px] sm:rounded-[28px] p-3.5 sm:p-5 md:p-6 backdrop-blur-xl shadow-2xl">
           <div className="flex items-center justify-between gap-4 mb-4 sm:mb-5">
             <div className="min-w-0">
               <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-white">
@@ -735,7 +735,7 @@ Please share the best quote and itinerary.`;
                   </div>
 
                   <div className="bg-black/20 border border-white/10 rounded-2xl p-4 sm:p-5">
-                    <p className="text-gray-300 leading-7 text-sm sm:text-base break-words">
+                    <p className="text-gray-300 leading-7 text-sm sm:text-base wrap-break-words">
                       {pkg.description}
                     </p>
                   </div>
@@ -787,7 +787,7 @@ Please share the best quote and itinerary.`;
                               {item.title}
                             </h3>
 
-                            <p className="text-gray-300 leading-7 text-sm sm:text-base break-words">
+                            <p className="text-gray-300 leading-7 text-sm sm:text-base wrap-break-words">
                               {item.description}
                             </p>
                           </div>
@@ -1335,7 +1335,7 @@ Please share the best quote and itinerary.`;
 };
 
 const HeroInfo = ({ icon, title, subtitle }) => (
-  <div className="bg-black/40 backdrop-blur-xl border border-white/15 rounded-2xl p-3.5 sm:p-4 transition group shadow-lg min-h-[88px] sm:min-h-[104px]">
+  <div className="bg-black/40 backdrop-blur-xl border border-white/15 rounded-2xl p-3.5 sm:p-4 transition group shadow-lg min-h-22 sm:min-h-26">
     <div className="text-(--gold-main) mb-2 sm:mb-3 group-hover:scale-110 transition [&>svg]:w-5 sm:[&>svg]:w-7 [&>svg]:h-5 sm:[&>svg]:h-7">
       {icon}
     </div>
@@ -1350,7 +1350,7 @@ const HeroInfo = ({ icon, title, subtitle }) => (
 );
 
 const TrustPill = ({ icon, title }) => (
-  <div className="bg-white/[0.06] border border-white/10 backdrop-blur-md rounded-2xl px-3 py-2.5 sm:py-3 flex items-center gap-2 sm:gap-3 transition shadow-lg min-h-[48px]">
+  <div className="bg-white/6 border border-white/10 backdrop-blur-md rounded-2xl px-3 py-2.5 sm:py-3 flex items-center gap-2 sm:gap-3 transition shadow-lg min-h-12">
     <div className="text-(--gold-main) shrink-0 [&>svg]:w-4 sm:[&>svg]:w-5 [&>svg]:h-4 sm:[&>svg]:h-5">
       {icon}
     </div>
@@ -1361,7 +1361,7 @@ const TrustPill = ({ icon, title }) => (
 );
 
 const TrustCard = ({ icon, title, small }) => (
-  <div className="bg-black/20 border border-white/10 rounded-2xl p-3.5 sm:p-4 flex items-start gap-3 hover:bg-white/[0.05] transition">
+  <div className="bg-black/20 border border-white/10 rounded-2xl p-3.5 sm:p-4 flex items-start gap-3 hover:bg-white/5 transition">
     <div className="text-(--gold-main) shrink-0 [&>svg]:w-6 sm:[&>svg]:w-7 [&>svg]:h-6 sm:[&>svg]:h-7">
       {icon}
     </div>
@@ -1377,7 +1377,7 @@ const TrustCard = ({ icon, title, small }) => (
 );
 
 const FeatureCard = ({ icon, title, text }) => (
-  <div className="flex gap-3 sm:gap-4 items-start p-3.5 sm:p-4 rounded-2xl hover:bg-white/[0.04] transition">
+  <div className="flex gap-3 sm:gap-4 items-start p-3.5 sm:p-4 rounded-2xl hover:bg-white/4 transition">
     <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-(--gold-main) shrink-0 [&>svg]:w-5 sm:[&>svg]:w-6 [&>svg]:h-5 sm:[&>svg]:h-6">
       {icon}
     </div>
@@ -1415,7 +1415,7 @@ const ListSection = ({ title, items, type }) => (
         {items.map((item, index) => (
           <div
             key={index}
-            className="bg-black/25 border border-white/10 rounded-2xl p-4 flex gap-3 hover:bg-white/[0.04] transition"
+            className="bg-black/25 border border-white/10 rounded-2xl p-4 flex gap-3 hover:bg-white/4 transition"
           >
             {type === "include" ? (
               <CheckCircle2

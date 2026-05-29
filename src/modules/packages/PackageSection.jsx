@@ -149,7 +149,7 @@ const PackageSection = ({ limit = 8 }) => {
     <section
       className="
         relative overflow-hidden bg-(--bg-main)
-        py-10 sm:py-12 md:py-16 lg:py-20 xl:py-24
+        py-20 sm:py-22 md:py-24 lg:py-28 xl:py-32
       "
     >
       {/* Decorative Background */}
