@@ -3,7 +3,7 @@ import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
-import { Search } from "lucide-react";
+import { Search, ArrowLeft, ArrowRight, MapPin } from "lucide-react";
 import PackageCard from "./PackageCard";
 import { publicApi } from "../../services/api";
 
@@ -15,8 +15,6 @@ const fetchPackages = async (page = 1, limit = 8, destination = "") => {
   }).toString();
 
   const { data } = await publicApi.get(`/api/package/packages/?${query}`);
-
-  console.log("API RESPONSE:", data);
 
   const packages = data?.data || data?.results || [];
 
@@ -48,7 +46,6 @@ const PackageSection = ({ limit = 8 }) => {
   );
 
   const updateUrl = (newPage, newDestination = debouncedDestination) => {
-    // ✅ Do not redirect homepage to /packages
     if (!isPackagesPage) return;
 
     const params = new URLSearchParams();
@@ -71,9 +68,13 @@ const PackageSection = ({ limit = 8 }) => {
 
     setPage(validPage);
     updateUrl(validPage);
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   };
 
-  // ✅ Sync state only on packages page
   useEffect(() => {
     if (!isPackagesPage) return;
 
@@ -82,7 +83,6 @@ const PackageSection = ({ limit = 8 }) => {
     setDebouncedDestination(destinationFromUrl);
   }, [pageFromUrl, destinationFromUrl, isPackagesPage]);
 
-  // ✅ Debounce search + update URL only on /packages
   useEffect(() => {
     const timer = setTimeout(() => {
       const trimmedDestination = destination.trim();
@@ -90,7 +90,6 @@ const PackageSection = ({ limit = 8 }) => {
       setDebouncedDestination(trimmedDestination);
       setPage(1);
 
-      // ✅ Do not navigate when PackageSection is used on homepage
       if (!isPackagesPage) return;
 
       const params = new URLSearchParams();
@@ -125,66 +124,162 @@ const PackageSection = ({ limit = 8 }) => {
   const containerVariants = {
     hidden: {},
     visible: {
-      transition: { staggerChildren: 0.12 },
+      transition: {
+        staggerChildren: 0.1,
+      },
     },
   };
 
   const cardVariants = {
-    hidden: { opacity: 0, y: 40 },
+    hidden: {
+      opacity: 0,
+      y: 35,
+    },
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.5, ease: "easeOut" },
+      transition: {
+        duration: 0.45,
+        ease: "easeOut",
+      },
     },
   };
 
   return (
-    <section className="relative pt-20 md:pt-24 pb-10 bg-(--bg-main)">
-      <div className="max-w-7xl mx-auto px-4">
+    <section
+      className="
+        relative overflow-hidden bg-(--bg-main)
+        py-10 sm:py-12 md:py-16 lg:py-20 xl:py-24
+      "
+    >
+      {/* Decorative Background */}
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute -top-20 left-1/2 h-56 w-56 -translate-x-1/2 rounded-full bg-(--gold-main)/10 blur-3xl sm:h-72 sm:w-72 md:h-96 md:w-96" />
+        <div className="absolute bottom-10 -left-24 h-56 w-56 rounded-full bg-white/5 blur-3xl sm:h-72 sm:w-72" />
+        <div className="absolute -right-28 top-1/3 h-64 w-64 rounded-full bg-(--gold-main)/5 blur-3xl md:h-80 md:w-80" />
+      </div>
+
+      <div
+        className="
+          relative z-10 mx-auto w-full max-w-7xl
+          px-4 sm:px-5 md:px-6 lg:px-8
+        "
+      >
         {/* Heading */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-12"
+          transition={{ duration: 0.55, ease: "easeOut" }}
+          className="
+            mx-auto max-w-3xl text-center
+            mb-7 sm:mb-8 md:mb-10 lg:mb-12
+          "
         >
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-(--gold-main)">
-            Curated Travel Packages
+          <div
+            className="
+              mb-3 sm:mb-4 inline-flex items-center gap-2 rounded-full
+              border border-(--gold-main)/30 bg-white/5
+              px-3 py-1.5 sm:px-4 sm:py-2
+              text-[10px] sm:text-xs md:text-sm
+              font-semibold uppercase tracking-[0.18em] sm:tracking-[0.25em]
+              text-(--gold-main) backdrop-blur-md
+            "
+          >
+            <MapPin size={15} />
+            Explore Packages
+          </div>
+
+          <h2
+            className="
+              text-2xl font-bold leading-tight text-white
+              sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl
+            "
+          >
+            Curated Travel <span className="text-(--gold-main)">Packages</span>
           </h2>
+
+          <p
+            className="
+              mx-auto mt-3 max-w-2xl
+              text-sm leading-6 text-gray-400
+              sm:mt-4 sm:text-base sm:leading-7
+              md:text-lg md:leading-8
+            "
+          >
+            Discover handpicked holiday packages designed for unforgettable
+            journeys, premium stays, and smooth travel experiences.
+          </p>
         </motion.div>
 
         {/* Search Bar */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex justify-center mb-12"
+          transition={{ duration: 0.45 }}
+          className="
+            mx-auto max-w-2xl
+            mb-8 sm:mb-9 md:mb-10 lg:mb-12
+          "
         >
-          <div className="relative w-full max-w-xl">
-            <Search
-              className="absolute left-4 top-3.5 text-gray-400"
-              size={20}
-            />
+          <div
+            className="
+              relative rounded-2xl border border-white/10
+              bg-white/6 p-1.5 sm:p-2
+              shadow-2xl shadow-black/20 backdrop-blur-xl
+            "
+          >
+            <div className="relative">
+              <Search
+                className="absolute left-3.5 sm:left-4 top-1/2 -translate-y-1/2 text-(--gold-main)"
+                size={19}
+              />
 
-            <input
-              type="text"
-              placeholder="Search destination, city or country..."
-              value={destination}
-              onChange={(e) => setDestination(e.target.value)}
-              className="w-full pl-11 pr-4 py-3 rounded-xl border border-gray-600 bg-(--bg-card) text-white 
-              focus:outline-none focus:border-(--gold-main) focus:ring-1 focus:ring-(--gold-main)
-              transition-all duration-300"
-            />
+              <input
+                type="text"
+                placeholder="Search destination, city or country..."
+                value={destination}
+                onChange={(e) => setDestination(e.target.value)}
+                className="
+                  w-full rounded-xl border border-white/10 bg-(--bg-card)
+                  py-3 pl-11 pr-3 text-sm text-white outline-none
+                  transition-all duration-300 placeholder:text-gray-500
+                  focus:border-(--gold-main) focus:ring-2 focus:ring-(--gold-main)/25
+                  sm:py-3.5 sm:pl-12 sm:pr-4 sm:text-base
+                  md:py-4
+                "
+              />
+            </div>
           </div>
         </motion.div>
 
         {/* Loading Skeleton */}
         {isLoading && (
-          <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          <div
+            className="
+              grid grid-cols-1
+              gap-4 sm:grid-cols-2 sm:gap-5
+              lg:grid-cols-4 lg:gap-6 xl:gap-8
+            "
+          >
             {[...Array(limit)].map((_, i) => (
               <div
                 key={i}
-                className="h-80 rounded-2xl bg-(--bg-card) animate-pulse"
-              />
+                className="
+                  overflow-hidden rounded-2xl sm:rounded-3xl
+                  border border-white/10 bg-white/6
+                  p-2.5 sm:p-3
+                  shadow-xl shadow-black/20
+                "
+              >
+                <div className="h-44 animate-pulse rounded-xl bg-white/10 sm:h-52 sm:rounded-2xl md:h-56" />
+
+                <div className="mt-4 space-y-2.5 px-1 pb-2 sm:mt-5 sm:space-y-3 sm:pb-3">
+                  <div className="h-4 w-3/4 animate-pulse rounded-full bg-white/10" />
+                  <div className="h-4 w-1/2 animate-pulse rounded-full bg-white/10" />
+                  <div className="mt-4 h-10 w-full animate-pulse rounded-xl bg-white/10 sm:mt-5" />
+                </div>
+              </div>
             ))}
           </div>
         )}
@@ -193,55 +288,126 @@ const PackageSection = ({ limit = 8 }) => {
         {!isLoading && packages.length > 0 && (
           <>
             <motion.div
-              className="grid gap-8 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+              className="
+                grid grid-cols-1
+                gap-4 sm:grid-cols-2 sm:gap-5
+                lg:grid-cols-4 lg:gap-6 xl:gap-8
+              "
               variants={containerVariants}
               initial="hidden"
               animate="visible"
             >
               {packages.map((pkg) => (
-                <PackageCard key={pkg.id} pkg={pkg} variants={cardVariants} />
+                <PackageCard
+                  key={pkg.id || pkg._id || pkg.slug}
+                  pkg={pkg}
+                  variants={cardVariants}
+                />
               ))}
             </motion.div>
 
             {/* Pagination */}
-            <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mt-12">
-              <motion.button
-                whileTap={{ scale: 0.95 }}
-                onClick={() => handlePageChange(page - 1)}
-                disabled={page <= 1 || !data?.previous}
-                className="px-6 py-2 rounded-lg border border-(--gold-main) text-(--gold-main)
-                hover:bg-(--gold-main) hover:text-black transition disabled:opacity-40"
+            {isPackagesPage && totalPages > 1 && (
+              <div
+                className="
+                  mt-8 flex flex-col items-center justify-center gap-3
+                  sm:mt-10 sm:flex-row sm:gap-4
+                  md:mt-12 lg:mt-14
+                "
               >
-                Previous
-              </motion.button>
+                <motion.button
+                  whileTap={{ scale: 0.96 }}
+                  onClick={() => handlePageChange(page - 1)}
+                  disabled={page <= 1 || !data?.previous}
+                  className="
+                    flex w-full items-center justify-center gap-2 rounded-xl
+                    border border-(--gold-main)/70
+                    px-5 py-2.5 text-sm font-semibold
+                    text-(--gold-main) transition-all duration-300
+                    hover:bg-(--gold-main) hover:text-black
+                    disabled:cursor-not-allowed disabled:opacity-40
+                    sm:w-auto sm:px-6 sm:py-3
+                  "
+                >
+                  <ArrowLeft size={18} />
+                  Previous
+                </motion.button>
 
-              <span className="text-white text-sm sm:text-base">
-                Page {page} of {totalPages}
-              </span>
+                <div
+                  className="
+                    w-full rounded-xl border border-white/10
+                    bg-white/6 px-5 py-2.5 text-center
+                    text-sm font-medium text-white backdrop-blur-md
+                    sm:w-auto sm:py-3
+                  "
+                >
+                  Page <span className="text-(--gold-main)">{page}</span> of{" "}
+                  <span className="text-(--gold-main)">{totalPages}</span>
+                </div>
 
-              <motion.button
-                whileTap={{ scale: 0.95 }}
-                onClick={() => handlePageChange(page + 1)}
-                disabled={page >= totalPages || !data?.next}
-                className="px-6 py-2 rounded-lg bg-(--gold-main) text-black
-                hover:opacity-90 transition disabled:opacity-40"
-              >
-                Next
-              </motion.button>
-            </div>
+                <motion.button
+                  whileTap={{ scale: 0.96 }}
+                  onClick={() => handlePageChange(page + 1)}
+                  disabled={page >= totalPages || !data?.next}
+                  className="
+                    flex w-full items-center justify-center gap-2 rounded-xl
+                    bg-(--gold-main)
+                    px-5 py-2.5 text-sm font-semibold
+                    text-black transition-all duration-300
+                    hover:-translate-y-0.5 hover:shadow-lg hover:shadow-(--gold-main)/20
+                    disabled:cursor-not-allowed disabled:opacity-40
+                    sm:w-auto sm:px-6 sm:py-3
+                  "
+                >
+                  Next
+                  <ArrowRight size={18} />
+                </motion.button>
+              </div>
+            )}
           </>
         )}
 
         {/* Empty State */}
         {!isLoading && packages.length === 0 && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-center mt-20 h-screen"
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="
+              mx-auto mt-8 flex min-h-75 max-w-xl flex-col
+              items-center justify-center rounded-2xl border border-white/10
+              bg-white/5 px-5 py-10 text-center
+              shadow-2xl shadow-black/20 backdrop-blur-xl
+              sm:mt-10 sm:min-h-85 sm:rounded-3xl sm:px-6 sm:py-12
+              md:min-h-90
+            "
           >
-            <p className="text-gray-400 text-lg">
-              No packages found for this destination.
+            <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-(--gold-main)/10 text-(--gold-main) sm:mb-5 sm:h-16 sm:w-16">
+              <Search size={26} />
+            </div>
+
+            <h3 className="text-xl font-bold text-white sm:text-2xl">
+              No packages found
+            </h3>
+
+            <p className="mt-3 text-sm leading-6 text-gray-400 sm:text-base">
+              We could not find any package for this destination. Try searching
+              another city, country, or travel place.
             </p>
+
+            {destination && (
+              <button
+                type="button"
+                onClick={() => setDestination("")}
+                className="
+                  mt-5 rounded-xl bg-(--gold-main)
+                  px-5 py-2.5 text-sm font-semibold text-black
+                  transition hover:opacity-90
+                  sm:mt-6 sm:px-6 sm:py-3
+                "
+              >
+                Clear Search
+              </button>
+            )}
           </motion.div>
         )}
       </div>

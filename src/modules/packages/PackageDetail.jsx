@@ -92,6 +92,7 @@ const PackageDetails = () => {
 
   const [activeTab, setActiveTab] = useState("overview");
   const [openBookingForm, setOpenBookingForm] = useState(false);
+  const [openQuoteForm, setOpenQuoteForm] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [openFaq, setOpenFaq] = useState(null);
 
@@ -196,6 +197,7 @@ Please share the best quote and itinerary.`;
     )}`;
 
     window.open(url, "_blank");
+    setOpenQuoteForm(false);
   };
 
   const handleShare = async () => {
@@ -354,7 +356,7 @@ Please share the best quote and itinerary.`;
   ];
 
   return (
-    <div className="bg-(--bg-main) text-white min-h-screen pb-28 lg:pb-12 overflow-hidden">
+    <div className="bg-(--bg-main) text-white min-h-screen pb-28 sm:pb-32 lg:pb-12 overflow-hidden">
       {/* HERO */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0">
@@ -363,16 +365,16 @@ Please share the best quote and itinerary.`;
             alt={packageTitle}
             className="w-full h-full object-cover object-center scale-105"
           />
-          <div className="absolute inset-0 bg-black/40 sm:bg-black/20" />
-          <div className="absolute inset-0 bg-linear-to-b from-black/02 via-[#020617]/40 to-(--bg-main)" />
+          <div className="absolute inset-0 bg-black/45 sm:bg-black/30" />
+          <div className="absolute inset-0 bg-linear-to-b from-black/10 via-[#020617]/45 to-(--bg-main)" />
           <div className="absolute inset-0 bg-linear-to-r from-[#020617] via-[#020617cc] to-black/10" />
         </div>
 
-        <div className="absolute -top-28 -left-28 w-[320px] h-[320px] bg-yellow-500/20 blur-[110px] rounded-full" />
-        <div className="absolute top-40 -right-28 w-[320px] h-[320px] bg-cyan-500/10 blur-[110px] rounded-full" />
+        <div className="absolute -top-24 -left-24 w-[260px] h-[260px] sm:w-[320px] sm:h-[320px] bg-yellow-500/20 blur-[100px] sm:blur-[110px] rounded-full" />
+        <div className="absolute top-40 -right-24 w-[260px] h-[260px] sm:w-[320px] sm:h-[320px] bg-cyan-500/10 blur-[100px] sm:blur-[110px] rounded-full" />
 
-        <div className="relative max-w-7xl mx-auto px-3 sm:px-6 pt-24 sm:pt-20 lg:pt-24 pb-8 sm:pb-12 lg:pb-16">
-          <div className="flex items-center justify-between gap-2 mb-5 sm:mb-10 lg:mb-12">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-5 md:px-6 lg:px-8 pt-[88px] sm:pt-24 md:pt-28 lg:pt-[120px] pb-7 sm:pb-10 md:pb-12 lg:pb-16">
+          <div className="flex items-center justify-between gap-3 mb-6 sm:mb-8 md:mb-10 lg:mb-12">
             <button
               onClick={() => navigate("/packages")}
               className="inline-flex items-center gap-1.5 bg-white/10 hover:bg-white/15 border border-white/15 rounded-full px-3 sm:px-5 py-2 sm:py-2.5 text-[11px] sm:text-sm transition backdrop-blur-md"
@@ -396,12 +398,12 @@ Please share the best quote and itinerary.`;
             </div>
           </div>
 
-          <div className="grid lg:grid-cols-[1fr_390px] gap-8 lg:gap-10 items-start">
+          <div className="grid lg:grid-cols-[minmax(0,1fr)_390px] gap-7 sm:gap-8 md:gap-10 lg:gap-12 items-start">
             <motion.div
               initial={{ opacity: 0, y: 35 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.65 }}
-              className="max-w-4xl"
+              className="max-w-4xl min-w-0"
             >
               <div className="flex flex-wrap items-center gap-2 mb-4">
                 <div className="inline-flex items-center gap-1.5 bg-yellow-400/15 border border-yellow-400/30 text-(--gold-main) px-3 py-1.5 rounded-full text-[11px] sm:text-sm font-semibold backdrop-blur-md">
@@ -416,21 +418,21 @@ Please share the best quote and itinerary.`;
 
                 <div className="inline-flex items-center gap-1.5 bg-white/10 border border-white/15 text-white px-3 py-1.5 rounded-full text-[11px] sm:text-sm backdrop-blur-md max-w-full">
                   <MapPin size={14} className="text-(--gold-main) shrink-0" />
-                  <span className="truncate max-w-[220px] sm:max-w-none">
+                  <span className="truncate max-w-[220px] sm:max-w-[320px] md:max-w-none">
                     {destination}
                   </span>
                 </div>
               </div>
 
-              <h1 className="text-[28px] sm:text-5xl md:text-6xl lg:text-7xl font-(--font-hero) leading-[1.08] mb-3 sm:mb-5 break-words">
+              <h1 className="text-[27px] sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-(--font-hero) leading-[1.08] mb-3 sm:mb-4 md:mb-5 break-words">
                 {packageTitle}
               </h1>
 
-              <p className="text-sm sm:text-base md:text-xl text-gray-200 max-w-3xl leading-relaxed mb-5 sm:mb-7 line-clamp-3 sm:line-clamp-4">
+              <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-200 max-w-3xl leading-6 sm:leading-7 md:leading-8 mb-5 sm:mb-6 md:mb-7 line-clamp-3 sm:line-clamp-4">
                 {shortDescription}
               </p>
 
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-3 max-w-4xl mb-5 sm:mb-8">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 max-w-4xl mb-5 sm:mb-7 md:mb-8">
                 <HeroInfo
                   icon={<CalendarDays />}
                   title={`${pkg.days} Days`}
@@ -449,11 +451,11 @@ Please share the best quote and itinerary.`;
                 />
               </div>
 
-              <div className="relative bg-black/45 border border-white/15 rounded-[22px] sm:rounded-3xl p-4 sm:p-6 backdrop-blur-2xl max-w-3xl mb-5 sm:mb-7 overflow-hidden shadow-2xl">
+              <div className="relative bg-black/45 border border-white/15 rounded-[22px] sm:rounded-3xl p-4 sm:p-5 md:p-6 backdrop-blur-2xl max-w-3xl mb-5 sm:mb-6 md:mb-7 overflow-hidden shadow-2xl">
                 <div className="absolute -top-16 -right-16 w-44 h-44 rounded-full bg-yellow-400/15 blur-[70px]" />
 
-                <div className="relative grid md:grid-cols-[1fr_auto] gap-4 sm:gap-5 items-center">
-                  <div>
+                <div className="relative grid md:grid-cols-[minmax(0,1fr)_auto] gap-5 md:gap-6 items-center">
+                  <div className="min-w-0">
                     <p className="text-gray-300 text-xs sm:text-sm mb-1">
                       Starting From
                     </p>
@@ -504,7 +506,7 @@ Please share the best quote and itinerary.`;
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-3 max-w-4xl">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 max-w-4xl">
                 <TrustPill icon={<ShieldCheck />} title="Secure Booking" />
                 <TrustPill icon={<Wallet />} title="Best Price" />
                 <TrustPill icon={<Clock3 />} title="24/7 Support" />
@@ -533,7 +535,7 @@ Please share the best quote and itinerary.`;
                     Plan Your {destinationName} Trip
                   </h3>
 
-                  <p className="text-gray-300 text-sm mt-1 mb-5">
+                  <p className="text-gray-300 text-sm mt-1 mb-5 leading-6">
                     Get a personalized itinerary and best quote from our travel
                     expert.
                   </p>
@@ -596,14 +598,14 @@ Please share the best quote and itinerary.`;
       </section>
 
       {/* MINI GALLERY */}
-      <section className="max-w-7xl mx-auto px-3 sm:px-6 mt-5 sm:mt-8 relative z-10">
-        <div className="bg-white/[0.03] border border-white/10 rounded-[22px] sm:rounded-[28px] p-3 sm:p-5 backdrop-blur-xl shadow-2xl">
+      <section className="max-w-7xl mx-auto px-4 sm:px-5 md:px-6 lg:px-8 mt-6 sm:mt-8 md:mt-10 relative z-10">
+        <div className="bg-white/[0.03] border border-white/10 rounded-[22px] sm:rounded-[28px] p-3.5 sm:p-5 md:p-6 backdrop-blur-xl shadow-2xl">
           <div className="flex items-center justify-between gap-4 mb-4 sm:mb-5">
-            <div>
+            <div className="min-w-0">
               <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-white">
                 Trip Gallery
               </h2>
-              <p className="text-xs sm:text-sm text-gray-400 mt-1">
+              <p className="text-xs sm:text-sm text-gray-400 mt-1 leading-5">
                 Explore beautiful moments from this package
               </p>
             </div>
@@ -611,7 +613,7 @@ Please share the best quote and itinerary.`;
             <button
               type="button"
               onClick={() => setActiveTab("gallery")}
-              className="hidden md:inline-flex items-center gap-2 border border-(--gold-main)/50 text-(--gold-main) px-4 py-2 rounded-full text-sm font-semibold hover:bg-(--gold-main) hover:text-black transition"
+              className="hidden md:inline-flex items-center gap-2 border border-(--gold-main)/50 text-(--gold-main) px-4 py-2 rounded-full text-sm font-semibold hover:bg-(--gold-main) hover:text-black transition shrink-0"
             >
               <Camera size={16} />
               View All
@@ -628,8 +630,8 @@ Please share the best quote and itinerary.`;
                   whileTap={{ scale: 0.97 }}
                   className={`relative overflow-hidden group border border-white/10 bg-black/30 shadow-xl rounded-2xl sm:rounded-3xl ${
                     index === 0
-                      ? "h-48 col-span-2 sm:h-72 lg:h-64 lg:col-span-2"
-                      : "h-36 sm:h-64"
+                      ? "h-44 col-span-2 sm:h-72 lg:h-64 lg:col-span-2"
+                      : "h-32 sm:h-64"
                   }`}
                 >
                   <img
@@ -645,7 +647,7 @@ Please share the best quote and itinerary.`;
                   </div>
 
                   <div className="absolute bottom-3 left-3 right-3 text-left">
-                    <p className="text-white font-bold text-xs sm:text-base">
+                    <p className="text-white font-bold text-xs sm:text-base leading-tight">
                       {index === 0
                         ? "Destination View"
                         : index === 1
@@ -667,8 +669,8 @@ Please share the best quote and itinerary.`;
       </section>
 
       {/* FEATURE STRIP */}
-      <section className="max-w-7xl mx-auto px-3 sm:px-6 mt-5 sm:mt-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3 bg-(--bg-card) border border-white/10 rounded-3xl sm:rounded-[26px] p-3 sm:p-4 shadow-xl">
+      <section className="max-w-7xl mx-auto px-4 sm:px-5 md:px-6 lg:px-8 mt-6 sm:mt-8 md:mt-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 bg-(--bg-card) border border-white/10 rounded-3xl sm:rounded-[26px] p-3.5 sm:p-4 md:p-5 shadow-xl">
           <FeatureCard
             icon={<Building2 />}
             title="Hotels Included"
@@ -693,10 +695,10 @@ Please share the best quote and itinerary.`;
       </section>
 
       {/* MAIN CONTENT */}
-      <section className="max-w-7xl mx-auto px-3 sm:px-6 mt-5 sm:mt-8 grid lg:grid-cols-[1fr_360px] gap-8">
-        <div className="space-y-5 sm:space-y-8">
+      <section className="max-w-7xl mx-auto px-4 sm:px-5 md:px-6 lg:px-8 mt-6 sm:mt-8 md:mt-10 grid lg:grid-cols-[minmax(0,1fr)_360px] gap-6 sm:gap-8 lg:gap-10">
+        <div className="space-y-6 sm:space-y-8 min-w-0">
           <div className="bg-(--bg-card) border border-white/10 rounded-3xl sm:rounded-[26px] overflow-hidden shadow-2xl">
-            <div className="flex overflow-x-auto border-b border-white/10 bg-black/20">
+            <div className="flex overflow-x-auto border-b border-white/10 bg-black/20 scrollbar-hide">
               {tabs.map((tab) => (
                 <button
                   key={tab.id}
@@ -719,11 +721,11 @@ Please share the best quote and itinerary.`;
               ))}
             </div>
 
-            <div className="p-3 sm:p-5 md:p-8">
+            <div className="p-4 sm:p-5 md:p-7 lg:p-8">
               {activeTab === "overview" && (
                 <div>
                   <div className="mb-5">
-                    <p className="text-[11px] sm:text-xs uppercase tracking-[0.25em] text-(--gold-main) mb-2">
+                    <p className="text-[11px] sm:text-xs uppercase tracking-[0.22em] sm:tracking-[0.25em] text-(--gold-main) mb-2">
                       Package Details
                     </p>
 
@@ -758,7 +760,7 @@ Please share the best quote and itinerary.`;
               {activeTab === "itinerary" && (
                 <div>
                   <div className="mb-5 sm:mb-6">
-                    <p className="text-[11px] sm:text-xs uppercase tracking-[0.25em] text-(--gold-main) mb-2">
+                    <p className="text-[11px] sm:text-xs uppercase tracking-[0.22em] sm:tracking-[0.25em] text-(--gold-main) mb-2">
                       Day Wise Plan
                     </p>
 
@@ -772,7 +774,7 @@ Please share the best quote and itinerary.`;
                       {itineraryDays.map((item, index) => (
                         <div
                           key={index}
-                          className="relative grid grid-cols-1 md:grid-cols-[96px_1fr] gap-3 sm:gap-4"
+                          className="relative grid grid-cols-1 md:grid-cols-[96px_minmax(0,1fr)] gap-3 sm:gap-4"
                         >
                           <div className="md:sticky md:top-24 h-fit">
                             <div className="inline-flex md:flex w-fit md:w-full items-center justify-center bg-yellow-400/10 border border-yellow-400/30 rounded-full md:rounded-2xl px-4 py-2.5 text-(--gold-main) font-bold text-xs sm:text-sm md:text-base">
@@ -780,7 +782,7 @@ Please share the best quote and itinerary.`;
                             </div>
                           </div>
 
-                          <div className="bg-black/25 border border-white/10 rounded-2xl p-4 sm:p-5 hover:border-yellow-400/30 transition">
+                          <div className="bg-black/25 border border-white/10 rounded-2xl p-4 sm:p-5 hover:border-yellow-400/30 transition min-w-0">
                             <h3 className="font-semibold text-white mb-2 text-sm sm:text-base md:text-lg leading-snug">
                               {item.title}
                             </h3>
@@ -821,7 +823,7 @@ Please share the best quote and itinerary.`;
               {activeTab === "gallery" && (
                 <div>
                   <div className="mb-5 sm:mb-6">
-                    <p className="text-[11px] sm:text-xs uppercase tracking-[0.25em] text-(--gold-main) mb-2">
+                    <p className="text-[11px] sm:text-xs uppercase tracking-[0.22em] sm:tracking-[0.25em] text-(--gold-main) mb-2">
                       Trip Photos
                     </p>
 
@@ -838,8 +840,8 @@ Please share the best quote and itinerary.`;
                           onClick={() => setSelectedImage(img.image)}
                           className={`relative overflow-hidden border border-white/10 bg-black/30 group shadow-lg ${
                             index === 0
-                              ? "col-span-2 h-48 sm:h-72 lg:h-80 rounded-2xl sm:rounded-3xl"
-                              : "h-36 sm:h-56 lg:h-64 rounded-2xl sm:rounded-3xl"
+                              ? "col-span-2 h-44 sm:h-72 lg:h-80 rounded-2xl sm:rounded-3xl"
+                              : "h-32 sm:h-56 lg:h-64 rounded-2xl sm:rounded-3xl"
                           }`}
                         >
                           <img
@@ -886,7 +888,7 @@ Please share the best quote and itinerary.`;
                       }
                       className="w-full flex items-center justify-between gap-3 p-4 text-left"
                     >
-                      <span className="font-semibold text-sm sm:text-base">
+                      <span className="font-semibold text-sm sm:text-base leading-snug">
                         {faq.question}
                       </span>
                       <ChevronDown
@@ -903,7 +905,7 @@ Please share the best quote and itinerary.`;
                           initial={{ height: 0, opacity: 0 }}
                           animate={{ height: "auto", opacity: 1 }}
                           exit={{ height: 0, opacity: 0 }}
-                          className="px-4 pb-4 text-gray-300 text-sm overflow-hidden"
+                          className="px-4 pb-4 text-gray-300 text-sm leading-6 overflow-hidden"
                         >
                           {faq.answer}
                         </motion.p>
@@ -1008,11 +1010,11 @@ Please share the best quote and itinerary.`;
       </section>
 
       {/* MOBILE BOTTOM CTA */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 bg-[#050812]/95 backdrop-blur-xl border-t border-white/10 px-3 pt-2 pb-[calc(0.6rem+env(safe-area-inset-bottom))] lg:hidden">
-        <div className="grid grid-cols-[0.85fr_0.85fr_1.25fr] gap-2">
+      <div className="fixed bottom-0 left-0 right-0 z-40 bg-[#050812]/95 backdrop-blur-xl border-t border-white/10 px-3 sm:px-4 pt-2.5 pb-[calc(0.75rem+env(safe-area-inset-bottom))] lg:hidden">
+        <div className="grid grid-cols-4 gap-2">
           <button
             onClick={handleWhatsappInquiry}
-            className="border border-green-500/30 bg-green-500/10 rounded-2xl py-2.5 flex flex-col items-center justify-center gap-1 text-green-400 font-semibold text-[11px]"
+            className="border border-green-500/30 bg-green-500/10 rounded-2xl py-2.5 flex flex-col items-center justify-center gap-1 text-green-400 font-semibold text-[10px] sm:text-[11px]"
           >
             <MessageCircle size={17} />
             WhatsApp
@@ -1020,21 +1022,131 @@ Please share the best quote and itinerary.`;
 
           <a
             href="tel:+919667455591"
-            className="border border-white/10 bg-white/5 rounded-2xl py-2.5 flex flex-col items-center justify-center gap-1 text-(--gold-main) font-semibold text-[11px]"
+            className="border border-white/10 bg-white/5 rounded-2xl py-2.5 flex flex-col items-center justify-center gap-1 text-(--gold-main) font-semibold text-[10px] sm:text-[11px]"
           >
             <Phone size={17} />
             Call
           </a>
 
           <button
+            onClick={() => setOpenQuoteForm(true)}
+            className="border border-(--gold-main)/50 bg-(--gold-main)/10 rounded-2xl py-2.5 flex flex-col items-center justify-center gap-1 text-(--gold-main) font-bold text-[10px] sm:text-[11px]"
+          >
+            <SlidersHorizontal size={17} />
+            Custom
+          </button>
+
+          <button
             onClick={handleBookClick}
-            className="bg-linear-to-r from-start to-end rounded-2xl py-2.5 flex flex-col items-center justify-center gap-1 text-black font-bold text-[11px] shadow-[0_10px_30px_rgba(245,186,74,0.25)]"
+            className="bg-linear-to-r from-start to-end rounded-2xl py-2.5 flex flex-col items-center justify-center gap-1 text-black font-bold text-[10px] sm:text-[11px] shadow-[0_10px_30px_rgba(245,186,74,0.25)]"
           >
             <Plane size={17} />
-            Plan Trip
+            Plan
           </button>
         </div>
       </div>
+
+      {/* MOBILE QUOTE FORM */}
+      <AnimatePresence>
+        {openQuoteForm && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-end justify-center p-3 lg:hidden"
+            onClick={() => setOpenQuoteForm(false)}
+          >
+            <motion.div
+              initial={{ y: 90, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 90, opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative w-full max-w-md bg-(--bg-card) border border-white/10 rounded-[28px] shadow-2xl overflow-hidden"
+            >
+              <div className="absolute top-0 right-0 w-36 h-36 bg-yellow-400/20 blur-[75px] rounded-full" />
+
+              <div className="relative p-4 sm:p-5">
+                <div className="flex items-start justify-between gap-4 mb-5">
+                  <div>
+                    <div className="w-12 h-12 rounded-2xl bg-yellow-400/15 border border-yellow-400/30 flex items-center justify-center text-(--gold-main) mb-3">
+                      <Navigation size={23} />
+                    </div>
+
+                    <h3 className="text-xl sm:text-2xl font-bold text-white">
+                      Plan Your {destinationName} Trip
+                    </h3>
+
+                    <p className="text-gray-300 text-sm mt-1 leading-6">
+                      Get a personalized itinerary and best quote from our
+                      travel expert.
+                    </p>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => setOpenQuoteForm(false)}
+                    className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/15 border border-white/10 text-white shrink-0"
+                  >
+                    ✕
+                  </button>
+                </div>
+
+                <div className="space-y-3">
+                  <QuoteInput
+                    name="name"
+                    placeholder="Your Name"
+                    value={formData.name}
+                    onChange={handleChange}
+                  />
+
+                  <QuoteInput
+                    name="phone"
+                    placeholder="Phone Number"
+                    value={formData.phone}
+                    onChange={handleChange}
+                  />
+
+                  <QuoteInput
+                    name="date"
+                    type="date"
+                    value={formData.date}
+                    onChange={handleChange}
+                  />
+
+                  <QuoteInput
+                    name="budget"
+                    placeholder="Your Budget Optional"
+                    value={formData.budget}
+                    onChange={handleChange}
+                  />
+
+                  <button
+                    type="button"
+                    onClick={handleQuoteWhatsapp}
+                    className="w-full bg-linear-to-r from-start to-end text-black font-bold py-3.5 rounded-2xl active:scale-[0.98] transition"
+                  >
+                    Get Best Quote
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={handleQuoteWhatsapp}
+                    className="w-full border border-green-500/50 bg-green-500/10 text-green-300 font-semibold py-3.5 rounded-2xl flex items-center justify-center gap-2 hover:bg-green-500/15 transition"
+                  >
+                    <MessageCircle size={18} />
+                    Send Quote on WhatsApp
+                  </button>
+
+                  <p className="text-xs text-gray-400 text-center pt-1">
+                    Our expert will call you within a few minutes.
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* BOOKING MODAL */}
       <AnimatePresence>
@@ -1223,7 +1335,7 @@ Please share the best quote and itinerary.`;
 };
 
 const HeroInfo = ({ icon, title, subtitle }) => (
-  <div className="bg-black/40 backdrop-blur-xl border border-white/15 rounded-2xl p-3 sm:p-4 transition group shadow-lg min-h-[86px] sm:min-h-0">
+  <div className="bg-black/40 backdrop-blur-xl border border-white/15 rounded-2xl p-3.5 sm:p-4 transition group shadow-lg min-h-[88px] sm:min-h-[104px]">
     <div className="text-(--gold-main) mb-2 sm:mb-3 group-hover:scale-110 transition [&>svg]:w-5 sm:[&>svg]:w-7 [&>svg]:h-5 sm:[&>svg]:h-7">
       {icon}
     </div>
@@ -1231,7 +1343,9 @@ const HeroInfo = ({ icon, title, subtitle }) => (
     <p className="font-bold text-white text-xs sm:text-base leading-tight">
       {title}
     </p>
-    <p className="text-[11px] sm:text-sm text-gray-300 mt-0.5">{subtitle}</p>
+    <p className="text-[11px] sm:text-sm text-gray-300 mt-1 leading-snug">
+      {subtitle}
+    </p>
   </div>
 );
 
@@ -1247,27 +1361,31 @@ const TrustPill = ({ icon, title }) => (
 );
 
 const TrustCard = ({ icon, title, small }) => (
-  <div className="bg-black/20 border border-white/10 rounded-2xl p-4 flex items-start gap-3 hover:bg-white/[0.05] transition">
+  <div className="bg-black/20 border border-white/10 rounded-2xl p-3.5 sm:p-4 flex items-start gap-3 hover:bg-white/[0.05] transition">
     <div className="text-(--gold-main) shrink-0 [&>svg]:w-6 sm:[&>svg]:w-7 [&>svg]:h-6 sm:[&>svg]:h-7">
       {icon}
     </div>
-    <div>
+    <div className="min-w-0">
       <p className="font-semibold text-sm md:text-base leading-tight">
         {title}
       </p>
-      {small && <p className="text-xs text-gray-400 mt-1">{small}</p>}
+      {small && (
+        <p className="text-xs text-gray-400 mt-1 leading-relaxed">{small}</p>
+      )}
     </div>
   </div>
 );
 
 const FeatureCard = ({ icon, title, text }) => (
-  <div className="flex gap-3 sm:gap-4 items-start p-3 sm:p-4 rounded-2xl hover:bg-white/[0.04] transition">
+  <div className="flex gap-3 sm:gap-4 items-start p-3.5 sm:p-4 rounded-2xl hover:bg-white/[0.04] transition">
     <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-(--gold-main) shrink-0 [&>svg]:w-5 sm:[&>svg]:w-6 [&>svg]:h-5 sm:[&>svg]:h-6">
       {icon}
     </div>
-    <div>
-      <h3 className="font-bold text-sm sm:text-base">{title}</h3>
-      <p className="text-xs sm:text-sm text-gray-300 mt-1">{text}</p>
+    <div className="min-w-0">
+      <h3 className="font-bold text-sm sm:text-base leading-tight">{title}</h3>
+      <p className="text-xs sm:text-sm text-gray-300 mt-1 leading-relaxed">
+        {text}
+      </p>
     </div>
   </div>
 );
@@ -1308,7 +1426,7 @@ const ListSection = ({ title, items, type }) => (
               <XCircle className="text-red-400 shrink-0 mt-0.5" size={18} />
             )}
 
-            <p className="text-gray-300 text-sm">{item}</p>
+            <p className="text-gray-300 text-sm leading-6">{item}</p>
           </div>
         ))}
       </div>
@@ -1317,7 +1435,7 @@ const ListSection = ({ title, items, type }) => (
 );
 
 const WhyPoint = ({ text }) => (
-  <p className="flex items-center gap-2">
+  <p className="flex items-center gap-2 leading-6">
     <CheckCircle2 className="text-green-400 shrink-0" size={17} />
     {text}
   </p>
