@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
 
+    <!-- Google Search Console Verification -->
     <meta
       name="google-site-verification"
       content="ruk93Qz7jswqiIaH4R8Bhc02C3UgwlBI0azwZYWmW3w"
@@ -22,7 +23,7 @@
 
     <title>FlyingLyte | Flights, Hotels & Travel Booking</title>
 
-    <!-- Google Consent Mode: default denied before Google tag loads -->
+    <!-- Google Consent Mode: default denied before Google tags -->
     <script>
       window.dataLayer = window.dataLayer || [];
 
@@ -40,6 +41,23 @@
       });
     </script>
 
+    <!-- Google Tag Manager: Web Container -->
+    <script>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({
+          "gtm.start": new Date().getTime(),
+          event: "gtm.js",
+        });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != "dataLayer" ? "&l=" + l : "";
+        j.async = true;
+        j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, "script", "dataLayer", "GTM-P4CXRMK");
+    </script>
+
     <!-- Google tag for Google Ads / Google Analytics -->
     <script
       async
@@ -49,7 +67,22 @@
     <script>
       gtag("js", new Date());
 
+      /* Google Ads */
       gtag("config", "AW-18015093510", {
+        anonymize_ip: true,
+        allow_google_signals: false,
+        allow_ad_personalization_signals: false,
+      });
+
+      /* Google Analytics GA4 */
+      gtag("config", "G-PWH1WRN04Q", {
+        anonymize_ip: true,
+        allow_google_signals: false,
+        allow_ad_personalization_signals: false,
+      });
+
+      /* Google tag ID */
+      gtag("config", "GT-P3FFKHTW", {
         anonymize_ip: true,
         allow_google_signals: false,
         allow_ad_personalization_signals: false,
@@ -58,6 +91,16 @@
   </head>
 
   <body>
+    <!-- Google Tag Manager noscript -->
+    <noscript>
+      <iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-P4CXRMK"
+        height="0"
+        width="0"
+        style="display: none; visibility: hidden"
+      ></iframe>
+    </noscript>
+
     <div id="root"></div>
 
     <script type="module" src="/src/main.jsx"></script>
