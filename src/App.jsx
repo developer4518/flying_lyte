@@ -27,12 +27,12 @@ import HotelResults from "./modules/hotels/pages/HotelResults";
 import HotelDetails from "./modules/hotels/pages/HotelDetails";
 import PrebookLoader from "./modules/hotels/pages/PreBookLoader";
 import HotelBooking from "./modules/hotels/pages/HotelBooking";
-import HotelBookingSuccess from "./modules/hotels/pages/BookingSuccess";
 import HotelBookingDetails from "./modules/hotels/pages/HotelBookingDetails";
 import FlightBookingDetails from "./modules/flights/pages/FlightBookingDetails";
 import Blogs from "./Pages/Blogs";
 import BlogDetails from "./Pages/BlogDetails";
 import CancellationPolicyPage from "./Pages/CancellationPolicyPage";
+import HotelBookingSuccess from "./modules/hotels/pages/HotelBookingSuccess";
 
 const App = () => {
   return (
