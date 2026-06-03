@@ -22,24 +22,44 @@
 
     <title>FlyingLyte | Flights, Hotels & Travel Booking</title>
 
-    <!-- Google tag (gtag.js) -->
+    <!-- Google Consent Mode: default denied before Google tag loads -->
+    <script>
+      window.dataLayer = window.dataLayer || [];
+
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+
+      gtag("consent", "default", {
+        ad_storage: "denied",
+        ad_user_data: "denied",
+        ad_personalization: "denied",
+        analytics_storage: "denied",
+        functionality_storage: "granted",
+        security_storage: "granted",
+      });
+    </script>
+
+    <!-- Google tag for Google Ads / Google Analytics -->
     <script
       async
       src="https://www.googletagmanager.com/gtag/js?id=AW-18015093510"
     ></script>
 
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
       gtag("js", new Date());
-      gtag("config", "AW-18015093510");
+
+      gtag("config", "AW-18015093510", {
+        anonymize_ip: true,
+        allow_google_signals: false,
+        allow_ad_personalization_signals: false,
+      });
     </script>
   </head>
 
   <body>
     <div id="root"></div>
+
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
