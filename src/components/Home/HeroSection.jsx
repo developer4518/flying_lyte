@@ -32,9 +32,9 @@ const HeroSection = () => {
         </div>
 
         {/* Search Card */}
-        <div className="w-full">
+        {/* <div className="w-full">
          <SearchBox/>
-        </div>
+        </div> */}
 
       </div>
     </section>
