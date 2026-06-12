@@ -13,9 +13,9 @@ const Home = () => {
   return (
     <div className="bg-(--bg-main)">
       <Navbar />
-      <HeroSection />
       {/* <PopularDestinations /> */}
       <PackageSection limit={4} />
+      <HeroSection />
       <CTASection />
       <AboutUs />
       <BlogSection />
