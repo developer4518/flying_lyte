@@ -7,6 +7,8 @@ import { Search, ArrowLeft, ArrowRight, MapPin } from "lucide-react";
 import PackageCard from "./PackageCard";
 import { publicApi } from "../../services/api";
 
+const PACKAGE_BG_IMAGE = "/images/travel-pattern-bg.png";
+
 const fetchPackages = async (page = 1, limit = 8, destination = "") => {
   const query = new URLSearchParams({
     page,
@@ -148,12 +150,35 @@ const PackageSection = ({ limit = 8 }) => {
   return (
     <section
       className="
-        relative overflow-hidden bg-(--bg-main)
+        relative isolate overflow-hidden bg-[#090909]
         py-20 sm:py-22 md:py-24 lg:py-28 xl:py-32
       "
     >
-      {/* Decorative Background */}
-      <div className="pointer-events-none absolute inset-0">
+      {/* Background Image */}
+      <img
+        src={PACKAGE_BG_IMAGE}
+        alt=""
+        aria-hidden="true"
+        className="
+          pointer-events-none absolute inset-0 z-0
+          h-full w-full object-cover object-center
+          opacity-80
+        "
+      />
+
+      {/* Very light dark overlay */}
+      <div className="pointer-events-none absolute inset-0 z-0 bg-black/15" />
+
+      {/* Top-bottom gradient only */}
+      <div
+        className="
+          pointer-events-none absolute inset-0 z-0
+          bg-gradient-to-b from-black/55 via-transparent to-black/65
+        "
+      />
+
+      {/* Decorative Glow */}
+      <div className="pointer-events-none absolute inset-0 z-0">
         <div className="absolute -top-20 left-1/2 h-56 w-56 -translate-x-1/2 rounded-full bg-(--gold-main)/10 blur-3xl sm:h-72 sm:w-72 md:h-96 md:w-96" />
         <div className="absolute bottom-10 -left-24 h-56 w-56 rounded-full bg-white/5 blur-3xl sm:h-72 sm:w-72" />
         <div className="absolute -right-28 top-1/3 h-64 w-64 rounded-full bg-(--gold-main)/5 blur-3xl md:h-80 md:w-80" />
@@ -179,7 +204,7 @@ const PackageSection = ({ limit = 8 }) => {
           <div
             className="
               mb-3 sm:mb-4 inline-flex items-center gap-2 rounded-full
-              border border-(--gold-main)/30 bg-white/5
+              border border-(--gold-main)/30 bg-black/30
               px-3 py-1.5 sm:px-4 sm:py-2
               text-[10px] sm:text-xs md:text-sm
               font-semibold uppercase tracking-[0.18em] sm:tracking-[0.25em]
@@ -202,7 +227,7 @@ const PackageSection = ({ limit = 8 }) => {
           <p
             className="
               mx-auto mt-3 max-w-2xl
-              text-sm leading-6 text-gray-400
+              text-sm leading-6 text-gray-200
               sm:mt-4 sm:text-base sm:leading-7
               md:text-lg md:leading-8
             "
@@ -225,13 +250,13 @@ const PackageSection = ({ limit = 8 }) => {
           <div
             className="
               relative rounded-2xl border border-white/10
-              bg-white/6 p-1.5 sm:p-2
+              bg-black/35 p-1.5 sm:p-2
               shadow-2xl shadow-black/20 backdrop-blur-xl
             "
           >
             <div className="relative">
               <Search
-                className="absolute left-3.5 sm:left-4 top-1/2 -translate-y-1/2 text-(--gold-main)"
+                className="absolute left-3.5 top-1/2 -translate-y-1/2 text-(--gold-main) sm:left-4"
                 size={19}
               />
 
@@ -241,7 +266,7 @@ const PackageSection = ({ limit = 8 }) => {
                 value={destination}
                 onChange={(e) => setDestination(e.target.value)}
                 className="
-                  w-full rounded-xl border border-white/10 bg-(--bg-card)
+                  w-full rounded-xl border border-white/10 bg-black/70
                   py-3 pl-11 pr-3 text-sm text-white outline-none
                   transition-all duration-300 placeholder:text-gray-500
                   focus:border-(--gold-main) focus:ring-2 focus:ring-(--gold-main)/25
@@ -266,10 +291,9 @@ const PackageSection = ({ limit = 8 }) => {
               <div
                 key={i}
                 className="
-                  overflow-hidden rounded-2xl sm:rounded-3xl
-                  border border-white/10 bg-white/6
-                  p-2.5 sm:p-3
-                  shadow-xl shadow-black/20
+                  overflow-hidden rounded-2xl border border-white/10
+                  bg-black/35 p-2.5 shadow-xl shadow-black/20
+                  backdrop-blur-md sm:rounded-3xl sm:p-3
                 "
               >
                 <div className="h-44 animate-pulse rounded-xl bg-white/10 sm:h-52 sm:rounded-2xl md:h-56" />
@@ -321,9 +345,9 @@ const PackageSection = ({ limit = 8 }) => {
                   disabled={page <= 1 || !data?.previous}
                   className="
                     flex w-full items-center justify-center gap-2 rounded-xl
-                    border border-(--gold-main)/70
-                    px-5 py-2.5 text-sm font-semibold
-                    text-(--gold-main) transition-all duration-300
+                    border border-(--gold-main)/70 px-5 py-2.5
+                    text-sm font-semibold text-(--gold-main)
+                    transition-all duration-300
                     hover:bg-(--gold-main) hover:text-black
                     disabled:cursor-not-allowed disabled:opacity-40
                     sm:w-auto sm:px-6 sm:py-3
@@ -336,7 +360,7 @@ const PackageSection = ({ limit = 8 }) => {
                 <div
                   className="
                     w-full rounded-xl border border-white/10
-                    bg-white/6 px-5 py-2.5 text-center
+                    bg-black/35 px-5 py-2.5 text-center
                     text-sm font-medium text-white backdrop-blur-md
                     sm:w-auto sm:py-3
                   "
@@ -351,9 +375,9 @@ const PackageSection = ({ limit = 8 }) => {
                   disabled={page >= totalPages || !data?.next}
                   className="
                     flex w-full items-center justify-center gap-2 rounded-xl
-                    bg-(--gold-main)
-                    px-5 py-2.5 text-sm font-semibold
-                    text-black transition-all duration-300
+                    bg-(--gold-main) px-5 py-2.5
+                    text-sm font-semibold text-black
+                    transition-all duration-300
                     hover:-translate-y-0.5 hover:shadow-lg hover:shadow-(--gold-main)/20
                     disabled:cursor-not-allowed disabled:opacity-40
                     sm:w-auto sm:px-6 sm:py-3
@@ -375,7 +399,7 @@ const PackageSection = ({ limit = 8 }) => {
             className="
               mx-auto mt-8 flex min-h-75 max-w-xl flex-col
               items-center justify-center rounded-2xl border border-white/10
-              bg-white/5 px-5 py-10 text-center
+              bg-black/35 px-5 py-10 text-center
               shadow-2xl shadow-black/20 backdrop-blur-xl
               sm:mt-10 sm:min-h-85 sm:rounded-3xl sm:px-6 sm:py-12
               md:min-h-90
@@ -389,7 +413,7 @@ const PackageSection = ({ limit = 8 }) => {
               No packages found
             </h3>
 
-            <p className="mt-3 text-sm leading-6 text-gray-400 sm:text-base">
+            <p className="mt-3 text-sm leading-6 text-gray-300 sm:text-base">
               We could not find any package for this destination. Try searching
               another city, country, or travel place.
             </p>
