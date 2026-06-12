@@ -7,7 +7,7 @@ import { Search, ArrowLeft, ArrowRight, MapPin } from "lucide-react";
 import PackageCard from "./PackageCard";
 import { publicApi } from "../../services/api";
 
-const PACKAGE_BG_IMAGE = "/images/travel-pattern-bg.png";
+const PACKAGE_BG_IMAGE = "/images/travel-pattern-bg1.png";
 
 const fetchPackages = async (page = 1, limit = 8, destination = "") => {
   const query = new URLSearchParams({
