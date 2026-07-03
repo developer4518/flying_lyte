@@ -379,20 +379,19 @@ Thailand nightlife in 2026 is more than just parties—it’s a complete journey
     `,
   },
   {
-    id: 10,
+    id: 8,
     slug: "manali-kasol-group-tour-travel-guide-2026",
     title:
       "Manali & Kasol Group Tour 2026 – Your Perfect Adventure, Mountains & Travel Experience",
     category: "Group Tours & Adventure",
     author: "FlyingLyte Team",
     date: "03 July 2026",
-    image:"",
+    image: "/images/blogs/manali-kasol-group-tour-2026.jpeg",
 
     shortDescription:
       "Join an unforgettable Manali & Kasol Group Tour and experience breathtaking mountains, adventure activities, scenic valleys, riverside cafes, and exciting moments with fellow travelers.",
 
     description: `
-
 A Manali & Kasol Group Tour is one of the best ways to explore the beauty of Himachal Pradesh while creating unforgettable memories with fellow travelers. From snow-covered mountains and exciting adventures to peaceful valleys and vibrant café culture, this journey offers the perfect mix of fun and relaxation.
 
 Discover why Manali and Kasol continue to be favorite destinations among travel enthusiasts in 2026.
@@ -428,7 +427,6 @@ Group tours make traveling more affordable by reducing costs for transportation 
 Conclusion
 
 A Manali & Kasol Group Tour is more than just a vacation; it is an experience filled with mountains, friendships, adventure, and unforgettable moments. Whether you are traveling with friends or joining a travel community, this journey promises memories that last forever.
-
-  `,
+`,
   },
 ];
