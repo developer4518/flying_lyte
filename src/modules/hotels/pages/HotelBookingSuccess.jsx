@@ -1602,7 +1602,7 @@ const DateTile = ({ label, value, icon }) => {
 
 const MiniStat = ({ label, value }) => {
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4 text-center">
+    <div className="rounded-2xl border border-white/10 bg-white/3 p-4 text-center">
       <p className="text-2xl font-black text-yellow-400">{value}</p>
 
       <p className="mt-1 text-xs font-semibold uppercase tracking-[0.16em] text-gray-500">
