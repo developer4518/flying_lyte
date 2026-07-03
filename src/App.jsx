@@ -33,6 +33,9 @@ import Blogs from "./Pages/Blogs";
 import BlogDetails from "./Pages/BlogDetails";
 import CancellationPolicyPage from "./Pages/CancellationPolicyPage";
 import HotelBookingSuccess from "./modules/hotels/pages/HotelBookingSuccess";
+import HotelInvoice from "./modules/hotels/pages/HotelInvoice";
+import HotelVoucher from "./modules/hotels/pages/HotelVoucher";
+import HotelReviewBooking from "./modules/hotels/pages/HotelReviewBooking";
 
 const App = () => {
   return (
@@ -42,23 +45,31 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/bookings" element={<MyBookings />} />
+        <Route path="/about" element={<AboutUs />} />
+        <Route path="/contact" element={<ContactPage />} />
+        <Route path="/blogs" element={<Blogs />} />
+        <Route path="/blogs/:slug" element={<BlogDetails />} />
+        <Route path="/terms" element={<TermsConditions />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/refund-policy" element={<RefundPolicy />} />
+        <Route path="/cancellation" element={<CancellationPolicyPage />} />
+
         <Route path="/packages" element={<PackageSection limit={8} />} />
         <Route path="/packages/:slug" element={<PackageDetails />} />
         <Route
           path="/package_booking_success/:bookingId"
           element={<PackageBookingSuccess />}
         />
-        <Route path="/bookings" element={<MyBookings />} />
-        <Route path="/about" element={<AboutUs />} />
-        <Route path="/contact" element={<ContactPage />} />
-        <Route path="/blogs" element={<Blogs />} />
-        <Route path="/blogs/:slug" element={<BlogDetails />} />
-        <Route path="/flights" element={<FlightsResults />} />
+
+        {/* Hotel Routes */}
         <Route path="/hotels" element={<HotelResults />} />
         <Route path="/hotels/:id" element={<HotelDetails />} />
         <Route path="/prebook" element={<PrebookLoader />} />
         <Route path="/hotel-booking" element={<HotelBooking />} />
-        {/* <Route path="/booking-success" element={<HotelBookingSuccess />} /> */}
+        <Route path="/hotel-review-booking" element={<HotelReviewBooking />} />
+        <Route path="/booking-details/:bookingId" element={<HotelVoucher />} />
+        <Route path="/hotel-invoice/:bookingId" element={<HotelInvoice />} />
         <Route
           path="/hotel-booking-success"
           element={<HotelBookingSuccess />}
@@ -67,6 +78,9 @@ const App = () => {
           path="/booking-details/:bookingId"
           element={<HotelBookingDetails />}
         />
+
+        {/* Flights */}
+        <Route path="/flights" element={<FlightsResults />} />
         <Route path="/fare-rule" element={<FareRule />} />
         <Route path="/fare-quote" element={<FareQuote />} />
         <Route path="/ssr" element={<SSRPage />} />
@@ -77,10 +91,7 @@ const App = () => {
           path="/flight-booking-details/:id"
           element={<FlightBookingDetails />}
         />
-        <Route path="/terms" element={<TermsConditions />} />
-        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-        <Route path="/refund-policy" element={<RefundPolicy />} />
-        <Route path="/cancellation" element={<CancellationPolicyPage />} />
+
         {/* <Route path="/hotels" element={<HotelPage />} /> */}
         {/* <Route path="/railways" element={<RailwayPage />} /> */}
         {/* Optional: 404 Page */}

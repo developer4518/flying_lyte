@@ -173,7 +173,7 @@ const PackageSection = ({ limit = 8 }) => {
       <div
         className="
           pointer-events-none absolute inset-0 z-0
-          bg-gradient-to-b from-black/55 via-transparent to-black/65
+          bg-linear-to-b from-black/55 via-transparent to-black/65
         "
       />
 
