@@ -162,7 +162,7 @@ const PackageSection = ({ limit = 8 }) => {
         className="
           pointer-events-none absolute inset-0 z-0
           h-full w-full object-cover object-center
-          opacity-60
+          opacity-90
         "
       />
 
@@ -203,13 +203,14 @@ const PackageSection = ({ limit = 8 }) => {
         >
           <div
             className="
-              mb-3 sm:mb-4 inline-flex items-center gap-2 rounded-full
-              border border-(--gold-main)/30 bg-black/30
-              px-3 py-1.5 sm:px-4 sm:py-2
-              text-[10px] sm:text-xs md:text-sm
-              font-semibold uppercase tracking-[0.18em] sm:tracking-[0.25em]
-              text-(--gold-main) backdrop-blur-md
-            "
+    mb-3 sm:mb-4 inline-flex items-center gap-2 rounded-full
+    border border-(--gold-main)/30 bg-black/30
+    px-3 py-1.5 sm:px-4 sm:py-2
+    text-[10px] sm:text-xs md:text-sm
+    font-semibold uppercase tracking-[0.18em] sm:tracking-[0.25em]
+    text-(--gold-main) backdrop-blur-md
+    [text-shadow:0_2px_10px_rgba(0,0,0,0.95)]
+  "
           >
             <MapPin size={15} />
             Explore Packages
@@ -217,20 +218,25 @@ const PackageSection = ({ limit = 8 }) => {
 
           <h2
             className="
-              text-2xl font-bold leading-tight text-white
-              sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl
-            "
+    text-2xl font-bold leading-tight text-white
+    [text-shadow:0_5px_24px_rgba(0,0,0,0.95)]
+    sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl
+  "
           >
-            Curated Travel <span className="text-(--gold-main)">Packages</span>
+            Curated Travel{" "}
+            <span className="text-(--gold-main) [text-shadow:0_5px_24px_rgba(0,0,0,0.95)]">
+              Packages
+            </span>
           </h2>
 
           <p
             className="
-              mx-auto mt-3 max-w-2xl
-              text-sm leading-6 text-gray-200
-              sm:mt-4 sm:text-base sm:leading-7
-              md:text-lg md:leading-8
-            "
+    mx-auto mt-3 max-w-2xl
+    text-sm leading-6 text-gray-100
+    [text-shadow:0_3px_16px_rgba(0,0,0,0.95)]
+    sm:mt-4 sm:text-base sm:leading-7
+    md:text-lg md:leading-8
+  "
           >
             Discover handpicked holiday packages designed for unforgettable
             journeys, premium stays, and smooth travel experiences.

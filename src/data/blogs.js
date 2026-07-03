@@ -378,4 +378,57 @@ Conclusion
 Thailand nightlife in 2026 is more than just parties—it’s a complete journey from sunset relaxation to sunrise celebrations. Whether you're a first-time traveler or a party enthusiast, Thailand promises memories that last forever.
     `,
   },
+  {
+    id: 10,
+    slug: "manali-kasol-group-tour-travel-guide-2026",
+    title:
+      "Manali & Kasol Group Tour 2026 – Your Perfect Adventure, Mountains & Travel Experience",
+    category: "Group Tours & Adventure",
+    author: "FlyingLyte Team",
+    date: "03 July 2026",
+    image:"",
+
+    shortDescription:
+      "Join an unforgettable Manali & Kasol Group Tour and experience breathtaking mountains, adventure activities, scenic valleys, riverside cafes, and exciting moments with fellow travelers.",
+
+    description: `
+
+A Manali & Kasol Group Tour is one of the best ways to explore the beauty of Himachal Pradesh while creating unforgettable memories with fellow travelers. From snow-covered mountains and exciting adventures to peaceful valleys and vibrant café culture, this journey offers the perfect mix of fun and relaxation.
+
+Discover why Manali and Kasol continue to be favorite destinations among travel enthusiasts in 2026.
+
+1. Explore the Beauty of Manali
+
+Manali welcomes travelers with beautiful landscapes, fresh mountain air, and amazing sightseeing opportunities. Surrounded by rivers and Himalayan peaks, the destination provides a perfect atmosphere for nature lovers and adventure seekers.
+
+2. Experience Adventure at Solang Valley
+
+Solang Valley is known for attracting travelers looking for excitement and mountain experiences. Visitors can enjoy panoramic views, snow activities, and memorable outdoor adventures surrounded by breathtaking scenery.
+
+3. Discover the Peaceful Side of Kasol
+
+Kasol is often called the mini paradise of Himachal Pradesh. Its riverside atmosphere, scenic beauty, and relaxed environment make it an ideal destination for travelers seeking calm and natural surroundings.
+
+4. Visit Manikaran During Your Journey
+
+Located close to Kasol, Manikaran is famous for its hot water springs and peaceful environment. Travelers often include this destination in their itinerary for its spiritual and natural significance.
+
+5. Group Travel Creates Better Memories
+
+Group tours offer a different travel experience compared to solo trips. You meet new people, enjoy shared experiences, participate in fun activities, and create memorable stories during the journey.
+
+6. Enjoy Local Cafes and Food Experiences
+
+Manali and Kasol are famous for their cafés and local food culture. Travelers can explore mountain cafés, local markets, and delicious food while enjoying beautiful surroundings.
+
+7. Budget-Friendly Travel Experience
+
+Group tours make traveling more affordable by reducing costs for transportation and accommodations. Travelers can enjoy premium experiences while staying within their budget.
+
+Conclusion
+
+A Manali & Kasol Group Tour is more than just a vacation; it is an experience filled with mountains, friendships, adventure, and unforgettable moments. Whether you are traveling with friends or joining a travel community, this journey promises memories that last forever.
+
+  `,
+  },
 ];
