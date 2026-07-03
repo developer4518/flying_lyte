@@ -162,7 +162,7 @@ const PackageSection = ({ limit = 8 }) => {
         className="
           pointer-events-none absolute inset-0 z-0
           h-full w-full object-cover object-center
-          opacity-80
+          opacity-60
         "
       />
 
