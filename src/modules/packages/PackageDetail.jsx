@@ -363,21 +363,21 @@ Please share the best quote and itinerary.`;
           <img
             src={heroImage}
             alt={packageTitle}
-            className="w-full h-full object-cover object-center scale-[1.02] brightness-[1.12] contrast-[1.05] saturate-[1.08]"
+            className="w-full h-full object-cover object-center scale-100 brightness-[1.18] contrast-[1.08] saturate-[1.12]"
           />
 
-          {/* Light overlay so background image is clearly visible */}
-          <div className="absolute inset-0 bg-black/15 sm:bg-black/10" />
+          {/* Very light overlay for clean image visibility */}
+          <div className="absolute inset-0 bg-black/5" />
 
-          {/* Bottom fade for smooth section blending */}
-          <div className="absolute inset-0 bg-linear-to-b from-black/5 via-transparent to-(--bg-main)" />
+          {/* Soft bottom fade only */}
+          <div className="absolute inset-0 bg-linear-to-b from-transparent via-transparent to-(--bg-main)" />
 
-          {/* Left side readable, right side image visible */}
-          <div className="absolute inset-0 bg-linear-to-r from-[#020617dd] via-[#02061766] to-transparent" />
+          {/* Light left shade for text readability */}
+          <div className="absolute inset-0 bg-linear-to-r from-[#020617b3] via-[#02061733] to-transparent" />
         </div>
 
-        <div className="absolute -top-24 -left-24 w-65 h-65 sm:w-[320px] sm:h-80 bg-yellow-500/20 blur-[100px] sm:blur-[110px] rounded-full" />
-        <div className="absolute top-40 -right-24 w-65 h-65 sm:w-[320px] sm:h-80 bg-cyan-500/10 blur-[100px] sm:blur-[110px] rounded-full" />
+        <div className="absolute -top-24 -left-24 w-65 h-65 sm:w-[320px] sm:h-80 bg-yellow-500/8 blur-[90px] rounded-full" />
+        <div className="absolute top-40 -right-24 w-65 h-65 sm:w-[320px] sm:h-80 bg-cyan-500/5 blur-[90px] rounded-full" />
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-5 md:px-6 lg:px-8 pt-22 sm:pt-24 md:pt-28 lg:pt-30 pb-7 sm:pb-10 md:pb-12 lg:pb-16">
           <div className="flex items-center justify-between gap-3 mb-6 sm:mb-8 md:mb-10 lg:mb-12">
@@ -457,7 +457,7 @@ Please share the best quote and itinerary.`;
                 />
               </div>
 
-              <div className="relative bg-black/45 border border-white/15 rounded-[22px] sm:rounded-3xl p-4 sm:p-5 md:p-6 backdrop-blur-2xl max-w-3xl mb-5 sm:mb-6 md:mb-7 overflow-hidden shadow-2xl">
+              <div className="relative bg-black/30 border border-white/15 rounded-[22px] sm:rounded-3xl p-4 sm:p-5 md:p-6 backdrop-blur-md max-w-3xl mb-5 sm:mb-6 md:mb-7 overflow-hidden shadow-2xl">
                 <div className="absolute -top-16 -right-16 w-44 h-44 rounded-full bg-yellow-400/15 blur-[70px]" />
 
                 <div className="relative grid md:grid-cols-[minmax(0,1fr)_auto] gap-5 md:gap-6 items-center">
@@ -529,7 +529,7 @@ Please share the best quote and itinerary.`;
               transition={{ duration: 0.65 }}
               className="hidden lg:block"
             >
-              <div className="relative bg-black/55 backdrop-blur-2xl border border-white/15 rounded-[30px] p-6 shadow-2xl overflow-hidden">
+              <div className="relative bg-black/35 backdrop-blur-lg border border-white/15 rounded-[30px] p-6 shadow-2xl overflow-hidden">
                 <div className="absolute top-0 right-0 w-36 h-36 bg-yellow-400/20 blur-[75px] rounded-full" />
 
                 <div className="relative">
@@ -1341,7 +1341,7 @@ Please share the best quote and itinerary.`;
 };
 
 const HeroInfo = ({ icon, title, subtitle }) => (
-  <div className="bg-black/40 backdrop-blur-xl border border-white/15 rounded-2xl p-3.5 sm:p-4 transition group shadow-lg min-h-22 sm:min-h-26">
+  <div className="bg-black/25 backdrop-blur-md border border-white/15 rounded-2xl p-3.5 sm:p-4 transition group shadow-lg min-h-22 sm:min-h-26">
     <div className="text-(--gold-main) mb-2 sm:mb-3 group-hover:scale-110 transition [&>svg]:w-5 sm:[&>svg]:w-7 [&>svg]:h-5 sm:[&>svg]:h-7">
       {icon}
     </div>
