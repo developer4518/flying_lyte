@@ -363,11 +363,17 @@ Please share the best quote and itinerary.`;
           <img
             src={heroImage}
             alt={packageTitle}
-            className="w-full h-full object-cover object-center scale-105"
+            className="w-full h-full object-cover object-center scale-[1.02] brightness-[1.12] contrast-[1.05] saturate-[1.08]"
           />
-          <div className="absolute inset-0 bg-black/45 sm:bg-black/30" />
-          <div className="absolute inset-0 bg-linear-to-b from-black/10 via-[#020617]/45 to-(--bg-main)" />
-          <div className="absolute inset-0 bg-linear-to-r from-[#020617] via-[#020617cc] to-black/10" />
+
+          {/* Light overlay so background image is clearly visible */}
+          <div className="absolute inset-0 bg-black/15 sm:bg-black/10" />
+
+          {/* Bottom fade for smooth section blending */}
+          <div className="absolute inset-0 bg-linear-to-b from-black/5 via-transparent to-(--bg-main)" />
+
+          {/* Left side readable, right side image visible */}
+          <div className="absolute inset-0 bg-linear-to-r from-[#020617dd] via-[#02061766] to-transparent" />
         </div>
 
         <div className="absolute -top-24 -left-24 w-65 h-65 sm:w-[320px] sm:h-80 bg-yellow-500/20 blur-[100px] sm:blur-[110px] rounded-full" />
