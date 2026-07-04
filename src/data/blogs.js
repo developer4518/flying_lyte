@@ -7,7 +7,8 @@ export const blogs = [
     author: "FlyingLyte Team",
     date: "08 May 2026",
     image:
-      "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=1200",
+      "/images/blogs/why-you-need-to-know-7-things-about-tomorrowland-thailand.png",
+
     shortDescription:
       "Discover the 7 most important things about Tomorrowland Thailand 2026 including tickets, DJs, venue, tourism impact, and festival experience.",
     description: `
@@ -48,7 +49,7 @@ Tomorrowland Thailand 2026 is shaping up to be one of the biggest EDM events in 
     author: "FlyingLyte Team",
     date: "11 May 2026",
     image:
-      "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=1200",
+      "/images/blogs/top-reasons-why-thailand-tomorrowland-2026-is-trending.png",
     shortDescription:
       "Discover why Tomorrowland Thailand 2026 is becoming one of the most talked-about EDM festivals in the world.",
     description: `
@@ -89,8 +90,7 @@ Tomorrowland Thailand 2026 is expected to become one of Asia’s biggest music a
     category: "EDM Festivals",
     author: "FlyingLyte Team",
     date: "12 May 2026",
-    image:
-      "https://images.unsplash.com/photo-1499364615650-ec38552f4f34?w=1200",
+    image: "/images/blogs/best-things-about-thailand-tomorrowland-2026.png",
     shortDescription:
       "Explore the best things about Tomorrowland Thailand 2026 including nightlife, festival stages, DJs, beaches, and luxury experiences.",
     description: `
@@ -131,8 +131,7 @@ Tomorrowland Thailand 2026 is expected to become one of Asia’s biggest EDM fes
     category: "EDM Festivals",
     author: "FlyingLyte Team",
     date: "13 May 2026",
-    image:
-      "https://images.unsplash.com/photo-1505236858219-8359eb29e329?w=1200",
+    image: "/images/blogs/why-thailand-is-perfect-for-edm-festival-lovers.png",
     shortDescription:
       "Discover why Thailand is becoming one of the top destinations for EDM festivals, nightlife, beach parties, and international music events.",
     description: `
@@ -174,7 +173,7 @@ Thailand continues to grow as one of the biggest destinations for EDM festivals 
     author: "FlyingLyte Team",
     date: "14 May 2026",
     image:
-      "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=1200&auto=format&fit=crop&q=80",
+      "/images/blogs/ultimate-thailand-nightlife-guide-for-party-travelers.png",
     shortDescription:
       "Explore Thailand’s exciting nightlife scene with beach clubs, rooftop bars, EDM festivals, luxury parties, and unforgettable travel experiences.",
     description: `
@@ -216,8 +215,7 @@ Thailand continues to grow as Asia’s leading nightlife and EDM travel destinat
     category: "Nightlife & Festivals",
     author: "FlyingLyte Team",
     date: "18 May 2026",
-    image:
-      "https://images.unsplash.com/photo-1518972559570-7cc1309f3229?w=1200",
+    image: "/images/blogs/ultimate-thailand-edm-journey-planner-2026.png",
     shortDescription:
       "Plan your Thailand EDM journey in 2026 with smart travel routes, festival insights, nightlife hacks, and beach party experiences for the perfect trip.",
     description: `
@@ -301,8 +299,7 @@ If you want more than just a trip—if you want a story worth telling—Thailand
     category: "Nightlife & Festivals",
     author: "FlyingLyte Team",
     date: "16 May 2026",
-    image:
-      "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1200",
+    image: "/images/blogs/thailand-nightlife-experience-guide-2026.png",
     shortDescription:
       "Experience Thailand nightlife like never before in 2026 with sunset beach parties, rooftop lounges, EDM festivals, and all-night clubbing across top destinations.",
     description: `
@@ -386,7 +383,7 @@ Thailand nightlife in 2026 is more than just parties—it’s a complete journey
     category: "Group Tours & Adventure",
     author: "FlyingLyte Team",
     date: "03 July 2026",
-    image: "/images/blogs/manali-kasol-group-tour-2026.jpeg",
+    image: "/images/blogs/manali-kasol-group-tour-travel-guide-2026.png",
 
     shortDescription:
       "Join an unforgettable Manali & Kasol Group Tour and experience breathtaking mountains, adventure activities, scenic valleys, riverside cafes, and exciting moments with fellow travelers.",
@@ -428,5 +425,69 @@ Conclusion
 
 A Manali & Kasol Group Tour is more than just a vacation; it is an experience filled with mountains, friendships, adventure, and unforgettable moments. Whether you are traveling with friends or joining a travel community, this journey promises memories that last forever.
 `,
+  },
+  {
+    id: 9,
+    slug: "girls-group-trip-mussoorie-3-days-fun-memories-2026",
+    title:
+      "Girls’ Group Trip to Mussoorie – 3 Days of Fun, Mountains & Unforgettable Memories",
+    category: "Girls Trips & Travel Stories",
+    author: "FlyingLyte Team",
+    date: "04 July 2026",
+    image:
+      "/images/blogs/girls-group-trip-mussoorie-3-days-fun-memories-2026.png",
+
+    shortDescription:
+      "Plan the perfect Girls’ Group Trip to Mussoorie with scenic mountain views, café hopping, shopping, sightseeing, fun activities, and unforgettable moments with your best friends.",
+
+    description: `
+
+A Girls’ Group Trip to Mussoorie is the perfect escape from busy schedules and daily routines. Known as the Queen of Hills, Mussoorie offers beautiful mountain views, cool weather, charming cafés, and memorable experiences that make every trip special. Whether you are planning a vacation with your best friends or a weekend getaway, this 3-day journey promises fun, laughter, and unforgettable memories.
+
+Discover the perfect 3-day girls trip experience in Mussoorie.
+
+Day 1: Arrival and Exploring Mall Road
+
+Begin your journey by arriving in Mussoorie and checking into your hotel. After relaxing for some time, head towards Mall Road, one of the most popular attractions in the city.
+
+Spend your evening exploring local markets, trying delicious street food, shopping for souvenirs, and enjoying beautiful mountain views. Capture photos with your friends and enjoy the lively atmosphere.
+
+End the day with dinner at a cozy café while enjoying the cool weather and beautiful surroundings.
+
+Day 2: Sightseeing and Adventure Fun
+
+Start your morning with a delicious breakfast and prepare for a day full of sightseeing and exciting experiences.
+
+Visit popular attractions including:
+
+* Kempty Falls  
+* Gun Hill Point  
+* Company Garden  
+* Camel's Back Road  
+* George Everest Peak  
+
+Enjoy nature, click pictures, and spend quality time with your group while creating unforgettable memories.
+
+Evening time can be spent café hopping and enjoying music, conversations, and beautiful sunset views.
+
+Day 3: Relax, Shopping and Departure
+
+On the final day, enjoy a relaxed morning with coffee and mountain views. Visit nearby attractions or spend time shopping for local handicrafts and gifts before departure.
+
+Take one last group photo and leave with countless memories and unforgettable moments from your girls trip.
+
+Why Choose Mussoorie for a Girls Trip?
+
+1. Beautiful weather throughout the year  
+2. Scenic mountain landscapes  
+3. Safe and enjoyable travel experience  
+4. Great cafés and shopping places  
+5. Perfect destination for photos and memories  
+
+Conclusion
+
+A Girls’ Group Trip to Mussoorie offers the perfect combination of fun, friendship, adventure, and relaxation. From sightseeing and shopping to laughter-filled moments with your favorite people, this journey becomes a memory you'll always cherish.
+
+  `,
   },
 ];

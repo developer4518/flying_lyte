@@ -84,7 +84,7 @@ const Navbar = () => {
             </button>
 
             {/* Desktop Menu */}
-            <ul className="hidden lg:flex items-center gap-1 rounded-full border border-white/10 bg-white/[0.04] p-1">
+            <ul className="hidden lg:flex items-center gap-1 rounded-full border border-white/10 bg-white/4 p-1">
               {navLinks.map((item) => (
                 <li key={item.path}>
                   <Link
@@ -134,7 +134,7 @@ const Navbar = () => {
                         .toUpperCase()}
                     </span>
 
-                    <span className="max-w-[110px] truncate text-sm font-bold">
+                    <span className="max-w-27.5  truncate text-sm font-bold">
                       Hi, {user?.name?.split(" ")[0] || "User"}
                     </span>
 
@@ -203,7 +203,7 @@ const Navbar = () => {
                   className={`flex items-center justify-between rounded-2xl px-4 py-3 text-left text-sm font-semibold transition ${
                     isActive(item.path)
                       ? "bg-[#E6B35C] text-black"
-                      : "bg-white/[0.04] text-gray-200 hover:bg-white/[0.08] hover:text-[#E6B35C]"
+                      : "bg-white/4 text-gray-200 hover:bg-white/8 hover:text-[#E6B35C]"
                   }`}
                 >
                   {item.name}
@@ -219,7 +219,7 @@ const Navbar = () => {
                 <button
                   type="button"
                   onClick={() => navigate("/login")}
-                  className="rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm font-semibold text-white transition hover:bg-white/[0.08]"
+                  className="rounded-2xl border border-white/10 bg-white/4 px-4 py-3 text-sm font-semibold text-white transition hover:bg-white/8"
                 >
                   Login
                 </button>
@@ -227,14 +227,14 @@ const Navbar = () => {
                 <button
                   type="button"
                   onClick={() => navigate("/register")}
-                  className="rounded-2xl bg-gradient-to-r from-[#E6B35C] to-[#F7CF75] px-4 py-3 text-sm font-bold text-black shadow-[0_10px_28px_rgba(230,179,92,0.3)]"
+                  className="rounded-2xl bg-linear-to-r from-[#E6B35C] to-[#F7CF75] px-4 py-3 text-sm font-bold text-black shadow-[0_10px_28px_rgba(230,179,92,0.3)]"
                 >
                   Register
                 </button>
               </div>
             ) : (
               <div className="space-y-3">
-                <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3">
+                <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/4 px-4 py-3">
                   <span className="grid h-10 w-10 place-items-center rounded-full bg-[#E6B35C] font-black text-black">
                     {(user?.name || user?.email || "U").charAt(0).toUpperCase()}
                   </span>
