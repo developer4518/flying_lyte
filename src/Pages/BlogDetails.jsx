@@ -55,12 +55,13 @@ const BlogDetails = () => {
         </div>
       </section>
 
-      <section className="max-w-5xl mx-auto px-4">
-        <div className="rounded-3xl overflow-hidden border border-(--border-soft) shadow-[0_30px_80px_rgba(0,0,0,0.45)]">
+      {/* Full Clear Blog Image */}
+      <section className="max-w-7xl mx-auto px-4">
+        <div className="rounded-3xl overflow-hidden border border-(--border-soft) bg-black/30 shadow-[0_30px_80px_rgba(0,0,0,0.45)] p-2 md:p-3">
           <img
             src={blog.image}
             alt={blog.title}
-            className="w-full h-70 md:h-130 object-cover"
+            className="w-full h-auto max-h-[780px] object-contain rounded-2xl"
           />
         </div>
       </section>
