@@ -543,4 +543,118 @@ An Astonishing Kashmir journey is more than just a vacation; it is an unforgetta
 
   `,
   },
+  {
+    id: 11,
+    slug: "delightful-kashmir-holiday-package-5-days-4-nights-2026",
+    title:
+      "Delightful Kashmir Holiday Package – 5 Days & 4 Nights of Scenic Beauty and Adventure",
+    category: "Kashmir Tour Packages",
+    author: "FlyingLyte Team",
+    date: "05 July 2026",
+    image:
+      "/images/blogs/delightful-kashmir-holiday-package-5-days-4-nights-2026.png",
+
+    shortDescription:
+      "Experience the beauty of Kashmir with our 5 Days & 4 Nights holiday package covering Srinagar, Gulmarg, Sonmarg, and Pahalgam. Enjoy comfortable stays, sightseeing, transfers, and unforgettable Himalayan landscapes.",
+
+    description: `
+
+Looking for the perfect Himalayan getaway? Our Delightful Kashmir Holiday Package is designed for travelers who want to experience the best of Kashmir in just 5 Days and 4 Nights. Explore breathtaking valleys, pristine lakes, snow-covered mountains, and charming towns while enjoying a comfortable and hassle-free vacation.
+
+Whether you're traveling with family, friends, your partner, or on your honeymoon, this Kashmir package offers the perfect blend of relaxation, sightseeing, and adventure.
+
+ Destinations Covered
+
+* Srinagar
+* Gulmarg
+* Sonmarg
+* Pahalgam
+
+ Day 1 – Welcome to Srinagar
+
+Arrive in Srinagar, the beautiful summer capital of Jammu & Kashmir. After checking into your hotel, spend the evening exploring the famous Dal Lake, local markets, and scenic surroundings. Enjoy the peaceful atmosphere before relaxing for the night.
+
+ Day 2 – Excursion to Gulmarg
+
+After breakfast, travel through the stunning valleys of Kashmir to reach Gulmarg, a charming hill destination known for its breathtaking scenery, peaceful ambiance, and thrilling outdoor activities.
+
+Highlights include:
+
+* Scenic mountain landscapes
+* Gondola Cable Car (optional)
+* Snow activities (seasonal)
+* Photography spots
+* Leisure time in Gulmarg
+
+Return to Srinagar in the evening.
+
+ Day 3 – Full-Day Trip to Sonmarg
+
+Visit the spectacular valley of Sonmarg, popularly known as the "Meadow of Gold." The drive itself offers breathtaking Himalayan views, rivers, glaciers, and lush green landscapes.
+
+Enjoy:
+
+* Beautiful Sindh River
+* Glacier viewpoints
+* Pony rides (optional)
+* Mountain photography
+* Peaceful natural surroundings
+
+Return to Srinagar for an overnight stay.
+
+ Day 4 – Explore Pahalgam
+
+Head towards the picturesque town of Pahalgam, famous for its green valleys, pine forests, and Lidder River.
+
+Popular attractions include:
+
+* Betaab Valley
+* Aru Valley
+* Chandanwari
+* Riverside walks
+* Local shopping
+
+Spend quality time surrounded by Kashmir's untouched beauty before returning to your hotel.
+
+Day 5 – Departure
+
+After breakfast, check out from your hotel and proceed to the airport with unforgettable memories of Kashmir's breathtaking landscapes and warm hospitality.
+
+Package Inclusions
+
+* 4 Nights Hotel Accommodation
+* Daily Breakfast & Dinner
+* Private Transfers
+* Sightseeing as per itinerary
+* Driver Allowance
+* Toll Tax & Parking Charges
+* Pickup & Drop Assistance
+
+* Why Choose This Kashmir Package?
+
+* Covers Kashmir's top tourist destinations
+* Comfortable hotel accommodations
+* Ideal for couples, families, and groups
+* Beautiful mountain views throughout the journey
+* Well-planned itinerary
+* Budget-friendly pricing
+* Hassle-free travel experience
+
+ Best Time to Visit Kashmir
+
+Kashmir is beautiful throughout the year.
+
+* Spring (March–May): Blooming gardens and pleasant weather
+* Summer (June–August): Perfect for sightseeing
+* Autumn (September–November): Golden landscapes
+* Winter (December–February): Snowfall and winter adventures
+
+Conclusion
+
+The Delightful Kashmir Holiday Package offers an unforgettable journey through the most beautiful destinations in Kashmir. From the peaceful waters of Dal Lake to the snow-covered peaks of Gulmarg, the lush valleys of Pahalgam, and the stunning landscapes of Sonmarg, every day brings a new adventure.
+
+Book your Kashmir holiday with FlyingLyte and experience why Kashmir is truly known as "Paradise on Earth."
+
+  `,
+  },
 ];
