@@ -14,8 +14,8 @@ const Home = () => {
     <div className="bg-(--bg-main)">
       <Navbar />
       {/* <PopularDestinations /> */}
-      <PackageSection limit={4} />
       <HeroSection />
+      <PackageSection limit={4} />
       <CTASection />
       <AboutUs />
       <BlogSection />
