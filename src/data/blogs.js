@@ -545,115 +545,142 @@ An Astonishing Kashmir journey is more than just a vacation; it is an unforgetta
   },
   {
     id: 11,
-    slug: "delightful-kashmir-holiday-package-5-days-4-nights-2026",
+    slug: "rishikesh-group-tour-3-days-2-nights-2026",
     title:
-      "Delightful Kashmir Holiday Package – 5 Days & 4 Nights of Scenic Beauty and Adventure",
-    category: "Kashmir Tour Packages",
+      "Rishikesh Group Tour – 3 Days & 2 Nights of Adventure, Camping & Spiritual Bliss",
+    category: "Group Tours & Adventure",
     author: "FlyingLyte Team",
-    date: "05 July 2026",
-    image:
-      "/images/blogs/delightful-kashmir-holiday-package-5-days-4-nights-2026.png",
+    date: "07 July 2026",
+    image: "/images/blogs/rishikesh-group-tour-3-days-2-nights-2026.png",
 
     shortDescription:
-      "Experience the beauty of Kashmir with our 5 Days & 4 Nights holiday package covering Srinagar, Gulmarg, Sonmarg, and Pahalgam. Enjoy comfortable stays, sightseeing, transfers, and unforgettable Himalayan landscapes.",
+      "Experience the ultimate Rishikesh Group Tour with thrilling river rafting, riverside camping, bonfire nights, sightseeing, yoga, and breathtaking Himalayan landscapes—all in an exciting 3 Days & 2 Nights getaway.",
 
     description: `
 
-Looking for the perfect Himalayan getaway? Our Delightful Kashmir Holiday Package is designed for travelers who want to experience the best of Kashmir in just 5 Days and 4 Nights. Explore breathtaking valleys, pristine lakes, snow-covered mountains, and charming towns while enjoying a comfortable and hassle-free vacation.
+Escape into the heart of Uttarakhand with our **Rishikesh Group Tour**, a perfect combination of adventure, spirituality, and natural beauty. Whether you're traveling with friends, colleagues, or fellow explorers, this carefully planned package offers unforgettable experiences along the sacred Ganga River.
 
-Whether you're traveling with family, friends, your partner, or on your honeymoon, this Kashmir package offers the perfect blend of relaxation, sightseeing, and adventure.
+Known as the **Yoga Capital of the World**, Rishikesh welcomes travelers with majestic Himalayan views, thrilling adventure sports, peaceful temples, and vibrant cafés. This 3 Days & 2 Nights tour is ideal for anyone looking to recharge, explore, and create lifelong memories.
 
- Destinations Covered
+## Package Overview
 
-* Srinagar
-* Gulmarg
-* Sonmarg
-* Pahalgam
+Duration: 3 Days / 2 Nights
 
- Day 1 – Welcome to Srinagar
+Starting Price: ₹10,499 Per Person
 
-Arrive in Srinagar, the beautiful summer capital of Jammu & Kashmir. After checking into your hotel, spend the evening exploring the famous Dal Lake, local markets, and scenic surroundings. Enjoy the peaceful atmosphere before relaxing for the night.
+ Rated 4/5 by Trusted Travelers
 
- Day 2 – Excursion to Gulmarg
+Package Includes:
 
-After breakfast, travel through the stunning valleys of Kashmir to reach Gulmarg, a charming hill destination known for its breathtaking scenery, peaceful ambiance, and thrilling outdoor activities.
+• 2 Nights Hotel/Camp Accommodation
+• Daily Breakfast & Dinner
+• Sightseeing Tours
+• Private Transfers
+• Pickup & Drop Assistance
+• Tour Coordinator
+• Toll Taxes & Parking Charges
 
-Highlights include:
+Additional Benefits:
 
-* Scenic mountain landscapes
-* Gondola Cable Car (optional)
-* Snow activities (seasonal)
-* Photography spots
-* Leisure time in Gulmarg
+• Secure Booking
+• Best Price Guarantee
+• 24/7 Customer Support
+• Flexible Travel Dates
+• Fully Customizable Trip
+• WhatsApp Booking Assistance
 
-Return to Srinagar in the evening.
+## Day 1 – Begin Your Journey to Rishikesh
 
- Day 3 – Full-Day Trip to Sonmarg
+Arrive in Rishikesh and check into your riverside camp or hotel. Relax amidst the serene Himalayan surroundings before exploring the famous **Ram Jhula** and **Laxman Jhula**.
 
-Visit the spectacular valley of Sonmarg, popularly known as the "Meadow of Gold." The drive itself offers breathtaking Himalayan views, rivers, glaciers, and lush green landscapes.
+As evening approaches, witness the mesmerizing **Ganga Aarti at Triveni Ghat**, followed by a delicious dinner and an enjoyable bonfire with music.
 
-Enjoy:
+Overnight stay in Rishikesh.
 
-* Beautiful Sindh River
-* Glacier viewpoints
-* Pony rides (optional)
-* Mountain photography
-* Peaceful natural surroundings
+## Day 2 – Adventure Awaits
 
-Return to Srinagar for an overnight stay.
+Wake up to the fresh mountain air and enjoy breakfast before beginning an exciting day of adventure.
 
- Day 4 – Explore Pahalgam
+Enjoy activities like:
 
-Head towards the picturesque town of Pahalgam, famous for its green valleys, pine forests, and Lidder River.
+• River Rafting on the Ganga
+• Cliff Jumping
+• Body Surfing
+• Zipline (Optional)
+• Bungee Jumping (Optional)
+• Giant Swing (Optional)
 
-Popular attractions include:
+Later, visit **Neer Garh Waterfall**, relax by the river, and spend your evening exploring local cafés and markets.
 
-* Betaab Valley
-* Aru Valley
-* Chandanwari
-* Riverside walks
-* Local shopping
+Overnight stay in Rishikesh.
 
-Spend quality time surrounded by Kashmir's untouched beauty before returning to your hotel.
+## Day 3 – Explore & Departure
 
-Day 5 – Departure
+Start your morning with a peaceful yoga session or riverside walk before breakfast.
 
-After breakfast, check out from your hotel and proceed to the airport with unforgettable memories of Kashmir's breathtaking landscapes and warm hospitality.
+Visit popular attractions like **Beatles Ashram** and **Parmarth Niketan**, shop for souvenirs, and enjoy the final moments of your trip before departing with unforgettable memories.
 
-Package Inclusions
+## Popular Attractions
 
-* 4 Nights Hotel Accommodation
-* Daily Breakfast & Dinner
-* Private Transfers
-* Sightseeing as per itinerary
-* Driver Allowance
-* Toll Tax & Parking Charges
-* Pickup & Drop Assistance
+• Ram Jhula
+• Laxman Jhula
+• Triveni Ghat
+• Beatles Ashram
+• Parmarth Niketan
+• Neer Garh Waterfall
+• Ganga River
+• Riverside Cafés
+• Local Markets
 
-* Why Choose This Kashmir Package?
+## Why Choose This Package?
 
-* Covers Kashmir's top tourist destinations
-* Comfortable hotel accommodations
-* Ideal for couples, families, and groups
-* Beautiful mountain views throughout the journey
-* Well-planned itinerary
-* Budget-friendly pricing
-* Hassle-free travel experience
+• Adventure & Spiritual Experience
+• Comfortable Hotel/Camp Stay
+• Perfect for Friends & Groups
+• Guided Sightseeing
+• Budget-Friendly Pricing
+• Flexible Travel Dates
+• Secure Booking Process
+• 24/7 Travel Assistance
 
- Best Time to Visit Kashmir
+## Best Time to Visit Rishikesh
 
-Kashmir is beautiful throughout the year.
+The ideal time to visit Rishikesh is from **September to April**, when the weather is pleasant for river rafting, camping, sightseeing, yoga retreats, and outdoor adventures.
 
-* Spring (March–May): Blooming gardens and pleasant weather
-* Summer (June–August): Perfect for sightseeing
-* Autumn (September–November): Golden landscapes
-* Winter (December–February): Snowfall and winter adventures
+## Plan Your Rishikesh Trip
 
-Conclusion
+Planning your adventure is simple.
 
-The Delightful Kashmir Holiday Package offers an unforgettable journey through the most beautiful destinations in Kashmir. From the peaceful waters of Dal Lake to the snow-covered peaks of Gulmarg, the lush valleys of Pahalgam, and the stunning landscapes of Sonmarg, every day brings a new adventure.
+Just share:
 
-Book your Kashmir holiday with FlyingLyte and experience why Kashmir is truly known as "Paradise on Earth."
+• Your Name
+• Phone Number
+• Preferred Travel Date
+• Your Budget (Optional)
+
+Our travel experts will prepare a personalized itinerary and offer the best available quotation based on your travel preferences.
+
+✔ Get Best Quote
+✔ Send Quote on WhatsApp
+✔ Instant Booking Assistance
+✔ Customized Group Packages
+
+## Why Book With FlyingLyte?
+
+• Personalized Travel Planning
+• Best Price & No Hidden Charges
+• Comfortable Stays
+• Experienced Travel Experts
+• 24/7 Trip Assistance
+• Trusted by Thousands of Happy Travelers
+• Safe & Secure Booking
+• Fast and Easy Reservation Process
+
+## Conclusion
+
+A **Rishikesh Group Tour** is more than just a weekend getaway—it's an unforgettable journey filled with adventure, peace, breathtaking landscapes, and meaningful experiences. From rafting through the mighty Ganga to witnessing the divine Ganga Aarti, every moment is designed to leave you with memories that last a lifetime.
+
+Book your **Rishikesh Group Tour with FlyingLyte** today and discover why Rishikesh remains one of India's most loved travel destinations.
 
   `,
   },
