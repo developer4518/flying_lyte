@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Tabs from "./Tabs";
+import HotelsForm from "./HotelsForm";
 import { useNavigate } from "react-router-dom";
 import { Plane, Hotel, Sparkles, ArrowRight } from "lucide-react";
 
@@ -159,7 +160,7 @@ const SearchBox = () => {
         return <ComingSoonCard type="flights" />;
 
       case "hotels":
-        return <ComingSoonCard type="hotels" />;
+        return <ComingSoonCard type="Hotels" />;
 
       default:
         return <ComingSoonCard type="flights" />;
