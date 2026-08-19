@@ -160,7 +160,7 @@ const SearchBox = () => {
         return <ComingSoonCard type="flights" />;
 
       case "hotels":
-        return <ComingSoonCard type="Hotels" />;
+        return <HotelsForm />;
 
       default:
         return <ComingSoonCard type="flights" />;

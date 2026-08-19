@@ -525,6 +525,23 @@ const HotelVoucher = () => {
     roomData?.TotalFare ||
     0;
 
+
+    const convenienceFee = Number(
+  savedData?.convenienceFee ??
+    savedData?.prebookData?.convenience_fee ??
+    savedData?.reviewBookingData?.prebookData?.convenience_fee ??
+    0,
+);
+
+const totalPaid = Number(
+  savedData?.paidAmount ??
+    savedData?.paymentAmount ??
+    savedData?.totalAmount ??
+    savedData?.prebookData?.total_amount ??
+    savedData?.reviewBookingData?.prebookData?.total_amount ??
+    0,
+);
+
   const totalTax =
     roomData?.TotalTax ||
     booking?.TotalTax ||
@@ -1545,26 +1562,53 @@ Lead Guest: ${leadGuestName || "N/A"}`,
           </section>
         )}
 
-        {(netAmount || totalTax) && (
-          <section className="voucher-row">
-            <div className="voucher-cell">
-              <h2 className="voucher-gold mb-3 text-lg">Amount Details</h2>
+        {(netAmount || convenienceFee || totalPaid) && (
+  <section className="voucher-row">
+    <div className="voucher-cell">
+      <h2 className="voucher-gold mb-3 text-lg">
+        Amount Details
+      </h2>
 
-              <div className="amount-box">
-                {netAmount ? (
-                  <div className="amount-row total">
-                    <span>
-                      Net Amount
-                      <small>Inclusive of all taxes</small>
-                    </span>
+      <div className="amount-box">
+        {/* Hotel / Supplier Net Amount */}
+        <div className="amount-row">
+          <span>
+            Net Amount
+            <small>Hotel booking amount</small>
+          </span>
 
-                    <strong>{formatMoney(netAmount, currency)}</strong>
-                  </div>
-                ) : null}
-              </div>
-            </div>
-          </section>
-        )}
+          <strong>
+            {formatMoney(netAmount, currency)}
+          </strong>
+        </div>
+
+        {/* Customer Convenience Fee */}
+        <div className="amount-row">
+          <span>
+            Convenience Fee
+            <small>Payment convenience charges</small>
+          </span>
+
+          <strong>
+            {formatMoney(convenienceFee, currency)}
+          </strong>
+        </div>
+
+        {/* Actual PayU Paid Amount */}
+        <div className="amount-row total">
+          <span>
+            Total Amount Paid
+            <small>Amount paid successfully through PayU</small>
+          </span>
+
+          <strong>
+            {formatMoney(totalPaid, currency)}
+          </strong>
+        </div>
+      </div>
+    </div>
+  </section>
+)}
 
         {specialRequest && (
           <section className="voucher-row">

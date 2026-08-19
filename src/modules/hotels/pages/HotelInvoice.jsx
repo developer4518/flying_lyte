@@ -178,14 +178,19 @@ const HotelInvoice = () => {
     booking?.HotelDetails?.HotelName ||
     "Hotel";
 
-  const city =
-    hotel?.city ||
-    hotel?.CityName ||
-    hotel?.City ||
-    booking?.CityName ||
-    booking?.HotelCity ||
-    booking?.City ||
-    "N/A";
+const city =
+  savedData?.searchCity ||
+  savedData?.reviewBookingData?.searchCity ||
+  savedData?.search?.city ||
+  savedData?.search?.cityName ||
+  hotel?.city_name ||
+  hotel?.city ||
+  hotel?.CityName ||
+  hotel?.City ||
+  booking?.CityName ||
+  booking?.HotelCity ||
+  booking?.City ||
+  "N/A";
 
   const checkIn =
     savedData?.checkIn ||
@@ -342,12 +347,29 @@ const HotelInvoice = () => {
         gross,
     ) || 0;
 
-  const netReceivable =
-    Number(
-      booking?.NetReceivable ||
-        booking?.ReceivableAmount ||
-        booking?.TotalReceivable,
-    ) || Number(netAmount || gross || 0);
+
+    const convenienceFee = Number(
+  savedData?.convenienceFee ??
+    savedData?.prebookData?.convenience_fee ??
+    savedData?.reviewBookingData?.prebookData?.convenience_fee ??
+    0,
+);
+
+const totalAmountPaid = Number(
+  savedData?.paidAmount ??
+    savedData?.paymentAmount ??
+    savedData?.totalAmount ??
+    savedData?.prebookData?.total_amount ??
+    savedData?.reviewBookingData?.prebookData?.total_amount ??
+    0,
+);
+
+  // const netReceivable =
+  //   Number(
+  //     booking?.NetReceivable ||
+  //       booking?.ReceivableAmount ||
+  //       booking?.TotalReceivable,
+  //   ) || Number(netAmount || gross || 0);
 
   const taxableValue =
     Number(
@@ -407,14 +429,19 @@ const HotelInvoice = () => {
     hotel?.address ||
     "N/A";
 
-  const invoiceToCity =
-    booking?.CustomerCity ||
-    booking?.GuestCity ||
-    booking?.CityName ||
-    booking?.HotelCity ||
-    hotel?.CityName ||
-    hotel?.city ||
-    "N/A";
+ const invoiceToCity =
+  booking?.CustomerCity ||
+  booking?.GuestCity ||
+  savedData?.searchCity ||
+  savedData?.reviewBookingData?.searchCity ||
+  savedData?.search?.city ||
+  savedData?.search?.cityName ||
+  booking?.CityName ||
+  booking?.HotelCity ||
+  hotel?.city_name ||
+  hotel?.CityName ||
+  hotel?.city ||
+  "N/A";
 
   const invoiceToState =
     booking?.CustomerState ||
@@ -807,23 +834,34 @@ const HotelInvoice = () => {
                   currency={currency}
                 />
 
-                <div className="border-t border-(--border-soft) pt-3">
-                  <AmountRow
-                    label="Net Amount"
-                    value={netAmount}
-                    currency={currency}
-                    highlight
-                  />
+                <div className="border-t border-(--border-soft) pt-3 space-y-3">
+  <AmountRow
+    label="Net Amount"
+    value={netAmount}
+    currency={currency}
+    highlight
+  />
 
-                  <div className="flex justify-between gap-4 text-lg font-bold text-(--gold-main) mt-2">
-                    <span>Net Receivable</span>
-                    <span>{formatMoney(netReceivable, currency)}</span>
-                  </div>
+  <AmountRow
+    label="Convenience Fee"
+    value={convenienceFee}
+    currency={currency}
+  />
 
-                  <p className="text-xs text-(--text-muted) text-right mt-1">
-                    Amount in {currency}
-                  </p>
-                </div>
+  <div className="border-t border-(--border-soft) pt-3">
+    <div className="flex justify-between gap-4 text-lg font-bold text-(--gold-main)">
+      <span>Total Amount</span>
+
+      <span>
+        {formatMoney(totalAmountPaid, currency)}
+      </span>
+    </div>
+
+    <p className="text-xs text-(--text-muted) text-right mt-1">
+      Amount paid through PayU
+    </p>
+  </div>
+</div>
               </div>
             </div>
 

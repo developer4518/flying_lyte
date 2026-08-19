@@ -568,6 +568,15 @@ const HotelBookingSuccess = () => {
       0,
   );
 
+  const paidAmount = Number(
+  savedData?.paidAmount ??
+    savedData?.paymentAmount ??
+    savedData?.prebookData?.total_amount ??
+    savedData?.total_amount ??
+    totalFare ??
+    0,
+);
+
   const offeredRate =
     roomData?.TotalFare ||
     booking?.TotalFare ||
@@ -1487,7 +1496,7 @@ const HotelBookingSuccess = () => {
                   </span>
 
                   <span className="text-2xl font-black text-yellow-400">
-                    {formatMoney(totalFare, currency)}
+                    {formatMoney(paidAmount, currency)}
                   </span>
                 </div>
               </div>

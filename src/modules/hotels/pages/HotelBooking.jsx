@@ -5,7 +5,7 @@ import { useMemo, useState } from "react";
 import { useHotelStore } from "../../../store/hotelStore";
 
 const HotelBooking = () => {
-  const { setGuestDetails } = useHotelStore();
+  const { setGuestDetails, search } = useHotelStore();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -13,6 +13,41 @@ const HotelBooking = () => {
   const payload = state?.payload || state;
 
   const { hotel, preBook, checkIn, checkOut, guests } = payload;
+
+  const getCityName = (value) => {
+  if (!value) return "";
+
+  if (typeof value === "string") {
+    return value.trim();
+  }
+
+  return (
+    value?.name ||
+    value?.city_name ||
+    value?.CityName ||
+    value?.city ||
+    value?.label ||
+    ""
+  );
+};
+
+const searchCity =
+  getCityName(payload?.cityName) ||
+  getCityName(payload?.CityName) ||
+  getCityName(payload?.destinationName) ||
+  getCityName(payload?.searchCity) ||
+
+  getCityName(search?.cityName) ||
+  getCityName(search?.CityName) ||
+  getCityName(search?.destinationName) ||
+  getCityName(search?.destination) ||
+
+  getCityName(search?.city) ||
+
+  getCityName(hotel?.city_name) ||
+  getCityName(hotel?.CityName) ||
+  getCityName(hotel?.city) ||
+  "";
 
   const roomData =
     preBook?.raw?.HotelResult?.[0]?.Rooms?.[0] ||
@@ -1039,6 +1074,7 @@ const HotelBooking = () => {
         prebookData: preBook,
         checkIn,
         checkOut,
+        searchCity,
         net,
         TotalFare: totalFare,
         totalFare,
