@@ -10,51 +10,95 @@ export const privateApi = axios.create({
 });
 
 // Attach access token to every request
-privateApi.interceptors.request.use(
-  (config) => {
-    const token = useAuthStore.getState().token;
+// privateApi.interceptors.request.use(
+//   (config) => {
+//     const token = useAuthStore.getState().token;
 
-    console.log("Authorization token:", token);
+//     console.log("Authorization token:", token);
 
-    if (token) {
-      config.headers = config.headers || {};
-      config.headers.Authorization = `Bearer ${token}`;
-    }
+//     if (token) {
+//       config.headers = config.headers || {};
+//       config.headers.Authorization = `Bearer ${token}`;
+//     }
 
-    return config;
-  },
-  (error) => Promise.reject(error)
-);
+//     return config;
+//   },
+//   (error) => Promise.reject(error)
+// );
 
 // Handle expired access tokens (optional refresh flow)
 privateApi.interceptors.response.use(
   (response) => response,
+
   async (error) => {
     const originalRequest = error.config;
 
-    if (error.response?.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
-
+    if (
+      error.response?.status === 401 &&
+      originalRequest &&
+      !originalRequest._retry
+    ) {
       const { refreshToken, setToken, logout } = useAuthStore.getState();
 
-      try {
-        // Call refresh endpoint
-        const res = await publicApi.post("/api/auth/token/refresh/", {
-          refresh: refreshToken,
-        });
+      /*
+       * User logged in hi nahi hai.
+       *
+       * Refresh API call mat karo.
+       * Original 401 PreBookLoader ko return karo.
+       */
+      if (!refreshToken) {
+        logout();
 
-        const newAccessToken = res.data.data.access;
+        return Promise.reject(error);
+      }
+
+      originalRequest._retry = true;
+
+      try {
+        const res = await publicApi.post(
+          "/api/auth/token/refresh/",
+          {
+            refresh: refreshToken,
+          },
+        );
+
+        const newAccessToken =
+          res.data?.data?.access ||
+          res.data?.access;
+
+        if (!newAccessToken) {
+          throw new Error("New access token missing");
+        }
+
         setToken(newAccessToken);
 
-        // Retry original request with new token
-        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+        originalRequest.headers =
+          originalRequest.headers || {};
+
+        originalRequest.headers.Authorization =
+          `Bearer ${newAccessToken}`;
+
         return privateApi(originalRequest);
       } catch (refreshError) {
+        console.log(
+          "TOKEN REFRESH FAILED:",
+          refreshError?.response?.data || refreshError,
+        );
+
         logout();
-        return Promise.reject(refreshError);
+
+        /*
+         * IMPORTANT:
+         * refresh ka 400 return nahi karna.
+         * Original 401 return karo.
+         *
+         * Isse PreBookLoader identify karega
+         * ki login required hai.
+         */
+        return Promise.reject(error);
       }
     }
 
     return Promise.reject(error);
-  }
+  },
 );

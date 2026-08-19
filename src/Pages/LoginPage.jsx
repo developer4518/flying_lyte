@@ -41,13 +41,17 @@ const LoginPage = () => {
       setToken(access);
       setRefreshToken(refresh);
 
-      const redirectTo = location.state?.redirectTo || "/";
-      const payload = location.state?.payload || null;
+     const redirectTo = location.state?.redirectTo || "/";
+const payload = location.state?.payload || null;
 
-      navigate(redirectTo, {
-        state: payload, 
-        replace: true,
-      });
+navigate(redirectTo, {
+  replace: true,
+  state: payload
+    ? {
+        payload,
+      }
+    : undefined,
+});
 
       toast.success("Login Successful ✈️");
     } catch (error) {
