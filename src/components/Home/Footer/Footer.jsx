@@ -100,7 +100,7 @@ const Footer = () => {
           {/* Bottom Bar */}
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-xs text-gray-400 text-center md:text-left">
-              © {new Date().getFullYear()} FlyingLyte. All rights reserved.
+              © 2024 FlyingLyte. All rights reserved.
             </p>
 
             {/* Social Icons */}
