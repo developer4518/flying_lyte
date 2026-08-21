@@ -377,8 +377,6 @@ const getRoomBadges = (room) => {
   return badges;
 };
 
-
-
 const getVisiblePageNumbers = (currentPage, totalPages) => {
   const maxVisible = 5;
 
@@ -387,10 +385,7 @@ const getVisiblePageNumbers = (currentPage, totalPages) => {
 
   start = Math.max(1, end - maxVisible + 1);
 
-  return Array.from(
-    { length: end - start + 1 },
-    (_, index) => start + index,
-  );
+  return Array.from({ length: end - start + 1 }, (_, index) => start + index);
 };
 
 const HotelResults = () => {
@@ -409,87 +404,71 @@ const HotelResults = () => {
   const childAges = Array.isArray(guests?.childAges) ? guests.childAges : [];
 
   const hotelResponse = useMemo(() => {
-  if (!hotels) return {};
+    if (!hotels) return {};
 
-  if (
-    hotels?.data &&
-    typeof hotels.data === "object" &&
-    !Array.isArray(hotels.data)
-  ) {
-    return {
-      ...hotels,
-      ...hotels.data,
-    };
-  }
+    if (
+      hotels?.data &&
+      typeof hotels.data === "object" &&
+      !Array.isArray(hotels.data)
+    ) {
+      return {
+        ...hotels,
+        ...hotels.data,
+      };
+    }
 
-  return hotels;
-}, [hotels]);
+    return hotels;
+  }, [hotels]);
 
   const hotelList = useMemo(() => {
-  let list = [];
+    let list = [];
 
-  if (Array.isArray(hotelResponse)) {
-    list = hotelResponse;
-  } else if (Array.isArray(hotelResponse?.results)) {
-    list = hotelResponse.results;
-  } else if (Array.isArray(hotelResponse?.HotelResult)) {
-    list = hotelResponse.HotelResult;
-  } else if (Array.isArray(hotelResponse?.hotels)) {
-    list = hotelResponse.hotels;
-  }
+    if (Array.isArray(hotelResponse)) {
+      list = hotelResponse;
+    } else if (Array.isArray(hotelResponse?.results)) {
+      list = hotelResponse.results;
+    } else if (Array.isArray(hotelResponse?.HotelResult)) {
+      list = hotelResponse.HotelResult;
+    } else if (Array.isArray(hotelResponse?.hotels)) {
+      list = hotelResponse.hotels;
+    }
 
-  return list.map(normalizeHotel);
-}, [hotelResponse]);
+    return list.map(normalizeHotel);
+  }, [hotelResponse]);
 
+  const currentPage = Math.max(1, Number(hotelResponse?.page || 1));
 
-const currentPage = Math.max(
-  1,
-  Number(hotelResponse?.page || 1),
-);
+  const pageSize = Math.max(1, Number(hotelResponse?.page_size || 40));
 
-const pageSize = Math.max(
-  1,
-  Number(hotelResponse?.page_size || 40),
-);
+  const totalHotels = Math.max(
+    0,
+    Number(
+      hotelResponse?.count ||
+        hotelResponse?.total_tbo_hotels_found ||
+        hotelList.length,
+    ),
+  );
 
-const totalHotels = Math.max(
-  0,
-  Number(
-    hotelResponse?.count ||
-      hotelResponse?.total_tbo_hotels_found ||
-      hotelList.length,
-  ),
-);
+  const totalPages = Math.max(
+    1,
+    Number(
+      hotelResponse?.total_pages || Math.ceil(totalHotels / pageSize) || 1,
+    ),
+  );
 
-const totalPages = Math.max(
-  1,
-  Number(
-    hotelResponse?.total_pages ||
-      Math.ceil(totalHotels / pageSize) ||
-      1,
-  ),
-);
+  const hasNext = hotelResponse?.has_next ?? currentPage < totalPages;
 
-const hasNext =
-  hotelResponse?.has_next ?? currentPage < totalPages;
+  const hasPrevious = hotelResponse?.has_previous ?? currentPage > 1;
 
-const hasPrevious =
-  hotelResponse?.has_previous ?? currentPage > 1;
+  const startHotelNumber =
+    totalHotels === 0 ? 0 : (currentPage - 1) * pageSize + 1;
 
-const startHotelNumber =
-  totalHotels === 0
-    ? 0
-    : (currentPage - 1) * pageSize + 1;
+  const endHotelNumber = Math.min(currentPage * pageSize, totalHotels);
 
-const endHotelNumber = Math.min(
-  currentPage * pageSize,
-  totalHotels,
-);
-
-const visiblePageNumbers = useMemo(
-  () => getVisiblePageNumbers(currentPage, totalPages),
-  [currentPage, totalPages],
-);
+  const visiblePageNumbers = useMemo(
+    () => getVisiblePageNumbers(currentPage, totalPages),
+    [currentPage, totalPages],
+  );
 
   const [sort, setSort] = useState("price");
   const [priceRange, setPriceRange] = useState([0, 200000]);
@@ -498,7 +477,7 @@ const visiblePageNumbers = useMemo(
   const [mealType, setMealType] = useState("all");
   const [showFilters, setShowFilters] = useState(false);
   const [pageLoading, setPageLoading] = useState(false);
-const [paginationError, setPaginationError] = useState("");
+  const [paginationError, setPaginationError] = useState("");
 
   const filteredHotels = useMemo(() => {
     const filtered = hotelList.filter((hotel) => {
@@ -526,172 +505,155 @@ const [paginationError, setPaginationError] = useState("");
     });
   }, [hotelList, sort, priceRange, minRating, onlyRefundable, mealType]);
 
-
   const handlePageChange = useCallback(
-  async (requestedPage) => {
-    const nextPage = Number(requestedPage);
+    async (requestedPage) => {
+      const nextPage = Number(requestedPage);
 
-    if (
-      pageLoading ||
-      nextPage < 1 ||
-      nextPage > totalPages ||
-      nextPage === currentPage
-    ) {
-      return;
-    }
+      if (
+        pageLoading ||
+        nextPage < 1 ||
+        nextPage > totalPages ||
+        nextPage === currentPage
+      ) {
+        return;
+      }
 
-    try {
-      setPageLoading(true);
-      setPaginationError("");
+      try {
+        setPageLoading(true);
+        setPaginationError("");
 
-      /*
-       * Best case:
-       * HotelsForm saved the original requestParams.
-       * We reuse everything and change only the page.
-       */
-      let params = {
-        ...(search?.requestParams || {}),
-        page: nextPage,
-        page_size: 40,
-      };
-
-      /*
-       * Fallback if requestParams is not available.
-       */
-      if (!params.city) {
-        const roomGuests = Array.isArray(guests?.roomGuests)
-          ? guests.roomGuests
-          : [];
-
-        const paxRooms =
-          roomGuests.length > 0
-            ? roomGuests.map((room) => {
-                const children = Number(
-                  room.Children ?? room.children ?? 0,
-                );
-
-                const ages =
-                  room.ChildrenAges ||
-                  room.ChildAges ||
-                  room.childAges ||
-                  [];
-
-                return {
-                  Adults: Number(
-                    room.Adults ?? room.adults ?? 1,
-                  ),
-                  Children: children,
-                  ChildrenAges: ages
-                    .slice(0, children)
-                    .map(Number),
-                };
-              })
-            : [
-                {
-                  Adults: Number(guests?.adults || 1),
-                  Children: Number(guests?.children || 0),
-                  ChildrenAges: Array.isArray(guests?.childAges)
-                    ? guests.childAges.map(Number)
-                    : [],
-                },
-              ];
-
-        params = {
-          city:
-            typeof city === "object"
-              ? city?.code ||
-                city?.Code ||
-                city?.CityId ||
-                city?.cityId
-              : city,
-
-          checkin: checkIn,
-          checkout: checkOut,
-
-          adults: Number(guests?.adults || 1),
-          children: Number(guests?.children || 0),
-          rooms: Number(guests?.rooms || paxRooms.length || 1),
-
-          nationality: search?.nationality || "IN",
-          currency: search?.currency || "INR",
-
-          pax_rooms: JSON.stringify(paxRooms),
-
+        /*
+         * Best case:
+         * HotelsForm saved the original requestParams.
+         * We reuse everything and change only the page.
+         */
+        let params = {
+          ...(search?.requestParams || {}),
           page: nextPage,
           page_size: 40,
         };
+
+        /*
+         * Fallback if requestParams is not available.
+         */
+        if (!params.city) {
+          const roomGuests = Array.isArray(guests?.roomGuests)
+            ? guests.roomGuests
+            : [];
+
+          const paxRooms =
+            roomGuests.length > 0
+              ? roomGuests.map((room) => {
+                  const children = Number(room.Children ?? room.children ?? 0);
+
+                  const ages =
+                    room.ChildrenAges || room.ChildAges || room.childAges || [];
+
+                  return {
+                    Adults: Number(room.Adults ?? room.adults ?? 1),
+                    Children: children,
+                    ChildrenAges: ages.slice(0, children).map(Number),
+                  };
+                })
+              : [
+                  {
+                    Adults: Number(guests?.adults || 1),
+                    Children: Number(guests?.children || 0),
+                    ChildrenAges: Array.isArray(guests?.childAges)
+                      ? guests.childAges.map(Number)
+                      : [],
+                  },
+                ];
+
+          params = {
+            city:
+              typeof city === "object"
+                ? city?.code || city?.Code || city?.CityId || city?.cityId
+                : city,
+
+            checkin: checkIn,
+            checkout: checkOut,
+
+            adults: Number(guests?.adults || 1),
+            children: Number(guests?.children || 0),
+            rooms: Number(guests?.rooms || paxRooms.length || 1),
+
+            nationality: search?.nationality || "IN",
+            currency: search?.currency || "INR",
+
+            pax_rooms: JSON.stringify(paxRooms),
+
+            page: nextPage,
+            page_size: 40,
+          };
+        }
+
+        console.log("HOTEL PAGE REQUEST:", params);
+
+        const response = await publicApi.get(
+          search?.requestEndpoint || "/api/hotels/search-hotels/",
+          {
+            params,
+          },
+        );
+
+        console.log(`HOTEL PAGE ${nextPage} RESPONSE:`, response.data);
+
+        let responseData = response.data;
+
+        if (
+          responseData?.data &&
+          typeof responseData.data === "object" &&
+          !Array.isArray(responseData.data)
+        ) {
+          responseData = {
+            ...responseData,
+            ...responseData.data,
+          };
+        }
+
+        /*
+         * IMPORTANT:
+         * Store COMPLETE backend response.
+         *
+         * Don't store only responseData.results.
+         * Otherwise count / page / total_pages will disappear.
+         */
+        useHotelStore.setState({
+          hotels: responseData,
+        });
+
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth",
+        });
+      } catch (error) {
+        console.error(
+          "HOTEL PAGINATION ERROR:",
+          error?.response?.data || error,
+        );
+
+        setPaginationError(
+          error?.response?.data?.error ||
+            error?.response?.data?.message ||
+            error?.message ||
+            "Unable to load hotels.",
+        );
+      } finally {
+        setPageLoading(false);
       }
-
-      console.log("HOTEL PAGE REQUEST:", params);
-
-      const response = await publicApi.get(
-        search?.requestEndpoint ||
-          "/api/hotels/search-hotels/",
-        {
-          params,
-        },
-      );
-
-      console.log(
-        `HOTEL PAGE ${nextPage} RESPONSE:`,
-        response.data,
-      );
-
-      let responseData = response.data;
-
-      if (
-        responseData?.data &&
-        typeof responseData.data === "object" &&
-        !Array.isArray(responseData.data)
-      ) {
-        responseData = {
-          ...responseData,
-          ...responseData.data,
-        };
-      }
-
-      /*
-       * IMPORTANT:
-       * Store COMPLETE backend response.
-       *
-       * Don't store only responseData.results.
-       * Otherwise count / page / total_pages will disappear.
-       */
-      useHotelStore.setState({
-        hotels: responseData,
-      });
-
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth",
-      });
-    } catch (error) {
-      console.error(
-        "HOTEL PAGINATION ERROR:",
-        error?.response?.data || error,
-      );
-
-      setPaginationError(
-        error?.response?.data?.error ||
-          error?.response?.data?.message ||
-          error?.message ||
-          "Unable to load hotels.",
-      );
-    } finally {
-      setPageLoading(false);
-    }
-  },
-  [
-    pageLoading,
-    totalPages,
-    currentPage,
-    search,
-    guests,
-    city,
-    checkIn,
-    checkOut,
-  ],
-);
+    },
+    [
+      pageLoading,
+      totalPages,
+      currentPage,
+      search,
+      guests,
+      city,
+      checkIn,
+      checkOut,
+    ],
+  );
 
   const handleView = useCallback(
     (hotel, room) => {
@@ -851,12 +813,12 @@ const [paginationError, setPaginationError] = useState("");
 
           <div className="flex flex-wrap gap-2 text-xs">
             <span className="px-3 py-1 rounded-full bg-green-500/10 text-green-300 border border-green-500/20">
-  {totalHotels} Hotels Found
-</span>
+              {totalHotels} Hotels Found
+            </span>
 
-<span className="px-3 py-1 rounded-full bg-yellow-500/10 text-yellow-300 border border-yellow-500/20">
-  Page {currentPage} of {totalPages}
-</span>
+            <span className="px-3 py-1 rounded-full bg-yellow-500/10 text-yellow-300 border border-yellow-500/20">
+              Page {currentPage} of {totalPages}
+            </span>
           </div>
         </div>
       </div>
@@ -878,26 +840,26 @@ const [paginationError, setPaginationError] = useState("");
         </div>
 
         <div className="md:col-span-3 space-y-5">
-        {totalHotels > 0 && (
-  <PaginationBar
-    currentPage={currentPage}
-    totalPages={totalPages}
-    totalHotels={totalHotels}
-    startHotelNumber={startHotelNumber}
-    endHotelNumber={endHotelNumber}
-    visiblePageNumbers={visiblePageNumbers}
-    hasNext={hasNext}
-    hasPrevious={hasPrevious}
-    pageLoading={pageLoading}
-    onPageChange={handlePageChange}
-  />
-)}
+          {totalHotels > 0 && (
+            <PaginationBar
+              currentPage={currentPage}
+              totalPages={totalPages}
+              totalHotels={totalHotels}
+              startHotelNumber={startHotelNumber}
+              endHotelNumber={endHotelNumber}
+              visiblePageNumbers={visiblePageNumbers}
+              hasNext={hasNext}
+              hasPrevious={hasPrevious}
+              pageLoading={pageLoading}
+              onPageChange={handlePageChange}
+            />
+          )}
 
-{paginationError && (
-  <div className="text-sm text-red-400 bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3">
-    {paginationError}
-  </div>
-)}
+          {paginationError && (
+            <div className="text-sm text-red-400 bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3">
+              {paginationError}
+            </div>
+          )}
 
           {filteredHotels.length === 0 ? (
             <div className="bg-[#15151C] p-10 rounded-2xl text-center border border-gray-800">
@@ -1025,28 +987,22 @@ const [paginationError, setPaginationError] = useState("");
                 </div>
               );
             })
-
-
-            
           )}
 
-
-
-
-  {totalHotels > 0 && (
-  <PaginationBar
-    currentPage={currentPage}
-    totalPages={totalPages}
-    totalHotels={totalHotels}
-    startHotelNumber={startHotelNumber}
-    endHotelNumber={endHotelNumber}
-    visiblePageNumbers={visiblePageNumbers}
-    hasNext={hasNext}
-    hasPrevious={hasPrevious}
-    pageLoading={pageLoading}
-    onPageChange={handlePageChange}
-  />
-)}
+          {totalHotels > 0 && (
+            <PaginationBar
+              currentPage={currentPage}
+              totalPages={totalPages}
+              totalHotels={totalHotels}
+              startHotelNumber={startHotelNumber}
+              endHotelNumber={endHotelNumber}
+              visiblePageNumbers={visiblePageNumbers}
+              hasNext={hasNext}
+              hasPrevious={hasPrevious}
+              pageLoading={pageLoading}
+              onPageChange={handlePageChange}
+            />
+          )}
         </div>
       </div>
 
@@ -1106,7 +1062,6 @@ const [paginationError, setPaginationError] = useState("");
   );
 };
 
-
 const PaginationBar = ({
   currentPage,
   totalPages,
@@ -1130,9 +1085,7 @@ const PaginationBar = ({
               {startHotelNumber} - {endHotelNumber}
             </span>{" "}
             of{" "}
-            <span className="text-yellow-400 font-semibold">
-              {totalHotels}
-            </span>{" "}
+            <span className="text-yellow-400 font-semibold">{totalHotels}</span>{" "}
             hotels
           </p>
 
@@ -1206,14 +1159,11 @@ const PaginationBar = ({
       </div>
 
       {pageLoading && (
-        <p className="text-xs text-yellow-300 mt-3">
-          Loading hotels...
-        </p>
+        <p className="text-xs text-yellow-300 mt-3">Loading hotels...</p>
       )}
     </div>
   );
 };
-
 
 const FiltersUI = ({
   sort,
