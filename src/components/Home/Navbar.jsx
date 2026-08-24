@@ -8,6 +8,7 @@ const navLinks = [
   { name: "Home", path: "/" },
   { name: "Packages", path: "/packages" },
   { name: "Flights", path: "/flights" },
+  { name: "Hotels", path: "/hotels" },
   { name: "Contact", path: "/contact" },
   { name: "Blogs", path: "/blogs" },
 ];
@@ -44,13 +45,60 @@ const Navbar = () => {
     };
   }, [menuOpen]);
 
+  const handleReloadNavigate = (path, state = null) => {
+    setMenuOpen(false);
+    setProfileOpen(false);
+
+    // Hotels jaisi navigation jahan React Router state chahiye
+    if (state) {
+      navigate(path, { state });
+
+      setTimeout(() => {
+        window.location.reload();
+      }, 0);
+
+      return;
+    }
+
+    // Normal navigation = full page reload
+    window.location.assign(path);
+  };
+
   const handleLogout = () => {
     logout();
     navigate("/");
   };
 
+  const handleNavClick = (e, item) => {
+    e.preventDefault();
+
+    if (item.name === "Hotels") {
+      handleReloadNavigate("/", {
+        searchTab: "hotels",
+      });
+      return;
+    }
+
+    handleReloadNavigate(item.path);
+  };
+
   const isActive = (path) => {
-    if (path === "/") return location.pathname === "/";
+    // Navbar Hotels se Home + Hotels tab open hua hai
+    if (
+      path === "/hotels" &&
+      location.pathname === "/" &&
+      location.state?.searchTab === "hotels"
+    ) {
+      return true;
+    }
+
+    // Home tab
+    if (path === "/") {
+      return (
+        location.pathname === "/" && location.state?.searchTab !== "hotels"
+      );
+    }
+
     return (
       location.pathname === path || location.pathname.startsWith(`${path}/`)
     );
@@ -89,6 +137,7 @@ const Navbar = () => {
                 <li key={item.path}>
                   <Link
                     to={item.path}
+                    onClick={(e) => handleNavClick(e, item)}
                     className={`relative block rounded-full px-4 py-2 text-sm font-semibold transition-all duration-300 ${
                       isActive(item.path)
                         ? "bg-[#E6B35C]/15 text-[#E6B35C] shadow-[inset_0_0_0_1px_rgba(230,179,92,0.25)]"
@@ -199,7 +248,15 @@ const Navbar = () => {
                 <button
                   key={item.path}
                   type="button"
-                  onClick={() => navigate(item.path)}
+                  onClick={() => {
+                    if (item.name === "Hotels") {
+                      handleReloadNavigate("/", {
+                        searchTab: "hotels",
+                      });
+                    } else {
+                      handleReloadNavigate(item.path);
+                    }
+                  }}
                   className={`flex items-center justify-between rounded-2xl px-4 py-3 text-left text-sm font-semibold transition ${
                     isActive(item.path)
                       ? "bg-[#E6B35C] text-black"

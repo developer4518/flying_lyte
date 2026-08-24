@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react"
 import Register from "./Pages/Register";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import Home from "./Pages/Home";
 import LoginPage from "./Pages/LoginPage";
 import ContactPage from "./Pages/ContactPage";
@@ -38,10 +38,25 @@ import HotelVoucher from "./modules/hotels/pages/HotelVoucher";
 import HotelReviewBooking from "./modules/hotels/pages/HotelReviewBooking";
 import PaymentSuccess from "./modules/hotels/pages/PaymentSuccess";
 
+const ScrollToTop = () => {
+  const { pathname, search } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "auto",
+    });
+  }, [pathname, search]);
+
+  return null;
+};
+
 const App = () => {
   return (
     <main>
       <Navbar />
+       <ScrollToTop />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />

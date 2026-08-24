@@ -478,6 +478,43 @@ const HotelResults = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [pageLoading, setPageLoading] = useState(false);
   const [paginationError, setPaginationError] = useState("");
+  const [hotelSearch, setHotelSearch] = useState("");
+  const [selectedHotelCode, setSelectedHotelCode] = useState("");
+  const [hotelDropdownOpen, setHotelDropdownOpen] = useState(false);
+  const [hotelFilterLoading, setHotelFilterLoading] = useState(false);
+
+  /*
+   * Keep initial full hotel-name list separately.
+   *
+   * When selected hotel API returns only one hotel,
+   * we don't want to lose the original 150 dropdown options.
+   */
+  const [allHotelOptions, setAllHotelOptions] = useState([]);
+
+  useEffect(() => {
+    if (
+      Array.isArray(hotelResponse?.hotel_options) &&
+      hotelResponse.hotel_options.length > 1
+    ) {
+      setAllHotelOptions(hotelResponse.hotel_options);
+    }
+  }, [hotelResponse?.hotel_options]);
+
+  const filteredHotelOptions = useMemo(() => {
+    const query = hotelSearch.trim().toLowerCase();
+
+    if (!query) {
+      return [];
+    }
+
+    return allHotelOptions
+      .filter((hotel) =>
+        String(hotel.hotel_name || "")
+          .toLowerCase()
+          .includes(query),
+      )
+      .slice(0, 30);
+  }, [allHotelOptions, hotelSearch]);
 
   const filteredHotels = useMemo(() => {
     const filtered = hotelList.filter((hotel) => {
@@ -504,6 +541,157 @@ const HotelResults = () => {
       return 0;
     });
   }, [hotelList, sort, priceRange, minRating, onlyRefundable, mealType]);
+
+  const handleHotelSelect = useCallback(
+    async (hotel) => {
+      const hotelCode = String(hotel?.hotel_code || "");
+
+      if (!hotelCode) return;
+
+      try {
+        setHotelFilterLoading(true);
+        setPaginationError("");
+
+        setHotelSearch(hotel?.hotel_name || "");
+
+        setSelectedHotelCode(hotelCode);
+
+        setHotelDropdownOpen(false);
+
+        const params = {
+          ...(search?.requestParams || {}),
+
+          hotel_code: hotelCode,
+
+          // selected hotel result always starts from page 1
+          page: 1,
+
+          page_size: 40,
+        };
+
+        console.log("HOTEL NAME FILTER REQUEST:", params);
+
+        const response = await publicApi.get(
+          search?.requestEndpoint || "/api/hotels/search-hotels/",
+          {
+            params,
+          },
+        );
+
+        let responseData = response.data;
+
+        if (
+          responseData?.data &&
+          typeof responseData.data === "object" &&
+          !Array.isArray(responseData.data)
+        ) {
+          responseData = {
+            ...responseData,
+            ...responseData.data,
+          };
+        }
+
+        /*
+         * Do NOT replace allHotelOptions here.
+         *
+         * We want original 150 hotel names
+         * to remain available.
+         */
+        useHotelStore.setState({
+          hotels: responseData,
+        });
+
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth",
+        });
+      } catch (error) {
+        console.error(
+          "HOTEL NAME FILTER ERROR:",
+          error?.response?.data || error,
+        );
+
+        setPaginationError(
+          error?.response?.data?.error ||
+            error?.response?.data?.message ||
+            error?.message ||
+            "Unable to load selected hotel.",
+        );
+      } finally {
+        setHotelFilterLoading(false);
+      }
+    },
+    [search],
+  );
+
+  const handleClearHotelFilter = useCallback(async () => {
+    try {
+      setHotelFilterLoading(true);
+      setPaginationError("");
+
+      setHotelSearch("");
+      setSelectedHotelCode("");
+      setHotelDropdownOpen(false);
+
+      const params = {
+        ...(search?.requestParams || {}),
+
+        page: 1,
+        page_size: 40,
+      };
+
+      /*
+       * Important:
+       * Make sure selected hotel isn't sent again.
+       */
+      delete params.hotel_code;
+
+      console.log("CLEAR HOTEL FILTER REQUEST:", params);
+
+      const response = await publicApi.get(
+        search?.requestEndpoint || "/api/hotels/search-hotels/",
+        {
+          params,
+        },
+      );
+
+      let responseData = response.data;
+
+      if (
+        responseData?.data &&
+        typeof responseData.data === "object" &&
+        !Array.isArray(responseData.data)
+      ) {
+        responseData = {
+          ...responseData,
+          ...responseData.data,
+        };
+      }
+
+      useHotelStore.setState({
+        hotels: responseData,
+      });
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    } catch (error) {
+      console.error(
+        "CLEAR HOTEL FILTER ERROR:",
+        error?.response?.data || error,
+      );
+
+      setPaginationError(
+        error?.response?.data?.error ||
+          error?.response?.data?.message ||
+          error?.message ||
+          "Unable to clear hotel filter.",
+      );
+    } finally {
+      setHotelFilterLoading(false);
+    }
+  }, [search]);
 
   const handlePageChange = useCallback(
     async (requestedPage) => {
@@ -597,6 +785,10 @@ const HotelResults = () => {
           },
         );
 
+        if (selectedHotelCode) {
+          params.hotel_code = selectedHotelCode;
+        }
+
         console.log(`HOTEL PAGE ${nextPage} RESPONSE:`, response.data);
 
         let responseData = response.data;
@@ -652,6 +844,7 @@ const HotelResults = () => {
       city,
       checkIn,
       checkOut,
+      selectedHotelCode,
     ],
   );
 
@@ -826,6 +1019,16 @@ const HotelResults = () => {
       <div className="px-4 md:px-10 py-6 grid grid-cols-1 md:grid-cols-4 gap-6">
         <div className="hidden md:block bg-[#15151C] p-5 rounded-2xl sticky top-28 border border-gray-800 h-fit">
           <FiltersUI
+            hotelSearch={hotelSearch}
+            setHotelSearch={setHotelSearch}
+            selectedHotelCode={selectedHotelCode}
+            setSelectedHotelCode={setSelectedHotelCode}
+            hotelDropdownOpen={hotelDropdownOpen}
+            setHotelDropdownOpen={setHotelDropdownOpen}
+            filteredHotelOptions={filteredHotelOptions}
+            hotelFilterLoading={hotelFilterLoading}
+            handleHotelSelect={handleHotelSelect}
+            handleClearHotelFilter={handleClearHotelFilter}
             sort={sort}
             setSort={setSort}
             priceRange={priceRange}
@@ -1037,6 +1240,16 @@ const HotelResults = () => {
             </div>
 
             <FiltersUI
+              hotelSearch={hotelSearch}
+              setHotelSearch={setHotelSearch}
+              selectedHotelCode={selectedHotelCode}
+              setSelectedHotelCode={setSelectedHotelCode}
+              hotelDropdownOpen={hotelDropdownOpen}
+              setHotelDropdownOpen={setHotelDropdownOpen}
+              filteredHotelOptions={filteredHotelOptions}
+              hotelFilterLoading={hotelFilterLoading}
+              handleHotelSelect={handleHotelSelect}
+              handleClearHotelFilter={handleClearHotelFilter}
               sort={sort}
               setSort={setSort}
               priceRange={priceRange}
@@ -1166,6 +1379,17 @@ const PaginationBar = ({
 };
 
 const FiltersUI = ({
+  hotelSearch,
+  setHotelSearch,
+  selectedHotelCode,
+  setSelectedHotelCode,
+  hotelDropdownOpen,
+  setHotelDropdownOpen,
+  filteredHotelOptions,
+  hotelFilterLoading,
+  handleHotelSelect,
+  handleClearHotelFilter,
+
   sort,
   setSort,
   priceRange,
@@ -1178,6 +1402,121 @@ const FiltersUI = ({
   setMealType,
 }) => (
   <div className="space-y-5">
+    <div className="relative">
+      <label className="text-sm text-gray-400">Hotel Name</label>
+
+      <div className="relative mt-1">
+        <input
+          type="text"
+          value={hotelSearch}
+          disabled={hotelFilterLoading}
+          placeholder="Search hotel name..."
+          onFocus={() => {
+            if (hotelSearch.trim()) {
+              setHotelDropdownOpen(true);
+            }
+          }}
+          onChange={(e) => {
+            const value = e.target.value;
+
+            setHotelSearch(value);
+
+            // User is typing again,
+            // so remove old selected hotel code locally.
+            setSelectedHotelCode("");
+
+            setHotelDropdownOpen(Boolean(value.trim()));
+          }}
+          className="
+        w-full
+        p-2.5 pr-10
+        rounded-xl
+        bg-[#0B0B0F]
+        border border-gray-800
+        outline-none
+        focus:border-yellow-400
+        disabled:opacity-60
+      "
+        />
+
+        {hotelFilterLoading ? (
+          <span
+            className="
+          absolute
+          right-3 top-1/2
+          -translate-y-1/2
+          w-4 h-4
+          rounded-full
+          border-2
+          border-gray-600
+          border-t-yellow-400
+          animate-spin
+        "
+          />
+        ) : hotelSearch ? (
+          <button
+            type="button"
+            onClick={handleClearHotelFilter}
+            className="
+          absolute
+          right-3 top-1/2
+          -translate-y-1/2
+          text-gray-500
+          hover:text-white
+        "
+          >
+            ✕
+          </button>
+        ) : null}
+      </div>
+
+      {hotelDropdownOpen && hotelSearch.trim() && !hotelFilterLoading && (
+        <div
+          className="
+          absolute
+          left-0 right-0
+          top-full
+          mt-2
+          z-50
+          max-h-64
+          overflow-y-auto
+          rounded-xl
+          border border-gray-700
+          bg-[#0B0B0F]
+          shadow-2xl
+        "
+        >
+          {filteredHotelOptions.length > 0 ? (
+            filteredHotelOptions.map((hotel) => (
+              <button
+                key={hotel.hotel_code}
+                type="button"
+                onClick={() => handleHotelSelect(hotel)}
+                className="
+                block
+                w-full
+                px-3 py-3
+                text-left
+                text-sm
+                text-gray-200
+                border-b border-gray-800
+                last:border-b-0
+                hover:bg-yellow-400/10
+                hover:text-yellow-300
+                transition
+              "
+              >
+                {hotel.hotel_name}
+              </button>
+            ))
+          ) : (
+            <div className="px-3 py-3 text-sm text-gray-500">
+              No matching hotel found
+            </div>
+          )}
+        </div>
+      )}
+    </div>
     <div>
       <label className="text-sm text-gray-400">Sort</label>
 

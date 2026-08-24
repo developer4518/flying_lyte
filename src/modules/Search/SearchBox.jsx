@@ -1,12 +1,29 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Tabs from "./Tabs";
 import HotelsForm from "./HotelsForm";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Plane, Hotel, Sparkles, ArrowRight } from "lucide-react";
+
+
 
 const SearchBox = () => {
   const [activeTab, setActiveTab] = useState("flights");
   const navigate = useNavigate();
+
+  const location = useLocation();
+
+  
+useEffect(() => {
+  if (location.pathname !== "/") return;
+
+  const requestedTab = location.state?.searchTab;
+
+  if (requestedTab === "hotels") {
+    setActiveTab("hotels");
+  } else {
+    setActiveTab("flights");
+  }
+}, [location.pathname, location.state?.searchTab]);
 
   const handleTabChange = (tabId) => {
     if (tabId === "packages") {
