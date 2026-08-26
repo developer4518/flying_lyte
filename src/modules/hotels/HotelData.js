@@ -1242,5 +1242,6 @@ export const cityData = {
     { code: "149248", name: "Thulo Syabru, Nepal" },
     { code: "149232", name: "Tikapur, Nepal" },
     { code: "221548", name: "Tilottama, Nepal" },
+    { code: "418290", name: "Balichauki, Himachal Pradesh" },
   ],
 };

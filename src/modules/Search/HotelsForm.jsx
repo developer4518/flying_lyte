@@ -101,11 +101,13 @@ const isInternationalDestination = (cityName = "", countryName = "") => {
     return !isIndiaCountry(country);
   }
 
-  return INTERNATIONAL_DESTINATION_KEYWORDS.some((keyword) =>
-    city.includes(keyword),
-  );
-};
+  return INTERNATIONAL_DESTINATION_KEYWORDS.some((keyword) => {
+  const escapedKeyword = keyword.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const regex = new RegExp(`\\b${escapedKeyword}\\b`, "i");
 
+  return regex.test(city);
+});
+}; 
 const createRoom = () => ({
   adults: 1,
   children: 0,
