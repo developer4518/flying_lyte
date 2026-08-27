@@ -29,6 +29,14 @@ const ContactPage = () => {
     try {
       setLoading(true);
       await axios.post("/api/contact", formData);
+
+      // Google Ads - Contact Conversion
+      if (typeof window.gtag === "function") {
+        window.gtag("event", "conversion", {
+          send_to: "AW-18404161246/IC0qCLXvnegcEN7t5MdE",
+        });
+      }
+
       toast.success("Message sent successfully!");
       setFormData({ name: "", email: "", subject: "", message: "" });
     } catch {
