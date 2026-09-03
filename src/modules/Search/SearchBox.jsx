@@ -4,25 +4,28 @@ import HotelsForm from "./HotelsForm";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Plane, Hotel, Sparkles, ArrowRight } from "lucide-react";
 
-
-
 const SearchBox = () => {
   const [activeTab, setActiveTab] = useState("flights");
   const navigate = useNavigate();
 
   const location = useLocation();
 
-  
-useEffect(() => {
+ useEffect(() => {
   if (location.pathname !== "/") return;
 
   const requestedTab = location.state?.searchTab;
 
   if (requestedTab === "hotels") {
     setActiveTab("hotels");
-  } else {
-    setActiveTab("flights");
+    return;
   }
+
+  if (requestedTab === "flights") {
+    setActiveTab("flights");
+    return;
+  }
+
+  setActiveTab("flights");
 }, [location.pathname, location.state?.searchTab]);
 
   const handleTabChange = (tabId) => {
@@ -32,8 +35,15 @@ useEffect(() => {
     }
 
     setActiveTab(tabId);
-  };
 
+    // Navbar active state ko bhi sync rakho
+    navigate("/", {
+      state: {
+        searchTab: tabId,
+      },
+      replace: true,
+    });
+  };
   const ComingSoonCard = ({ type }) => {
     const isFlight = type === "flights";
 

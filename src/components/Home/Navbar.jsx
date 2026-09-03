@@ -49,18 +49,14 @@ const Navbar = () => {
     setMenuOpen(false);
     setProfileOpen(false);
 
-    // Hotels jaisi navigation jahan React Router state chahiye
+    // React Router state wali navigation
+    // Hotels ke liye reload nahi karenge
     if (state) {
       navigate(path, { state });
-
-      setTimeout(() => {
-        window.location.reload();
-      }, 0);
-
       return;
     }
 
-    // Normal navigation = full page reload
+    // Baaki normal pages ki existing reload functionality same
     window.location.assign(path);
   };
 
@@ -70,17 +66,37 @@ const Navbar = () => {
   };
 
   const handleNavClick = (e, item) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    if (item.name === "Hotels") {
-      handleReloadNavigate("/", {
+  // HOTELS
+  if (item.name === "Hotels") {
+    setMenuOpen(false);
+    setProfileOpen(false);
+
+    navigate("/", {
+      state: {
         searchTab: "hotels",
-      });
-      return;
-    }
+      },
+    });
 
-    handleReloadNavigate(item.path);
-  };
+    return;
+  }
+
+  // HOME
+  if (item.name === "Home") {
+    setMenuOpen(false);
+    setProfileOpen(false);
+
+    navigate("/", {
+      replace: true,
+      state: null,
+    });
+
+    return;
+  }
+
+  handleReloadNavigate(item.path);
+};
 
   const isActive = (path) => {
     // Navbar Hotels se Home + Hotels tab open hua hai
