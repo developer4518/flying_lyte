@@ -51,15 +51,17 @@
       })(window, document, "script", "dataLayer", "GTM-P4CXRMK");
     </script>
 
-    <!-- Google tag for Google Ads / Google Analytics -->
-    <script
-      async
-      src="https://www.googletagmanager.com/gtag/js?id=G-PWH1WRN04Q"
-    ></script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-PWH1WRN04Q"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-PWH1WRN04Q');
+    </script>
 
     <script>
-      gtag("js", new Date());
-
       /* Google Ads */
       gtag("config", "AW-18015093510", {
         anonymize_ip: true,
@@ -68,14 +70,11 @@
       });
 
       /* New Google Ads */
-gtag("config", "AW-18404161246", {
-  anonymize_ip: true,
-  allow_google_signals: false,
-  allow_ad_personalization_signals: false,
-});
-
-      /* Google Analytics GA4 */
-      gtag('config', 'G-PWH1WRN04Q');
+      gtag("config", "AW-18404161246", {
+        anonymize_ip: true,
+        allow_google_signals: false,
+        allow_ad_personalization_signals: false,
+      });
 
       /* Google tag ID */
       gtag("config", "GT-P3FFKHTW", {
