@@ -944,7 +944,7 @@ const HotelDetails = () => {
           <img
             src={images[0]}
             alt={hotelName}
-            onClick={() => setSelectedImage(images[0])}
+            onClick={() = loading="lazy" > setSelectedImage(images[0])}
             className="w-full h-64 md:h-105 object-cover rounded-2xl cursor-pointer hover:opacity-90 transition"
           />
         </div>
@@ -955,7 +955,7 @@ const HotelDetails = () => {
               key={i}
               src={img}
               alt={`${hotelName} ${i + 2}`}
-              onClick={() => setSelectedImage(img)}
+              onClick={() = loading="lazy" > setSelectedImage(img)}
               className="w-full h-32 md:h-50.5 object-cover rounded-xl cursor-pointer hover:opacity-90 transition"
             />
           ))}
@@ -975,7 +975,7 @@ const HotelDetails = () => {
             src={selectedImage}
             alt="Selected hotel"
             className="max-h-[90%] max-w-[90%] rounded-xl"
-          />
+           loading="lazy" />
         </div>
       )}
 

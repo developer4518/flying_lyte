@@ -33,7 +33,7 @@ const Footer = () => {
               src={logo}
               alt="FlyingLyte Logo"
               className="w-42 md:w-52 cursor-pointer"
-              onClick={() => navigate("/")}
+              onClick={() = loading="lazy" > navigate("/")}
             />
 
             <p className="mt-3 text-sm leading-relaxed text-gray-400">
@@ -126,7 +126,7 @@ const Footer = () => {
                 src={payment.image}
                 alt={payment.name}
                 className="w-full h-full object-contain p-1"
-              />
+               loading="lazy" />
             </div>
           ))}
         </div>
@@ -157,7 +157,7 @@ const Footer = () => {
                       src={payment.image}
                       alt={payment.name}
                       className="w-full h-full object-contain p-1"
-                    />
+                     loading="lazy" />
                   </div>
                 ))}
               </div> */}

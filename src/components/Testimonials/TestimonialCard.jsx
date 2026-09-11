@@ -44,7 +44,7 @@ const TestimonialCard = ({ testimonial }) => {
           border-2 border-(--gold-main)
           object-cover
         "
-      />
+       loading="lazy" />
 
       {/* Feedback */}
       <p className="text-(--text-muted) text-sm leading-relaxed mb-4">

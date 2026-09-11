@@ -164,7 +164,7 @@ const PackageSection = ({ limit = 8 }) => {
           h-full w-full object-cover object-center
           opacity-90
         "
-      />
+       loading="lazy" />
 
       {/* Very light dark overlay */}
       <div className="pointer-events-none absolute inset-0 z-0 bg-black/15" />

@@ -376,6 +376,32 @@ Please share the best quote and itinerary.`;
             }
           })}
         </script>
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": "https://www.flyinglyte.com/"
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Packages",
+                "item": "https://www.flyinglyte.com/packages"
+              },
+              {
+                "@type": "ListItem",
+                "position": 3,
+                "name": packageTitle,
+                "item": `https://www.flyinglyte.com/packages/${slug}`
+              }
+            ]
+          })}
+        </script>
       </Helmet>
       <div className="bg-(--bg-main) text-white min-h-screen pb-28 sm:pb-32 lg:pb-12 overflow-hidden">
         {/* HERO */}
@@ -385,7 +411,7 @@ Please share the best quote and itinerary.`;
             src={heroImage}
             alt={packageTitle}
             className="w-full h-full object-cover object-center scale-100 brightness-[1.18] contrast-[1.08] saturate-[1.12]"
-          />
+           loading="lazy" />
 
           {/* Very light overlay for clean image visibility */}
           <div className="absolute inset-0 bg-black/5" />
@@ -665,7 +691,7 @@ Please share the best quote and itinerary.`;
                     src={img.image}
                     alt={`Package ${index + 1}`}
                     className="w-full h-full object-cover group-hover:scale-110 transition duration-700"
-                  />
+                   loading="lazy" />
 
                   <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/25 to-transparent" />
 
@@ -875,7 +901,7 @@ Please share the best quote and itinerary.`;
                             src={img.image}
                             alt={`Gallery ${index + 1}`}
                             className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
-                          />
+                           loading="lazy" />
 
                           <div className="absolute inset-0 bg-linear-to-t from-black/70 via-transparent to-transparent opacity-80" />
 

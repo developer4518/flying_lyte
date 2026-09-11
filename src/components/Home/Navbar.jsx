@@ -144,7 +144,7 @@ const Navbar = () => {
                 src={logo}
                 alt="FlyingLyte"
                 className="h-10 w-auto max-w-38.75 select-none object-contain drop-shadow-[0_10px_20px_rgba(230,179,92,0.18)] transition duration-300 group-hover:scale-[1.03] md:h-12 md:max-w-52.5"
-              />
+               loading="lazy" />
             </button>
 
             {/* Desktop Menu */}

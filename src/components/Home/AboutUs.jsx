@@ -91,7 +91,7 @@ const AboutUs = () => {
             src="/images/aboutImage.webp"
             alt="Travel"
             className="rounded-2xl shadow-lg"
-          />
+           loading="lazy" />
         </motion.div>
 
         {/* WHAT WE OFFER */}
