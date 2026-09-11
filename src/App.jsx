@@ -47,6 +47,12 @@ const ScrollToTop = () => {
       left: 0,
       behavior: "auto",
     });
+
+    if (typeof window !== "undefined" && window.gtag) {
+      window.gtag("config", "G-PWH1WRN04Q", {
+        page_path: pathname + search,
+      });
+    }
   }, [pathname, search]);
 
   return null;
