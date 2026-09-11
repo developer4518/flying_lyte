@@ -203,7 +203,7 @@ const FlightsResults = () => {
                   <div className="flex items-center gap-3">
                     <img
                       src={`/airlines/${first?.Airline?.AirlineCode}.png`}
-                      onError={(e) = loading="lazy" > {
+                      onError={(e) => {
                         e.currentTarget.style.display = "none";
                       }}
                       alt={first?.Airline?.AirlineName || "Airline"}

@@ -30,11 +30,11 @@ const Footer = () => {
           {/* Brand */}
           <div className="md:col-span-2">
             <img
-              src={logo}
-              alt="FlyingLyte Logo"
-              className="w-42 md:w-52 cursor-pointer"
-              onClick={() = loading="lazy" > navigate("/")}
-            />
+               src="/images/flying_logo.png"
+               alt="FlyingLyte Logo"
+               className="w-42 md:w-52 cursor-pointer"
+               onClick={() => navigate("/")}
+             loading="lazy" />
 
             <p className="mt-3 text-sm leading-relaxed text-gray-400">
               FlyingLyte helps you book flights, hotels, and holiday packages at
