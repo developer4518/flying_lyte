@@ -693,7 +693,7 @@ Book your **Rishikesh Group Tour with FlyingLyte** today and discover why Rishik
     author: "FlyingLyte Team",
     date: "14 August 2026",
     image:
-      "/images/blogs/munnar-kerala-tour-2026-misty-hills-tea-estates-scenic-landscapes.png",
+      "/images/blogs/munnar-kerala-tour-2026-misty-hills-tea-estates-scenic-landscapes1.jpeg",
 
     shortDescription:
       "Discover Munnar in 2026 through misty mountain roads, endless tea estates, cascading waterfalls, peaceful lakes and breathtaking viewpoints on an unforgettable Kerala hill escape.",
@@ -922,7 +922,7 @@ Plan your **Munnar Tour with FlyingLyte** and discover Kerala's beautiful hill c
     author: "FlyingLyte Team",
     date: "08 September 2026",
     image:
-      "/images/blogs/tomorrowland-Thailan-Premium-Festival-Escape.png",
+      "/images/blogs/tomorrowland-Thailan-Premium-Festival-Escape1.jpeg",
 
     shortDescription:
       "Experience an unforgettable Thailand festival holiday with our Tomorrowland Thailand Package 2026, featuring comfortable hotel stays, Pattaya sightseeing, transfers, nightlife, beaches and an exciting international music festival experience.",
