@@ -2016,7 +2016,7 @@ Years later, you may forget the hotel room number or your flight timing—but yo
 
 📧 **Email:** info@flyinglyte.com
 
-🌐 **Website:** [www.flyinglyte.com](https://www.flyinglyte.com/)
+🌐 **Website:** www.flyinglyte.com
 
 ### Two destinations. Countless memories. One Himalayan journey with FlyingLyte.
 
