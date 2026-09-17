@@ -551,7 +551,7 @@ An Astonishing Kashmir journey is more than just a vacation; it is an unforgetta
     category: "Group Tours & Adventure",
     author: "FlyingLyte Team",
     date: "07 July 2026",
-    image: "/images/blogs/rishikesh-group-tour-3-days-2-nights-2026.png",
+    image: "/images/blogs/rishikesh_group_tour.jpeg",
 
     shortDescription:
       "Experience the ultimate Rishikesh Group Tour with thrilling river rafting, riverside camping, bonfire nights, sightseeing, yoga, and breathtaking Himalayan landscapes—all in an exciting 3 Days & 2 Nights getaway.",
