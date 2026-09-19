@@ -498,7 +498,7 @@ A Girls’ Group Trip to Mussoorie offers the perfect combination of fun, friend
     category: "Nature & Travel Guide",
     author: "FlyingLyte Team",
     date: "04 July 2026",
-    image: "/images/blogs/astonishing-kashmir-travel-guide-2026.png",
+    image: "/images/blogs/khashmir_blog_image.jpeg",
 
     shortDescription:
       "Discover the astonishing beauty of Kashmir with snow-covered mountains, stunning valleys, peaceful lakes, houseboats, gardens, and unforgettable travel experiences.",
@@ -2021,5 +2021,263 @@ Years later, you may forget the hotel room number or your flight timing—but yo
 ### Two destinations. Countless memories. One Himalayan journey with FlyingLyte.
 
   `,
-  }
+  },
+
+  {
+  id: 16,
+  slug: "goa-tour-package",
+  title:
+    "Discover Goa: Beautiful Beaches, Iconic Places & Perfect Holiday Escapes",
+  category: "Goa Tours",
+  author: "FlyingLyte Team",
+  date: "18 September 2026",
+  image:
+    "/images/blogs/goa_blog_image.jpeg",
+
+  shortDescription:
+    "Discover Goa with FlyingLyte. Explore beautiful beaches, Portuguese heritage, water sports, local food and our 5 Days / 4 Nights Goa tour package starting from ₹31,500 per person.",
+
+  description: `
+
+Golden beaches, thrilling water sports, Portuguese heritage, delicious seafood and colourful sunsets—Goa has everything you need for a memorable holiday.
+
+Whether you are travelling with friends, family or your partner, this Goa travel guide will help you discover the best beaches, famous attractions, local food and the perfect place to stay.
+
+## Why Visit Goa?
+
+Goa is more than a party destination. It offers the perfect combination of **relaxation, adventure, culture and nightlife**.
+
+Here, you can:
+
+- Relax on beautiful beaches
+- Try exciting water sports
+- Explore historic forts and churches
+- Walk through colourful Portuguese streets
+- Enjoy authentic Goan cuisine
+- Visit local markets and beach cafés
+- Experience peaceful sunsets and vibrant nightlife
+
+## Best Places to Visit in Goa
+
+### North Goa – Beaches, Markets & Nightlife
+
+North Goa is ideal for travellers who enjoy lively beaches, shopping, water sports and entertainment.
+
+**Baga Beach** is popular for beach shacks, water activities and nightlife, while **Calangute Beach** offers a wide coastline with restaurants and shopping nearby.
+
+For a calmer experience, visit **Candolim Beach**. Travellers who enjoy cafés, markets and sunset views should also explore **Anjuna and Vagator**.
+
+Do not miss **Chapora Fort and Fort Aguada**, where you can enjoy beautiful coastal views and discover Goa's Portuguese history.
+
+### South Goa – Tranquil Beaches & Laid-Back Coastal Escapes
+
+South Goa is perfect for couples, families and travellers looking for a quieter holiday.
+
+**Palolem Beach** is famous for its palm-lined shoreline and colourful beach huts. **Colva and Benaulim** are ideal for relaxed walks and beautiful sunsets.
+
+For a quieter escape, head to **Agonda Beach**, where scenic natural beauty meets a calm and less crowded shoreline.
+
+## Heritage & Nature in Goa
+
+Goa's culture is beautifully reflected in its churches, temples and colourful neighbourhoods.
+
+Visit the **Basilica of Bom Jesus and Se Cathedral** in Old Goa to admire their historic architecture.
+
+Walk through **Fontainhas**, Panjim's colourful Latin Quarter, filled with Portuguese-style houses, artistic cafés and narrow streets.
+
+Nature lovers can plan a trip to **Dudhsagar Waterfalls**, while travellers interested in local culture can visit **Mangeshi Temple** or a traditional spice plantation.
+
+## Best Things to Do in Goa
+
+Your Goa holiday can include:
+
+- Parasailing and jet skiing
+- Banana boat rides
+- Scuba diving and snorkelling
+- Kayaking
+- Dolphin-spotting trips
+- Sunset or river cruises
+- Local market shopping
+- Beach café hopping
+
+Activities depend on the season, weather and local availability.
+
+Book activities only with authorised operators and always follow the recommended safety guidelines.
+
+## What to Eat in Goa?
+
+Goan cuisine combines coastal flavours, Indian spices and Portuguese influences.
+
+Popular dishes include:
+
+- Goan fish curry with rice
+- Prawn curry
+- Chicken cafreal
+- Xacuti
+- Vindaloo
+- Rava-fried fish
+- Ros omelette
+- Goan pão
+- Bebinca
+
+You will also find vegetarian thalis, local curries, bakery items and international café food across Goa.
+
+## Where to Stay in Goa?
+
+Choose your location according to your travel style:
+
+- **Baga and Calangute:** Best for nightlife, shopping and water sports
+- **Candolim:** Suitable for couples and families wanting a calmer North Goa stay
+- **Anjuna or Vagator:** Ideal for cafés, markets, boutique stays and sunsets
+- **Panjim:** Best for heritage attractions, restaurants and city facilities
+- **Palolem, Colva or Agonda:** Perfect for peaceful beaches and relaxing holidays
+
+The right location can make your Goa holiday more comfortable and save valuable travelling time.
+
+## Best Time to Visit Goa
+
+### November to February
+
+This is considered the best time to visit Goa for pleasant weather, beaches, sightseeing and water sports.
+
+It is also the most popular tourist season, so hotels and activities may need to be booked in advance.
+
+### March to May
+
+These months are warmer but may offer fewer crowds and better hotel deals.
+
+Travellers who do not mind the heat can enjoy a quieter Goa experience during this period.
+
+### June to September
+
+The monsoon season brings lush greenery, beautiful landscapes and refreshing weather.
+
+However, water sports and some beach activities may be unavailable because of rain and sea conditions.
+
+## FlyingLyte Goa Tour Package
+
+Want to explore Goa without separately arranging your hotel, transfers and sightseeing?
+
+FlyingLyte offers a comfortable **5 Days / 4 Nights Goa Tour Package** for couples, families and groups.
+
+### Package Overview
+
+**Destination:** Goa, India
+
+**Duration:** 5 Days / 4 Nights
+
+**Starting Price:** ₹31,500 Per Person
+
+**Traveller Rating:** 4/5
+
+### Package Includes
+
+- Comfortable hotel accommodation
+- Sightseeing according to the itinerary
+- Local transfers
+- Airport or railway pickup and drop as per package
+- Travel assistance
+- Customizable travel plan
+- 24/7 support during your journey
+
+Exact inclusions may vary according to the selected hotel, travel dates and package category.
+
+## Suggested 5-Day Goa Itinerary
+
+### Day 1: Arrival & Beach Evening
+
+Arrive in Goa, complete your hotel check-in and spend the evening relaxing at a nearby beach.
+
+Enjoy the sunset, explore local cafés or take a peaceful walk beside the sea.
+
+### Day 2: North Goa Sightseeing
+
+Explore popular North Goa attractions such as Baga Beach, Calangute Beach, Candolim Beach, Fort Aguada, Anjuna and Vagator.
+
+The final sightseeing route may vary according to your selected package.
+
+### Day 3: South Goa & Heritage Attractions
+
+Visit peaceful South Goa beaches and explore important heritage attractions.
+
+Depending on the itinerary, your day may include Palolem, Colva, Benaulim, Old Goa churches or Panjim.
+
+### Day 4: Adventure or Leisure Day
+
+Choose between water sports, a Dudhsagar Waterfalls excursion, shopping, café hopping or a relaxing beach day.
+
+Activities depend on the weather, season and availability.
+
+### Day 5: Departure
+
+Enjoy breakfast and some free time before checking out of the hotel.
+
+Transfer to the airport or railway station according to your package schedule.
+
+The final itinerary can be customized according to your preferences.
+
+## Frequently Asked Questions
+
+### Is 5 Days Enough for a Goa Trip?
+
+Yes. A **5 Days / 4 Nights Goa package** provides enough time to explore major North Goa and South Goa attractions while keeping some time for relaxation.
+
+### Which Is Better—North Goa or South Goa?
+
+**North Goa** is the go-to destination for lively nightlife, buzzing markets, cafés and exciting water activities.
+
+**South Goa** is ideal for peaceful beaches, romantic stays and relaxing family holidays.
+
+You can include both regions in your itinerary for a complete Goa experience.
+
+### How Much Does the FlyingLyte Goa Package Cost?
+
+The FlyingLyte Goa tour package starts from **₹31,500 per person**.
+
+Final pricing depends on travel dates, hotel category, room occupancy, number of travellers and package customization.
+
+## Plan Your Goa Holiday
+
+Imagine walking beside the sea, exploring colourful streets, enjoying Goan food and watching the sun set over the Arabian Sea.
+
+Whether you are planning a romantic getaway, family holiday, friends' trip or relaxing beach escape, FlyingLyte can help create a Goa itinerary around your requirements.
+
+To receive a personalized itinerary and quotation, simply share:
+
+- Preferred travel dates
+- Number of travellers
+- Departure city
+- Hotel preference
+- Approximate budget
+- Special requirements
+
+Our travel experts will help you plan a comfortable and memorable Goa holiday.
+
+## Ready to Explore Goa?
+
+### FlyingLyte Goa Tour Package
+
+**5 Days / 4 Nights**
+
+**Starting From ₹31,500 Per Person**
+
+- Hotels Included
+- Sightseeing Included
+- Transfers Included
+- Customizable Package
+- Secure Booking Assistance
+- 24/7 Travel Support
+
+**Plan your unforgettable Goa holiday with FlyingLyte Tours & Travels.**
+
+📞 **Call:** 9667455591
+
+📧 **Email:** info@flyinglyte.com
+
+🌐 **Website:** [www.flyinglyte.com]
+
+### Golden beaches, colourful culture and unforgettable moments—experience Goa with FlyingLyte.
+
+  `,
+},
 ];
