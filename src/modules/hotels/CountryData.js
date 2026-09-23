@@ -1,6 +1,6 @@
 export const countryData = {
   CountryList: [
-    { Code: "IN", Name: "India" },
+    { Code: "IN", Name: "Indian" },
     { Code: "AF", Name: "Afghanistan" },
     { Code: "AL", Name: "Albania" },
     { Code: "DZ", Name: "Algeria" },

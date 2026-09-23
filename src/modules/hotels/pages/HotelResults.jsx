@@ -1394,7 +1394,7 @@ const HotelResults = () => {
 
   return (
     <div className="min-h-screen bg-[#0B0B0F] text-white pb-20 md:pb-0 pt-20">
-      <div className="sticky top-0 z-40 bg-[#0B0B0F]/95 backdrop-blur border-b border-gray-800 px-4 md:px-10 py-10 md:py-6">
+      <div className="bg-[#0B0B0F]/95 backdrop-blur border-b border-gray-800 px-4 md:px-10 py-10 md:py-6">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-2">
           <div>
             <p className="text-xs uppercase tracking-[0.35em] text-yellow-300">
