@@ -1,7 +1,7 @@
 "use client";
 
 import { useLocation, useNavigate } from "react-router-dom";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useHotelStore } from "../../../store/hotelStore";
 
 const INDIA_CITY_KEYWORDS = [
@@ -456,18 +456,18 @@ const getRoomDescription = (roomData = {}, hotel = {}) => {
 
   const matchedDetail = Array.isArray(roomDetails)
     ? roomDetails.find((item) => {
-        const detailName = String(
-          item?.RoomName || item?.room_name || item?.Name || "",
-        ).toLowerCase();
+      const detailName = String(
+        item?.RoomName || item?.room_name || item?.Name || "",
+      ).toLowerCase();
 
-        const currentName = String(name).toLowerCase();
+      const currentName = String(name).toLowerCase();
 
-        return (
-          detailName &&
-          currentName &&
-          (detailName.includes(currentName) || currentName.includes(detailName))
-        );
-      })
+      return (
+        detailName &&
+        currentName &&
+        (detailName.includes(currentName) || currentName.includes(detailName))
+      );
+    })
     : null;
 
   return (
@@ -508,23 +508,23 @@ const normalizeRoomData = (roomData = {}, hotel = {}) => {
   const totalFare =
     Number(
       roomData?.publishedFare ||
-        roomData?.TotalFare ||
-        rawRoom?.TotalFare ||
-        roomData?.Price?.PublishedPrice ||
-        roomData?.PublishedPrice ||
-        roomData?.NetAmount ||
-        rawRoom?.NetAmount ||
-        0,
+      roomData?.TotalFare ||
+      rawRoom?.TotalFare ||
+      roomData?.Price?.PublishedPrice ||
+      roomData?.PublishedPrice ||
+      roomData?.NetAmount ||
+      rawRoom?.NetAmount ||
+      0,
     ) || 0;
 
   const totalTax =
     Number(
       roomData?.tax ||
-        roomData?.TotalTax ||
-        rawRoom?.TotalTax ||
-        roomData?.Price?.Tax ||
-        roomData?.Tax ||
-        0,
+      roomData?.TotalTax ||
+      rawRoom?.TotalTax ||
+      roomData?.Price?.Tax ||
+      roomData?.Tax ||
+      0,
     ) || 0;
 
   const dayRateBase =
@@ -533,12 +533,12 @@ const normalizeRoomData = (roomData = {}, hotel = {}) => {
   const baseFare =
     Number(
       roomData?.baseFare ||
-        roomData?.base_fare ||
-        roomData?.BaseFare ||
-        roomData?.Price?.RoomPrice ||
-        roomData?.RoomPrice ||
-        dayRateBase ||
-        (totalFare && totalTax ? totalFare - totalTax : totalFare),
+      roomData?.base_fare ||
+      roomData?.BaseFare ||
+      roomData?.Price?.RoomPrice ||
+      roomData?.RoomPrice ||
+      dayRateBase ||
+      (totalFare && totalTax ? totalFare - totalTax : totalFare),
     ) || 0;
 
   const publishedFare = totalFare || baseFare + totalTax;
@@ -655,6 +655,10 @@ const HotelDetails = () => {
   const [showAllFacilities, setShowAllFacilities] = useState(false);
   const [showAllAttractions, setShowAllAttractions] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const touchStartX = useRef(null);
+  const wasImageSwiped = useRef(false);
   const [loading, setLoading] = useState(false);
 
   const [roomSearch, setRoomSearch] = useState("");
@@ -755,6 +759,91 @@ const HotelDetails = () => {
     return data;
   }, [roomOptions, roomSearch, sortBy]);
 
+
+  const images = useMemo(() => {
+    const imageList =
+      Array.isArray(hotel?.images) && hotel.images.length > 0
+        ? hotel.images
+        : Array.isArray(hotel?.Images) && hotel.Images.length > 0
+          ? hotel.Images
+          : [hotel?.image || hotel?.Image].filter(Boolean);
+
+    const uniqueImages = Array.from(
+      new Set(
+        imageList.filter(
+          (img) => typeof img === "string" && img.trim()
+        )
+      )
+    );
+
+    return uniqueImages.length > 0
+      ? uniqueImages
+      : ["https://api.flyinglyte.com/media/hotels/default.jpg"];
+  }, [hotel]);
+
+  useEffect(() => {
+    setCurrentImageIndex((current) =>
+      current >= images.length ? 0 : current
+    );
+  }, [images.length]);
+
+  useEffect(() => {
+    if (images.length <= 1) return;
+
+    const slider = setInterval(() => {
+      setCurrentImageIndex(
+        (previous) => (previous + 1) % images.length
+      );
+    }, 2500);
+
+    return () => clearInterval(slider);
+  }, [images.length]);
+
+  const showPreviousImage = (e) => {
+    e?.stopPropagation();
+
+    setCurrentImageIndex((previous) =>
+      previous === 0 ? images.length - 1 : previous - 1
+    );
+  };
+
+  const showNextImage = (e) => {
+    e?.stopPropagation();
+
+    setCurrentImageIndex(
+      (previous) => (previous + 1) % images.length
+    );
+  };
+
+  const handleImageTouchStart = (e) => {
+    touchStartX.current = e.touches?.[0]?.clientX ?? null;
+    wasImageSwiped.current = false;
+  };
+
+  const handleImageTouchEnd = (e) => {
+    if (touchStartX.current === null || images.length <= 1) return;
+
+    const touchEndX =
+      e.changedTouches?.[0]?.clientX ?? touchStartX.current;
+
+    const difference = touchStartX.current - touchEndX;
+
+    touchStartX.current = null;
+
+    if (Math.abs(difference) < 40) return;
+    wasImageSwiped.current = true;
+
+    if (difference > 0) {
+      setCurrentImageIndex(
+        (previous) => (previous + 1) % images.length
+      );
+    } else {
+      setCurrentImageIndex((previous) =>
+        previous === 0 ? images.length - 1 : previous - 1
+      );
+    }
+  };
+
   if (!hotel) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#0B0B0F] text-gray-400">
@@ -766,12 +855,7 @@ const HotelDetails = () => {
   const hotelName =
     hotel?.hotel_name || hotel?.HotelName || hotel?.Name || "Hotel";
 
-  const images =
-    Array.isArray(hotel?.images) && hotel.images.length > 0
-      ? hotel.images
-      : Array.isArray(hotel?.Images) && hotel.Images.length > 0
-        ? hotel.Images
-        : [hotel?.image || hotel?.Image || "https://via.placeholder.com/600"];
+
 
   const totalGuests =
     Number(guests?.adults || guests?.Adults || 0) +
@@ -828,9 +912,8 @@ const HotelDetails = () => {
     const children = Number(guests?.children || guests?.Children || 0);
     const rooms = Number(guests?.rooms || guests?.Rooms || 1);
 
-    return `Room ${rooms || 1} (${adults || 1} Adult${
-      (adults || 1) > 1 ? "s" : ""
-    } ${children ? `${children} Child${children > 1 ? "ren" : ""}` : ""})`;
+    return `Room ${rooms || 1} (${adults || 1} Adult${(adults || 1) > 1 ? "s" : ""
+      } ${children ? `${children} Child${children > 1 ? "ren" : ""}` : ""})`;
   };
 
   const handlePreBook = () => {
@@ -885,9 +968,9 @@ const HotelDetails = () => {
 
       const cleanAges = Array.isArray(ages)
         ? ages
-            .slice(0, children)
-            .map((age) => Number(age))
-            .filter((age) => age >= 1 && age <= 12)
+          .slice(0, children)
+          .map((age) => Number(age))
+          .filter((age) => age >= 1 && age <= 12)
         : [];
 
       return {
@@ -939,26 +1022,158 @@ const HotelDetails = () => {
 
   return (
     <div className="min-h-screen bg-[#0B0B0F] text-white px-4 md:px-10 py-16 md:py-24">
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-3 mb-6">
-        <div className="md:col-span-2">
-          <img
-            src={images[0]}
-            alt={hotelName}
-            onClick={() => setSelectedImage(images[0])}
-            className="w-full h-64 md:h-105 object-cover rounded-2xl cursor-pointer hover:opacity-90 transition"
-          />
-        </div>
+      <div className="relative group mb-6 overflow-hidden rounded-2xl bg-[#15151C]">
+        <div
+          className="relative w-full h-64 sm:h-80 md:h-[460px] lg:h-[520px] overflow-hidden"
+          onTouchStart={handleImageTouchStart}
+          onTouchEnd={handleImageTouchEnd}
+        >
+          <div
+            className="flex h-full transition-transform duration-500 ease-in-out"
+            style={{
+              transform: `translateX(-${currentImageIndex * 100}%)`,
+            }}
+          >
+            {images.map((img, index) => (
+              <img
+                key={`${img}-${index}`}
+                src={img}
+                alt={`${hotelName} ${index + 1}`}
+                loading={index === 0 ? "eager" : "lazy"}
+                onClick={() => {
+                  if (wasImageSwiped.current) {
+                    wasImageSwiped.current = false;
+                    return;
+                  }
 
-        <div className="grid grid-cols-2 gap-3 md:col-span-2">
-          {images.slice(1, 5).map((img, i) => (
-            <img
-              key={i}
-              src={img}
-              alt={`${hotelName} ${i + 2}`}
-              onClick={() => setSelectedImage(img)}
-              className="w-full h-32 md:h-50.5 object-cover rounded-xl cursor-pointer hover:opacity-90 transition"
-            />
-          ))}
+                  setSelectedImage(img);
+                }}
+                className="
+            w-full
+            h-full
+            shrink-0
+            object-cover
+            cursor-pointer
+          "
+              />
+            ))}
+          </div>
+
+          {/* LEFT / RIGHT ARROWS */}
+
+          {images.length > 1 && (
+            <>
+              <button
+                type="button"
+                aria-label="Previous hotel image"
+                onClick={showPreviousImage}
+                className="
+            absolute
+            left-3
+            top-1/2
+            -translate-y-1/2
+            z-20
+            w-10 h-10
+            md:w-11 md:h-11
+            rounded-full
+            bg-black/60
+            backdrop-blur
+            border border-white/20
+            text-white
+            text-2xl
+            flex items-center justify-center
+            hover:bg-yellow-400
+            hover:text-black
+            transition
+          "
+              >
+                ‹
+              </button>
+
+              <button
+                type="button"
+                aria-label="Next hotel image"
+                onClick={showNextImage}
+                className="
+            absolute
+            right-3
+            top-1/2
+            -translate-y-1/2
+            z-20
+            w-10 h-10
+            md:w-11 md:h-11
+            rounded-full
+            bg-black/60
+            backdrop-blur
+            border border-white/20
+            text-white
+            text-2xl
+            flex items-center justify-center
+            hover:bg-yellow-400
+            hover:text-black
+            transition
+          "
+              >
+                ›
+              </button>
+            </>
+          )}
+
+          {/* IMAGE COUNTER */}
+
+          {images.length > 1 && (
+            <div className="
+        absolute
+        top-3
+        right-3
+        z-20
+        rounded-full
+        bg-black/60
+        backdrop-blur
+        border border-white/10
+        px-3 py-1
+        text-xs
+        text-white
+      ">
+              {currentImageIndex + 1} / {images.length}
+            </div>
+          )}
+
+          {/* DOTS */}
+
+          {images.length > 1 && (
+            <div className="
+        absolute
+        bottom-4
+        left-1/2
+        -translate-x-1/2
+        z-20
+       hidden
+sm:flex
+        items-center
+        gap-2
+        rounded-full
+        bg-black/50
+        backdrop-blur
+        px-3 py-2
+      ">
+              {images.map((_, index) => (
+                <button
+                  key={index}
+                  type="button"
+                  aria-label={`Show image ${index + 1}`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setCurrentImageIndex(index);
+                  }}
+                  className={`rounded-full transition-all ${currentImageIndex === index
+                    ? "w-6 h-2 bg-yellow-400"
+                    : "w-2 h-2 bg-white/60 hover:bg-white"
+                    }`}
+                />
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
@@ -975,7 +1190,7 @@ const HotelDetails = () => {
             src={selectedImage}
             alt="Selected hotel"
             className="max-h-[90%] max-w-[90%] rounded-xl"
-           loading="lazy" />
+            loading="lazy" />
         </div>
       )}
 
@@ -990,17 +1205,16 @@ const HotelDetails = () => {
                     : "Domestic Hotel"}
                 </p>
 
-                <h1 className="text-2xl md:text-3xl font-bold text-yellow-400">
+                <h1 className="text-2xl md:text-3xl font-semibold text-yellow-400">
                   {hotelName}
                 </h1>
               </div>
 
               <span
-                className={`px-3 py-1 rounded-full text-xs font-semibold border ${
-                  isInternationalHotel
-                    ? "bg-purple-500/10 text-purple-300 border-purple-500/30"
-                    : "bg-green-500/10 text-green-300 border-green-500/30"
-                }`}
+                className={`px-3 py-1 rounded-full text-xs font-semibold border ${isInternationalHotel
+                  ? "bg-purple-500/10 text-purple-300 border-purple-500/30"
+                  : "bg-green-500/10 text-green-300 border-green-500/30"
+                  }`}
               >
                 {isInternationalHotel
                   ? "Passport Required"
@@ -1045,13 +1259,13 @@ const HotelDetails = () => {
                         Select Room
                       </p>
 
-                      <h2 className="mt-1 text-xl font-black text-[#111827]">
+                      <h2 className="mt-1 text-xl font-semibold text-[#111827]">
                         {getRoomCountTitle()}
                       </h2>
                     </div>
 
                     <div className="rounded-2xl bg-white/70 px-4 py-2 text-right shadow-sm ring-1 ring-black/5">
-                      <p className="text-lg font-black text-[#111827]">
+                      <p className="text-lg font-semibold text-[#111827]">
                         {filteredRoomOptions.length}
                       </p>
                       <p className="text-[11px] font-semibold text-gray-500">
@@ -1110,9 +1324,9 @@ const HotelDetails = () => {
 
                   const itemBasePrice = Number(
                     roomItem?.price ||
-                      roomItem?.baseFare ||
-                      roomItem?.base_fare ||
-                      0,
+                    roomItem?.baseFare ||
+                    roomItem?.base_fare ||
+                    0,
                   );
 
                   const itemTax = Number(
@@ -1121,8 +1335,8 @@ const HotelDetails = () => {
 
                   const roomTotal = Number(
                     roomItem?.publishedFare ||
-                      roomItem?.TotalFare ||
-                      itemBasePrice + itemTax,
+                    roomItem?.TotalFare ||
+                    itemBasePrice + itemTax,
                   );
 
                   const roomDesc =
@@ -1140,18 +1354,16 @@ const HotelDetails = () => {
                         setActiveRoom(roomItem);
                         setSelectedRoom(roomItem);
                       }}
-                      className={`group cursor-pointer px-4 py-4 transition ${
-                        isSelected
-                          ? "bg-linear-to-r from-yellow-400/20 via-yellow-300/10 to-transparent"
-                          : "bg-[#0B0B0F] hover:bg-white/3"
-                      }`}
+                      className={`group cursor-pointer px-4 py-4 transition ${isSelected
+                        ? "bg-linear-to-r from-yellow-400/20 via-yellow-300/10 to-transparent"
+                        : "bg-[#0B0B0F] hover:bg-white/3"
+                        }`}
                     >
                       <div
-                        className={`rounded-3xl border p-4 transition ${
-                          isSelected
-                            ? "border-yellow-400/50 bg-yellow-400/10 shadow-lg shadow-yellow-400/10"
-                            : "border-gray-800 bg-[#15151C] hover:border-yellow-400/25"
-                        }`}
+                        className={`rounded-3xl border p-4 transition ${isSelected
+                          ? "border-yellow-400/50 bg-yellow-400/10 shadow-lg shadow-yellow-400/10"
+                          : "border-gray-800 bg-[#15151C] hover:border-yellow-400/25"
+                          }`}
                       >
                         <div className="grid grid-cols-1 gap-5 lg:grid-cols-[1.35fr_0.8fr_0.85fr_0.75fr] lg:items-start">
                           <div>
@@ -1170,7 +1382,7 @@ const HotelDetails = () => {
 
                               <div className="min-w-0">
                                 <div className="flex flex-wrap items-center gap-2">
-                                  <h3 className="text-base font-black leading-6 text-white">
+                                  <h3 className="text-base font-medium leading-6 text-white">
                                     {roomItem.room_name ||
                                       roomItem.Name ||
                                       "Standard Room"}
@@ -1306,14 +1518,14 @@ const HotelDetails = () => {
                             <p className="text-xs font-semibold text-gray-400">
                               Base Fare
                             </p>
-                            <p className="text-lg font-black text-white">
+                            <p className="text-lg font-semibold text-white">
                               ₹ {formatPrice(itemBasePrice)}
                             </p>
 
                             <p className="mt-2 text-xs font-semibold text-gray-400">
                               Taxes
                             </p>
-                            <p className="text-sm font-bold text-gray-200">
+                            <p className="text-sm font-medium text-gray-200">
                               ₹ {formatPrice(itemTax)}
                             </p>
 
@@ -1322,7 +1534,7 @@ const HotelDetails = () => {
                             <p className="text-xs font-semibold text-yellow-300">
                               Total Price
                             </p>
-                            <p className="text-2xl font-black text-yellow-300">
+                            <p className="text-xl md:text-2xl font-semibold text-yellow-300">
                               ₹ {formatPrice(roomTotal)}
                             </p>
                           </div>
@@ -1401,9 +1613,8 @@ const HotelDetails = () => {
                       <p className="text-sm mt-2">
                         Charge:
                         <span
-                          className={`ml-2 ${
-                            rawCharge === 0 ? "text-green-300" : "text-red-300"
-                          }`}
+                          className={`ml-2 ${rawCharge === 0 ? "text-green-300" : "text-red-300"
+                            }`}
                         >
                           {rawCharge === 0
                             ? "Free cancellation"

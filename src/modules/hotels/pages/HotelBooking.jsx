@@ -15,39 +15,39 @@ const HotelBooking = () => {
   const { hotel, preBook, checkIn, checkOut, guests } = payload;
 
   const getCityName = (value) => {
-  if (!value) return "";
+    if (!value) return "";
 
-  if (typeof value === "string") {
-    return value.trim();
-  }
+    if (typeof value === "string") {
+      return value.trim();
+    }
 
-  return (
-    value?.name ||
-    value?.city_name ||
-    value?.CityName ||
-    value?.city ||
-    value?.label ||
-    ""
-  );
-};
+    return (
+      value?.name ||
+      value?.city_name ||
+      value?.CityName ||
+      value?.city ||
+      value?.label ||
+      ""
+    );
+  };
 
-const searchCity =
-  getCityName(payload?.cityName) ||
-  getCityName(payload?.CityName) ||
-  getCityName(payload?.destinationName) ||
-  getCityName(payload?.searchCity) ||
+  const searchCity =
+    getCityName(payload?.cityName) ||
+    getCityName(payload?.CityName) ||
+    getCityName(payload?.destinationName) ||
+    getCityName(payload?.searchCity) ||
 
-  getCityName(search?.cityName) ||
-  getCityName(search?.CityName) ||
-  getCityName(search?.destinationName) ||
-  getCityName(search?.destination) ||
+    getCityName(search?.cityName) ||
+    getCityName(search?.CityName) ||
+    getCityName(search?.destinationName) ||
+    getCityName(search?.destination) ||
 
-  getCityName(search?.city) ||
+    getCityName(search?.city) ||
 
-  getCityName(hotel?.city_name) ||
-  getCityName(hotel?.CityName) ||
-  getCityName(hotel?.city) ||
-  "";
+    getCityName(hotel?.city_name) ||
+    getCityName(hotel?.CityName) ||
+    getCityName(hotel?.city) ||
+    "";
 
   const roomData =
     preBook?.raw?.HotelResult?.[0]?.Rooms?.[0] ||
@@ -81,28 +81,28 @@ const searchCity =
 
   const net = Number(
     preBook?.net_amount ??
-      preBook?.NetAmount ??
-      preBook?.room?.NetAmount ??
-      roomData?.NetAmount ??
-      0,
+    preBook?.NetAmount ??
+    preBook?.room?.NetAmount ??
+    roomData?.NetAmount ??
+    0,
   );
   const totalFare = Number(
     payload?.TotalFare ??
-      payload?.totalFare ??
-      payload?.displayFare ??
-      preBook?.TotalFare ??
-      preBook?.totalFare ??
-      preBook?.displayFare ??
-      preBook?.room?.TotalFare ??
-      preBook?.room?.totalFare ??
-      preBook?.room?.displayFare ??
-      roomData?.TotalFare ??
-      roomData?.totalFare ??
-      roomData?.displayFare ??
-      preBook?.room_raw?.TotalFare ??
-      preBook?.raw?.HotelResult?.[0]?.Rooms?.[0]?.TotalFare ??
-      preBook?.raw?.Response?.HotelResult?.[0]?.Rooms?.[0]?.TotalFare ??
-      0,
+    payload?.totalFare ??
+    payload?.displayFare ??
+    preBook?.TotalFare ??
+    preBook?.totalFare ??
+    preBook?.displayFare ??
+    preBook?.room?.TotalFare ??
+    preBook?.room?.totalFare ??
+    preBook?.room?.displayFare ??
+    roomData?.TotalFare ??
+    roomData?.totalFare ??
+    roomData?.displayFare ??
+    preBook?.room_raw?.TotalFare ??
+    preBook?.raw?.HotelResult?.[0]?.Rooms?.[0]?.TotalFare ??
+    preBook?.raw?.Response?.HotelResult?.[0]?.Rooms?.[0]?.TotalFare ??
+    0,
   );
 
   const displayFare = totalFare;
@@ -113,15 +113,15 @@ const searchCity =
   const validation = {
     PanMandatory: toBool(
       validationInfo?.PanMandatory ||
-        validationInfo?.PANMandatory ||
-        validationInfo?.PANRequired ||
-        validationInfo?.IsPANRequired,
+      validationInfo?.PANMandatory ||
+      validationInfo?.PANRequired ||
+      validationInfo?.IsPANRequired,
     ),
 
     CorporateBokingAllowed: toBool(
       validationInfo?.CorporateBokingAllowed ||
-        validationInfo?.CorporateBookingAllowed ||
-        validationInfo?.IsCorporateBookingAllowed,
+      validationInfo?.CorporateBookingAllowed ||
+      validationInfo?.IsCorporateBookingAllowed,
     ),
 
     PanCountRequired: Number(validationInfo?.PanCountRequired || 0),
@@ -136,20 +136,20 @@ const searchCity =
 
     IsPackageFare: toBool(
       validationInfo?.IsPackageFare ||
-        validationInfo?.PackageFare ||
-        validationInfo?.PackageFare,
+      validationInfo?.PackageFare ||
+      validationInfo?.PackageFare,
     ),
 
     PackageDetailsMandatory: toBool(
       validationInfo?.IsPackageDetailsMandatory ||
-        validationInfo?.PackageDetailsMandatory ||
-        validationInfo?.PackageDetailsRequired,
+      validationInfo?.PackageDetailsMandatory ||
+      validationInfo?.PackageDetailsRequired,
     ),
 
     DepartureDetailsMandatory: toBool(
       validationInfo?.DepartureDetailsMandatory ||
-        validationInfo?.IsDepartureDetailsMandatory ||
-        validationInfo?.DepartureDetailsRequired,
+      validationInfo?.IsDepartureDetailsMandatory ||
+      validationInfo?.DepartureDetailsRequired,
     ),
 
     GSTAllowed: toBool(validationInfo?.GSTAllowed),
@@ -342,8 +342,8 @@ const searchCity =
     preBook?.rate_conditions?.length > 0
       ? preBook.rate_conditions
       : preBook?.raw?.HotelResult?.[0]?.RateConditions ||
-        preBook?.raw?.Response?.HotelResult?.[0]?.RateConditions ||
-        [];
+      preBook?.raw?.Response?.HotelResult?.[0]?.RateConditions ||
+      [];
 
   const getCancellationChargeText = (policy) => {
     const charge = Number(policy?.CancellationCharge ?? 0);
@@ -434,10 +434,10 @@ const searchCity =
         Children: children,
         ChildrenAges: normalizeAgeArray(
           payload?.childAges ||
-            preBook?.childAges ||
-            guests?.childAges ||
-            guests?.ChildrenAges ||
-            [],
+          preBook?.childAges ||
+          guests?.childAges ||
+          guests?.ChildrenAges ||
+          [],
           children,
         ),
       },
@@ -487,6 +487,8 @@ const searchCity =
   }, [normalizedRooms]);
 
   const [guestList, setGuestList] = useState(initialGuests);
+  const [rateConditionsAccepted, setRateConditionsAccepted] = useState(false);
+  const [showRateConditions, setShowRateConditions] = useState(false);
   const [isCorporate, setIsCorporate] = useState(false);
   const [corporatePAN, setCorporatePAN] = useState("");
 
@@ -921,6 +923,10 @@ const searchCity =
   };
 
   const handleReviewBooking = () => {
+    if (rateConditions.length > 0 && !rateConditionsAccepted) {
+      alert("Please read and accept the Rate Conditions before continuing.");
+      return;
+    }
     const error = validateGuests();
     if (error) return alert(error);
 
@@ -1051,8 +1057,7 @@ const searchCity =
           JSON.stringify(finalAges.map(Number))
         ) {
           throw new Error(
-            `Child age mismatch before booking. Room ${
-              index + 1
+            `Child age mismatch before booking. Room ${index + 1
             }: searched age ${searchAges.join(
               ", ",
             )} but booking age ${finalAges.join(", ")}`,
@@ -1206,12 +1211,11 @@ const searchCity =
                             </td>
 
                             <td
-                              className={`px-4 py-3 font-semibold ${
-                                getCancellationChargeText(policy) ===
+                              className={`px-4 py-3 font-semibold ${getCancellationChargeText(policy) ===
                                 "Free Cancellation"
-                                  ? "text-green-300"
-                                  : "text-red-300"
-                              }`}
+                                ? "text-green-300"
+                                : "text-red-300"
+                                }`}
                             >
                               {getCancellationChargeText(policy)}
                             </td>
@@ -1252,9 +1256,9 @@ const searchCity =
                       {typeof promotion === "string"
                         ? promotion
                         : promotion?.Description ||
-                          promotion?.Name ||
-                          promotion?.PromotionName ||
-                          "Promotion available"}
+                        promotion?.Name ||
+                        promotion?.PromotionName ||
+                        "Promotion available"}
                     </div>
                   ))}
                 </div>
@@ -1383,34 +1387,92 @@ const searchCity =
           </div>
 
           <div className="overflow-hidden rounded-2xl border border-gray-800 bg-[#15151C]">
-            <div className="flex items-center gap-2 bg-[#1E2230] px-5 py-3">
-              <span className="text-yellow-300">📋</span>
-              <h3 className="font-semibold text-yellow-300">Rate Condition</h3>
-            </div>
 
-            <div className="p-5">
-              {rateConditions.length > 0 ? (
-                <ol className="list-decimal space-y-3 pl-5 text-sm leading-6 text-gray-300">
-                  {rateConditions.map((condition, index) => (
-                    <li
-                      key={index}
-                      className="rounded-xl border border-white/10 bg-white/5 p-3 text-gray-300"
-                      dangerouslySetInnerHTML={{
-                        __html: String(condition || "")
-                          .replaceAll("&lt;", "<")
-                          .replaceAll("&gt;", ">")
-                          .replaceAll("&amp;", "&")
-                          .replaceAll(",", ", "),
-                      }}
-                    />
-                  ))}
-                </ol>
-              ) : (
+            {/* CLICKABLE HEADER */}
+            <button
+              type="button"
+              onClick={() => setShowRateConditions((prev) => !prev)}
+              className="flex w-full items-center justify-between gap-3 bg-[#1E2230] px-5 py-4 text-left transition hover:bg-[#252A3A]"
+            >
+              <div className="flex items-center gap-3">
+                <span className="text-yellow-300">📋</span>
+
+                <div>
+                  <h3 className="font-semibold text-yellow-300">
+                    Rate Condition
+                  </h3>
+
+                  {rateConditions.length > 0 && (
+                    <p className="mt-1 text-xs text-gray-500">
+                      {rateConditions.length} condition
+                      {rateConditions.length > 1 ? "s" : ""} •{" "}
+                      {showRateConditions ? "Click to hide" : "Click to view"}
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              {rateConditions.length > 0 && (
+                <span
+                  className={`text-lg text-yellow-300 transition-transform duration-300 ${showRateConditions ? "rotate-180" : ""
+                    }`}
+                >
+                  ▼
+                </span>
+              )}
+            </button>
+
+            {/* CONDITIONS - ONLY AFTER ARROW CLICK */}
+            {rateConditions.length > 0 && showRateConditions && (
+              <div className="border-t border-gray-800 p-5">
+                <div className="max-h-80 overflow-y-auto pr-2">
+                  <ol className="list-decimal space-y-3 pl-5 text-sm leading-6 text-gray-300">
+                    {rateConditions.map((condition, index) => (
+                      <li
+                        key={index}
+                        className="rounded-xl border border-white/10 bg-white/5 p-3 text-gray-300"
+                        dangerouslySetInnerHTML={{
+                          __html: String(condition || "")
+                            .replaceAll("&lt;", "<")
+                            .replaceAll("&gt;", ">")
+                            .replaceAll("&amp;", "&")
+                            .replaceAll(",", ", "),
+                        }}
+                      />
+                    ))}
+                  </ol>
+                </div>
+              </div>
+            )}
+
+            {/* NO CONDITIONS */}
+            {rateConditions.length === 0 && (
+              <div className="p-5">
                 <p className="text-sm text-gray-400">
                   Rate conditions are not available.
                 </p>
-              )}
-            </div>
+              </div>
+            )}
+
+            {/* CHECKBOX ALWAYS VISIBLE */}
+            {rateConditions.length > 0 && (
+              <div className="px-5 pb-5 pt-4">
+                <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-yellow-400/20 bg-yellow-400/10 p-4">
+                  <input
+                    type="checkbox"
+                    checked={rateConditionsAccepted}
+                    onChange={(e) =>
+                      setRateConditionsAccepted(e.target.checked)
+                    }
+                    className="mt-1 h-4 w-4 shrink-0 accent-yellow-400"
+                  />
+
+                  <span className="text-sm leading-6 text-gray-300">
+                    I have read and agree to the Rate Conditions.
+                  </span>
+                </label>
+              </div>
+            )}
           </div>
 
           {validation.CorporateBokingAllowed && (
@@ -1841,9 +1903,10 @@ const searchCity =
 
             <hr className="border-gray-700" />
 
-            <div className="flex justify-between text-lg font-bold">
+            <div className="flex justify-between text-base md:text-lg font-semibold">
               <span>Total</span>
-              <span className="text-yellow-400">
+
+              <span className="font-medium text-yellow-400">
                 ₹{" "}
                 {totalFare.toLocaleString("en-IN", {
                   minimumFractionDigits: 2,
@@ -1871,11 +1934,10 @@ const searchCity =
                 </span>
                 <span>
                   {validation.PanMandatory
-                    ? `PAN details are required for this booking${
-                        validation.PanCountRequired > 0
-                          ? ` (${validation.PanCountRequired} )`
-                          : ""
-                      }.`
+                    ? `PAN details are required for this booking${validation.PanCountRequired > 0
+                      ? ` (${validation.PanCountRequired} )`
+                      : ""
+                    }.`
                     : "PAN details are not required for this booking."}
                 </span>
               </li>
@@ -1918,7 +1980,21 @@ const searchCity =
 
           <button
             onClick={handleReviewBooking}
-            className="mt-6 w-full rounded-xl bg-linear-to-r from-yellow-400 to-orange-400 py-3 font-semibold text-black"
+            disabled={rateConditions.length > 0 && !rateConditionsAccepted}
+            className="
+    mt-6
+    w-full
+    rounded-xl
+    bg-linear-to-r
+    from-yellow-400
+    to-orange-400
+    py-3
+    font-semibold
+    text-black
+    transition
+    disabled:cursor-not-allowed
+    disabled:opacity-40
+  "
           >
             Review Booking
           </button>

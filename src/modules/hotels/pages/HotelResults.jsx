@@ -1,5 +1,11 @@
 import { useNavigate } from "react-router-dom";
-import { useState, useMemo, useCallback, useEffect } from "react";
+import {
+  useState,
+  useMemo,
+  useCallback,
+  useEffect,
+  useRef,
+} from "react";
 import { useHotelStore } from "../../../store/hotelStore";
 import { publicApi } from "../../../services/api";
 
@@ -388,6 +394,241 @@ const getVisiblePageNumbers = (currentPage, totalPages) => {
   return Array.from({ length: end - start + 1 }, (_, index) => start + index);
 };
 
+const HotelImageSlider = ({
+  images = [],
+  alt = "Hotel",
+  autoPlay = false,
+}) => {
+  const slides = useMemo(() => {
+    const cleanImages = (Array.isArray(images) ? images : [])
+      .filter((image) => isValidImage(image))
+      .filter((image, index, array) => array.indexOf(image) === index)
+      .slice(0, 3);
+
+    return cleanImages.length > 0 ? cleanImages : [FALLBACK_IMAGE];
+  }, [images]);
+
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+
+  useEffect(() => {
+    setCurrentSlide((current) =>
+      current >= slides.length ? 0 : current
+    );
+  }, [slides.length]);
+
+  const touchStartX = useRef(null);
+  const wasSwiped = useRef(false);
+
+  /* ===============================
+     AUTO SLIDE
+  =============================== */
+
+  useEffect(() => {
+    if (!autoPlay || slides.length <= 1) return;
+
+    const slider = setInterval(() => {
+      setCurrentSlide((previous) => (previous + 1) % slides.length);
+    }, 1500);
+
+    return () => clearInterval(slider);
+  }, [autoPlay, slides.length]);
+  /* ===============================
+     PREVIOUS
+  =============================== */
+
+  const previousSlide = (e) => {
+    e.stopPropagation();
+
+    setCurrentSlide((previous) =>
+      previous === 0 ? slides.length - 1 : previous - 1,
+    );
+  };
+
+  /* ===============================
+     NEXT
+  =============================== */
+
+  const nextSlide = (e) => {
+    e.stopPropagation();
+
+    setCurrentSlide((previous) => (previous + 1) % slides.length);
+  };
+
+  /* ===============================
+     MOBILE SWIPE
+  =============================== */
+
+  const handleTouchStart = (e) => {
+    touchStartX.current = e.touches?.[0]?.clientX ?? null;
+    wasSwiped.current = false;
+  };
+
+  const handleTouchEnd = (e) => {
+    if (touchStartX.current === null || slides.length <= 1) return;
+
+    const touchEndX =
+      e.changedTouches?.[0]?.clientX ?? touchStartX.current;
+
+    const difference = touchStartX.current - touchEndX;
+
+    touchStartX.current = null;
+
+    if (Math.abs(difference) < 40) return;
+
+    wasSwiped.current = true;
+
+    if (difference > 0) {
+      setCurrentSlide((previous) => (previous + 1) % slides.length);
+    } else {
+      setCurrentSlide((previous) =>
+        previous === 0 ? slides.length - 1 : previous - 1,
+      );
+    }
+  };
+
+  return (
+    <div
+      className="relative w-full h-full overflow-hidden"
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+      onClick={(e) => {
+        /*
+         * Normal image click = hotel details open.
+         * Swipe ke baad accidental card click prevent hoga.
+         */
+        if (wasSwiped.current) {
+          e.stopPropagation();
+          wasSwiped.current = false;
+        }
+      }}
+    >
+      {/* IMAGES */}
+
+      <div
+        className="flex w-full h-full transition-transform duration-500 ease-in-out"
+        style={{
+          transform: `translateX(-${currentSlide * 100}%)`,
+        }}
+      >
+        {slides.map((image, index) => (
+          <img
+            key={`${image}-${index}`}
+            src={image}
+            alt={`${alt} ${index + 1}`}
+            className="w-full h-full object-cover shrink-0"
+            loading="lazy"
+            referrerPolicy="no-referrer"
+            onError={(e) => {
+              e.currentTarget.onerror = null;
+              e.currentTarget.src = FALLBACK_IMAGE;
+            }}
+          />
+        ))}
+      </div>
+
+      {/* LEFT / RIGHT BUTTONS */}
+
+      {slides.length > 1 && (
+        <>
+          <button
+            type="button"
+            aria-label="Previous hotel image"
+            onClick={previousSlide}
+            className="
+              absolute
+              left-2
+              top-1/2
+              -translate-y-1/2
+              z-20
+              w-8 h-8
+              rounded-full
+              bg-black/60
+              backdrop-blur-sm
+              border border-white/20
+              text-white
+              flex items-center justify-center
+              opacity-100
+md:opacity-0
+md:group-hover:opacity-100
+              hover:bg-yellow-400
+              hover:text-black
+              transition
+            "
+          >
+            ‹
+          </button>
+
+          <button
+            type="button"
+            aria-label="Next hotel image"
+            onClick={nextSlide}
+            className="
+              absolute
+              right-2
+              top-1/2
+              -translate-y-1/2
+              z-20
+              w-8 h-8
+              rounded-full
+              bg-black/60
+              backdrop-blur-sm
+              border border-white/20
+              text-white
+              flex items-center justify-center
+              opacity-100
+md:opacity-0
+md:group-hover:opacity-100
+              hover:bg-yellow-400
+              hover:text-black
+              transition
+            "
+          >
+            ›
+          </button>
+        </>
+      )}
+
+      {/* DOTS */}
+
+      {slides.length > 1 && (
+        <div
+          className="
+            absolute
+            bottom-3
+            right-3
+            z-20
+            flex
+            items-center
+            gap-1.5
+            bg-black/50
+            backdrop-blur-sm
+            px-2 py-1.5
+            rounded-full
+          "
+          onClick={(e) => e.stopPropagation()}
+        >
+          {slides.map((_, index) => (
+            <button
+              key={index}
+              type="button"
+              aria-label={`Show hotel image ${index + 1}`}
+              onClick={(e) => {
+                e.stopPropagation();
+                setCurrentSlide(index);
+              }}
+              className={`rounded-full transition-all ${currentSlide === index
+                ? "w-5 h-1.5 bg-yellow-400"
+                : "w-1.5 h-1.5 bg-white/60 hover:bg-white"
+                }`}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
 const HotelResults = () => {
   const navigate = useNavigate();
 
@@ -472,6 +713,7 @@ const HotelResults = () => {
   );
 
   const [sort, setSort] = useState("price");
+  const [hoveredHotelKey, setHoveredHotelKey] = useState(null);
   const [priceRange, setPriceRange] = useState([0, 200000]);
   const [minRating, setMinRating] = useState(0);
   const [onlyRefundable, setOnlyRefundable] = useState(false);
@@ -1212,7 +1454,13 @@ const HotelResults = () => {
             </div>
           ) : (
             filteredHotels.map((hotel, index) => {
+              const hotelKey = String(
+                hotel.hotel_code ||
+                hotel.HotelCode ||
+                index
+              );
               const defaultRoom = hotel.selected_room || hotel.rooms?.[0];
+
               const hotelImage =
                 hotel.image ||
                 hotel.images?.[0] ||
@@ -1220,23 +1468,68 @@ const HotelResults = () => {
                 hotel.rawHotel?.images?.[0] ||
                 FALLBACK_IMAGE;
 
+
+              const hotelImages =
+                Array.isArray(hotel.images) && hotel.images.length > 0
+                  ? hotel.images.slice(0, 3)
+                  : [hotelImage];
+
+              const hasBookingCode = Boolean(
+                defaultRoom?.booking_code ||
+                defaultRoom?.BookingCode ||
+                defaultRoom?.room_raw?.BookingCode ||
+                hotel.booking_code ||
+                hotel.BookingCode,
+              );
+
               return (
                 <div
-                  key={`${hotel.hotel_code || hotel.HotelCode || index}-${index}`}
-                  className="group bg-[#15151C] rounded-2xl border border-gray-800 hover:border-yellow-400/40 transition overflow-hidden shadow-lg shadow-black/20"
+                  key={`${hotelKey}-${index}`}
+                  onMouseEnter={() => setHoveredHotelKey(hotelKey)}
+                  onMouseLeave={() => setHoveredHotelKey(null)}
+                  onClick={() => {
+                    if (hasBookingCode) {
+                      handleView(hotel, defaultRoom);
+                    }
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.target !== e.currentTarget) return;
+
+                    if (
+                      hasBookingCode &&
+                      (e.key === "Enter" || e.key === " ")
+                    ) {
+                      e.preventDefault();
+                      handleView(hotel, defaultRoom);
+                    }
+                  }}
+                  tabIndex={hasBookingCode ? 0 : -1}
+                  aria-label={`View details for ${hotel.hotel_name || "hotel"}`}
+                  className={`
+    group
+    bg-[#15151C]
+    rounded-2xl
+    border border-gray-800
+    hover:border-yellow-400/50
+    transition-all
+    duration-300
+    overflow-hidden
+    shadow-lg
+    shadow-black/20
+    focus:outline-none
+    focus:border-yellow-400
+    ${hasBookingCode
+                      ? "cursor-pointer hover:-translate-y-0.5 hover:shadow-xl hover:shadow-black/30"
+                      : "cursor-default"
+                    }
+  `}
                 >
                   <div className="flex flex-col lg:flex-row">
                     <div className="relative w-full lg:w-60 h-44 sm:h-48 lg:h-52 shrink-0 bg-[#0B0B0F]">
-                      <img
-                        src={hotelImage}
+                      <HotelImageSlider
+                        images={hotelImages}
                         alt={hotel.hotel_name || "Hotel"}
-                        className="w-full h-full object-cover"
-                        loading="lazy"
-                        referrerPolicy="no-referrer"
-                        onError={(e) => {
-                          e.currentTarget.onerror = null;
-                          e.currentTarget.src = FALLBACK_IMAGE;
-                        }}
+                        autoPlay={hoveredHotelKey === hotelKey}
                       />
 
                       {hotel.has_image && (
@@ -1308,16 +1601,11 @@ const HotelResults = () => {
                           </p>
 
                           <button
-                            onClick={() => handleView(hotel, defaultRoom)}
-                            disabled={
-                              !(
-                                defaultRoom?.booking_code ||
-                                defaultRoom?.BookingCode ||
-                                defaultRoom?.room_raw?.BookingCode ||
-                                hotel.booking_code ||
-                                hotel.BookingCode
-                              )
-                            }
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleView(hotel, defaultRoom);
+                            }}
+                            disabled={!hasBookingCode}
                             className="mt-3 px-4 py-2 rounded-lg bg-linear-to-r from-yellow-400 to-orange-400 text-black text-xs md:text-sm font-bold hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 transition"
                           >
                             View Details →
