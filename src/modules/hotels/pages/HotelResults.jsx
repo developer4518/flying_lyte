@@ -352,12 +352,60 @@ const getRoomBadges = (room) => {
       : "bg-red-500/10 text-red-300 border-red-500/20",
   });
 
-  if (room.inclusion) {
+  const getRoomBadges = (room) => {
+    if (!room) return [];
+
+    const badges = [];
+
+    if (room.meal) {
+      badges.push({
+        label: String(room.meal).replaceAll("_", " "),
+        className: "bg-blue-500/10 text-blue-300 border-blue-500/20",
+      });
+    }
+
     badges.push({
-      label: room.inclusion,
-      className: "bg-yellow-500/10 text-yellow-300 border-yellow-500/20",
+      label: room.refundable ? "Refundable" : "Non-refundable",
+      className: room.refundable
+        ? "bg-green-500/10 text-green-300 border-green-500/20"
+        : "bg-red-500/10 text-red-300 border-red-500/20",
     });
-  }
+
+    if (
+      Array.isArray(room.cancel_policies) &&
+      room.cancel_policies.length > 0
+    ) {
+      badges.push({
+        label: "Cancellation policy",
+        className:
+          "bg-purple-500/10 text-purple-300 border-purple-500/20",
+      });
+    }
+
+    if (
+      Array.isArray(room.rate_conditions) &&
+      room.rate_conditions.length > 0
+    ) {
+      badges.push({
+        label: "Rate conditions",
+        className:
+          "bg-cyan-500/10 text-cyan-300 border-cyan-500/20",
+      });
+    }
+
+    if (
+      Array.isArray(room.room_promotion) &&
+      room.room_promotion.length > 0
+    ) {
+      badges.push({
+        label: "Promotion",
+        className:
+          "bg-orange-500/10 text-orange-300 border-orange-500/20",
+      });
+    }
+
+    return badges;
+  };
 
   if (Array.isArray(room.cancel_policies) && room.cancel_policies.length > 0) {
     badges.push({
@@ -680,7 +728,7 @@ const HotelResults = () => {
 
   const currentPage = Math.max(1, Number(hotelResponse?.page || 1));
 
-  const pageSize = Math.max(1, Number(hotelResponse?.page_size || 40));
+  const pageSize = Math.max(1, Number(hotelResponse?.page_size || 20));
 
   const totalHotels = Math.max(
     0,
@@ -934,7 +982,7 @@ const HotelResults = () => {
           // selected hotel result always starts from page 1
           page: 1,
 
-          page_size: 40,
+          page_size: 20,
         };
 
         console.log("HOTEL NAME FILTER REQUEST:", params);
@@ -1005,7 +1053,7 @@ const HotelResults = () => {
         ...(search?.requestParams || {}),
 
         page: 1,
-        page_size: 40,
+        page_size: 20,
       };
 
       /*
@@ -1086,7 +1134,7 @@ const HotelResults = () => {
         let params = {
           ...(search?.requestParams || {}),
           page: nextPage,
-          page_size: 40,
+          page_size: 20,
         };
 
         /*
@@ -1140,7 +1188,7 @@ const HotelResults = () => {
             pax_rooms: JSON.stringify(paxRooms),
 
             page: nextPage,
-            page_size: 40,
+            page_size: 20,
           };
         }
 
@@ -1714,92 +1762,210 @@ const PaginationBar = ({
   pageLoading,
   onPageChange,
 }) => {
-  return (
-    <div className="bg-[#15151C] border border-gray-800 rounded-2xl px-5 py-4">
-      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-        {/* LEFT SIDE */}
-        <div>
-          <p className="text-sm md:text-base text-gray-300">
-            Showing{" "}
-            <span className="text-yellow-400 font-semibold">
-              {startHotelNumber} - {endHotelNumber}
-            </span>{" "}
-            of{" "}
-            <span className="text-yellow-400 font-semibold">{totalHotels}</span>{" "}
-            hotels
-          </p>
+  // Mobile par maximum 3 page numbers
+  const mobilePageCount = Math.min(3, totalPages);
 
-          <p className="text-xs text-gray-500 mt-1">
-            Page {currentPage} of {totalPages}
-          </p>
+  const mobileStartPage = Math.max(
+    1,
+    Math.min(currentPage - 1, totalPages - mobilePageCount + 1)
+  );
+
+  const mobilePageNumbers = Array.from(
+    { length: mobilePageCount },
+    (_, index) => mobileStartPage + index
+  );
+
+  return (
+    <div className="bg-[#15151C] border border-gray-800 rounded-2xl px-4 py-4 md:px-5">
+
+      {/* =========================
+          MOBILE PAGINATION
+      ========================== */}
+      <div className="md:hidden">
+        <div className="flex items-center justify-between gap-3 mb-4">
+          <div>
+            <p className="text-sm text-gray-300">
+              Showing{" "}
+              <span className="text-yellow-400 font-semibold">
+                {startHotelNumber}-{endHotelNumber}
+              </span>{" "}
+              of{" "}
+              <span className="text-yellow-400 font-semibold">
+                {totalHotels}
+              </span>
+            </p>
+
+            <p className="text-xs text-gray-500 mt-1">
+              Page {currentPage} of {totalPages}
+            </p>
+          </div>
+
+          {pageLoading && (
+            <div className="w-5 h-5 rounded-full border-2 border-gray-700 border-t-yellow-400 animate-spin shrink-0" />
+          )}
         </div>
 
-        {/* RIGHT SIDE */}
-        <div className="flex items-center flex-wrap gap-2">
-          {/* PREVIOUS */}
+        <div className="flex items-center justify-center gap-2">
+          {/* Previous */}
           <button
             type="button"
+            aria-label="Previous page"
             disabled={!hasPrevious || pageLoading}
             onClick={() => onPageChange(currentPage - 1)}
             className="
-              min-h-10 px-4 rounded-xl
+              w-10 h-10
+              rounded-xl
               border border-gray-700
-              text-sm text-gray-300
-              hover:border-yellow-400
-              hover:text-yellow-300
+              flex items-center justify-center
+              text-lg text-gray-300
               disabled:opacity-30
               disabled:cursor-not-allowed
+              active:scale-95
               transition
             "
           >
-            ← Previous
+            ‹
           </button>
 
-          {/* PAGE NUMBERS */}
-          {visiblePageNumbers.map((pageNumber) => (
+          {/* Page Numbers */}
+          {mobilePageNumbers.map((pageNumber) => (
             <button
-              type="button"
               key={pageNumber}
+              type="button"
               disabled={pageLoading}
               onClick={() => onPageChange(pageNumber)}
               className={`
-                min-w-10 h-10 px-3 rounded-xl
-                border text-sm font-medium transition
+                w-10 h-10
+                rounded-xl
+                border
+                text-sm
+                font-semibold
+                transition
+                active:scale-95
+
                 ${currentPage === pageNumber
                   ? "bg-yellow-400 text-black border-yellow-400"
-                  : "bg-[#0B0B0F] text-gray-300 border-gray-700 hover:border-yellow-400 hover:text-yellow-300"
+                  : "bg-[#0B0B0F] text-gray-300 border-gray-700"
                 }
-                ${pageLoading ? "cursor-wait" : ""}
               `}
             >
               {pageNumber}
             </button>
           ))}
 
-          {/* NEXT */}
+          {/* Next */}
           <button
             type="button"
+            aria-label="Next page"
             disabled={!hasNext || pageLoading}
             onClick={() => onPageChange(currentPage + 1)}
             className="
-              min-h-10 px-4 rounded-xl
+              w-10 h-10
+              rounded-xl
               border border-gray-700
-              text-sm text-gray-300
-              hover:border-yellow-400
-              hover:text-yellow-300
+              flex items-center justify-center
+              text-lg text-gray-300
               disabled:opacity-30
               disabled:cursor-not-allowed
+              active:scale-95
               transition
             "
           >
-            Next →
+            ›
           </button>
         </div>
       </div>
 
-      {pageLoading && (
-        <p className="text-xs text-yellow-300 mt-3">Loading hotels...</p>
-      )}
+      {/* =========================
+          DESKTOP PAGINATION
+      ========================== */}
+      <div className="hidden md:block">
+        <div className="flex items-center justify-between gap-4">
+
+          <div>
+            <p className="text-base text-gray-300">
+              Showing{" "}
+              <span className="text-yellow-400 font-semibold">
+                {startHotelNumber} - {endHotelNumber}
+              </span>{" "}
+              of{" "}
+              <span className="text-yellow-400 font-semibold">
+                {totalHotels}
+              </span>{" "}
+              hotels
+            </p>
+
+            <p className="text-xs text-gray-500 mt-1">
+              Page {currentPage} of {totalPages}
+            </p>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              disabled={!hasPrevious || pageLoading}
+              onClick={() => onPageChange(currentPage - 1)}
+              className="
+                min-h-10 px-4 rounded-xl
+                border border-gray-700
+                text-sm text-gray-300
+                hover:border-yellow-400
+                hover:text-yellow-300
+                disabled:opacity-30
+                disabled:cursor-not-allowed
+                transition
+              "
+            >
+              ← Previous
+            </button>
+
+            {visiblePageNumbers.map((pageNumber) => (
+              <button
+                type="button"
+                key={pageNumber}
+                disabled={pageLoading}
+                onClick={() => onPageChange(pageNumber)}
+                className={`
+                  min-w-10 h-10 px-3 rounded-xl
+                  border text-sm font-medium transition
+
+                  ${currentPage === pageNumber
+                    ? "bg-yellow-400 text-black border-yellow-400"
+                    : "bg-[#0B0B0F] text-gray-300 border-gray-700 hover:border-yellow-400 hover:text-yellow-300"
+                  }
+                `}
+              >
+                {pageNumber}
+              </button>
+            ))}
+
+            <button
+              type="button"
+              disabled={!hasNext || pageLoading}
+              onClick={() => onPageChange(currentPage + 1)}
+              className="
+                min-h-10 px-4 rounded-xl
+                border border-gray-700
+                text-sm text-gray-300
+                hover:border-yellow-400
+                hover:text-yellow-300
+                disabled:opacity-30
+                disabled:cursor-not-allowed
+                transition
+              "
+            >
+              Next →
+            </button>
+          </div>
+        </div>
+
+        {pageLoading && (
+          <p className="text-xs text-yellow-300 mt-3">
+            Loading hotels...
+          </p>
+        )}
+      </div>
+
     </div>
   );
 };
