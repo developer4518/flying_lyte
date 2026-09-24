@@ -2280,4 +2280,268 @@ Our travel experts will help you plan a comfortable and memorable Goa holiday.
 
   `,
 },
+{
+  id: 17,
+  slug: "ayodhya-varanasi-tour-package",
+  title:
+    "Ayodhya & Varanasi Travel Guide: Sacred Places, Local Flavours & Holiday Packages",
+  category: "Ayodhya & Varanasi Tours",
+  author: "FlyingLyte Team",
+  date: "24 September 2026",
+  image:
+    "/images/blogs/ayodhya.webp",
+
+  shortDescription:
+    "Explore Ayodhya and Varanasi with FlyingLyte. Visit sacred temples, peaceful ghats, attend Ganga Aarti, enjoy local food and book our 4 Days / 3 Nights tour package starting from ₹15,499 per person.",
+
+  description: `
+
+Sacred temples, peaceful ghats, glowing evening aartis and delicious local food—**Ayodhya and Varanasi offer a beautiful mix of spirituality, culture and history.**
+
+Whether you are travelling with family, senior citizens or planning a spiritual getaway, this guide will help you discover the **best places to visit, famous food, suitable stay areas and a comfortable 4-day tour plan.**
+
+## Why Visit Ayodhya & Varanasi?
+
+Ayodhya is celebrated for its deep association with Lord Rama, sacred temples and the serene banks of the Saryu River.
+
+Varanasi, also known as Kashi or Banaras, is famous for ancient ghats, Kashi Vishwanath Temple, Ganga Aarti, boat rides and traditional street food.
+
+Together, both cities offer a memorable journey filled with **faith, heritage, local culture and beautiful riverfront experiences.**
+
+## Best Places to Visit in Ayodhya
+
+### Shri Ram Janmabhoomi Mandir
+
+The **Ram Mandir** is Ayodhya's most prominent landmark and a major spiritual destination for pilgrims visiting the city.
+
+### Hanuman Garhi
+
+A famous temple dedicated to Lord Hanuman, **Hanuman Garhi** is another must-visit place in Ayodhya.
+
+### Kanak Bhawan
+
+Known for its beautiful interiors, **Kanak Bhawan** is traditionally associated with Lord Ram and Sita.
+
+### Ram Ki Paidi & Saryu River
+
+Spend your evening at **Ram Ki Paidi**, enjoy the peaceful Saryu riverfront and watch the area beautifully light up around sunset.
+
+You can also visit **Nageshwarnath Temple** or **Guptar Ghat** if you have extra time.
+
+## Best Places to Visit in Varanasi
+
+### Kashi Vishwanath Temple
+
+One of the most famous temples in India, **Kashi Vishwanath Temple** is the spiritual heart of Varanasi.
+
+Explore the nearby old lanes and local markets for an authentic Banarasi experience.
+
+### Dashashwamedh Ghat & Ganga Aarti
+
+Watching the evening **Ganga Aarti at Dashashwamedh Ghat** is one of the most memorable experiences in Varanasi.
+
+The glowing lamps, spiritual chants and riverfront atmosphere make it a must-see attraction.
+
+### Sunrise Boat Ride
+
+Wake up early for a **boat ride on the Ganga** and watch the ghats slowly come alive with morning prayers and beautiful sunrise views.
+
+### Assi Ghat
+
+**Assi Ghat** is ideal for peaceful morning walks, cafés and a more relaxed riverside experience.
+
+### Sarnath
+
+Visit **Sarnath** to explore Buddhist heritage, ancient stupas, monasteries and peaceful surroundings.
+
+## Best Things to Do
+
+During your Ayodhya and Varanasi trip, you can:
+
+- Visit Ram Mandir and Hanuman Garhi
+- Enjoy a peaceful evening at Ram Ki Paidi
+- Visit Kashi Vishwanath Temple
+- Attend the evening Ganga Aarti
+- Take a sunrise boat ride
+- Explore the old lanes of Banaras
+- Visit Sarnath
+- Shop for Banarasi silk and souvenirs
+- Try traditional local food
+
+## What to Eat in Ayodhya?
+
+Ayodhya is known for simple and delicious vegetarian food.
+
+Popular dishes and sweets include:
+
+- Kachori-sabzi
+- Puri-sabzi
+- Jalebi
+- Peda
+- Rabri
+- Malpua
+- Lassi
+
+A hot kachori breakfast followed by temple sightseeing is a perfect way to start your day.
+
+## What to Eat in Varanasi?
+
+Varanasi is famous for its street food and traditional flavours.
+
+Do not miss:
+
+- Kachori sabzi
+- Tamatar chaat
+- Baati chokha
+- Lassi
+- Malaiyyo during winter
+- Banarasi paan
+
+Trying local food while exploring the old lanes is one of the best ways to experience Banaras.
+
+## Where to Stay?
+
+### Where to Stay in Ayodhya
+
+Stay near **Ram Mandir, Ram Path or central Ayodhya** if temple visits are your priority.
+
+Families and senior citizens should choose hotels with easy vehicle access, comfortable rooms and lift facilities.
+
+### Where to Stay in Varanasi
+
+- **Godowlia or Dashashwamedh:** Best for Kashi Vishwanath Temple and Ganga Aarti
+- **Assi Ghat:** Suitable for cafés, river views and relaxed stays
+- **Cantonment or Sigra:** Better for road access, bigger hotels and family stays
+
+Select your accommodation according to your sightseeing priorities and travel requirements.
+
+## Best Time to Visit
+
+**October to March** is one of the best times to visit Ayodhya and Varanasi because the weather is more comfortable for sightseeing, temple visits and boat rides.
+
+Festival periods such as **Deepotsav, Dev Deepawali, Ram Navami and Mahashivratri** offer a beautiful spiritual experience but can also be very crowded.
+
+Booking hotels and transportation in advance is recommended during festivals and peak travel dates.
+
+## FlyingLyte Ayodhya & Varanasi Tour Package
+
+Explore both sacred cities without separately arranging hotels, sightseeing and transfers.
+
+FlyingLyte offers a comfortable **4 Days / 3 Nights Ayodhya and Varanasi tour package** for families, couples, groups and senior citizens.
+
+### Package Overview
+
+**Destination:** Ayodhya & Varanasi, India
+
+**Duration:** 4 Days / 3 Nights
+
+**Starting Price:** ₹15,499 Per Person
+
+**Traveller Rating:** 4/5
+
+### Package Includes
+
+- Comfortable hotel accommodation
+- Major sightseeing
+- Local transfers
+- Airport or railway pickup and drop as per package
+- Travel assistance
+- Customizable itinerary
+- 24/7 support during your journey
+
+Exact inclusions may vary according to travel dates, hotel category, selected package and customization.
+
+## Suggested 4-Day Itinerary
+
+### Day 1: Arrival in Varanasi
+
+Arrive in Varanasi and complete your hotel check-in.
+
+Visit **Kashi Vishwanath Temple** and attend the evening **Ganga Aarti at Dashashwamedh Ghat**.
+
+### Day 2: Varanasi Sightseeing
+
+Begin your day with a sunrise boat ride on the Ganga.
+
+Explore **Assi Ghat**, local attractions, the old lanes of Banaras and visit **Sarnath**.
+
+### Day 3: Varanasi to Ayodhya
+
+Travel from Varanasi to Ayodhya.
+
+Visit **Ram Mandir, Hanuman Garhi, Kanak Bhawan and Ram Ki Paidi**.
+
+### Day 4: Local Sightseeing & Departure
+
+Enjoy breakfast and complete any remaining local sightseeing.
+
+Check out from your hotel and proceed towards the airport or railway station according to your departure schedule.
+
+Your travel plan can be tailored around your preferred dates, interests and holiday style.
+
+## Frequently Asked Questions
+
+### Is 4 Days Enough for Ayodhya and Varanasi?
+
+Yes. A **4 Days / 3 Nights trip** provides enough time to cover the major attractions of both cities comfortably.
+
+A properly planned itinerary helps reduce unnecessary travel and gives you enough time for important temple visits, ghats and local sightseeing.
+
+### What Is Famous in Ayodhya?
+
+Ayodhya is famous for **Ram Mandir, Hanuman Garhi, Kanak Bhawan, Ram Ki Paidi and the Saryu River**.
+
+It is one of India's most important spiritual destinations and is closely associated with Lord Rama.
+
+### What Is Varanasi Famous For?
+
+Varanasi is known for **Kashi Vishwanath Temple, Ganga Aarti, ancient ghats, sunrise boat rides, Banarasi silk and traditional street food**.
+
+### How Much Does the FlyingLyte Package Cost?
+
+The FlyingLyte Ayodhya and Varanasi package starts from **₹15,499 per person**.
+
+Final pricing depends on travel dates, hotel category, number of travellers, room occupancy and package customization.
+
+## Plan Your Ayodhya & Varanasi Journey
+
+From the peaceful Saryu River in Ayodhya to the glowing ghats of Varanasi, this journey brings together **spirituality, culture, food and unforgettable experiences.**
+
+To receive a customized itinerary and quotation, simply share:
+
+- Preferred travel dates
+- Number of travellers
+- Departure city
+- Hotel preference
+- Approximate budget
+- Any special requirements
+
+Our travel experts can help create a comfortable journey according to your requirements.
+
+## Ready to Explore Ayodhya & Varanasi?
+
+### FlyingLyte Ayodhya & Varanasi Tour Package
+
+**4 Days / 3 Nights**
+
+**Starting From ₹15,499 Per Person**
+
+- Hotels Included
+- Sightseeing Included
+- Transfers Included
+- Customizable Package
+- Secure Booking Assistance
+- 24/7 Travel Support
+
+**Plan your memorable Ayodhya & Varanasi journey with FlyingLyte Tours & Travels.**
+
+📞 **Call/WhatsApp:** 9667455591
+
+📧 **Email:** info@flyinglyte.com
+
+🌐 **Website:** [www.flyinglyte.com]
+### Two sacred cities, timeless traditions and unforgettable moments—experience Ayodhya & Varanasi with FlyingLyte.
+
+  `,
+},
 ];
