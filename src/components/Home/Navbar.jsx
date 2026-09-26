@@ -66,37 +66,37 @@ const Navbar = () => {
   };
 
   const handleNavClick = (e, item) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  // HOTELS
-  if (item.name === "Hotels") {
-    setMenuOpen(false);
-    setProfileOpen(false);
+    // HOTELS
+    if (item.name === "Hotels") {
+      setMenuOpen(false);
+      setProfileOpen(false);
 
-    navigate("/", {
-      state: {
-        searchTab: "hotels",
-      },
-    });
+      navigate("/", {
+        state: {
+          searchTab: "hotels",
+        },
+      });
 
-    return;
-  }
+      return;
+    }
 
-  // HOME
-  if (item.name === "Home") {
-    setMenuOpen(false);
-    setProfileOpen(false);
+    // HOME
+    if (item.name === "Home") {
+      setMenuOpen(false);
+      setProfileOpen(false);
 
-    navigate("/", {
-      replace: true,
-      state: null,
-    });
+      navigate("/", {
+        replace: true,
+        state: null,
+      });
 
-    return;
-  }
+      return;
+    }
 
-  handleReloadNavigate(item.path);
-};
+    handleReloadNavigate(item.path);
+  };
 
   const isActive = (path) => {
     // Navbar Hotels se Home + Hotels tab open hua hai
@@ -144,7 +144,7 @@ const Navbar = () => {
                 src={logo}
                 alt="FlyingLyte"
                 className="h-10 w-auto max-w-38.75 select-none object-contain drop-shadow-[0_10px_20px_rgba(230,179,92,0.18)] transition duration-300 group-hover:scale-[1.03] md:h-12 md:max-w-52.5"
-               loading="lazy" />
+                loading="lazy" />
             </button>
 
             {/* Desktop Menu */}
@@ -154,11 +154,10 @@ const Navbar = () => {
                   <Link
                     to={item.path}
                     onClick={(e) => handleNavClick(e, item)}
-                    className={`relative block rounded-full px-4 py-2 text-sm font-semibold transition-all duration-300 ${
-                      isActive(item.path)
-                        ? "bg-[#E6B35C]/15 text-[#E6B35C] shadow-[inset_0_0_0_1px_rgba(230,179,92,0.25)]"
-                        : "text-gray-300 hover:bg-white/5 hover:text-[#E6B35C]"
-                    }`}
+                    className={`relative block rounded-full px-4 py-2 text-sm font-semibold transition-all duration-300 ${isActive(item.path)
+                      ? "bg-[#E6B35C]/15 text-[#E6B35C] shadow-[inset_0_0_0_1px_rgba(230,179,92,0.25)]"
+                      : "text-gray-300 hover:bg-white/5 hover:text-[#E6B35C]"
+                      }`}
                   >
                     {item.name}
                   </Link>
@@ -204,9 +203,8 @@ const Navbar = () => {
                     </span>
 
                     <span
-                      className={`text-xs transition ${
-                        profileOpen ? "rotate-180" : ""
-                      }`}
+                      className={`text-xs transition ${profileOpen ? "rotate-180" : ""
+                        }`}
                     >
                       ▼
                     </span>
@@ -249,17 +247,44 @@ const Navbar = () => {
 
         {/* Mobile Menu */}
         {menuOpen && (
-          <div className="mt-3 overflow-hidden rounded-[26px] border border-white/10 bg-[#06111d]/95 p-4 text-gray-200 shadow-[0_18px_50px_rgba(0,0,0,0.55)] backdrop-blur-2xl lg:hidden">
-            <div className="mb-4 rounded-2xl border border-[#E6B35C]/15 bg-[#E6B35C]/10 px-4 py-3">
-              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#E6B35C]">
-                FlyingLyte
-              </p>
-              <p className="mt-1 text-sm text-gray-300">
-                Explore flights, packages and bookings.
-              </p>
-            </div>
+          <div
+            className="
+  mt-2
+  max-h-[calc(100dvh-82px)]
+  overflow-y-auto
+  overscroll-contain
+  touch-pan-y
+  rounded-[20px]
+  border border-white/10
+  bg-[#06111d]/97
+  p-2.5
+  pb-[calc(env(safe-area-inset-bottom)+10px)]
+  text-gray-200
+  shadow-[0_20px_55px_rgba(0,0,0,0.58)]
+  backdrop-blur-2xl
+  [-webkit-overflow-scrolling:touch]
+  lg:hidden
+"
+          >
+            <div className="mb-2.5 rounded-xl border border-[#E6B35C]/15 bg-[#E6B35C]/8 px-3 py-2">
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#E6B35C]">
+                    FlyingLyte
+                  </p>
 
-            <div className="flex flex-col gap-2">
+                  <p className="mt-0.5 text-[11px] leading-4 text-gray-400">
+                    Explore • Book • Travel
+                  </p>
+                </div>
+
+                <span className="text-base text-[#E6B35C]">
+                  ✦
+                </span>
+              </div>
+            </div>
+            <div className="flex flex-col gap-1.5">
+
               {navLinks.map((item) => (
                 <button
                   key={item.path}
@@ -273,26 +298,27 @@ const Navbar = () => {
                       handleReloadNavigate(item.path);
                     }
                   }}
-                  className={`flex items-center justify-between rounded-2xl px-4 py-3 text-left text-sm font-semibold transition ${
-                    isActive(item.path)
-                      ? "bg-[#E6B35C] text-black"
-                      : "bg-white/4 text-gray-200 hover:bg-white/8 hover:text-[#E6B35C]"
-                  }`}
+                  className={`group flex min-h-10 items-center justify-between rounded-xl border px-3.5 py-2 text-left text-[13px] font-semibold transition-all duration-200 ${isActive(item.path)
+                    ? "border-[#E6B35C]/60 bg-[#E6B35C] text-black shadow-[0_6px_18px_rgba(230,179,92,0.18)]"
+                    : "border-white/5 bg-white/[0.035] text-gray-200 hover:border-[#E6B35C]/20 hover:bg-white/[0.07] hover:text-[#E6B35C]"
+                    }`}
                 >
                   {item.name}
-                  <span className="text-base">›</span>
+                  <span className="text-sm opacity-70 transition-transform duration-200 group-hover:translate-x-0.5">
+                    ›
+                  </span>
                 </button>
               ))}
             </div>
 
-            <div className="my-4 h-px bg-white/10" />
+            <div className="my-2.5 h-px bg-linear-to-r from-transparent via-white/10 to-transparent" />
 
             {!user ? (
               <div className="grid grid-cols-2 gap-3">
                 <button
                   type="button"
                   onClick={() => navigate("/login")}
-                  className="rounded-2xl border border-white/10 bg-white/4 px-4 py-3 text-sm font-semibold text-white transition hover:bg-white/8"
+                  className="rounded-xl border border-white/10 bg-white/4 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-white/8"
                 >
                   Login
                 </button>
@@ -300,14 +326,14 @@ const Navbar = () => {
                 <button
                   type="button"
                   onClick={() => navigate("/register")}
-                  className="rounded-2xl bg-linear-to-r from-[#E6B35C] to-[#F7CF75] px-4 py-3 text-sm font-bold text-black shadow-[0_10px_28px_rgba(230,179,92,0.3)]"
+                  className="rounded-xl bg-linear-to-r from-[#E6B35C] to-[#F7CF75] px-4 py-2.5 text-sm font-bold text-black shadow-[0_10px_28px_rgba(230,179,92,0.3)]"
                 >
                   Register
                 </button>
               </div>
             ) : (
               <div className="space-y-3">
-                <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/4 px-4 py-3">
+                <div className="flex items-center gap-2.5 rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5">
                   <span className="grid h-10 w-10 place-items-center rounded-full bg-[#E6B35C] font-black text-black">
                     {(user?.name || user?.email || "U").charAt(0).toUpperCase()}
                   </span>
