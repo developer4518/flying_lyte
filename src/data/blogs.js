@@ -299,7 +299,7 @@ If you want more than just a trip—if you want a story worth telling—Thailand
     category: "Nightlife & Festivals",
     author: "FlyingLyte Team",
     date: "16 May 2026",
-    image: "/images/blogs/thailand-nightlife-experience-guide-2026.png",
+    image: "/images/blogs/thailand.webp",
     shortDescription:
       "Experience Thailand nightlife like never before in 2026 with sunset beach parties, rooftop lounges, EDM festivals, and all-night clubbing across top destinations.",
     description: `
@@ -383,7 +383,7 @@ Thailand nightlife in 2026 is more than just parties—it’s a complete journey
     category: "Group Tours & Adventure",
     author: "FlyingLyte Team",
     date: "03 July 2026",
-    image: "/images/blogs/manali-kasol-group-tour-travel-guide-2026.png",
+    image: "/images/blogs/manali.webp",
 
     shortDescription:
       "Join an unforgettable Manali & Kasol Group Tour and experience breathtaking mountains, adventure activities, scenic valleys, riverside cafes, and exciting moments with fellow travelers.",
@@ -435,7 +435,7 @@ A Manali & Kasol Group Tour is more than just a vacation; it is an experience fi
     author: "FlyingLyte Team",
     date: "04 July 2026",
     image:
-      "/images/blogs/girls-group-trip-mussoorie-3-days-fun-memories-2026.png",
+      "/images/blogs/mussoorie.webp",
 
     shortDescription:
       "Plan the perfect Girls’ Group Trip to Mussoorie with scenic mountain views, café hopping, shopping, sightseeing, fun activities, and unforgettable moments with your best friends.",
