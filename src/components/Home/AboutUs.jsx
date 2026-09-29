@@ -1,8 +1,10 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Plane, Hotel, Package, Globe, Calendar } from "lucide-react";
 
 const AboutUs = () => {
+  const navigate = useNavigate();
   const fadeUp = {
     hidden: { opacity: 0, y: 40 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
@@ -11,23 +13,33 @@ const AboutUs = () => {
   const features = [
     {
       icon: Plane,
+      title: "Flight Search",
       text: "Compare flights from leading global airlines",
+      action: "flights",
     },
     {
       icon: Hotel,
+      title: "Hotel Stays",
       text: "Discover hotels across thousands of destinations",
+      action: "hotels",
     },
     {
       icon: Package,
+      title: "Holiday Packages",
       text: "Explore curated holiday packages",
+      path: "/packages",
     },
     {
       icon: Globe,
+      title: "Exclusive Travel Deals",
       text: "Access exclusive travel deals and limited-time offers",
+      path: "/packages",
     },
     {
       icon: Calendar,
+      title: "Manage Bookings",
       text: "Manage bookings and itineraries in one place",
+      path: "/bookings",
     },
   ];
 
@@ -91,28 +103,128 @@ const AboutUs = () => {
             src="/images/aboutImage.webp"
             alt="Travel"
             className="rounded-2xl shadow-lg"
-           loading="lazy" />
+            loading="lazy" />
         </motion.div>
 
         {/* WHAT WE OFFER */}
-        <motion.div variants={fadeUp} initial="hidden" whileInView="visible">
-          <h2 className="font-bold text-3xl text-(--gold-main) text-center mb-8 md:mb-14">
-            What We Offer
-          </h2>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
+        <motion.div
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          className="relative"
+        >
+          {/* Background glow */}
+          <div className="pointer-events-none absolute left-1/2 top-24 h-64 w-64 -translate-x-1/2 rounded-full bg-yellow-400/5 blur-3xl" />
+
+          {/* Heading */}
+          <div className="relative mb-10 text-center md:mb-14">
+            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.32em] text-(--gold-soft)">
+              Travel Made Simple
+            </p>
+
+            <h2 className="text-3xl font-bold text-(--gold-main) md:text-4xl">
+              What We Offer
+            </h2>
+
+            <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-(--text-muted) md:text-base">
+              Everything you need to search, plan and manage your journey in one place.
+            </p>
+
+            <div className="mx-auto mt-5 h-1 w-16 rounded-full bg-linear-to-r from-yellow-500 to-yellow-300" />
+          </div>
+
+          {/* Cards */}
+          <div className="relative grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {features.map((item, index) => {
               const Icon = item.icon;
 
               return (
-                <div
+                <motion.button
                   key={index}
-                  className="bg-(--bg-card) border border-(--border-soft) rounded-xl p-6 hover:scale-105 transition"
-                >
-                  <Icon className="text-(--gold-soft) mb-2 md:mb-4" size={30} />
+                  type="button"
+                  onClick={() => {
+                    if (item.action === "flights") {
+                      navigate("/", {
+                        state: {
+                          searchTab: "flights",
+                        },
+                      });
 
-                  <p className="text-(--text-muted)">{item.text}</p>
-                </div>
+                      window.scrollTo({
+                        top: 0,
+                        behavior: "smooth",
+                      });
+
+                      return;
+                    }
+
+                    if (item.action === "hotels") {
+                      navigate("/", {
+                        state: {
+                          searchTab: "hotels",
+                        },
+                      });
+
+                      window.scrollTo({
+                        top: 0,
+                        behavior: "smooth",
+                      });
+
+                      return;
+                    }
+
+                    if (item.path) {
+                      navigate(item.path);
+                    }
+                  }}
+                  whileHover={{ y: -6 }}
+                  transition={{ duration: 0.25 }}
+                  className={`
+    group
+    relative
+    w-full
+    cursor-pointer
+    overflow-hidden
+    rounded-2xl
+    border
+    border-(--border-soft)
+    bg-(--bg-card)
+    p-6
+    text-left
+    transition-all
+    duration-300
+    hover:border-yellow-400/40
+    hover:shadow-[0_18px_50px_rgba(234,168,42,0.12)]
+  `}
+                >
+                  {/* Card glow */}
+                  <div className="pointer-events-none absolute -right-12 -top-12 h-28 w-28 rounded-full bg-yellow-400/0 blur-3xl transition duration-300 group-hover:bg-yellow-400/10" />
+
+                  {/* Icon */}
+                  <div className="relative mb-5 flex h-12 w-12 items-center justify-center rounded-xl border border-yellow-400/20 bg-yellow-400/10 text-(--gold-soft) transition duration-300 group-hover:scale-110 group-hover:border-yellow-400/40 group-hover:bg-yellow-400/15">
+                    <Icon size={24} strokeWidth={1.8} />
+                  </div>
+
+                  {/* Content */}
+                  <div className="relative">
+                    <h3 className="text-lg font-semibold text-(--text-main)">
+                      {item.title}
+                    </h3>
+
+                    <p className="mt-2 text-sm leading-6 text-(--text-muted)">
+                      {item.text}
+                    </p>
+
+                    <div className="mt-5 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-(--gold-soft) opacity-70 transition group-hover:opacity-100">
+                      Explore
+                      <span className="transition-transform duration-300 group-hover:translate-x-1">
+                        →
+                      </span>
+                    </div>
+                  </div>
+                </motion.button>
               );
             })}
           </div>
