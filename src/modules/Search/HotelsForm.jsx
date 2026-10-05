@@ -188,8 +188,18 @@ const HotelsForm = () => {
   const [loading, setLocalLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
-  const [cityInput, setCityInput] = useState(search?.cityName || "");
+  const [cityInput, setCityInput] = useState(
+    search?.hotelName || search?.cityName || ""
+  );
+
   const [citySuggestions, setCitySuggestions] = useState([]);
+
+  const [hotelSuggestions, setHotelSuggestions] = useState([]);
+  const [hotelSuggestionsLoading, setHotelSuggestionsLoading] =
+    useState(false);
+
+
+  const [destinationOpen, setDestinationOpen] = useState(false);
 
   const [nationalityInput, setNationalityInput] = useState(
     search?.nationalityName || INDIA_NATIONALITY.Name,
@@ -205,6 +215,12 @@ const HotelsForm = () => {
     city: search?.city || "",
     cityName: search?.cityName || "",
     cityCountry: search?.cityCountry || "",
+
+    // selected hotel
+    hotelCode: search?.hotelCode || "",
+    hotelName: search?.hotelName || "",
+
+
     nationality: search?.nationality || INDIA_NATIONALITY.Code,
     nationalityName: search?.nationalityName || INDIA_NATIONALITY.Name,
     checkIn: search?.checkIn || "",
@@ -261,6 +277,8 @@ const HotelsForm = () => {
     const handleClick = (e) => {
       if (cityRef.current && !cityRef.current.contains(e.target)) {
         setCitySuggestions([]);
+        setHotelSuggestions([]);
+        setDestinationOpen(false);
       }
 
       if (
@@ -329,6 +347,89 @@ const HotelsForm = () => {
       })
       .slice(0, 10);
   };
+
+
+
+  useEffect(() => {
+    const query = cityInput.trim();
+
+    // Hotel already selected
+    if (
+      formData.hotelCode &&
+      normalizeText(query) === normalizeText(formData.hotelName)
+    ) {
+      setHotelSuggestions([]);
+      setHotelSuggestionsLoading(false);
+      return;
+    }
+
+    // City already selected
+    if (
+      !formData.hotelCode &&
+      formData.city &&
+      normalizeText(query) === normalizeText(formData.cityName)
+    ) {
+      setHotelSuggestions([]);
+      setHotelSuggestionsLoading(false);
+      return;
+    }
+
+    // Minimum 2 characters
+    if (query.length < 2) {
+      setHotelSuggestions([]);
+      setHotelSuggestionsLoading(false);
+      return;
+    }
+
+    let cancelled = false;
+
+    const timer = setTimeout(async () => {
+      try {
+        setHotelSuggestionsLoading(true);
+
+        const response = await publicApi.get(
+          "/api/hotels/hotel-suggestions/",
+          {
+            params: {
+              q: query,
+            },
+          }
+        );
+
+        if (cancelled) return;
+
+        const results = Array.isArray(response?.data?.results)
+          ? response.data.results
+          : [];
+
+        setHotelSuggestions(results);
+      } catch (error) {
+        if (!cancelled) {
+          console.error(
+            "HOTEL SUGGESTION ERROR:",
+            error?.response?.data || error
+          );
+
+          setHotelSuggestions([]);
+        }
+      } finally {
+        if (!cancelled) {
+          setHotelSuggestionsLoading(false);
+        }
+      }
+    }, 300);
+
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+  }, [
+    cityInput,
+    formData.city,
+    formData.cityName,
+    formData.hotelCode,
+    formData.hotelName,
+  ]);
 
   const searchNationalities = (query) => {
     if (!query) return [];
@@ -425,7 +526,7 @@ const HotelsForm = () => {
 
   const validateSearch = (data = formData) => {
     if (!data.city || !data.cityName) {
-      setErrorMsg("Please select a city from the dropdown");
+      setErrorMsg("Please select a city or hotel from the dropdown");
       return false;
     }
 
@@ -562,6 +663,13 @@ const HotelsForm = () => {
 
     const baseApiParams = {
       city: finalFormData.city,
+
+      ...(finalFormData.hotelCode
+        ? {
+          hotel_code: finalFormData.hotelCode,
+        }
+        : {}),
+
       checkin: finalFormData.checkIn,
       checkout: finalFormData.checkOut,
       nationality: finalNationality,
@@ -733,80 +841,229 @@ const HotelsForm = () => {
       >
         <div className="relative md:col-span-3 w-full" ref={cityRef}>
           <label className="mb-1.5 block text-xs font-medium text-(--text-muted)">
-            City
+            City / Hotel
           </label>
 
           <input
             type="text"
-            placeholder="Search city"
+            placeholder="Search city or hotel"
             value={cityInput}
+
+            onFocus={() => {
+              setDestinationOpen(true);
+            }}
+
             onChange={(e) => {
               const value = e.target.value;
 
+              setDestinationOpen(true);
               setCityInput(value);
+
+              // Previous selection clear
               setFormData((prev) => ({
                 ...prev,
                 city: "",
                 cityName: "",
                 cityCountry: "",
+                hotelCode: "",
+                hotelName: "",
               }));
+
               setCitySuggestions(searchCities(value));
             }}
+
             className="w-full h-12 px-4 rounded-2xl text-sm bg-(--bg-secondary) border border-(--border-soft) outline-none focus:border-(--gold-main) focus:ring-2 focus:ring-(--gold-main)/20 transition"
           />
 
-          {citySuggestions.length > 0 && (
-            <div className="absolute top-full left-0 mt-2 w-full bg-(--bg-card) border border-(--border-soft) rounded-2xl shadow-2xl z-50 max-h-64 overflow-y-auto p-1">
-              {citySuggestions.map((city, index) => {
-                const selectedCityName = getCityName(city);
-                const selectedCityCode = getCityCode(city);
-                const selectedCityCountry = getCityCountry(city);
-                const selectedIsInternational = isInternationalDestination(
-                  selectedCityName,
-                  selectedCityCountry,
-                );
+          {destinationOpen &&
+            (citySuggestions.length > 0 ||
+              hotelSuggestions.length > 0 ||
+              hotelSuggestionsLoading) && (
+              <div className="absolute top-full left-0 mt-2 w-full bg-(--bg-card) border border-(--border-soft) rounded-2xl shadow-2xl z-50 max-h-80 overflow-y-auto p-1">
 
-                return (
-                  <button
-                    type="button"
-                    key={`${selectedCityCode}-${index}`}
-                    onClick={() => {
-                      setFormData((prev) => ({
-                        ...prev,
-                        city: selectedCityCode,
-                        cityName: selectedCityName,
-                        cityCountry: selectedCityCountry,
-                        nationality: selectedIsInternational
-                          ? INDIA_NATIONALITY.Code
-                          : prev.nationality || INDIA_NATIONALITY.Code,
-                        nationalityName: selectedIsInternational
-                          ? INDIA_NATIONALITY.Name
-                          : prev.nationalityName || INDIA_NATIONALITY.Name,
-                      }));
+                {/* CITY SUGGESTIONS */}
+                {citySuggestions.length > 0 && (
+                  <>
+                    <div className="px-3 py-2 text-[10px] uppercase tracking-wider text-(--text-muted) font-semibold">
+                      Cities
+                    </div>
 
-                      setCityInput(selectedCityName);
-                      setCitySuggestions([]);
+                    {citySuggestions.map((city, index) => {
+                      const selectedCityName = getCityName(city);
+                      const selectedCityCode = getCityCode(city);
+                      const selectedCityCountry = getCityCountry(city);
 
-                      if (selectedIsInternational) {
-                        setNationalityInput(INDIA_NATIONALITY.Name);
-                        setNationalitySuggestions([]);
-                      }
-                    }}
-                    className="w-full p-3 rounded-xl hover:bg-(--bg-secondary) cursor-pointer text-sm flex items-center justify-between gap-3 text-left transition"
-                  >
-                    <span>
-                      {selectedCityName}
-                      {selectedCityCountry ? `, ${selectedCityCountry}` : ""}
-                    </span>
+                      const selectedIsInternational =
+                        isInternationalDestination(
+                          selectedCityName,
+                          selectedCityCountry
+                        );
 
-                    <span className="text-xs text-(--text-muted)">
-                      {selectedCityCode}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-          )}
+                      return (
+                        <button
+                          type="button"
+                          key={`city-${selectedCityCode}-${index}`}
+                          onClick={() => {
+                            setFormData((prev) => ({
+                              ...prev,
+
+                              city: selectedCityCode,
+                              cityName: selectedCityName,
+                              cityCountry: selectedCityCountry,
+
+                              // City selected, so no hotel
+                              hotelCode: "",
+                              hotelName: "",
+
+                              nationality: selectedIsInternational
+                                ? INDIA_NATIONALITY.Code
+                                : prev.nationality ||
+                                INDIA_NATIONALITY.Code,
+
+                              nationalityName: selectedIsInternational
+                                ? INDIA_NATIONALITY.Name
+                                : prev.nationalityName ||
+                                INDIA_NATIONALITY.Name,
+                            }));
+
+                            setCityInput(selectedCityName);
+
+                            setCitySuggestions([]);
+                            setHotelSuggestions([]);
+
+                            setDestinationOpen(false);
+
+                            if (selectedIsInternational) {
+                              setNationalityInput(
+                                INDIA_NATIONALITY.Name
+                              );
+
+                              setNationalitySuggestions([]);
+                            }
+                          }}
+                          className="w-full p-3 rounded-xl hover:bg-(--bg-secondary) cursor-pointer text-sm flex items-center justify-between gap-3 text-left transition"
+                        >
+                          <div className="min-w-0">
+                            <div className="flex items-center gap-2">
+                              <span>📍</span>
+
+                              <span className="truncate">
+                                {selectedCityName}
+                              </span>
+                            </div>
+
+                            <p className="text-[11px] text-(--text-muted) mt-1 ml-6">
+                              City
+                            </p>
+                          </div>
+
+                          <span className="text-xs text-(--text-muted) shrink-0">
+                            {selectedCityCode}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </>
+                )}
+
+                {/* DIVIDER */}
+                {citySuggestions.length > 0 &&
+                  (hotelSuggestions.length > 0 ||
+                    hotelSuggestionsLoading) && (
+                    <div className="border-t border-(--border-soft) my-1" />
+                  )}
+
+                {/* HOTEL SUGGESTIONS */}
+                {(hotelSuggestions.length > 0 ||
+                  hotelSuggestionsLoading) && (
+                    <>
+                      <div className="px-3 py-2 text-[10px] uppercase tracking-wider text-(--text-muted) font-semibold">
+                        Hotels
+                      </div>
+
+                      {hotelSuggestionsLoading && (
+                        <div className="px-3 py-3 text-xs text-(--text-muted)">
+                          Searching hotels...
+                        </div>
+                      )}
+
+                      {!hotelSuggestionsLoading &&
+                        hotelSuggestions.map((hotel) => (
+                          <button
+                            type="button"
+                            key={`hotel-${hotel.hotel_code}`}
+                            onClick={() => {
+                              const selectedIsInternational =
+                                hotel.country_code !== "IN";
+
+                              setFormData((prev) => ({
+                                ...prev,
+
+                                // Hotel ka city automatically select
+                                city: hotel.city_code,
+                                cityName: hotel.city_name,
+                                cityCountry:
+                                  hotel.country_name || "",
+
+                                hotelCode: hotel.hotel_code,
+                                hotelName: hotel.hotel_name,
+
+                                nationality: selectedIsInternational
+                                  ? INDIA_NATIONALITY.Code
+                                  : prev.nationality ||
+                                  INDIA_NATIONALITY.Code,
+
+                                nationalityName:
+                                  selectedIsInternational
+                                    ? INDIA_NATIONALITY.Name
+                                    : prev.nationalityName ||
+                                    INDIA_NATIONALITY.Name,
+                              }));
+
+                              // Input me hotel name show hoga
+                              setCityInput(hotel.hotel_name);
+
+                              setCitySuggestions([]);
+                              setHotelSuggestions([]);
+                              setDestinationOpen(false);
+
+                              if (selectedIsInternational) {
+                                setNationalityInput(
+                                  INDIA_NATIONALITY.Name
+                                );
+
+                                setNationalitySuggestions([]);
+                              }
+                            }}
+                            className="w-full p-3 rounded-xl hover:bg-(--bg-secondary) cursor-pointer text-sm text-left transition"
+                          >
+                            <div className="flex items-start gap-2">
+                              <span>🏨</span>
+
+                              <div className="min-w-0 flex-1">
+                                <p className="font-medium truncate">
+                                  {hotel.hotel_name}
+                                </p>
+
+                                <p className="text-[11px] text-(--text-muted) mt-1 truncate">
+                                  {hotel.city_name}
+
+                                  {hotel.country_name
+                                    ? `, ${hotel.country_name}`
+                                    : ""}
+                                </p>
+                              </div>
+
+                              <span className="text-[10px] text-(--gold-main) shrink-0">
+                                Hotel
+                              </span>
+                            </div>
+                          </button>
+                        ))}
+                    </>
+                  )}
+              </div>
+            )}
         </div>
 
         <div className="relative md:col-span-3 w-full" ref={nationalityRef}>
