@@ -3,6 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { privateApi } from "../../../services/api";
 import { useFlightStore } from "../../../store/flightStore";
 
+import { pdf } from "@react-pdf/renderer";
+
+import FlightTicketPDF from "../components/FlightTicketPDF";
+import FlightInvoicePDF from "../components/FlightInvoicePDF";
+
 // ✅ Handles both book response and ticket response
 const normalizeBookingResponse = (res) => {
   return (
@@ -14,14 +19,8 @@ const normalizeBookingResponse = (res) => {
   );
 };
 
-// ✅ Safe localStorage parser
-const safeParse = (key, fallback = null) => {
-  try {
-    return JSON.parse(localStorage.getItem(key)) || fallback;
-  } catch (error) {
-    console.error(`Invalid localStorage data for ${key}`, error);
-    return fallback;
-  }
+const toBool = (value) => {
+  return value === true || String(value).toLowerCase() === "true";
 };
 
 const BookingSuccess = () => {
@@ -30,13 +29,75 @@ const BookingSuccess = () => {
   const storeTraceId = useFlightStore((state) => state.traceId);
 
   const [booking, setBooking] = useState(null);
+  const [pricing, setPricing] = useState(null);
   const [ticketLoading, setTicketLoading] = useState(false);
-  const [releaseLoading, setReleaseLoading] = useState(false);
+  const [ticketPdfLoading, setTicketPdfLoading] = useState(false);
+  const [invoiceLoading, setInvoiceLoading] = useState(false);
   const [storedData, setStoredData] = useState(null);
-  const [isPnrReleased, setIsPnrReleased] = useState(false);
+  const [releaseLoading, setReleaseLoading] = useState(false);
+  const [isReleased, setIsReleased] = useState(false);
+
+
+  /* ================= POPUP ================= */
+
+  const [popup, setPopup] = useState({
+    show: false,
+    title: "",
+    message: "",
+    type: "error",
+    actionLabel: "Okay",
+    onAction: null,
+  });
+
+  const showPopup = ({
+    title,
+    message,
+    type = "error",
+    actionLabel = "Okay",
+    onAction = null,
+  }) => {
+    setPopup({
+      show: true,
+      title,
+      message,
+      type,
+      actionLabel,
+      onAction,
+    });
+  };
+
+  const closePopup = () => {
+    const action = popup.onAction;
+
+    setPopup({
+      show: false,
+      title: "",
+      message: "",
+      type: "error",
+      actionLabel: "Okay",
+      onAction: null,
+    });
+
+    if (typeof action === "function") {
+      action();
+    }
+  };
+
+  // ✅ CANCEL REQUEST
+  const [showCancelModal, setShowCancelModal] = useState(false);
+  const [cancelType, setCancelType] = useState("");
+  const [cancelRemarks, setCancelRemarks] = useState("");
+
+  const [cancelDetails, setCancelDetails] = useState(null);
+
+  const [selectedSectorIndexes, setSelectedSectorIndexes] = useState([]);
+  const [selectedTicketIds, setSelectedTicketIds] = useState([]);
+
+  const [cancelDetailsLoading, setCancelDetailsLoading] = useState(false);
+  const [cancelRequestLoading, setCancelRequestLoading] = useState(false);
 
   useEffect(() => {
-    const stored = safeParse("flightBookingData");
+    const stored = JSON.parse(localStorage.getItem("flightBookingData"));
 
     if (!stored) {
       navigate("/");
@@ -46,12 +107,13 @@ const BookingSuccess = () => {
     console.log("BOOKING 👉", stored);
 
     setStoredData(stored);
+    setIsReleased(stored?.isReleased === true);
 
     const raw = stored.booking || stored;
     const normalized = normalizeBookingResponse(raw);
 
     setBooking(normalized);
-    setIsPnrReleased(Boolean(stored?.pnrReleased));
+    setPricing(stored.pricing || null);
   }, [navigate]);
 
   if (!booking) {
@@ -76,6 +138,22 @@ const BookingSuccess = () => {
       ? [itinerary.Segments]
       : [];
 
+  // ✅ STEP 1 - DOMESTIC / INTERNATIONAL CHECK
+  const getCountryCode = (point) =>
+    point?.CountryCode ||
+    point?.Airport?.CountryCode ||
+    point?.Airport?.Country?.CountryCode ||
+    "";
+
+  const isInternational = segments.some((seg) => {
+    const originCountry = getCountryCode(seg?.Origin);
+    const destinationCountry = getCountryCode(seg?.Destination);
+
+    if (!originCountry || !destinationCountry) return false;
+
+    return originCountry !== destinationCountry;
+  });
+
   const bookingId =
     itinerary?.BookingId ||
     booking?.BookingId ||
@@ -84,7 +162,12 @@ const BookingSuccess = () => {
 
   const pnr = itinerary?.PNR || booking?.PNR || booking?.Response?.PNR || "N/A";
 
-  const stored = safeParse("flightBookingData", {});
+  const stored = JSON.parse(localStorage.getItem("flightBookingData") || "{}");
+
+  const source =
+    stored?.source ??
+    storedData?.source ??
+    null;
 
   const traceId =
     itinerary?.TraceId ||
@@ -118,13 +201,12 @@ const BookingSuccess = () => {
 
   const hasTicket = passengers.some((p) => p?.Ticket?.TicketNumber);
 
-  const status = isPnrReleased
-    ? "PNR Released"
-    : hasTicket
-      ? "Ticketed"
-      : itinerary?.Status === 5
-        ? "Confirmed"
-        : "Pending";
+  // ✅ All passengers must have their own ticket
+  const allPassengersTicketed =
+    passengers.length > 0 &&
+    passengers.every(
+      (p) => p?.Ticket?.TicketNumber,
+    );
 
   const isNonLcc =
     storedData?.isLcc === false ||
@@ -136,20 +218,81 @@ const BookingSuccess = () => {
     itinerary?.IsLCC === false ||
     booking?.IsLCC === false;
 
-  const canGenerateTicket =
+
+  const isLcc =
+    toBool(storedData?.isLcc) ||
+    toBool(storedData?.isLCC) ||
+    toBool(stored?.isLcc) ||
+    toBool(stored?.isLCC) ||
+    toBool(
+      storedData?.fareQuote?.Response?.Results?.IsLCC,
+    ) ||
+    toBool(
+      storedData?.fareQuote?.Response?.Results?.[0]?.IsLCC,
+    ) ||
+    toBool(itinerary?.IsLCC) ||
+    toBool(booking?.IsLCC);
+
+  // Non-LCC booking created but ticket not issued yet
+  const isOnHold =
     isNonLcc &&
     !hasTicket &&
-    !isPnrReleased &&
-    bookingId !== "N/A" &&
-    pnr !== "N/A";
+    !isReleased;
 
-  const canReleasePnr = !hasTicket && !isPnrReleased && bookingId !== "N/A";
-
+  const status = isReleased
+    ? "PNR Released"
+    : hasTicket
+      ? "Ticketed"
+      : isOnHold
+        ? "On Hold"
+        : itinerary?.Status === 5
+          ? "Confirmed"
+          : "Pending";
+  const canGenerateTicket = isOnHold && bookingId !== "N/A" && pnr !== "N/A";
   const formatDateTime = (date) => {
     if (!date) return "";
     if (String(date).includes("T")) return date;
     return `${date}T00:00:00`;
   };
+
+  const formatDisplayDateTime = (value) => {
+    if (!value) return "N/A";
+
+    const date = new Date(value);
+
+    if (Number.isNaN(date.getTime())) {
+      return "N/A";
+    }
+
+    return date.toLocaleString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    });
+  };
+
+
+  // ================= CANCEL REQUEST DATA =================
+
+  const cancelPassengers = Array.isArray(cancelDetails?.Passenger)
+    ? cancelDetails.Passenger
+    : cancelDetails?.Passenger
+      ? [cancelDetails.Passenger]
+      : [];
+
+  const cancelSegments = Array.isArray(cancelDetails?.Segments)
+    ? cancelDetails.Segments
+    : cancelDetails?.Segments
+      ? [cancelDetails.Segments]
+      : [];
+
+  const getCancelTicketId = (passenger) =>
+    passenger?.Ticket?.TicketId ||
+    passenger?.TicketId ||
+    null;
 
   const handleGenerateTicket = async () => {
     try {
@@ -162,139 +305,483 @@ const BookingSuccess = () => {
           storeTraceId,
         });
 
-        alert(
-          "TraceId missing. Please book again or save TraceId in flightBookingData.",
-        );
+        showPopup({
+          title: "Booking Session Missing",
+          message:
+            "TraceId is missing. We cannot safely generate this ticket. Please contact support or create the booking again.",
+          type: "error",
+        });
+
         return;
       }
 
       if (!bookingId || bookingId === "N/A") {
-        alert("Booking ID missing");
+        showPopup({
+          title: "Booking ID Missing",
+          message:
+            "Booking ID is not available for this flight.",
+          type: "error",
+        });
+
         return;
       }
 
       if (!pnr || pnr === "N/A") {
-        alert("PNR missing");
+        showPopup({
+          title: "PNR Missing",
+          message:
+            "PNR is not available for this booking.",
+          type: "error",
+        });
+
         return;
       }
 
       setTicketLoading(true);
 
-      const latestStored = safeParse("flightBookingData", {});
+      const latestStored = JSON.parse(
+        localStorage.getItem("flightBookingData") || "{}",
+      );
 
+
+      const { data: bookingDetailsResponse } = await privateApi.post(
+        "/api/airlines/booking-details/",
+        {
+          PNR: pnr,
+          BookingId: Number(bookingId),
+        },
+      );
+
+      const latestItinerary =
+        bookingDetailsResponse?.data?.Response?.FlightItinerary ||
+        bookingDetailsResponse?.Response?.FlightItinerary ||
+        null;
+
+      const freshFlightFare = Number(
+        pricingData?.flightFare ||
+        latestItinerary?.Fare?.PublishedFare ||
+        latestItinerary?.Fare?.OfferedFare ||
+        0
+      );
+
+      const freshSeatPrice = Number(
+        pricingData?.seatPrice || 0
+      );
+
+      const freshMealPrice = Number(
+        pricingData?.mealPrice || 0
+      );
+
+      const freshBaggagePrice = Number(
+        pricingData?.baggagePrice || 0
+      );
+
+      const calculatedPaymentAmount =
+        freshFlightFare +
+        freshSeatPrice +
+        freshMealPrice +
+        freshBaggagePrice;
+
+      const freshPaymentAmount = Number(
+        pricingData?.totalPrice ||
+        calculatedPaymentAmount ||
+        0
+      );
+
+      const ticketPassengers = Array.isArray(latestItinerary?.Passenger)
+        ? latestItinerary.Passenger
+        : latestItinerary?.Passenger
+          ? [latestItinerary.Passenger]
+          : [];
+
+      console.log("TICKET PASSENGERS 👉", ticketPassengers);
+      if (!ticketPassengers.length) {
+        showPopup({
+          title: "Passenger Details Missing",
+          message:
+            "Passenger details could not be fetched from the booking. Please try again.",
+          type: "error",
+        });
+
+        return;
+      }
       const savedPassengers =
-        latestStored?.passengers ||
         latestStored?.passengerDetails ||
-        safeParse("passengers", []) ||
-        safeParse("passengerDetails", []);
+        latestStored?.passengers ||
+        JSON.parse(localStorage.getItem("passengerDetails") || "[]") ||
+        JSON.parse(localStorage.getItem("passengers") || "[]");
 
-      const passportPayload = passengers.map((apiPassenger, index) => {
-        const savedPassenger = savedPassengers?.[index] || {};
+      const documentRequirements =
+        latestStored?.documentRequirements ||
+        storedData?.documentRequirements ||
+        {};
 
-        return {
-          PaxId: apiPassenger?.PaxId,
-          PassportNo:
-            apiPassenger?.PassportNo ||
-            savedPassenger?.PassportNo ||
-            savedPassenger?.passportNo ||
-            "",
-          PassportExpiry: formatDateTime(
-            apiPassenger?.PassportExpiry ||
+      const isPanRequiredAtTicket = toBool(
+        documentRequirements?.isPanRequiredAtTicket,
+      );
+
+      const isPassportRequiredAtTicket = toBool(
+        documentRequirements?.isPassportRequiredAtTicket,
+      );
+
+      console.log("TICKET DOCUMENT REQUIREMENTS 👉", {
+        isPanRequiredAtTicket,
+        isPassportRequiredAtTicket,
+      });
+
+      let passportPayload = [];
+
+      if (isPassportRequiredAtTicket) {
+        passportPayload = ticketPassengers.map((apiPassenger, index) => {
+          const savedPassenger = savedPassengers?.[index] || {};
+
+          return {
+            PaxId: apiPassenger?.PaxId,
+
+            PassportNo:
+              apiPassenger?.PassportNo ||
+              savedPassenger?.PassportNo ||
+              savedPassenger?.passport ||
+              savedPassenger?.passportNo ||
+              "",
+
+            PassportExpiry: formatDateTime(
+              apiPassenger?.PassportExpiry ||
               savedPassenger?.PassportExpiry ||
               savedPassenger?.passportExpiry,
-          ),
-          DateOfBirth: formatDateTime(
-            apiPassenger?.DateOfBirth ||
+            ),
+
+            DateOfBirth: formatDateTime(
+              apiPassenger?.DateOfBirth ||
               savedPassenger?.DateOfBirth ||
               savedPassenger?.dob ||
               savedPassenger?.dateOfBirth,
-          ),
-        };
-      });
+            ),
+          };
+        });
 
-      const missingPassport = passportPayload.some(
-        (p) => !p.PaxId || !p.PassportNo || !p.PassportExpiry || !p.DateOfBirth,
-      );
+        const missingPassport = passportPayload.some(
+          (p) =>
+            !p.PaxId || !p.PassportNo || !p.PassportExpiry || !p.DateOfBirth,
+        );
 
-      if (missingPassport) {
-        console.log("PASSPORT PAYLOAD ERROR 👉", passportPayload);
-        alert("Passport details missing for one or more passengers");
-        return;
+        if (missingPassport) {
+          console.log(
+            "PASSPORT PAYLOAD ERROR 👉",
+            passportPayload,
+          );
+
+          showPopup({
+            title: "Passport Details Required",
+            message:
+              "Valid passport details are missing for one or more passengers.",
+            type: "warning",
+          });
+
+          return;
+        }
+      }
+
+
+      let panPayload = [];
+
+      if (isPanRequiredAtTicket) {
+        panPayload = ticketPassengers.map((apiPassenger, index) => {
+          const savedPassenger = savedPassengers?.[index] || {};
+
+          const panNumber = String(
+            savedPassenger?.pan ||
+            savedPassenger?.PAN ||
+            "",
+          )
+            .trim()
+            .toUpperCase();
+
+          return {
+            PaxId: apiPassenger?.PaxId,
+            PAN: panNumber,
+          };
+        });
+
+        const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]$/;
+
+        const invalidPan = panPayload.some(
+          (item) =>
+            !item.PaxId ||
+            !panRegex.test(item.PAN),
+        );
+
+        if (invalidPan) {
+          console.log(
+            "PAN PAYLOAD ERROR 👉",
+            panPayload,
+          );
+
+          showPopup({
+            title: "PAN Details Required",
+            message:
+              "Valid PAN details are missing for one or more passengers.",
+            type: "warning",
+          });
+
+          return;
+        }
       }
 
       const ticketPayload = {
         TraceId: traceId,
         PNR: pnr,
         BookingId: Number(bookingId),
+
         Passport: passportPayload,
+        PAN: panPayload,
+
+        IsPanRequiredAtTicket: isPanRequiredAtTicket,
+        IsPassportRequiredAtTicket: isPassportRequiredAtTicket,
+
         IsPriceChangeAccepted: true,
       };
 
-      console.log("NON-LCC TICKET PAYLOAD 👉", ticketPayload);
-
-      const { data } = await privateApi.post(
-        "/api/airlines/ticket/",
+      console.log(
+        "NON-LCC TICKET PAYLOAD 👉",
         ticketPayload,
       );
 
-      console.log("NON-LCC TICKET RESPONSE 👉", data);
+      /* ========================================
+         GET LEAD PASSENGER PAYMENT DETAILS
+      ======================================== */
 
-      const updatedStored = {
-        ...latestStored,
-        booking: data,
-        pricing: latestStored?.pricing,
-        traceId:
-          data?.data?.Response?.TraceId || data?.Response?.TraceId || traceId,
-        TraceId:
-          data?.data?.Response?.TraceId || data?.Response?.TraceId || traceId,
-        isLcc: false,
-        pnrReleased: false,
-      };
+      const leadApiPassenger =
+        ticketPassengers?.[0] || {};
 
-      localStorage.setItem("flightBookingData", JSON.stringify(updatedStored));
+      const leadSavedPassenger =
+        savedPassengers?.[0] || {};
 
-      const normalized = normalizeBookingResponse(data);
+      const paymentFirstName = String(
+        leadApiPassenger?.FirstName ||
+        leadSavedPassenger?.FirstName ||
+        leadSavedPassenger?.firstName ||
+        "",
+      ).trim();
 
-      setBooking(normalized);
-      setStoredData(updatedStored);
-      setIsPnrReleased(false);
+      const paymentEmail = String(
+        leadApiPassenger?.Email ||
+        leadSavedPassenger?.Email ||
+        leadSavedPassenger?.email ||
+        "",
+      ).trim();
 
-      alert("Ticket generated successfully");
-    } catch (error) {
-      console.error("NON-LCC TICKET ERROR 👉", error);
+      const paymentPhone = String(
+        leadApiPassenger?.ContactNo ||
+        leadApiPassenger?.ContactNumber ||
+        leadSavedPassenger?.ContactNo ||
+        leadSavedPassenger?.phone ||
+        "",
+      ).trim();
 
-      alert(
-        error?.response?.data?.message ||
-          error?.response?.data?.Error?.ErrorMessage ||
-          error?.response?.data?.Response?.Error?.ErrorMessage ||
-          error?.message ||
-          "Ticket generation failed",
-      );
-    } finally {
-      setTicketLoading(false);
-    }
-  };
+      /* ========================================
+         VALIDATE PAYMENT DETAILS
+      ======================================== */
 
-  const handleReleasePNR = async () => {
-    try {
-      if (!bookingId || bookingId === "N/A") {
-        alert("Booking ID missing");
+      if (
+        !paymentFirstName ||
+        !paymentEmail ||
+        !paymentPhone
+      ) {
+        showPopup({
+          title: "Contact Details Missing",
+          message:
+            "Lead passenger name, email or mobile number is missing. Payment cannot be started safely.",
+          type: "error",
+        });
+
         return;
       }
 
-      const confirmRelease = window.confirm(
-        "Are you sure you want to release this PNR?",
+      if (!freshPaymentAmount || freshPaymentAmount <= 0) {
+        showPopup({
+          title: "Payment Amount Missing",
+          message:
+            "The payable flight amount is not available. Please contact support before generating the ticket.",
+          type: "error",
+        });
+
+        return;
+      }
+
+      /* ========================================
+         SAVE DATA BEFORE PAYU
+      ======================================== */
+
+      localStorage.setItem(
+        "pendingFlightPayment",
+        JSON.stringify({
+          paymentAction:
+            "non_lcc_hold_ticket",
+
+          ticketPayload,
+
+          successRedirect:
+            "/booking-success",
+
+          source:
+            "booking_success",
+
+          origin:
+            "booking_success",
+
+          flightBookingData: {
+            ...latestStored,
+
+            isLcc: false,
+
+            traceId,
+            TraceId: traceId,
+
+            pricing: {
+              ...(latestStored?.pricing || pricingData || {}),
+
+              flightFare: freshFlightFare,
+              seatPrice: freshSeatPrice,
+              mealPrice: freshMealPrice,
+              baggagePrice: freshBaggagePrice,
+
+              totalPrice: freshPaymentAmount,
+            },
+          },
+
+          paymentAmount: freshPaymentAmount,
+
+          bookingId:
+            Number(bookingId),
+
+          pnr,
+        }),
       );
 
-      if (!confirmRelease) return;
+      /* ========================================
+         REDIRECT TO PAYU
+      ======================================== */
 
+      const form =
+        document.createElement("form");
+
+      form.method = "POST";
+
+      form.action = `${import.meta.env.VITE_API_BASE_URL
+        }/payment/airline/initiate/`;
+
+
+
+
+      const paymentData = {
+        amount: freshPaymentAmount,
+        firstname: paymentFirstName,
+        email: paymentEmail,
+        phone: paymentPhone,
+
+        payment_action: "non_lcc_hold_ticket",
+        booking_id: Number(bookingId),
+        pnr,
+        trace_id: traceId,
+
+        // ✅ SAVE EXACT PRICE BREAKDOWN
+        flight_fare: freshFlightFare,
+        seat_amount: freshSeatPrice,
+        meal_amount: freshMealPrice,
+        baggage_amount: freshBaggagePrice,
+
+        frontend_url: window.location.origin,
+      };
+
+      Object.entries(
+        paymentData,
+      ).forEach(([key, value]) => {
+        const input =
+          document.createElement("input");
+
+        input.type = "hidden";
+        input.name = key;
+        input.value = value ?? "";
+
+        form.appendChild(input);
+      });
+
+      document.body.appendChild(form);
+
+      form.submit();
+
+      return;
+    } catch (error) {
+      console.error("TICKET FULL ERROR 👉", error);
+
+      console.log(
+        "TICKET STATUS 👉",
+        error?.response?.status,
+      );
+
+      console.log(
+        "TICKET RESPONSE FULL 👉\n",
+        JSON.stringify(error?.response?.data, null, 2)
+      );
+      console.log(
+        "TBO RAW DATA 👉\n",
+        JSON.stringify(error?.response?.data?.data, null, 2)
+      );
+
+      showPopup({
+        title: "Unable To Continue",
+        message:
+          error?.response?.data?.message ||
+          error?.message ||
+          "Unable to prepare ticket payment. Please try again.",
+        type: "error",
+      });
+    } finally {
+      setTicketLoading(false);
+    }
+
+  }; // ✅ handleGenerateTicket yahan close hoga
+
+
+  const handleReleasePnr = async () => {
+    if (!isNonLcc) {
+      alert("Release PNR is available only for Full Service flights.");
+      return;
+    }
+
+    if (hasTicket) {
+      alert("Ticket has already been generated.");
+      return;
+    }
+
+    if (isReleased) {
+      alert("PNR is already released.");
+      return;
+    }
+
+    if (!bookingId || bookingId === "N/A") {
+      alert("Booking ID missing.");
+      return;
+    }
+
+    if (source === null || source === undefined || source === "") {
+      console.log("SOURCE DEBUG 👉", {
+        source,
+        stored,
+        storedData,
+      });
+
+      alert("Source missing. Unable to release PNR.");
+      return;
+    }
+
+    try {
       setReleaseLoading(true);
 
       const payload = {
         BookingId: Number(bookingId),
-        Source: Number(
-          itinerary?.Source || booking?.Source || stored?.Source || 4,
-        ),
+        Source: Number(source),
       };
 
       console.log("RELEASE PNR PAYLOAD 👉", payload);
@@ -306,236 +793,963 @@ const BookingSuccess = () => {
 
       console.log("RELEASE PNR RESPONSE 👉", data);
 
-      const responseStatus =
-        data?.data?.Response?.ResponseStatus || data?.Response?.ResponseStatus;
-
-      const errorCode =
-        data?.data?.Response?.Error?.ErrorCode ??
-        data?.Response?.Error?.ErrorCode;
-
-      const errorMessage =
-        data?.data?.Response?.Error?.ErrorMessage ||
-        data?.Response?.Error?.ErrorMessage;
-
-      const isSuccess =
-        data?.success === true &&
-        Number(responseStatus) === 1 &&
-        Number(errorCode) === 0;
-
-      if (!isSuccess) {
-        alert(data?.message || errorMessage || "PNR release failed");
-        return;
+      if (!data?.success) {
+        throw new Error(
+          data?.message || "Unable to release PNR",
+        );
       }
 
-      const latestStored = safeParse("flightBookingData", {});
+      const latestStored = JSON.parse(
+        localStorage.getItem("flightBookingData") || "{}",
+      );
 
       const updatedStored = {
         ...latestStored,
-        pnrReleased: true,
-        releasePnrResponse: data,
+        isReleased: true,
+        releaseResponse: data,
       };
 
-      localStorage.setItem("flightBookingData", JSON.stringify(updatedStored));
+      localStorage.setItem(
+        "flightBookingData",
+        JSON.stringify(updatedStored),
+      );
 
       setStoredData(updatedStored);
-      setIsPnrReleased(true);
+      setIsReleased(true);
 
-      alert(data?.message || "PNR Released Successfully");
+      alert("Your PNR has been released successfully.");
     } catch (error) {
       console.error("RELEASE PNR ERROR 👉", error);
 
       alert(
         error?.response?.data?.message ||
-          error?.response?.data?.data?.Response?.Error?.ErrorMessage ||
-          error?.response?.data?.Response?.Error?.ErrorMessage ||
-          error?.message ||
-          "PNR release failed",
+        error?.response?.data?.error ||
+        error?.message ||
+        "Unable to release PNR",
       );
     } finally {
       setReleaseLoading(false);
     }
   };
 
+
+  const handleOpenCancelRequest = async () => {
+    if (!hasTicket) {
+      alert("Ticket is not generated yet.");
+      return;
+    }
+
+    if (!allPassengersTicketed) {
+      alert("Ticket is not generated for all passengers.");
+      return;
+    }
+
+    if (isReleased) {
+      alert("Released PNR cannot be cancelled.");
+      return;
+    }
+
+    if (!bookingId || bookingId === "N/A") {
+      alert("Booking ID missing.");
+      return;
+    }
+
+    if (!pnr || pnr === "N/A") {
+      alert("PNR missing.");
+      return;
+    }
+
+    // Reset old modal data
+    setCancelType("");
+    setCancelRemarks("");
+    setSelectedSectorIndexes([]);
+    setSelectedTicketIds([]);
+    setCancelDetails(null);
+
+    setShowCancelModal(true);
+
+    try {
+      setCancelDetailsLoading(true);
+
+      const { data } = await privateApi.post(
+        "/api/airlines/booking-details/",
+        {
+          PNR: pnr,
+          BookingId: Number(bookingId),
+        },
+      );
+
+      console.log("CANCEL BOOKING DETAILS 👉", data);
+
+      const itinerary =
+        data?.data?.Response?.FlightItinerary ||
+        data?.Response?.FlightItinerary ||
+        null;
+
+      if (!itinerary) {
+        throw new Error("Booking details not available.");
+      }
+
+      setCancelDetails(itinerary);
+    } catch (error) {
+      console.error("CANCEL DETAILS ERROR 👉", error);
+
+      alert(
+        error?.response?.data?.message ||
+        error?.message ||
+        "Unable to fetch booking details",
+      );
+
+      setShowCancelModal(false);
+    } finally {
+      setCancelDetailsLoading(false);
+    }
+  };
+
+
+  const handleSendCancelRequest = async () => {
+    if (!cancelType) {
+      alert("Please select cancellation type.");
+      return;
+    }
+
+    if (!cancelRemarks.trim()) {
+      alert("Please enter remarks.");
+      return;
+    }
+
+    // Partial cancellation validation
+    if (cancelType === "partial") {
+      if (selectedSectorIndexes.length === 0) {
+        alert("Please select at least one sector.");
+        return;
+      }
+
+      if (selectedTicketIds.length === 0) {
+        alert("Please select at least one passenger.");
+        return;
+      }
+    }
+
+    const confirmed = window.confirm(
+      "Are you sure you want to send cancel request?",
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    try {
+      setCancelRequestLoading(true);
+
+      const payload = {
+        BookingId: Number(bookingId),
+
+        // Full = 1, Partial = 2
+        RequestType: cancelType === "full" ? 1 : 2,
+
+        CancellationType: 3,
+
+        Remarks: cancelRemarks.trim(),
+      };
+
+      // ✅ Only Partial Cancellation
+      if (cancelType === "partial") {
+        payload.Sectors = selectedSectorIndexes.map((index) => {
+          const segment = cancelSegments[index];
+
+          return {
+            Origin:
+              segment?.Origin?.Airport?.AirportCode || "",
+
+            Destination:
+              segment?.Destination?.Airport?.AirportCode || "",
+          };
+        });
+
+        payload.TicketId = selectedTicketIds.map(Number);
+      }
+
+      console.log("CANCEL REQUEST PAYLOAD 👉", payload);
+
+      const { data } = await privateApi.post(
+        "/api/airlines/sendrequest/",
+        payload,
+      );
+
+      console.log("CANCEL REQUEST RESPONSE 👉", data);
+
+      if (!data?.success) {
+        throw new Error(
+          data?.message || "Cancellation request failed",
+        );
+      }
+
+      const changeRequestId =
+        data?.change_request_id ||
+        data?.change_request_ids?.[0] ||
+        "N/A";
+
+      alert(
+        `Cancellation request sent successfully.\n\n` +
+        `Change Request ID: ${changeRequestId}\n\n` +
+        `Please note this Change Request ID. You can use it to track your cancellation status.`,
+      );
+
+      setShowCancelModal(false);
+
+      // User OK karega tabhi home redirect hoga
+      navigate("/");
+    } catch (error) {
+      console.error("CANCEL REQUEST ERROR 👉", error);
+
+      alert(
+        error?.response?.data?.message ||
+        error?.response?.data?.error ||
+        error?.message ||
+        "Unable to send cancellation request",
+      );
+    } finally {
+      setCancelRequestLoading(false);
+    }
+  };
+
+  const handleDownloadTicket = async () => {
+    if (!hasTicket) {
+      alert("Please generate the ticket first.");
+      return;
+    }
+
+    try {
+      setTicketPdfLoading(true);
+
+      const bookingData = JSON.parse(
+        localStorage.getItem("bookingData") || "{}",
+      );
+
+      const blob = await pdf(
+        <FlightTicketPDF
+          booking={booking}
+          pricing={pricingData}
+          bookingData={bookingData}
+        />,
+      ).toBlob();
+
+      const url = URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+
+      link.href = url;
+      link.download = `Ticket_${pnr}_${bookingId}.pdf`;
+
+      document.body.appendChild(link);
+
+      link.click();
+
+      document.body.removeChild(link);
+
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("TICKET PDF ERROR 👉", error);
+
+      alert("Unable to generate ticket PDF");
+    } finally {
+      setTicketPdfLoading(false);
+    }
+  };
+
+  const handlePrintInvoice = async () => {
+    if (!hasTicket) {
+      alert("Please generate the ticket first.");
+      return;
+    }
+
+    try {
+      setInvoiceLoading(true);
+
+      const bookingData = JSON.parse(
+        localStorage.getItem("bookingData") || "{}",
+      );
+
+      const blob = await pdf(
+        <FlightInvoicePDF
+          booking={booking}
+          pricing={pricingData}
+          bookingData={bookingData}
+        />,
+      ).toBlob();
+
+      const url = URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+
+      link.href = url;
+      link.download = `Invoice_${pnr}_${bookingId}.pdf`;
+
+      document.body.appendChild(link);
+      link.click();
+
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("INVOICE PDF ERROR 👉", error);
+      alert("Unable to generate invoice PDF");
+    } finally {
+      setInvoiceLoading(false);
+    }
+  };
+
   return (
-    <div className="bg-gray-100 min-h-screen py-20 px-3 md:px-6">
-      <div className="max-w-5xl mx-auto space-y-6">
-        {/* HEADER */}
-        <div className="bg-gradient-to-r from-green-500 to-emerald-600 text-white p-6 rounded-2xl shadow-lg flex flex-col md:flex-row justify-between">
-          <div>
-            <h2 className="text-2xl md:text-3xl font-bold">
-              🎉 Booking Confirmed
-            </h2>
+    <>
+      <div className="bg-gray-100 min-h-screen pt-16 pb-10  px-2 sm:px-3 md:py-20 md:px-6 print:hidden">
+        <div className="max-w-5xl mx-auto space-y-3 md:space-y-6">
+          {/* HEADER */}
+          <div className="bg-linear-to-r from-green-500 to-emerald-600 text-white p-4 md:p-6 rounded-xl md:rounded-2xl shadow-lg flex flex-col md:flex-row justify-between gap-3">
+            <div>
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-bold">
+                {isReleased
+                  ? "PNR Released"
+                  : isOnHold
+                    ? "⏸ Booking Hold"
+                    : "🎉 Booking Confirmed"}
+              </h2>
 
-            <p className="text-sm mt-1 opacity-90">
-              {isPnrReleased
-                ? "PNR has been released successfully."
-                : hasTicket
-                  ? "Your e-ticket is ready ✈"
-                  : "Booking created. Generate ticket now."}
-            </p>
-
-            <div className="mt-3 text-sm space-y-1 break-all">
-              <p>PNR: {pnr}</p>
-              <p>Booking ID: {bookingId}</p>
-              <p>TraceId: {traceId || "N/A"}</p>
-              <p>
-                Status: <span className="font-semibold">{status}</span>
+              <p className="text-sm mt-1 opacity-90">
+                {isReleased
+                  ? "Your PNR has been released successfully."
+                  : hasTicket
+                    ? "Your e-ticket is ready ✈"
+                    : isOnHold
+                      ? "Your booking is on hold. Generate the ticket."
+                      : "Your booking has been created successfully."}
               </p>
-            </div>
-          </div>
 
-          <div className="mt-4 md:mt-0 bg-white text-black px-6 py-3 rounded-xl font-semibold shadow-md h-fit">
-            ₹ {totalFare}
-          </div>
-        </div>
-
-        {/* FLIGHTS */}
-        {segments.map((seg, i) => (
-          <div key={i} className="bg-white rounded-2xl shadow-md p-5 border">
-            <div className="flex justify-between mb-4">
-              <div>
-                <h3 className="font-semibold text-lg">
-                  {seg?.Airline?.AirlineName}
-                </h3>
-                <p className="text-sm text-gray-500">
-                  {seg?.Airline?.AirlineCode}-{seg?.Airline?.FlightNumber}
-                </p>
-              </div>
-
-              <span className="text-xs bg-blue-50 px-3 py-1 rounded-full h-fit">
-                {seg?.StopPoint ? "Connecting" : "Non-stop"}
-              </span>
-            </div>
-
-            <div className="flex justify-between items-center text-center">
-              <div>
-                <p className="text-xl font-bold">
-                  {seg?.Origin?.Airport?.AirportCode}
-                </p>
-                <p className="text-xs text-gray-500">
-                  {seg?.Origin?.DepTime
-                    ? new Date(seg.Origin.DepTime).toLocaleString()
-                    : "N/A"}
-                </p>
-              </div>
-
-              <div>✈</div>
-
-              <div>
-                <p className="text-xl font-bold">
-                  {seg?.Destination?.Airport?.AirportCode}
-                </p>
-                <p className="text-xs text-gray-500">
-                  {seg?.Destination?.ArrTime
-                    ? new Date(seg.Destination.ArrTime).toLocaleString()
-                    : "N/A"}
+              <div className="mt-2 text-xs sm:text-sm space-y-0.5 break-all">
+                <p>PNR: {pnr}</p>
+                <p>Booking ID: {bookingId}</p>
+                <p>TraceId: {traceId || "N/A"}</p>
+                <p>
+                  Status: <span className="font-semibold">{status}</span>
                 </p>
               </div>
             </div>
+
+            <div className="mt-1 md:mt-0 bg-white text-black px-4 py-2.5 rounded-lg md:rounded-xl text-sm md:text-base font-semibold shadow-md h-fit">
+              ₹ {totalFare}
+            </div>
           </div>
-        ))}
 
-        {/* PASSENGERS */}
-        <div className="bg-white rounded-2xl shadow-md p-5 border">
-          <h3 className="font-semibold text-lg mb-4">Passengers</h3>
+          {/* FLIGHTS */}
+          {segments.map((seg, i) => (
+            <div key={i} className="bg-white rounded-xl md:rounded-2xl shadow-sm md:shadow-md p-3.5 md:p-5 border">
+              <div className="flex justify-between mb-4">
+                <div>
+                  <h3 className="font-semibold text-lg">
+                    {seg?.Airline?.AirlineName}
+                  </h3>
+                  <p className="text-sm text-gray-500">
+                    {seg?.Airline?.AirlineCode}-{seg?.Airline?.FlightNumber}
+                  </p>
+                </div>
 
-          {passengers.map((p, i) => (
-            <div key={i} className="border-b py-3 text-sm space-y-1">
-              <p className="font-medium">
-                {p?.Title} {p?.FirstName} {p?.LastName}
-              </p>
+                <span className="text-xs bg-blue-50 px-3 py-1 rounded-full h-fit">
+                  {seg?.StopPoint ? "Connecting" : "Non-stop"}
+                </span>
+              </div>
 
-              <p className="text-gray-500">
-                Ticket: {p?.Ticket?.TicketNumber || "N/A"}
-              </p>
+              <div className="flex justify-between items-center text-center">
+                <div>
+                  <p className="text-xl font-bold">
+                    {seg?.Origin?.Airport?.AirportCode}
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    {formatDisplayDateTime(seg?.Origin?.DepTime)}
+                  </p>
+                </div>
 
-              <p className="text-gray-500">
-                Ticket Status: {p?.Ticket?.Status || "N/A"}
-              </p>
+                <div>✈</div>
 
-              <p className="text-gray-500">
-                Issue Date:{" "}
-                {p?.Ticket?.IssueDate
-                  ? new Date(p.Ticket.IssueDate).toLocaleString()
-                  : "N/A"}
-              </p>
-
-              <p className="text-gray-500">
-                Type:{" "}
-                {p?.PaxType === 1
-                  ? "Adult"
-                  : p?.PaxType === 2
-                    ? "Child"
-                    : "Infant"}
-              </p>
+                <div>
+                  <p className="text-xl font-bold">
+                    {seg?.Destination?.Airport?.AirportCode}
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    {formatDisplayDateTime(seg?.Destination?.ArrTime)}
+                  </p>
+                </div>
+              </div>
             </div>
           ))}
-        </div>
 
-        {/* FARE DETAILS */}
-        <div className="bg-white rounded-2xl shadow-md p-5 border mb-24">
-          <h3 className="font-semibold text-lg mb-4">Fare Details</h3>
+          {/* PASSENGERS */}
+          <div className="bg-white rounded-xl md:rounded-2xl shadow-sm md:shadow-md p-3.5 md:p-5 border">
+            <h3 className="font-semibold text-lg mb-4">Passengers</h3>
 
-          <Row label="Flight Fare" value={flightFare} />
-          {seatPrice > 0 && <Row label="Seat" value={seatPrice} />}
-          {mealPrice > 0 && <Row label="Meal" value={mealPrice} />}
-          {baggagePrice > 0 && <Row label="Baggage" value={baggagePrice} />}
-          {convenienceFee > 0 && (
-            <Row label="Convenience Fee" value={convenienceFee} />
-          )}
+            {passengers.map((p, i) => (
+              <div key={i} className="border-b py-2 text-xs sm:text-sm space-y-0.5">
+                <p className="font-medium">
+                  {p?.Title} {p?.FirstName} {p?.LastName}
+                </p>
 
-          <div className="border-t mt-3 pt-3 flex justify-between font-bold">
-            <span>Total Paid</span>
-            <span>₹ {totalFare}</span>
+                <p className="text-gray-500">
+                  Ticket: {p?.Ticket?.TicketNumber || "N/A"}
+                </p>
+
+                <p className="text-gray-500">
+                  Ticket Status: {p?.Ticket?.Status || "N/A"}
+                </p>
+
+                <p className="text-gray-500">
+                  Issue Date:{" "}
+                  {formatDisplayDateTime(p?.Ticket?.IssueDate)}
+                </p>
+
+                <p className="text-gray-500">
+                  Type:{" "}
+                  {p?.PaxType === 1
+                    ? "Adult"
+                    : p?.PaxType === 2
+                      ? "Child"
+                      : "Infant"}
+                </p>
+              </div>
+            ))}
           </div>
-        </div>
 
-        {/* ACTIONS */}
-        <div className="fixed bottom-0 left-0 w-full bg-white border-t p-4">
-          <div className="max-w-5xl mx-auto flex flex-col sm:flex-row gap-3">
-            <button
-              onClick={() => {
-                if (!bookingId || bookingId === "N/A") {
-                  alert("Booking ID missing!");
-                  return;
-                }
-                navigate(`/flight-booking-details/${bookingId}`);
-              }}
-              className="flex-1 bg-gray-200 py-3 rounded-xl"
-            >
-              View Full Booking
-            </button>
+          {/* FARE DETAILS */}
+          <div className="bg-white rounded-xl md:rounded-2xl shadow-sm md:shadow-md p-3.5 md:p-5 border">
+            <h3 className="font-semibold text-lg mb-4">Fare Details</h3>
 
-            {canGenerateTicket && (
-              <button
-                onClick={handleGenerateTicket}
-                disabled={ticketLoading || releaseLoading}
-                className="flex-1 bg-emerald-600 text-white py-3 rounded-xl disabled:opacity-60"
-              >
-                {ticketLoading ? "Generating..." : "Generate Ticket"}
-              </button>
+            <Row label="Flight Fare" value={flightFare} />
+            {seatPrice > 0 && <Row label="Seat" value={seatPrice} />}
+            {mealPrice > 0 && <Row label="Meal" value={mealPrice} />}
+            {baggagePrice > 0 && <Row label="Baggage" value={baggagePrice} />}
+            {convenienceFee > 0 && (
+              <Row label="Convenience Fee" value={convenienceFee} />
             )}
 
-            {canReleasePnr && (
-              <button
-                onClick={handleReleasePNR}
-                disabled={releaseLoading || ticketLoading}
-                className="flex-1 bg-red-600 text-white py-3 rounded-xl disabled:opacity-60"
-              >
-                {releaseLoading ? "Releasing..." : "Release PNR"}
-              </button>
-            )}
+            <div className="border-t mt-3 pt-3 flex justify-between font-bold">
+              <span>Total Paid</span>
+              <span>₹ {totalFare}</span>
+            </div>
+          </div>
 
-            <button
-              onClick={() => window.print()}
-              className="flex-1 bg-blue-600 text-white py-3 rounded-xl"
+          {/* ACTIONS */}
+          {/* ACTIONS */}
+          <div className="fixed bottom-0 left-0 z-40 w-full bg-white/95 backdrop-blur border-t p-2 sm:p-3">
+            <div
+              className={`max-w-5xl mx-auto grid gap-1.5 sm:gap-2 ${hasTicket
+                ? "grid-cols-4"
+                : canGenerateTicket && isNonLcc && !isReleased
+                  ? "grid-cols-3"
+                  : "grid-cols-1"
+                }`}
             >
-              Print Ticket
-            </button>
+              {/* VIEW FULL BOOKING */}
+              <button
+                onClick={() => {
+                  if (!bookingId || bookingId === "N/A") {
+                    alert("Booking ID missing!");
+                    return;
+                  }
+
+                  navigate(`/flight-booking-details/${bookingId}`);
+                }}
+                className="min-w-0 h-12 bg-gray-200 px-1 rounded-lg text-[10px] sm:text-sm font-semibold leading-tight"
+              >
+                <>
+                  <span className="sm:hidden">Booking</span>
+                  <span className="hidden sm:inline">
+                    View Full Booking
+                  </span>
+                </>
+              </button>
+
+              {/* ==============================
+        BEFORE TICKET / ON HOLD
+    ============================== */}
+              {!hasTicket && (
+                <>
+                  {canGenerateTicket && (
+                    <button
+                      onClick={handleGenerateTicket}
+                      disabled={ticketLoading}
+                      className="flex-1 min-w-0 bg-emerald-600 text-white px-1 py-3 rounded-xl text-[10px] sm:text-sm font-medium leading-tight disabled:opacity-60"
+                    >
+                      {ticketLoading ? "Generating..." : "Generate Ticket"}
+                    </button>
+                  )}
+
+                  {isNonLcc && !isReleased && (
+                    <button
+                      onClick={handleReleasePnr}
+                      disabled={releaseLoading}
+                      className="flex-1 min-w-0 bg-red-600 text-white px-1 py-3 rounded-xl text-[10px] sm:text-sm font-medium leading-tight disabled:opacity-60"
+                    >
+                      {releaseLoading ? "Releasing..." : "Release PNR"}
+                    </button>
+                  )}
+                </>
+              )}
+
+              {/* ==============================
+        AFTER TICKET GENERATED
+    ============================== */}
+              {hasTicket && (
+                <>
+                  <button
+                    onClick={handleDownloadTicket}
+                    disabled={ticketPdfLoading}
+                    className="min-w-0 h-12 bg-blue-600 text-white px-1 rounded-lg text-[10px] sm:text-sm font-semibold leading-tight disabled:opacity-60"
+                  >
+                    {ticketPdfLoading ? (
+                      "..."
+                    ) : (
+                      <>
+                        <span className="sm:hidden">
+                          Ticket
+                        </span>
+
+                        <span className="hidden sm:inline">
+                          Print Ticket
+                        </span>
+                      </>
+                    )}
+                  </button>
+
+                  <button
+                    onClick={handlePrintInvoice}
+                    disabled={invoiceLoading}
+                    className="min-w-0 h-12 bg-amber-500 text-black px-1 rounded-lg text-[10px] sm:text-sm font-semibold leading-tight disabled:opacity-60"
+                  >
+                    {invoiceLoading ? (
+                      "..."
+                    ) : (
+                      <>
+                        <span className="sm:hidden">
+                          Invoice
+                        </span>
+
+                        <span className="hidden sm:inline">
+                          Print Invoice
+                        </span>
+                      </>
+                    )}
+                  </button>
+
+                  {/* FLIGHT AMENDMENT - ONLY FOR LCC */}
+
+                  {false && isLcc && (
+                    <button
+                      type="button"
+                      onClick={() =>
+                        navigate(
+                          `/flight-amendment/${bookingId}`,
+                          {
+                            state: {
+                              pnr,
+                            },
+                          },
+                        )
+                      }
+                      className="flex-1 bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-xl"
+                    >
+                      Flight Amendment
+                    </button>
+                  )}
+
+                  {allPassengersTicketed && !isReleased && (
+                    <button
+                      onClick={handleOpenCancelRequest}
+                      className="min-w-0 h-12 bg-red-600 text-white px-1 rounded-lg text-[10px] sm:text-sm font-semibold leading-tight"
+                    >
+                      <>
+                        <span className="sm:hidden">
+                          Cancel
+                        </span>
+
+                        <span className="hidden sm:inline">
+                          Cancel Request
+                        </span>
+                      </>
+                    </button>
+                  )}
+                </>
+              )}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+
+      {/* PRINT TICKET ONLY */}
+
+
+      {showCancelModal && (
+        <div className="fixed inset-0 z-[100] bg-black/60 flex items-center justify-center p-4">
+          <div className="bg-white text-black w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-xl shadow-2xl">
+
+            {/* HEADER */}
+            <div className="flex items-center justify-between px-5 py-4 border-b">
+              <h3 className="font-semibold text-lg">
+                Request (PNR: {pnr})
+              </h3>
+
+              <button
+                type="button"
+                onClick={() => setShowCancelModal(false)}
+                className="text-xl"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="p-5 space-y-5">
+
+              {cancelDetailsLoading ? (
+                <div className="py-10 text-center">
+                  Loading booking details...
+                </div>
+              ) : (
+                <>
+                  {/* ==========================
+                CANCELLATION TYPE
+            ========================== */}
+
+                  <div>
+                    <label className="block text-sm font-semibold mb-2">
+                      Cancellation Type
+                    </label>
+
+                    <select
+                      value={cancelType}
+                      onChange={(e) => {
+                        setCancelType(e.target.value);
+
+                        // clear previous partial selection
+                        setSelectedSectorIndexes([]);
+                        setSelectedTicketIds([]);
+                      }}
+                      className="w-full border rounded-lg px-3 py-3"
+                    >
+                      <option value="">
+                        -Select-
+                      </option>
+
+                      <option value="full">
+                        Refund with Airline Penalty / Void
+                      </option>
+
+                      <option value="partial">
+                        Partial Cancellation
+                      </option>
+                    </select>
+                  </div>
+
+                  {/* ==========================
+                PARTIAL ONLY
+            ========================== */}
+
+                  {cancelType === "partial" && (
+                    <>
+                      {/* SECTORS */}
+
+                      <div className="border-t pt-4">
+                        <p className="font-semibold text-sm mb-3">
+                          Please select Refund Sectors
+                        </p>
+
+                        {/* ALL SECTORS */}
+
+                        <label className="flex items-center gap-2 mb-2">
+                          <input
+                            type="checkbox"
+                            checked={
+                              cancelSegments.length > 0 &&
+                              selectedSectorIndexes.length ===
+                              cancelSegments.length
+                            }
+                            onChange={(e) => {
+                              if (e.target.checked) {
+                                setSelectedSectorIndexes(
+                                  cancelSegments.map(
+                                    (_, index) => index,
+                                  ),
+                                );
+                              } else {
+                                setSelectedSectorIndexes([]);
+                              }
+                            }}
+                          />
+
+                          All
+                        </label>
+
+                        {cancelSegments.map((segment, index) => {
+                          const origin =
+                            segment?.Origin?.Airport?.AirportCode ||
+                            "--";
+
+                          const destination =
+                            segment?.Destination?.Airport
+                              ?.AirportCode || "--";
+
+                          return (
+                            <label
+                              key={index}
+                              className="flex items-center gap-2 mb-2"
+                            >
+                              <input
+                                type="checkbox"
+                                checked={selectedSectorIndexes.includes(
+                                  index,
+                                )}
+                                onChange={() => {
+                                  setSelectedSectorIndexes(
+                                    (previous) =>
+                                      previous.includes(index)
+                                        ? previous.filter(
+                                          (item) =>
+                                            item !== index,
+                                        )
+                                        : [
+                                          ...previous,
+                                          index,
+                                        ],
+                                  );
+                                }}
+                              />
+
+                              {origin}-{destination}
+                            </label>
+                          );
+                        })}
+                      </div>
+
+                      {/* PASSENGERS */}
+
+                      <div className="border-t pt-4">
+                        <p className="font-semibold text-sm mb-3">
+                          Please select Passenger
+                        </p>
+
+                        {/* ALL PASSENGERS */}
+
+                        <label className="flex items-center gap-2 mb-2">
+                          <input
+                            type="checkbox"
+                            checked={
+                              cancelPassengers.length > 0 &&
+                              selectedTicketIds.length ===
+                              cancelPassengers.filter(
+                                (p) => getCancelTicketId(p),
+                              ).length
+                            }
+                            onChange={(e) => {
+                              if (e.target.checked) {
+                                const allIds =
+                                  cancelPassengers
+                                    .map(getCancelTicketId)
+                                    .filter(Boolean);
+
+                                setSelectedTicketIds(allIds);
+                              } else {
+                                setSelectedTicketIds([]);
+                              }
+                            }}
+                          />
+
+                          All
+                        </label>
+
+                        {cancelPassengers.map(
+                          (passenger, index) => {
+                            const ticketId =
+                              getCancelTicketId(passenger);
+
+                            const passengerName =
+                              `${passenger?.Title || ""} ${passenger?.FirstName || ""
+                                } ${passenger?.LastName || ""
+                                }`
+                                .replace(/\s+/g, " ")
+                                .trim();
+
+                            return (
+                              <label
+                                key={
+                                  ticketId ||
+                                  passenger?.PaxId ||
+                                  index
+                                }
+                                className="flex items-center gap-2 mb-2"
+                              >
+                                <input
+                                  type="checkbox"
+                                  disabled={!ticketId}
+                                  checked={
+                                    ticketId
+                                      ? selectedTicketIds.includes(
+                                        ticketId,
+                                      )
+                                      : false
+                                  }
+                                  onChange={() => {
+                                    if (!ticketId) return;
+
+                                    setSelectedTicketIds(
+                                      (previous) =>
+                                        previous.includes(
+                                          ticketId,
+                                        )
+                                          ? previous.filter(
+                                            (id) =>
+                                              id !==
+                                              ticketId,
+                                          )
+                                          : [
+                                            ...previous,
+                                            ticketId,
+                                          ],
+                                    );
+                                  }}
+                                />
+
+                                {index + 1}.{" "}
+                                {passengerName ||
+                                  "Passenger"}
+
+                                {ticketId && (
+                                  <span className="text-xs text-gray-500">
+                                    (Ticket ID: {ticketId})
+                                  </span>
+                                )}
+                              </label>
+                            );
+                          },
+                        )}
+                      </div>
+                    </>
+                  )}
+
+                  {/* ==========================
+                REMARKS
+            ========================== */}
+
+                  <div className="border-t pt-4">
+                    <label className="block text-sm font-semibold mb-2">
+                      Please enter remarks
+                      <span className="text-red-600">
+                        {" "}
+                        *
+                      </span>
+                    </label>
+
+                    <textarea
+                      value={cancelRemarks}
+                      onChange={(e) =>
+                        setCancelRemarks(e.target.value)
+                      }
+                      rows={4}
+                      className="w-full border rounded-lg p-3"
+                      placeholder="Enter cancellation remarks"
+                    />
+                  </div>
+
+                  {/* NOTE */}
+
+                  <div className="text-xs text-gray-600 border-t pt-4">
+                    <p className="font-semibold mb-1">
+                      Note:
+                    </p>
+
+                    <p>
+                      1. Partial refund will be processed
+                      offline.
+                    </p>
+
+                    <p>
+                      2. Cancellation charges are subject
+                      to airline rules.
+                    </p>
+                  </div>
+
+                  {/* BUTTONS */}
+
+                  <div className="flex justify-end gap-3 border-t pt-4">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setShowCancelModal(false)
+                      }
+                      disabled={cancelRequestLoading}
+                      className="px-5 py-2 rounded-lg bg-gray-300"
+                    >
+                      Cancel
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={handleSendCancelRequest}
+                      disabled={cancelRequestLoading}
+                      className="px-5 py-2 rounded-lg bg-blue-600 text-white disabled:opacity-60"
+                    >
+                      {cancelRequestLoading
+                        ? "Sending..."
+                        : "Send Request"}
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+
+
+      {/* ================= PREMIUM POPUP ================= */}
+
+      {popup.show && (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 px-4 backdrop-blur-sm">
+          <div className="w-full max-w-md overflow-hidden rounded-3xl border border-white/10 bg-[#11141B] text-white shadow-2xl">
+            <div className="p-7 text-center">
+
+              <div
+                className={`mx-auto flex h-16 w-16 items-center justify-center rounded-full text-3xl ${popup.type === "warning"
+                  ? "bg-amber-400/10 text-amber-300"
+                  : popup.type === "success"
+                    ? "bg-green-400/10 text-green-300"
+                    : "bg-red-400/10 text-red-300"
+                  }`}
+              >
+                {popup.type === "warning"
+                  ? "!"
+                  : popup.type === "success"
+                    ? "✓"
+                    : "×"}
+              </div>
+
+              <h3 className="mt-5 text-xl font-bold">
+                {popup.title}
+              </h3>
+
+              <p className="mt-3 text-sm leading-6 text-gray-400">
+                {popup.message}
+              </p>
+
+              <button
+                type="button"
+                onClick={closePopup}
+                className="mt-7 w-full rounded-xl bg-linear-to-r from-yellow-400 to-orange-400 px-5 py-3 font-bold text-black transition hover:scale-[1.01]"
+              >
+                {popup.actionLabel}
+              </button>
+
+            </div>
+          </div>
+        </div>
+      )}
+
+    </>
   );
 };
 

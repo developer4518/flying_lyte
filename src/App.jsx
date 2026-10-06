@@ -12,6 +12,8 @@ import PassengerDetails from "./modules/flights/pages/PassengerDetails";
 import ReviewBooking from "./modules/flights/pages/ReviewBooking";
 import BookingSuccess from "./modules/flights/pages/BookingSuccess";
 import BookingDetails from "./modules/flights/pages/FlightBookingDetails";
+import FlightAmendment from "./modules/flights/pages/FlightAmendment";
+import FlightPaymentSuccess from "./modules/flights/pages/FlightPaymentSuccess";
 import TermsConditions from "./Pages/TermsConditions";
 import PrivacyPolicy from "./Pages/PrivacyPolicy";
 import RefundPolicy from "./Pages/RefundPolicy";
@@ -107,12 +109,20 @@ const App = () => {
         <Route path="/fare-rule" element={<FareRule />} />
         <Route path="/fare-quote" element={<FareQuote />} />
         <Route path="/ssr" element={<SSRPage />} />
+        <Route
+          path="/flight-amendment/:bookingId"
+          element={<FlightAmendment />}
+        />
         <Route path="/passenger-details" element={<PassengerDetails />} />
         <Route path="/review-booking" element={<ReviewBooking />} />
         <Route path="/booking-success" element={<BookingSuccess />} />
         <Route
           path="/flight-booking-details/:id"
           element={<FlightBookingDetails />}
+        />
+        <Route
+          path="/flight-payment-success"
+          element={<FlightPaymentSuccess />}
         />
 
         {/* <Route path="/hotels" element={<HotelPage />} /> */}

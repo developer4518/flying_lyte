@@ -1,104 +1,117 @@
 import axios from "axios";
 import { useAuthStore } from "../store/authStore";
 
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 export const publicApi = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
+  baseURL: BASE_URL,
 });
 
 export const privateApi = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
+  baseURL: BASE_URL,
 });
 
-// Attach access token to every request
-// privateApi.interceptors.request.use(
-//   (config) => {
-//     const token = useAuthStore.getState().token;
+const getAccessToken = () => {
+  const storeToken = useAuthStore.getState()?.token;
+  const localToken = localStorage.getItem("token");
 
-//     console.log("Authorization token:", token);
+  return storeToken || localToken || null;
+};
 
-//     if (token) {
-//       config.headers = config.headers || {};
-//       config.headers.Authorization = `Bearer ${token}`;
-//     }
+const getRefreshToken = () => {
+  const storeRefreshToken = useAuthStore.getState()?.refreshToken;
+  const localRefreshToken = localStorage.getItem("refreshToken");
 
-//     return config;
-//   },
-//   (error) => Promise.reject(error)
-// );
+  return storeRefreshToken || localRefreshToken || null;
+};
 
-// Handle expired access tokens (optional refresh flow)
+const extractAccessToken = (data) => {
+  return (
+    data?.data?.access ||
+    data?.access ||
+    data?.data?.tokens?.access ||
+    data?.tokens?.access ||
+    null
+  );
+};
+
+privateApi.interceptors.request.use(
+  (config) => {
+    const token = getAccessToken();
+
+    console.log("Authorization token:", token ? "FOUND" : "NULL");
+
+    if (token) {
+      config.headers = config.headers || {};
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+
+    return config;
+  },
+  (error) => Promise.reject(error),
+);
+
 privateApi.interceptors.response.use(
   (response) => response,
-
   async (error) => {
     const originalRequest = error.config;
 
-    if (
-      error.response?.status === 401 &&
-      originalRequest &&
-      !originalRequest._retry
-    ) {
-      const { refreshToken, setToken, logout } = useAuthStore.getState();
-
-      /*
-       * User logged in hi nahi hai.
-       *
-       * Refresh API call mat karo.
-       * Original 401 PreBookLoader ko return karo.
-       */
-      if (!refreshToken) {
-        logout();
-
-        return Promise.reject(error);
-      }
-
-      originalRequest._retry = true;
-
-      try {
-        const res = await publicApi.post(
-          "/api/auth/token/refresh/",
-          {
-            refresh: refreshToken,
-          },
-        );
-
-        const newAccessToken =
-          res.data?.data?.access ||
-          res.data?.access;
-
-        if (!newAccessToken) {
-          throw new Error("New access token missing");
-        }
-
-        setToken(newAccessToken);
-
-        originalRequest.headers =
-          originalRequest.headers || {};
-
-        originalRequest.headers.Authorization =
-          `Bearer ${newAccessToken}`;
-
-        return privateApi(originalRequest);
-      } catch (refreshError) {
-        console.log(
-          "TOKEN REFRESH FAILED:",
-          refreshError?.response?.data || refreshError,
-        );
-
-        logout();
-
-        /*
-         * IMPORTANT:
-         * refresh ka 400 return nahi karna.
-         * Original 401 return karo.
-         *
-         * Isse PreBookLoader identify karega
-         * ki login required hai.
-         */
-        return Promise.reject(error);
-      }
+    if (error.response?.status !== 401 || originalRequest?._retry) {
+      return Promise.reject(error);
     }
 
-    return Promise.reject(error);
+    originalRequest._retry = true;
+
+    const { setToken, logout } = useAuthStore.getState();
+    const refreshToken = getRefreshToken();
+
+    if (!refreshToken) {
+      logout?.();
+
+      return Promise.reject({
+        ...error,
+        response: {
+          ...error.response,
+          status: 401,
+          data: {
+            success: false,
+            message: "Please login again to continue booking.",
+          },
+        },
+      });
+    }
+
+    try {
+      const res = await publicApi.post("/api/auth/token/refresh/", {
+        refresh: refreshToken,
+      });
+
+      const newAccessToken = extractAccessToken(res.data);
+
+      if (!newAccessToken) {
+        throw new Error("Refresh response does not contain access token");
+      }
+
+      setToken(newAccessToken);
+
+      originalRequest.headers = originalRequest.headers || {};
+      originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+
+      return privateApi(originalRequest);
+    } catch (refreshError) {
+      logout?.();
+
+      return Promise.reject({
+        ...refreshError,
+        response: {
+          ...refreshError.response,
+          status: 401,
+          data: {
+            success: false,
+            message: "Session expired. Please login again.",
+          },
+        },
+      });
+    }
   },
 );

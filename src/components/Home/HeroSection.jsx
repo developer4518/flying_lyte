@@ -11,7 +11,7 @@ const HeroSection = () => {
           src="/images/HeroImage.jpg"
           alt="Travel Background"
           className="w-full h-full object-cover"
-        />
+         loading="lazy" />
         <div className="absolute inset-0 bg-black/60"></div>
       </div>
 
