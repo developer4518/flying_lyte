@@ -1035,27 +1035,31 @@ const HotelDetails = () => {
             }}
           >
             {images.map((img, index) => (
-              <img
+              <div
                 key={`${img}-${index}`}
-                src={img}
-                alt={`${hotelName} ${index + 1}`}
-                loading={index === 0 ? "eager" : "lazy"}
+                className="relative w-full h-full shrink-0 flex items-center justify-center bg-[#0B0B0F] overflow-hidden cursor-pointer"
                 onClick={() => {
                   if (wasImageSwiped.current) {
                     wasImageSwiped.current = false;
                     return;
                   }
-
                   setSelectedImage(img);
                 }}
-                className="
-            w-full
-            h-full
-            shrink-0
-            object-cover
-            cursor-pointer
-          "
-              />
+              >
+                {/* Background blurred fill */}
+                <div 
+                  className="absolute inset-0 bg-cover bg-center blur-2xl opacity-40 scale-110"
+                  style={{ backgroundImage: `url(${img})` }}
+                />
+                
+                {/* Foreground properly contained image */}
+                <img
+                  src={img}
+                  alt={`${hotelName} ${index + 1}`}
+                  loading={index === 0 ? "eager" : "lazy"}
+                  className="relative z-10 w-full h-full object-contain"
+                />
+              </div>
             ))}
           </div>
 
