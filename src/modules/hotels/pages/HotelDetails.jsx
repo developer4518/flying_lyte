@@ -3,7 +3,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useHotelStore } from "../../../store/hotelStore";
-import { Grid, X } from "lucide-react";
 
 const INDIA_CITY_KEYWORDS = [
   "delhi",
@@ -1023,61 +1022,17 @@ const HotelDetails = () => {
 
   return (
     <div className="min-h-screen bg-[#0B0B0F] text-white px-4 md:px-10 py-16 md:py-24">
-            <div className="relative mb-8 md:mb-12">
-        {/* DESKTOP BENTO GRID */}
-        {images.length > 0 ? (
-          <div className="hidden md:grid grid-cols-4 grid-rows-2 gap-2 h-[400px] lg:h-[550px] rounded-3xl overflow-hidden">
-            {/* Main Hero Image */}
-            <div 
-              className={`relative group cursor-pointer overflow-hidden ${images.length >= 5 ? 'col-span-2 row-span-2' : 'col-span-4 row-span-2'}`}
-              onClick={() => setSelectedImage(images[0])}
-            >
-              <img 
-                src={images[0]} 
-                alt={hotelName} 
-                className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-700 ease-out" 
-                loading="eager"
-              />
-              <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition duration-500" />
-            </div>
-
-            {/* 4 Smaller Images (Only if we have at least 5 images) */}
-            {images.length >= 5 && images.slice(1, 5).map((img, idx) => (
-              <div 
-                key={idx} 
-                className="relative group cursor-pointer overflow-hidden"
-                onClick={() => setSelectedImage(img)}
-              >
-                <img 
-                  src={img} 
-                  alt={`${hotelName} ${idx + 2}`} 
-                  className="w-full h-full object-cover group-hover:scale-[1.05] transition-transform duration-700 ease-out" 
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition duration-500" />
-                
-                {/* View all photos overlay on the last image */}
-                {idx === 3 && images.length > 5 && (
-                  <div className="absolute inset-0 bg-black/50 flex items-center justify-center hover:bg-black/40 transition duration-300">
-                    <span className="text-white text-sm font-medium flex items-center gap-2">
-                      <Grid size={16} /> View all {images.length} photos
-                    </span>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        ) : null}
-
-        {/* MOBILE CAROUSEL */}
-        <div className="md:hidden relative w-full h-64 sm:h-80 rounded-2xl overflow-hidden bg-[#15151C]">
+      <div className="relative group mb-6 overflow-hidden rounded-2xl bg-[#15151C]">
+        <div
+          className="relative w-full h-64 sm:h-80 md:h-[460px] lg:h-[520px] overflow-hidden"
+          onTouchStart={handleImageTouchStart}
+          onTouchEnd={handleImageTouchEnd}
+        >
           <div
-            className="flex h-full transition-transform duration-500 ease-out"
+            className="flex h-full transition-transform duration-500 ease-in-out"
             style={{
               transform: `translateX(-${currentImageIndex * 100}%)`,
             }}
-            onTouchStart={handleImageTouchStart}
-            onTouchEnd={handleImageTouchEnd}
           >
             {images.map((img, index) => (
               <img
@@ -1085,85 +1040,157 @@ const HotelDetails = () => {
                 src={img}
                 alt={`${hotelName} ${index + 1}`}
                 loading={index === 0 ? "eager" : "lazy"}
-                onClick={() => setSelectedImage(img)}
-                className="w-full h-full shrink-0 object-cover cursor-pointer"
+                onClick={() => {
+                  if (wasImageSwiped.current) {
+                    wasImageSwiped.current = false;
+                    return;
+                  }
+
+                  setSelectedImage(img);
+                }}
+                className="
+            w-full
+            h-full
+            shrink-0
+            object-cover
+            cursor-pointer
+          "
               />
             ))}
           </div>
-          
-          {/* Mobile simple counter */}
+
+          {/* LEFT / RIGHT ARROWS */}
+
           {images.length > 1 && (
-            <div className="absolute bottom-3 right-3 z-20 rounded-full bg-black/60 backdrop-blur-md px-3 py-1 text-[10px] font-medium tracking-widest text-white border border-white/10">
+            <>
+              <button
+                type="button"
+                aria-label="Previous hotel image"
+                onClick={showPreviousImage}
+                className="
+            absolute
+            left-3
+            top-1/2
+            -translate-y-1/2
+            z-20
+            w-10 h-10
+            md:w-11 md:h-11
+            rounded-full
+            bg-black/60
+            backdrop-blur
+            border border-white/20
+            text-white
+            text-2xl
+            flex items-center justify-center
+            hover:bg-yellow-400
+            hover:text-black
+            transition
+          "
+              >
+                ‹
+              </button>
+
+              <button
+                type="button"
+                aria-label="Next hotel image"
+                onClick={showNextImage}
+                className="
+            absolute
+            right-3
+            top-1/2
+            -translate-y-1/2
+            z-20
+            w-10 h-10
+            md:w-11 md:h-11
+            rounded-full
+            bg-black/60
+            backdrop-blur
+            border border-white/20
+            text-white
+            text-2xl
+            flex items-center justify-center
+            hover:bg-yellow-400
+            hover:text-black
+            transition
+          "
+              >
+                ›
+              </button>
+            </>
+          )}
+
+          {/* IMAGE COUNTER */}
+
+          {images.length > 1 && (
+            <div className="
+        absolute
+        top-3
+        right-3
+        z-20
+        rounded-full
+        bg-black/60
+        backdrop-blur
+        border border-white/10
+        px-3 py-1
+        text-xs
+        text-white
+      ">
               {currentImageIndex + 1} / {images.length}
+            </div>
+          )}
+
+          {/* DOTS */}
+
+          {images.length > 1 && (
+            <div className="
+        absolute
+        bottom-4
+        left-1/2
+        -translate-x-1/2
+        z-20
+       hidden
+sm:flex
+        items-center
+        gap-2
+        rounded-full
+        bg-black/50
+        backdrop-blur
+        px-3 py-2
+      ">
+              {images.map((_, index) => (
+                <button
+                  key={index}
+                  type="button"
+                  aria-label={`Show image ${index + 1}`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setCurrentImageIndex(index);
+                  }}
+                  className={`rounded-full transition-all ${currentImageIndex === index
+                    ? "w-6 h-2 bg-yellow-400"
+                    : "w-2 h-2 bg-white/60 hover:bg-white"
+                    }`}
+                />
+              ))}
             </div>
           )}
         </div>
       </div>
 
-            {selectedImage && (
-        <div className="fixed inset-0 z-50 flex flex-col bg-black/95 backdrop-blur-2xl">
-          <div className="flex justify-between items-center p-4 md:p-6">
-            <div className="text-white/60 text-sm tracking-widest uppercase">
-              {images.findIndex(img => img === selectedImage) + 1} / {images.length}
-            </div>
-            <button
-              type="button"
-              onClick={() => setSelectedImage(null)}
-              className="p-3 bg-white/5 rounded-full text-white/70 hover:bg-white/10 hover:text-white transition-all"
-              aria-label="Close image view"
-            >
-              <X size={20} />
-            </button>
-          </div>
-          
-          <div className="relative flex-1 flex items-center justify-center p-4 md:p-12">
-            <img
-              src={selectedImage}
-              alt="Hotel View"
-              className="max-w-full max-h-full object-contain rounded-xl shadow-2xl"
-            />
-            
-            {images.length > 1 && (
-              <>
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    const idx = images.findIndex(img => img === selectedImage);
-                    const prev = idx === 0 ? images.length - 1 : idx - 1;
-                    setSelectedImage(images[prev]);
-                  }}
-                  className="absolute left-4 md:left-10 p-4 rounded-full bg-black/40 text-white/70 hover:bg-black/80 hover:text-white transition backdrop-blur-md border border-white/10"
-                >
-                  ‹
-                </button>
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    const idx = images.findIndex(img => img === selectedImage);
-                    const next = (idx + 1) % images.length;
-                    setSelectedImage(images[next]);
-                  }}
-                  className="absolute right-4 md:right-10 p-4 rounded-full bg-black/40 text-white/70 hover:bg-black/80 hover:text-white transition backdrop-blur-md border border-white/10"
-                >
-                  ›
-                </button>
-              </>
-            )}
-          </div>
-          
-          {/* Thumbnail Strip */}
-          <div className="hidden md:flex gap-2 p-6 overflow-x-auto justify-center max-h-32">
-            {images.map((img, idx) => (
-              <img 
-                key={idx}
-                src={img}
-                onClick={() => setSelectedImage(img)}
-                className={`h-16 w-24 object-cover rounded-lg cursor-pointer transition-all duration-300 ${selectedImage === img ? 'ring-2 ring-[var(--gold-main)] opacity-100' : 'opacity-40 hover:opacity-100'}`}
-              />
-            ))}
-          </div>
+      {selectedImage && (
+        <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50 px-4">
+          <button
+            onClick={() => setSelectedImage(null)}
+            className="absolute top-5 right-5 text-white text-xl bg-white/10 hover:bg-white/20 w-10 h-10 rounded-full"
+          >
+            ✕
+          </button>
+
+          <img
+            src={selectedImage}
+            alt="Selected hotel"
+            className="max-h-[90%] max-w-[90%] rounded-xl"
+            loading="lazy" />
         </div>
       )}
 
@@ -1871,4 +1898,3 @@ const HotelDetails = () => {
 };
 
 export default HotelDetails;
-
