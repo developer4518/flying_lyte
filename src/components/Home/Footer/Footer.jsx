@@ -8,7 +8,7 @@ import {
   MapPin,
 } from "lucide-react";
 import { footerLinks } from "./footerLinks";
-import logo from "../../../../public/images/flying_logo.png";
+
 import { Link, useNavigate } from "react-router-dom";
 
 const Footer = () => {
