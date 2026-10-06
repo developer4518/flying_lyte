@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Tabs from "./Tabs";
 import HotelsForm from "./HotelsForm";
+import FlightsForm from "./FlightsForm";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Plane, Hotel, Sparkles, ArrowRight } from "lucide-react";
 
@@ -184,13 +185,13 @@ const SearchBox = () => {
   const renderForm = () => {
     switch (activeTab) {
       case "flights":
-        return <ComingSoonCard type="flights" />;
+        return <FlightsForm />;
 
       case "hotels":
         return <HotelsForm />;
 
       default:
-        return <ComingSoonCard type="flights" />;
+        return <FlightsForm />;
     }
   };
 
