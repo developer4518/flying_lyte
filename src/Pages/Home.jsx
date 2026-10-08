@@ -1,5 +1,5 @@
 import React from "react";
-import Navbar from "../components/Home/Navbar";
+
 import HeroSection from "../components/Home/HeroSection";
 //import PopularDestinations from "../components/Destination/PopularDestination";
 import WhyChooseUs from "./WhyChooseUs";
@@ -12,7 +12,7 @@ import BlogSection from "../components/Home/BlogSection";
 const Home = () => {
   return (
     <div className="bg-(--bg-main)">
-      <Navbar />
+      
       {/* <PopularDestinations /> */}
       <HeroSection />
       <PackageSection limit={4} />
