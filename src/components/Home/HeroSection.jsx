@@ -4,7 +4,7 @@ const HeroSection = () => {
   return (
     <section className="relative flex min-h-screen min-h-[100dvh] w-full flex-col overflow-visible bg-[#0B0F14] text-white">
       {/* HERO BACKGROUND */}
-      <div className="absolute left-0 right-0 top-0 h-[520px] overflow-hidden bg-[#0B0F14] sm:h-[620px] md:inset-0 md:h-auto">
+      <div className="absolute left-0 right-0 top-0 h-[520px] overflow-hidden bg-[#0B0F14] sm:h-[620px] md:h-[100dvh]">
         <img
           src="/images/rome-journey-background.png"
           alt="FlyingLyte travel background"

@@ -18,9 +18,9 @@ const Tabs = ({ activeTab, setActiveTab }) => {
             key={tab.id}
             type="button"
             onClick={() => setActiveTab(tab.id)}
-            className="group relative flex min-w-0 items-center justify-center gap-1 px-0.5 pb-2 text-[11px] font-semibold transition-all duration-300 sm:justify-start sm:gap-2 sm:px-2 sm:pb-3 sm:text-sm md:text-base"
+            className="group relative flex min-w-0 items-center justify-center gap-1 px-0.5 pb-2 text-[11px] font-medium transition-all duration-300 sm:justify-start sm:gap-2 sm:px-2 sm:pb-3 sm:text-sm md:text-base"
             style={{
-              fontFamily: "var(--font-heading)",
+              fontFamily: "var(--font-body)",
               color: isActive ? "#E6B35C" : "var(--text-muted)",
             }}
           >

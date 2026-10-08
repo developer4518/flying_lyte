@@ -828,7 +828,7 @@ const HotelsForm = () => {
   };
 
   return (
-    <div className="relative overflow-visible rounded-2xl border border-white/10 bg-[#07111c]/10 p-2.5 shadow-2xl backdrop-blur-none space-y-3 sm:p-3 md:p-4">
+    <div className="relative flex min-h-[210px] flex-col justify-center overflow-visible rounded-2xl border border-white/10 bg-[#07111c]/10 p-3 shadow-2xl backdrop-blur-none space-y-3 sm:min-h-[220px] sm:p-4 md:min-h-[235px] md:p-5">
       {errorMsg && (
         <div className="text-red-400 text-sm bg-red-900/20 border border-red-800 px-4 py-3 rounded-2xl text-center">
           {errorMsg}
