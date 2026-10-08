@@ -2,7 +2,7 @@ import SearchBox from "../../modules/Search/SearchBox";
 
 const HeroSection = () => {
   return (
-    <section cclassName="relative flex min-h-[100svh] w-full flex-col overflow-visible bg-[#0B0F14] text-white">
+    <section className="relative flex min-h-screen min-h-[100dvh] w-full flex-col overflow-visible bg-[#0B0F14] text-white">
       {/* HERO BACKGROUND */}
       <div className="absolute left-0 right-0 top-0 h-[520px] overflow-hidden bg-[#0B0F14] sm:h-[620px] md:inset-0 md:h-auto">
         <img
@@ -21,7 +21,7 @@ const HeroSection = () => {
       </div>
 
       {/* HERO CONTENT */}
-      <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col items-center px-2 pb-3 pt-[88px] text-center sm:px-4 sm:pt-24 md:px-6 md:pb-4 md:pt-24 lg:px-8">
+      <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col items-center px-2 pb-3 pt-[88px] text-center sm:px-4 sm:pt-24 md:px-6 md:pb-4 md:pt-24 lg:px-8 ">
         {/* HEADING */}
         <div className="mx-auto mb-2 max-w-3xl sm:mb-3 md:mb-4">
           <h1 className="text-[30px] font-semibold leading-[0.95] tracking-tight sm:text-4xl md:text-5xl lg:text-5xl">
