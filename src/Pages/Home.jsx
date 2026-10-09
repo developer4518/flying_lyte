@@ -13,16 +13,25 @@ import AboutUs from "../components/Home/AboutUs";
 import PackageSection from "../modules/packages/PackageSection";
 import BlogSection from "../components/Home/BlogSection";
 
+let popupCheckedForThisPageLoad = false;
+
 const Home = () => {
   const [showTripPopup, setShowTripPopup] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowTripPopup(true);
-    }, 2000);
+  const navigationEntry = performance.getEntriesByType("navigation")[0];
+  const isPageRefresh = navigationEntry?.type === "reload";
 
-    return () => clearTimeout(timer);
-  }, []);
+  if (!isPageRefresh || popupCheckedForThisPageLoad) return;
+
+  popupCheckedForThisPageLoad = true;
+
+  const timer = setTimeout(() => {
+    setShowTripPopup(true);
+  }, 2000);
+
+  return () => clearTimeout(timer);
+}, []);
 
   return (
     <div className="bg-(--bg-main)">
