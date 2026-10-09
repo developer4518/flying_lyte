@@ -194,7 +194,7 @@ const SearchBox = () => {
   const renderForm = () => {
     switch (activeTab) {
       case "flights":
-        return <ComingSoonCard />;
+        return <FlightsForm />;
 
       case "hotels":
         return <HotelsForm />;
@@ -203,7 +203,7 @@ const SearchBox = () => {
         return renderPackageSearchCard();
 
       default:
-        return <ComingSoonCard />;
+        return <FlightsForm />;
     }
   };
 
