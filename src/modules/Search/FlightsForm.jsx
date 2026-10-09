@@ -461,7 +461,7 @@ const FlightsForm = () => {
 
 
 
-      navigate("/flights");
+      navigate("/flights/results");
 
     } catch (err) {
 

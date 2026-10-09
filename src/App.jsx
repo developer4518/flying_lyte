@@ -3,6 +3,8 @@ import Register from "./Pages/Register";
 import { Route, Routes, useLocation } from "react-router-dom";
 import Home from "./Pages/Home";
 import LoginPage from "./Pages/LoginPage";
+import FlightsPage from "./Pages/FlightsPage";
+import HotelsPage from "./Pages/HotelsPage";
 import ContactPage from "./Pages/ContactPage";
 import Navbar from "./components/Home/Navbar";
 import FareRule from "./modules/flights/pages/FareRule";
@@ -11,7 +13,7 @@ import SSRPage from "./modules/flights/pages/SSRPage";
 import PassengerDetails from "./modules/flights/pages/PassengerDetails";
 import ReviewBooking from "./modules/flights/pages/ReviewBooking";
 import BookingSuccess from "./modules/flights/pages/BookingSuccess";
-import BookingDetails from "./modules/flights/pages/FlightBookingDetails";
+// import BookingDetails from "./modules/flights/pages/FlightBookingDetails";
 import FlightAmendment from "./modules/flights/pages/FlightAmendment";
 import FlightPaymentSuccess from "./modules/flights/pages/FlightPaymentSuccess";
 import TermsConditions from "./Pages/TermsConditions";
@@ -64,7 +66,7 @@ const App = () => {
   return (
     <main>
       <Navbar />
-       <ScrollToTop />
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />
@@ -79,6 +81,11 @@ const App = () => {
         <Route path="/refund-policy" element={<RefundPolicy />} />
         <Route path="/cancellation" element={<CancellationPolicyPage />} />
 
+
+
+        <Route path="/flights" element={<FlightsPage />} />
+        <Route path="/hotels" element={<HotelsPage />} />
+
         <Route path="/packages" element={<PackageSection limit={8} />} />
         <Route path="/packages/:slug" element={<PackageDetails />} />
         <Route
@@ -87,7 +94,8 @@ const App = () => {
         />
 
         {/* Hotel Routes */}
-        <Route path="/hotels" element={<HotelResults />} />
+        {/* <Route path="/hotels" element={<HotelResults />} /> */}
+        <Route path="/hotels/results" element={<HotelResults />} />
         <Route path="/hotels/:id" element={<HotelDetails />} />
         <Route path="/prebook" element={<PrebookLoader />} />
         <Route path="/hotel-booking" element={<HotelBooking />} />
@@ -105,7 +113,8 @@ const App = () => {
         />
 
         {/* Flights */}
-        <Route path="/flights" element={<FlightsResults />} />
+        {/* <Route path="/flights" element={<FlightsResults />} /> */}
+        <Route path="/flights/results" element={<FlightsResults />} />
         <Route path="/fare-rule" element={<FareRule />} />
         <Route path="/fare-quote" element={<FareQuote />} />
         <Route path="/ssr" element={<SSRPage />} />

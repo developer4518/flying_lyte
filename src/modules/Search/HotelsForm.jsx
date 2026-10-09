@@ -800,7 +800,7 @@ const HotelsForm = () => {
         hasNext: hotelResponse?.has_next,
       });
 
-      navigate("/hotels");
+      navigate("/hotels/results");
     } catch (err) {
       console.error("HOTEL SEARCH ERROR:", err?.response?.data || err);
 

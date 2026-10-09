@@ -69,18 +69,18 @@ const Navbar = () => {
     e.preventDefault();
 
     // HOTELS
-    if (item.name === "Hotels") {
-      setMenuOpen(false);
-      setProfileOpen(false);
+    // if (item.name === "Hotels") {
+    //   setMenuOpen(false);
+    //   setProfileOpen(false);
 
-      navigate("/", {
-        state: {
-          searchTab: "hotels",
-        },
-      });
+    //   navigate("/", {
+    //     state: {
+    //       searchTab: "hotels",
+    //     },
+    //   });
 
-      return;
-    }
+    //   return;
+    // }
 
     // HOME
     if (item.name === "Home") {
@@ -98,25 +98,36 @@ const Navbar = () => {
     handleReloadNavigate(item.path);
   };
 
-  const isActive = (path) => {
-    // Navbar Hotels se Home + Hotels tab open hua hai
-    if (
-      path === "/hotels" &&
-      location.pathname === "/" &&
-      location.state?.searchTab === "hotels"
-    ) {
-      return true;
-    }
+  // const isActive = (path) => {
+  //   // Navbar Hotels se Home + Hotels tab open hua hai
+  //   if (
+  //     path === "/hotels" &&
+  //     location.pathname === "/" &&
+  //     location.state?.searchTab === "hotels"
+  //   ) {
+  //     return true;
+  //   }
 
-    // Home tab
+  //   // Home tab
+  //   if (path === "/") {
+  //     return (
+  //       location.pathname === "/" && location.state?.searchTab !== "hotels"
+  //     );
+  //   }
+
+  //   return (
+  //     location.pathname === path || location.pathname.startsWith(`${path}/`)
+  //   );
+  // };
+
+  const isActive = (path) => {
     if (path === "/") {
-      return (
-        location.pathname === "/" && location.state?.searchTab !== "hotels"
-      );
+      return location.pathname === "/";
     }
 
     return (
-      location.pathname === path || location.pathname.startsWith(`${path}/`)
+      location.pathname === path ||
+      location.pathname.startsWith(`${path}/`)
     );
   };
 
@@ -289,14 +300,19 @@ const Navbar = () => {
                 <button
                   key={item.path}
                   type="button"
+                  // onClick={() => {
+                  //   if (item.name === "Hotels") {
+                  //     handleReloadNavigate("/", {
+                  //       searchTab: "hotels",
+                  //     });
+                  //   } else {
+                  //     handleReloadNavigate(item.path);
+                  //   }
+                  // }}
+
+
                   onClick={() => {
-                    if (item.name === "Hotels") {
-                      handleReloadNavigate("/", {
-                        searchTab: "hotels",
-                      });
-                    } else {
-                      handleReloadNavigate(item.path);
-                    }
+                    handleReloadNavigate(item.path);
                   }}
                   className={`group flex min-h-10 items-center justify-between rounded-xl border px-3.5 py-2 text-left text-[13px] font-semibold transition-all duration-200 ${isActive(item.path)
                     ? "border-[#E6B35C]/60 bg-[#E6B35C] text-black shadow-[0_6px_18px_rgba(230,179,92,0.18)]"
