@@ -5,10 +5,17 @@ import Footer from "./components/Home/Footer/Footer";
 import WhatsAppFloating from "./components/WhatsAppFloating";
 import Chatbot from "./components/chatbot/Chatbot";
 
+
 // Critical / Above-fold Route
 import Home from "./Pages/Home";
 
 // Lazy-loaded routes for code-splitting & optimal performance
+
+
+// Ads Only Landing Page
+const AdsTravelLanding = lazy(() =>
+  import("./Pages/AdsTravelLanding")
+);
 const FlightsPage = lazy(() => import("./Pages/FlightsPage"));
 const HotelsPage = lazy(() => import("./Pages/HotelsPage"));
 const Register = lazy(() => import("./Pages/Register"));
@@ -82,12 +89,21 @@ const ScrollToTop = () => {
 };
 
 const App = () => {
+  const { pathname } = useLocation();
+
+  const isAdsLanding =
+    pathname.replace(/\/+$/, "") === "/plan-your-trip";
+
   return (
     <main>
-      <Navbar />
+      {!isAdsLanding && <Navbar />}
       <ScrollToTop />
       <Suspense fallback={<PageLoader />}>
         <Routes>
+          <Route
+            path="/plan-your-trip"
+            element={<AdsTravelLanding />}
+          />
           <Route path="/" element={<Home />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<LoginPage />} />
@@ -158,9 +174,13 @@ const App = () => {
         </Routes>
       </Suspense>
 
-      <WhatsAppFloating />
-      <Chatbot />
-      <Footer />
+      {!isAdsLanding && (
+        <>
+          <WhatsAppFloating />
+          <Chatbot />
+          <Footer />
+        </>
+      )}
     </main>
   );
 };
