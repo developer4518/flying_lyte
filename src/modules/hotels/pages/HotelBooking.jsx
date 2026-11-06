@@ -514,12 +514,12 @@ const HotelBooking = () => {
 
   if (!preBook) {
     return (
-      <div className="min-h-screen bg-[#0B0B0F] p-10 text-center text-white">
-        <h2 className="mb-4 text-xl text-red-400">⚠️ Session Expired</h2>
+      <div className="fl-booking-ink fl-booking-base min-h-screen bg-[#0B0B0F] p-10 text-center text-white">
+        <h2 className="fl-booking-heading fl-booking-subtitle fl-booking-danger mb-4 text-xl text-red-400">⚠️ Session Expired</h2>
 
         <button
           onClick={() => navigate("/")}
-          className="rounded-lg bg-yellow-400 px-5 py-2 text-black"
+          className="fl-booking-ink fl-booking-notice fl-booking-button fl-booking-primary rounded-lg bg-yellow-400 px-5 py-2 text-black"
         >
           Go Home
         </button>
@@ -1114,19 +1114,19 @@ const HotelBooking = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0B0B0F] px-4 py-24 text-white md:px-10">
+    <div className="fl-booking-ink fl-booking-base min-h-screen bg-[#0B0B0F] px-4 py-24 text-white md:px-10">
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <div className="space-y-6 lg:col-span-2">
-          <div className="rounded-2xl border border-gray-800 bg-[#15151C] p-6">
-            <h2 className="text-2xl font-bold text-yellow-400">
+          <div className="fl-booking-surface fl-booking-line rounded-2xl border border-gray-800 bg-[#15151C] p-6">
+            <h2 className="fl-booking-heading fl-booking-subtitle fl-booking-accent text-2xl font-bold text-yellow-400">
               {hotel?.hotel_name || hotel?.HotelName || "Hotel Booking"}
             </h2>
 
-            <p className="mt-2 text-sm text-gray-400">
+            <p className="fl-booking-muted mt-2 text-sm text-gray-400">
               📅 {formatDate(checkIn)} → {formatDate(checkOut)}
             </p>
 
-            <p className="mt-1 text-sm text-gray-400">
+            <p className="fl-booking-muted mt-1 text-sm text-gray-400">
               🛏{" "}
               {Array.isArray(roomData?.Name)
                 ? roomData?.Name?.[0]
@@ -1135,47 +1135,47 @@ const HotelBooking = () => {
 
             <div className="mt-4 flex flex-wrap gap-2 text-xs">
               {validation.PanMandatory && (
-                <span className="rounded-full border border-red-400/30 bg-red-400/10 px-3 py-1 text-red-200">
+                <span className="fl-booking-danger fl-booking-danger-notice fl-booking-line rounded-full border border-red-400/30 bg-red-400/10 px-3 py-1 text-red-200">
                   PAN Mandatory
                 </span>
               )}
 
               {validation.IsPackageFare && (
-                <span className="rounded-full border border-blue-400/30 bg-blue-400/10 px-3 py-1 text-blue-200">
+                <span className="fl-booking-info fl-booking-notice fl-booking-line rounded-full border border-blue-400/30 bg-blue-400/10 px-3 py-1 text-blue-200">
                   Package Fare
                 </span>
               )}
 
               {validation.PackageDetailsMandatory && (
-                <span className="rounded-full border border-cyan-400/30 bg-cyan-400/10 px-3 py-1 text-cyan-200">
+                <span className="fl-booking-accent fl-booking-notice fl-booking-line rounded-full border border-cyan-400/30 bg-cyan-400/10 px-3 py-1 text-cyan-200">
                   Arrival Details Required
                 </span>
               )}
 
               {validation.DepartureDetailsMandatory && (
-                <span className="rounded-full border border-orange-400/30 bg-orange-400/10 px-3 py-1 text-orange-200">
+                <span className="fl-booking-line rounded-full border border-orange-400/30 bg-orange-400/10 px-3 py-1 text-orange-200">
                   Departure Details Required
                 </span>
               )}
 
               {validation.GSTAllowed && (
-                <span className="rounded-full border border-green-400/30 bg-green-400/10 px-3 py-1 text-green-200">
+                <span className="fl-booking-success fl-booking-success-notice fl-booking-line rounded-full border border-green-400/30 bg-green-400/10 px-3 py-1 text-green-200">
                   GST Allowed
                 </span>
               )}
 
               {validation.CorporateBokingAllowed && (
-                <span className="rounded-full border border-purple-400/30 bg-purple-400/10 px-3 py-1 text-purple-200">
+                <span className="fl-booking-line rounded-full border border-purple-400/30 bg-purple-400/10 px-3 py-1 text-purple-200">
                   Corporate Booking Allowed
                 </span>
               )}
             </div>
           </div>
 
-          <div className="overflow-hidden rounded-2xl border border-gray-800 bg-[#15151C]">
-            <div className="flex items-center gap-2 bg-[#1E2230] px-5 py-3">
-              <span className="text-yellow-300">🕒</span>
-              <h3 className="font-semibold text-yellow-300">
+          <div className="fl-booking-surface fl-booking-line overflow-hidden rounded-2xl border border-gray-800 bg-[#15151C]">
+            <div className="fl-booking-inset flex items-center gap-2 bg-[#1E2230] px-5 py-3">
+              <span className="fl-booking-accent text-yellow-300">🕒</span>
+              <h3 className="fl-booking-heading fl-booking-subtitle fl-booking-accent font-semibold text-yellow-300">
                 Cancellation Charges
               </h3>
             </div>
@@ -1183,9 +1183,9 @@ const HotelBooking = () => {
             <div className="p-5">
               {cancellationPolicies.length > 0 ? (
                 <>
-                  <div className="overflow-x-auto rounded-xl border border-gray-800">
-                    <table className="min-w-full text-sm">
-                      <thead className="bg-[#202432] text-gray-300">
+                  <div className="fl-booking-line overflow-x-auto rounded-xl border border-gray-800">
+                    <div className="fl-booking-table-scroll"><table className="fl-booking-table min-w-full text-sm">
+                      <thead className="fl-booking-ink fl-booking-inset bg-[#202432] text-gray-300">
                         <tr>
                           <th className="px-4 py-3 text-left font-semibold">
                             Cancelled on or After
@@ -1201,7 +1201,7 @@ const HotelBooking = () => {
 
                       <tbody className="divide-y divide-gray-800">
                         {cancellationPolicies.map((policy, index) => (
-                          <tr key={index} className="text-gray-300">
+                          <tr key={index} className="fl-booking-ink text-gray-300">
                             <td className="px-4 py-3">
                               {formatDate(policy?.FromDate)}
                             </td>
@@ -1222,27 +1222,27 @@ const HotelBooking = () => {
                           </tr>
                         ))}
                       </tbody>
-                    </table>
+                    </table></div>
                   </div>
 
-                  <p className="mt-4 text-sm text-gray-400">
-                    <span className="font-semibold text-red-400">Note:</span>{" "}
+                  <p className="fl-booking-muted mt-4 text-sm text-gray-400">
+                    <span className="fl-booking-danger font-semibold text-red-400">Note:</span>{" "}
                     Early check out may attract full cancellation charges unless
                     otherwise specified.
                   </p>
                 </>
               ) : (
-                <p className="text-sm text-gray-400">
+                <p className="fl-booking-muted text-sm text-gray-400">
                   Cancellation policy is not available for this room.
                 </p>
               )}
             </div>
           </div>
 
-          <div className="overflow-hidden rounded-2xl border border-gray-800 bg-[#15151C]">
-            <div className="flex items-center gap-2 bg-[#1E2230] px-5 py-3">
-              <span className="text-yellow-300">🏷️</span>
-              <h3 className="font-semibold text-yellow-300">Room Promotions</h3>
+          <div className="fl-booking-surface fl-booking-line overflow-hidden rounded-2xl border border-gray-800 bg-[#15151C]">
+            <div className="fl-booking-inset flex items-center gap-2 bg-[#1E2230] px-5 py-3">
+              <span className="fl-booking-accent text-yellow-300">🏷️</span>
+              <h3 className="fl-booking-heading fl-booking-subtitle fl-booking-accent font-semibold text-yellow-300">Room Promotions</h3>
             </div>
 
             <div className="p-5">
@@ -1251,7 +1251,7 @@ const HotelBooking = () => {
                   {roomPromotions.map((promotion, index) => (
                     <div
                       key={index}
-                      className="rounded-xl border border-green-400/20 bg-green-400/10 px-4 py-3 text-sm font-medium text-green-200"
+                      className="fl-booking-success fl-booking-success-notice fl-booking-line rounded-xl border border-green-400/20 bg-green-400/10 px-4 py-3 text-sm font-medium text-green-200"
                     >
                       {typeof promotion === "string"
                         ? promotion
@@ -1263,27 +1263,27 @@ const HotelBooking = () => {
                   ))}
                 </div>
               ) : (
-                <p className="text-sm text-gray-400">
+                <p className="fl-booking-muted text-sm text-gray-400">
                   Room promotions are not available.
                 </p>
               )}
             </div>
           </div>
 
-          <div className="overflow-hidden rounded-2xl border border-gray-800 bg-[#15151C]">
-            <div className="flex items-center gap-2 bg-[#1E2230] px-5 py-3">
-              <span className="text-yellow-300">➕</span>
-              <h3 className="font-semibold text-yellow-300">Supplements</h3>
+          <div className="fl-booking-surface fl-booking-line overflow-hidden rounded-2xl border border-gray-800 bg-[#15151C]">
+            <div className="fl-booking-inset flex items-center gap-2 bg-[#1E2230] px-5 py-3">
+              <span className="fl-booking-accent text-yellow-300">➕</span>
+              <h3 className="fl-booking-heading fl-booking-subtitle fl-booking-accent font-semibold text-yellow-300">Supplements</h3>
             </div>
 
             <div className="p-5">
               {supplements.length > 0 ? (
-                <div className="rounded-2xl border border-orange-400/20 bg-linear-to-br from-orange-400/10 via-yellow-400/5 to-transparent p-5">
+                <div className="fl-booking-surface fl-booking-line rounded-2xl border border-orange-400/20 bg-linear-to-br from-orange-400/10 via-yellow-400/5 to-transparent p-5">
                   <div className="space-y-4">
                     {supplements.map((supplementGroup, groupIndex) => (
                       <div
                         key={groupIndex}
-                        className="rounded-2xl border border-orange-400/20 bg-[#0B0B0F]/60 p-4"
+                        className="fl-booking-base fl-booking-line rounded-2xl border border-orange-400/20 bg-[#0B0B0F]/60 p-4"
                       >
                         <div className="space-y-3">
                           {(Array.isArray(supplementGroup)
@@ -1292,41 +1292,41 @@ const HotelBooking = () => {
                           ).map((supplement, index) => (
                             <div
                               key={`${groupIndex}-${index}`}
-                              className="rounded-xl border border-white/10 bg-white/5 p-4"
+                              className="fl-booking-surface fl-booking-line rounded-xl border border-white/10 bg-white/5 p-4"
                             >
                               <div className="mb-4 flex items-center justify-between gap-3">
                                 <div>
-                                  <p className="text-xs uppercase tracking-wide text-gray-500">
+                                  <p className="fl-booking-muted text-xs uppercase tracking-wide text-gray-500">
                                     Description
                                   </p>
-                                  <h5 className="text-base font-bold text-white">
+                                  <h5 className="fl-booking-heading fl-booking-subtitle fl-booking-ink text-base font-bold text-white">
                                     {supplement?.Description || "Supplement"}
                                   </h5>
                                 </div>
 
-                                <div className="rounded-full border border-yellow-400/30 bg-yellow-400/10 px-3 py-1 text-xs font-semibold text-yellow-200">
+                                <div className="fl-booking-accent fl-booking-notice fl-booking-line rounded-full border border-yellow-400/30 bg-yellow-400/10 px-3 py-1 text-xs font-semibold text-yellow-200">
                                   {supplement?.Type || "AtProperty"}
                                 </div>
                               </div>
 
                               <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-                                <div className="rounded-xl border border-white/10 bg-black/20 p-3">
-                                  <p className="text-xs text-gray-500">Index</p>
-                                  <p className="mt-1 font-semibold text-gray-100">
+                                <div className="fl-booking-inset fl-booking-line rounded-xl border border-white/10 bg-black/20 p-3">
+                                  <p className="fl-booking-muted text-xs text-gray-500">Index</p>
+                                  <p className="fl-booking-ink mt-1 font-semibold text-gray-100">
                                     {supplement?.Index ?? index + 1}
                                   </p>
                                 </div>
 
-                                <div className="rounded-xl border border-white/10 bg-black/20 p-3">
-                                  <p className="text-xs text-gray-500">Type</p>
+                                <div className="fl-booking-inset fl-booking-line rounded-xl border border-white/10 bg-black/20 p-3">
+                                  <p className="fl-booking-muted text-xs text-gray-500">Type</p>
                                   <p className="mt-1 font-semibold text-purple-200">
                                     {supplement?.Type || "-"}
                                   </p>
                                 </div>
 
-                                <div className="rounded-xl border border-white/10 bg-black/20 p-3">
-                                  <p className="text-xs text-gray-500">Price</p>
-                                  <p className="mt-1 font-semibold text-green-300">
+                                <div className="fl-booking-inset fl-booking-line rounded-xl border border-white/10 bg-black/20 p-3">
+                                  <p className="fl-booking-muted text-xs text-gray-500">Price</p>
+                                  <p className="fl-booking-success mt-1 font-semibold text-green-300">
                                     {Number(
                                       supplement?.Price || 0,
                                     ).toLocaleString("en-IN", {
@@ -1336,11 +1336,11 @@ const HotelBooking = () => {
                                   </p>
                                 </div>
 
-                                <div className="rounded-xl border border-white/10 bg-black/20 p-3">
-                                  <p className="text-xs text-gray-500">
+                                <div className="fl-booking-inset fl-booking-line rounded-xl border border-white/10 bg-black/20 p-3">
+                                  <p className="fl-booking-muted text-xs text-gray-500">
                                     Currency
                                   </p>
-                                  <p className="mt-1 font-semibold text-yellow-300">
+                                  <p className="fl-booking-accent mt-1 font-semibold text-yellow-300">
                                     {supplement?.Currency || "-"}
                                   </p>
                                 </div>
@@ -1353,17 +1353,17 @@ const HotelBooking = () => {
                   </div>
                 </div>
               ) : (
-                <p className="text-sm text-gray-400">
+                <p className="fl-booking-muted text-sm text-gray-400">
                   No supplements or extra charges are available for this room.
                 </p>
               )}
             </div>
           </div>
 
-          <div className="overflow-hidden rounded-2xl border border-gray-800 bg-[#15151C]">
-            <div className="flex items-center gap-2 bg-[#1E2230] px-5 py-3">
-              <span className="text-yellow-300">🛏️</span>
-              <h3 className="font-semibold text-yellow-300">Room Amenities</h3>
+          <div className="fl-booking-surface fl-booking-line overflow-hidden rounded-2xl border border-gray-800 bg-[#15151C]">
+            <div className="fl-booking-inset flex items-center gap-2 bg-[#1E2230] px-5 py-3">
+              <span className="fl-booking-accent text-yellow-300">🛏️</span>
+              <h3 className="fl-booking-heading fl-booking-subtitle fl-booking-accent font-semibold text-yellow-300">Room Amenities</h3>
             </div>
 
             <div className="p-5">
@@ -1372,38 +1372,38 @@ const HotelBooking = () => {
                   {roomAmenities.map((amenity, index) => (
                     <span
                       key={index}
-                      className="rounded-full border border-gray-700 bg-[#0B0B0F] px-3 py-1.5 text-xs text-gray-300"
+                      className="fl-booking-ink fl-booking-base fl-booking-line rounded-full border border-gray-700 bg-[#0B0B0F] px-3 py-1.5 text-xs text-gray-300"
                     >
                       {amenity}
                     </span>
                   ))}
                 </div>
               ) : (
-                <p className="text-sm text-gray-400">
+                <p className="fl-booking-muted text-sm text-gray-400">
                   Room amenities are not available.
                 </p>
               )}
             </div>
           </div>
 
-          <div className="overflow-hidden rounded-2xl border border-gray-800 bg-[#15151C]">
+          <div className="fl-booking-surface fl-booking-line overflow-hidden rounded-2xl border border-gray-800 bg-[#15151C]">
 
             {/* CLICKABLE HEADER */}
             <button
               type="button"
               onClick={() => setShowRateConditions((prev) => !prev)}
-              className="flex w-full items-center justify-between gap-3 bg-[#1E2230] px-5 py-4 text-left transition hover:bg-[#252A3A]"
+              className="fl-booking-inset fl-booking-button fl-booking-secondary flex w-full items-center justify-between gap-3 bg-[#1E2230] px-5 py-4 text-left transition hover:bg-[#252A3A]"
             >
               <div className="flex items-center gap-3">
-                <span className="text-yellow-300">📋</span>
+                <span className="fl-booking-accent text-yellow-300">📋</span>
 
                 <div>
-                  <h3 className="font-semibold text-yellow-300">
+                  <h3 className="fl-booking-heading fl-booking-subtitle fl-booking-accent font-semibold text-yellow-300">
                     Rate Condition
                   </h3>
 
                   {rateConditions.length > 0 && (
-                    <p className="mt-1 text-xs text-gray-500">
+                    <p className="fl-booking-muted mt-1 text-xs text-gray-500">
                       {rateConditions.length} condition
                       {rateConditions.length > 1 ? "s" : ""} •{" "}
                       {showRateConditions ? "Click to hide" : "Click to view"}
@@ -1414,7 +1414,7 @@ const HotelBooking = () => {
 
               {rateConditions.length > 0 && (
                 <span
-                  className={`text-lg text-yellow-300 transition-transform duration-300 ${showRateConditions ? "rotate-180" : ""
+                  className={`fl-booking-accent text-lg text-yellow-300 transition-transform duration-300 ${showRateConditions ? "rotate-180" : ""
                     }`}
                 >
                   ▼
@@ -1424,13 +1424,13 @@ const HotelBooking = () => {
 
             {/* CONDITIONS - ONLY AFTER ARROW CLICK */}
             {rateConditions.length > 0 && showRateConditions && (
-              <div className="border-t border-gray-800 p-5">
+              <div className="fl-booking-line border-t border-gray-800 p-5">
                 <div className="max-h-80 overflow-y-auto pr-2">
-                  <ol className="list-decimal space-y-3 pl-5 text-sm leading-6 text-gray-300">
+                  <ol className="fl-booking-ink list-decimal space-y-3 pl-5 text-sm leading-6 text-gray-300">
                     {rateConditions.map((condition, index) => (
                       <li
                         key={index}
-                        className="rounded-xl border border-white/10 bg-white/5 p-3 text-gray-300"
+                        className="fl-booking-ink fl-booking-surface fl-booking-line rounded-xl border border-white/10 bg-white/5 p-3 text-gray-300"
                         dangerouslySetInnerHTML={{
                           __html: String(condition || "")
                             .replaceAll("&lt;", "<")
@@ -1448,7 +1448,7 @@ const HotelBooking = () => {
             {/* NO CONDITIONS */}
             {rateConditions.length === 0 && (
               <div className="p-5">
-                <p className="text-sm text-gray-400">
+                <p className="fl-booking-muted text-sm text-gray-400">
                   Rate conditions are not available.
                 </p>
               </div>
@@ -1457,17 +1457,17 @@ const HotelBooking = () => {
             {/* CHECKBOX ALWAYS VISIBLE */}
             {rateConditions.length > 0 && (
               <div className="px-5 pb-5 pt-4">
-                <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-yellow-400/20 bg-yellow-400/10 p-4">
+                <label className="fl-booking-notice fl-booking-line flex cursor-pointer items-start gap-3 rounded-xl border border-yellow-400/20 bg-yellow-400/10 p-4">
                   <input
                     type="checkbox"
                     checked={rateConditionsAccepted}
                     onChange={(e) =>
                       setRateConditionsAccepted(e.target.checked)
                     }
-                    className="mt-1 h-4 w-4 shrink-0 accent-yellow-400"
+                    className="fl-booking-field mt-1 h-4 w-4 shrink-0 accent-yellow-400"
                   />
 
-                  <span className="text-sm leading-6 text-gray-300">
+                  <span className="fl-booking-ink text-sm leading-6 text-gray-300">
                     I have read and agree to the Rate Conditions.
                   </span>
                 </label>
@@ -1476,15 +1476,15 @@ const HotelBooking = () => {
           </div>
 
           {validation.CorporateBokingAllowed && (
-            <div className="rounded-2xl border border-gray-800 bg-[#15151C] p-6">
-              <h3 className="mb-4 text-yellow-300">Corporate Booking</h3>
+            <div className="fl-booking-surface fl-booking-line rounded-2xl border border-gray-800 bg-[#15151C] p-6">
+              <h3 className="fl-booking-heading fl-booking-subtitle fl-booking-accent mb-4 text-yellow-300">Corporate Booking</h3>
 
-              <label className="flex w-fit cursor-pointer items-center gap-2 rounded-full border border-purple-400/30 bg-purple-400/10 px-4 py-2 text-sm text-purple-200">
+              <label className="fl-booking-line flex w-fit cursor-pointer items-center gap-2 rounded-full border border-purple-400/30 bg-purple-400/10 px-4 py-2 text-sm text-purple-200">
                 <input
                   type="checkbox"
                   checked={isCorporate}
                   onChange={(e) => setIsCorporate(e.target.checked)}
-                  className="accent-yellow-400"
+                  className="fl-booking-field accent-yellow-400"
                 />
                 Book as corporate customer
               </label>
@@ -1493,7 +1493,7 @@ const HotelBooking = () => {
                 <div className="mt-4">
                   <input
                     placeholder="Corporate PAN"
-                    className="input uppercase"
+                    className="fl-booking-field input uppercase"
                     value={corporatePAN}
                     maxLength={10}
                     onChange={(e) =>
@@ -1505,7 +1505,7 @@ const HotelBooking = () => {
                     }
                   />
 
-                  <p className="mt-2 text-xs text-gray-500">
+                  <p className="fl-booking-muted mt-2 text-xs text-gray-500">
                     Corporate PAN must belong to the actual corporate customer.
                     Do not use agency PAN, TBO PAN, or parent/guardian PAN for
                     corporate booking.
@@ -1516,9 +1516,9 @@ const HotelBooking = () => {
           )}
 
           {validation.IsPackageFare && (
-            <div className="rounded-2xl border border-blue-400/20 bg-blue-400/10 p-5">
-              <h3 className="font-semibold text-blue-200">Package Fare</h3>
-              <p className="mt-2 text-sm text-blue-100/80">
+            <div className="fl-booking-notice fl-booking-line rounded-2xl border border-blue-400/20 bg-blue-400/10 p-5">
+              <h3 className="fl-booking-heading fl-booking-subtitle fl-booking-info font-semibold text-blue-200">Package Fare</h3>
+              <p className="fl-booking-info mt-2 text-sm text-blue-100/80">
                 This room is marked as package fare. The book request will send{" "}
                 <span className="font-semibold">IsPackageFare: true</span>.
                 Transport details are required only when the hotel validation
@@ -1528,14 +1528,14 @@ const HotelBooking = () => {
           )}
 
           {validation.PackageDetailsMandatory && (
-            <div className="rounded-2xl border border-gray-800 bg-[#15151C] p-6">
-              <h3 className="mb-4 text-yellow-300">
+            <div className="fl-booking-surface fl-booking-line rounded-2xl border border-gray-800 bg-[#15151C] p-6">
+              <h3 className="fl-booking-heading fl-booking-subtitle fl-booking-accent mb-4 text-yellow-300">
                 Arrival Transport Details
               </h3>
 
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
                 <select
-                  className="input"
+                  className="fl-booking-field input"
                   value={arrivalTransport.ArrivalTransportType}
                   onChange={(e) =>
                     setArrivalTransport((prev) => ({
@@ -1554,7 +1554,7 @@ const HotelBooking = () => {
                       ? "Flight No. e.g. 6E 203"
                       : "Surface details"
                   }
-                  className="input"
+                  className="fl-booking-field input"
                   value={arrivalTransport.TransportInfoId}
                   onChange={(e) =>
                     setArrivalTransport((prev) => ({
@@ -1566,7 +1566,7 @@ const HotelBooking = () => {
 
                 <input
                   type="datetime-local"
-                  className="input"
+                  className="fl-booking-field input"
                   value={arrivalTransport.Time}
                   onChange={(e) =>
                     setArrivalTransport((prev) => ({
@@ -1580,14 +1580,14 @@ const HotelBooking = () => {
           )}
 
           {validation.DepartureDetailsMandatory && (
-            <div className="rounded-2xl border border-gray-800 bg-[#15151C] p-6">
-              <h3 className="mb-4 text-yellow-300">
+            <div className="fl-booking-surface fl-booking-line rounded-2xl border border-gray-800 bg-[#15151C] p-6">
+              <h3 className="fl-booking-heading fl-booking-subtitle fl-booking-accent mb-4 text-yellow-300">
                 Departure Transport Details
               </h3>
 
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
                 <select
-                  className="input"
+                  className="fl-booking-field input"
                   value={departureTransport.DepartureTransportType}
                   onChange={(e) =>
                     setDepartureTransport((prev) => ({
@@ -1606,7 +1606,7 @@ const HotelBooking = () => {
                       ? "Flight No. e.g. AI 221"
                       : "Surface details"
                   }
-                  className="input"
+                  className="fl-booking-field input"
                   value={departureTransport.TransportInfoId}
                   onChange={(e) =>
                     setDepartureTransport((prev) => ({
@@ -1618,7 +1618,7 @@ const HotelBooking = () => {
 
                 <input
                   type="datetime-local"
-                  className="input"
+                  className="fl-booking-field input"
                   value={departureTransport.Time}
                   onChange={(e) =>
                     setDepartureTransport((prev) => ({
@@ -1632,13 +1632,13 @@ const HotelBooking = () => {
           )}
 
           {validation.GSTAllowed && isCorporate && (
-            <div className="rounded-2xl border border-gray-800 bg-[#15151C] p-6">
-              <h3 className="mb-4 text-yellow-300">GST Details</h3>
+            <div className="fl-booking-surface fl-booking-line rounded-2xl border border-gray-800 bg-[#15151C] p-6">
+              <h3 className="fl-booking-heading fl-booking-subtitle fl-booking-accent mb-4 text-yellow-300">GST Details</h3>
 
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <input
                   placeholder="GST Company Name"
-                  className="input"
+                  className="fl-booking-field input"
                   value={gstDetails.GSTCompanyName}
                   onChange={(e) =>
                     setGstDetails((prev) => ({
@@ -1650,7 +1650,7 @@ const HotelBooking = () => {
 
                 <input
                   placeholder="GST Number"
-                  className="input uppercase"
+                  className="fl-booking-field input uppercase"
                   value={gstDetails.GSTNumber}
                   maxLength={15}
                   onChange={(e) =>
@@ -1663,7 +1663,7 @@ const HotelBooking = () => {
 
                 <input
                   placeholder="GST Company Email"
-                  className="input"
+                  className="fl-booking-field input"
                   value={gstDetails.GSTCompanyEmail}
                   onChange={(e) =>
                     setGstDetails((prev) => ({
@@ -1675,7 +1675,7 @@ const HotelBooking = () => {
 
                 <input
                   placeholder="GST Company Contact Number"
-                  className="input"
+                  className="fl-booking-field input"
                   value={gstDetails.GSTCompanyContactNumber}
                   maxLength={10}
                   onChange={(e) =>
@@ -1691,7 +1691,7 @@ const HotelBooking = () => {
 
                 <input
                   placeholder="GST Company Address"
-                  className="input sm:col-span-2"
+                  className="fl-booking-field input sm:col-span-2"
                   value={gstDetails.GSTCompanyAddress}
                   onChange={(e) =>
                     setGstDetails((prev) => ({
@@ -1707,24 +1707,24 @@ const HotelBooking = () => {
           {guestList.map((guest, index) => (
             <div
               key={index}
-              className="rounded-2xl border border-gray-800 bg-[#15151C] p-6"
+              className="fl-booking-surface fl-booking-line rounded-2xl border border-gray-800 bg-[#15151C] p-6"
             >
-              <h3 className="mb-4 text-yellow-300">
+              <h3 className="fl-booking-heading fl-booking-subtitle fl-booking-accent mb-4 text-yellow-300">
                 Room {guest.RoomIndex + 1} - Guest {getRoomGuestNumber(index)}{" "}
                 {guest.LeadPassenger && "(Lead)"}{" "}
-                <span className="text-sm text-gray-500">
+                <span className="fl-booking-muted text-sm text-gray-500">
                   {guest.PaxType === 1 ? "Adult" : "Child"}
                 </span>
               </h3>
 
               {guest.PaxType === 1 && (
-                <label className="mb-4 flex w-fit cursor-pointer items-center gap-2 rounded-full border border-yellow-400/30 bg-yellow-400/10 px-4 py-2 text-sm text-yellow-200">
+                <label className="fl-booking-accent fl-booking-notice fl-booking-line mb-4 flex w-fit cursor-pointer items-center gap-2 rounded-full border border-yellow-400/30 bg-yellow-400/10 px-4 py-2 text-sm text-yellow-200">
                   <input
                     type="radio"
                     name={`room-lead-${guest.RoomIndex}`}
                     checked={guest.LeadPassenger}
                     onChange={() => updateLeadPassenger(index)}
-                    className="accent-yellow-400"
+                    className="fl-booking-field accent-yellow-400"
                   />
                   Lead passenger for Room {guest.RoomIndex + 1}
                 </label>
@@ -1733,7 +1733,7 @@ const HotelBooking = () => {
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 {guest.PaxType === 1 ? (
                   <select
-                    className="input title-select"
+                    className="fl-booking-field input title-select"
                     value={guest.Title || "Mr"}
                     onChange={(e) =>
                       updateGuest(index, "Title", e.target.value)
@@ -1750,7 +1750,7 @@ const HotelBooking = () => {
 
                 <input
                   placeholder="First Name"
-                  className="input"
+                  className="fl-booking-field input"
                   value={guest.FirstName}
                   minLength={FIRST_NAME_MIN_LENGTH}
                   onBlur={() => handleFirstNameBlur(index)}
@@ -1759,7 +1759,7 @@ const HotelBooking = () => {
 
                 <input
                   placeholder="Last Name"
-                  className="input"
+                  className="fl-booking-field input"
                   value={guest.LastName}
                   maxLength={
                     validation.CharLimit && validation.PaxNameMaxLength
@@ -1776,7 +1776,7 @@ const HotelBooking = () => {
                 />
 
                 <div>
-                  <label className="mb-1 block text-xs text-gray-400">
+                  <label className="fl-booking-muted mb-1 block text-xs text-gray-400">
                     {guest.PaxType === 1 ? "Adult Age" : "Child Age"}
                   </label>
 
@@ -1789,7 +1789,7 @@ const HotelBooking = () => {
                         ? "Enter adult age"
                         : "Child age from search"
                     }
-                    className="input"
+                    className="fl-booking-field input"
                     value={guest.Age}
                     disabled={guest.PaxType === 2}
                     onChange={(e) => updateGuest(index, "Age", e.target.value)}
@@ -1806,7 +1806,7 @@ const HotelBooking = () => {
                             ? "Child Passenger PAN required"
                             : "Child Passenger PAN"
                       }
-                      className="input uppercase"
+                      className="fl-booking-field input uppercase"
                       value={guest.PAN}
                       maxLength={10}
                       onChange={(e) =>
@@ -1823,7 +1823,7 @@ const HotelBooking = () => {
                     {!isCorporate && guest.PaxType === 2 && (
                       <input
                         placeholder="Parent / Guardian PAN for child"
-                        className="input uppercase"
+                        className="fl-booking-field input uppercase"
                         value={guest.ParentPAN}
                         maxLength={10}
                         onChange={(e) =>
@@ -1844,7 +1844,7 @@ const HotelBooking = () => {
                   <>
                     <input
                       placeholder={`Lead Email - Room ${guest.RoomIndex + 1}`}
-                      className="input"
+                      className="fl-booking-field input"
                       value={guest.Email}
                       onChange={(e) =>
                         updateGuest(index, "Email", e.target.value.trim())
@@ -1853,7 +1853,7 @@ const HotelBooking = () => {
 
                     <input
                       placeholder={`Lead Phone - Room ${guest.RoomIndex + 1}`}
-                      className="input"
+                      className="fl-booking-field input"
                       value={guest.Phoneno}
                       maxLength={10}
                       onChange={(e) =>
@@ -1869,7 +1869,7 @@ const HotelBooking = () => {
               </div>
 
               {validation.PanMandatory && (
-                <p className="mt-3 text-xs text-gray-500">
+                <p className="fl-booking-muted mt-3 text-xs text-gray-500">
                   {isCorporate
                     ? "For corporate booking, passenger PAN is required for each guest. Parent/Guardian PAN is not allowed."
                     : guest.PaxType === 2
@@ -1880,14 +1880,14 @@ const HotelBooking = () => {
             </div>
           ))}
         </div>
-        <div className="sticky top-24 h-fit rounded-2xl border border-gray-800 bg-[#15151C] p-6">
-          <h3 className="mb-4 text-lg text-yellow-300">Price Summary</h3>
+        <div className="fl-booking-surface fl-booking-line sticky top-24 h-fit rounded-2xl border border-gray-800 bg-[#15151C] p-6">
+          <h3 className="fl-booking-heading fl-booking-subtitle fl-booking-accent mb-4 text-lg text-yellow-300">Price Summary</h3>
 
           <div className="space-y-2 text-sm">
             <div className="flex justify-between">
               <span>
                 Total Amount{" "}
-                <p className="text-xs text-gray-200">
+                <p className="fl-booking-ink text-xs text-gray-200">
                   (Inclusive of all taxes )
                 </p>
               </span>
@@ -1901,12 +1901,12 @@ const HotelBooking = () => {
               </span>
             </div>
 
-            <hr className="border-gray-700" />
+            <hr className="fl-booking-line border-gray-700" />
 
             <div className="flex justify-between text-base md:text-lg font-semibold">
               <span>Total</span>
 
-              <span className="font-medium text-yellow-400">
+              <span className="fl-booking-accent font-medium text-yellow-400">
                 ₹{" "}
                 {totalFare.toLocaleString("en-IN", {
                   minimumFractionDigits: 2,
@@ -1916,8 +1916,8 @@ const HotelBooking = () => {
             </div>
           </div>
 
-          <div className="mt-5 rounded-xl border border-yellow-400/20 bg-yellow-400/10 p-4 text-xs text-gray-300">
-            <p className="font-semibold text-yellow-300">
+          <div className="fl-booking-ink fl-booking-notice fl-booking-line mt-5 rounded-xl border border-yellow-400/20 bg-yellow-400/10 p-4 text-xs text-gray-300">
+            <p className="fl-booking-accent font-semibold text-yellow-300">
               Important Requirements
             </p>
 
@@ -1981,7 +1981,7 @@ const HotelBooking = () => {
           <button
             onClick={handleReviewBooking}
             disabled={rateConditions.length > 0 && !rateConditionsAccepted}
-            className="
+            className="fl-booking-ink fl-booking-surface fl-booking-button fl-booking-primary
     mt-6
     w-full
     rounded-xl

@@ -828,9 +828,9 @@ const HotelsForm = () => {
   };
 
   return (
-    <div className="relative flex min-h-[210px] flex-col justify-center overflow-visible rounded-2xl border border-white/10 bg-[#07111c]/10 p-3 shadow-2xl backdrop-blur-none space-y-3 sm:min-h-[220px] sm:p-4 md:min-h-[235px] md:p-5">
+    <div className="fl-search-card relative flex min-h-[210px] flex-col justify-center overflow-visible rounded-2xl border border-white/10 bg-[#07111c]/10 p-3 shadow-2xl backdrop-blur-none space-y-3 sm:min-h-[220px] sm:p-4 md:min-h-[235px] md:p-5">
       {errorMsg && (
-        <div className="text-red-400 text-sm bg-red-900/20 border border-red-800 px-4 py-3 rounded-2xl text-center">
+        <div className="fl-search-error text-red-400 text-sm bg-red-900/20 border border-red-800 px-4 py-3 rounded-2xl text-center">
           {errorMsg}
         </div>
       )}
@@ -840,7 +840,7 @@ const HotelsForm = () => {
         className="relative grid grid-cols-12 gap-2.5 overflow-visible sm:gap-3 md:gap-3 items-end"
       >
         <div className="relative z-40 col-span-12 min-w-0 w-full sm:col-span-6 md:col-span-3" ref={cityRef}>
-          <label className="mb-1.5 block text-xs font-medium text-white/75">
+          <label className="fl-search-label mb-1.5 block text-xs font-medium text-white/75">
             City / Hotel
           </label>
 
@@ -874,19 +874,19 @@ const HotelsForm = () => {
               setCitySuggestions(searchCities(value));
             }}
 
-            className="w-full h-11 px-3 rounded-xl text-sm text-white bg-white/[0.07] border border-white/20 shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_8px_24px_rgba(0,0,0,0.18)] backdrop-blur-xl outline-none placeholder:text-white/55 transition hover:border-white/30 focus:border-[#E6B35C]/70 focus:bg-white/[0.09] focus:ring-2 focus:ring-[#E6B35C]/15"
+            className="fl-search-control w-full h-11 px-3 rounded-xl text-sm text-white bg-white/[0.07] border border-white/20 shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_8px_24px_rgba(0,0,0,0.18)] backdrop-blur-xl outline-none placeholder:text-white/55 transition hover:border-white/30 focus:border-[#E6B35C]/70 focus:bg-white/[0.09] focus:ring-2 focus:ring-[#E6B35C]/15"
           />
 
           {destinationOpen &&
             (citySuggestions.length > 0 ||
               hotelSuggestions.length > 0 ||
               hotelSuggestionsLoading) && (
-              <div className="absolute left-0 top-full z-[200] mt-2 max-h-72 w-full overflow-y-auto overscroll-contain rounded-xl border border-white/15 bg-[#0C1520]/98 p-1.5 text-white shadow-[0_22px_60px_rgba(0,0,0,0.75)] backdrop-blur-xl sm:min-w-[340px] md:min-w-[380px]">
+              <div className="fl-search-popup absolute left-0 top-full z-[200] mt-2 max-h-72 w-full overflow-y-auto overscroll-contain rounded-xl border border-white/15 bg-[#0C1520]/98 p-1.5 text-white shadow-[0_22px_60px_rgba(0,0,0,0.75)] backdrop-blur-xl sm:min-w-[340px] md:min-w-[380px]">
 
                 {/* CITY SUGGESTIONS */}
                 {citySuggestions.length > 0 && (
                   <>
-                    <div className="px-3 py-2 text-[10px] uppercase tracking-wider text-(--text-muted) font-semibold">
+                    <div className="fl-search-muted px-3 py-2 text-[10px] uppercase tracking-wider text-(--text-muted) font-semibold">
                       Cities
                     </div>
 
@@ -943,23 +943,23 @@ const HotelsForm = () => {
                               setNationalitySuggestions([]);
                             }
                           }}
-                          className="w-full p-3 rounded-xl hover:bg-(--bg-secondary) cursor-pointer text-sm flex items-center justify-between gap-3 text-left transition"
+                          className="fl-search-option w-full p-3 rounded-xl hover:bg-(--bg-secondary) cursor-pointer text-sm flex items-center justify-between gap-3 text-left transition"
                         >
                           <div className="min-w-0">
                             <div className="flex items-center gap-2">
                               <span>📍</span>
 
-                              <span className="truncate">
+                              <span className="fl-search-ink truncate">
                                 {selectedCityName}
                               </span>
                             </div>
 
-                            <p className="text-[11px] text-(--text-muted) mt-1 ml-6">
+                            <p className="fl-search-muted text-[11px] text-(--text-muted) mt-1 ml-6">
                               City
                             </p>
                           </div>
 
-                          <span className="text-xs text-(--text-muted) shrink-0">
+                          <span className="fl-search-muted text-xs text-(--text-muted) shrink-0">
                             {selectedCityCode}
                           </span>
                         </button>
@@ -972,19 +972,19 @@ const HotelsForm = () => {
                 {citySuggestions.length > 0 &&
                   (hotelSuggestions.length > 0 ||
                     hotelSuggestionsLoading) && (
-                    <div className="border-t border-(--border-soft) my-1" />
+                    <div className="fl-search-muted border-t border-(--border-soft) my-1" />
                   )}
 
                 {/* HOTEL SUGGESTIONS */}
                 {(hotelSuggestions.length > 0 ||
                   hotelSuggestionsLoading) && (
                     <>
-                      <div className="px-3 py-2 text-[10px] uppercase tracking-wider text-(--text-muted) font-semibold">
+                      <div className="fl-search-muted px-3 py-2 text-[10px] uppercase tracking-wider text-(--text-muted) font-semibold">
                         Hotels
                       </div>
 
                       {hotelSuggestionsLoading && (
-                        <div className="px-3 py-3 text-xs text-(--text-muted)">
+                        <div className="fl-search-muted px-3 py-3 text-xs text-(--text-muted)">
                           Searching hotels...
                         </div>
                       )}
@@ -1037,17 +1037,17 @@ const HotelsForm = () => {
                                 setNationalitySuggestions([]);
                               }
                             }}
-                            className="w-full p-3 rounded-xl hover:bg-(--bg-secondary) cursor-pointer text-sm text-left transition"
+                            className="fl-search-option w-full p-3 rounded-xl hover:bg-(--bg-secondary) cursor-pointer text-sm text-left transition"
                           >
                             <div className="flex items-start gap-2">
                               <span>🏨</span>
 
                               <div className="min-w-0 flex-1">
-                                <p className="font-medium truncate">
+                                <p className="fl-search-ink font-medium truncate">
                                   {hotel.hotel_name}
                                 </p>
 
-                                <p className="text-[11px] text-(--text-muted) mt-1 truncate">
+                                <p className="fl-search-muted text-[11px] text-(--text-muted) mt-1 truncate">
                                   {hotel.city_name}
 
                                   {hotel.country_name
@@ -1056,7 +1056,7 @@ const HotelsForm = () => {
                                 </p>
                               </div>
 
-                              <span className="text-[10px] text-(--gold-main) shrink-0">
+                              <span className="fl-search-ink text-[10px] text-(--gold-main) shrink-0">
                                 Hotel
                               </span>
                             </div>
@@ -1069,7 +1069,7 @@ const HotelsForm = () => {
         </div>
 
         <div className="relative z-30 col-span-12 min-w-0 w-full sm:col-span-6 md:col-span-3" ref={nationalityRef}>
-          <label className="mb-1 block text-xs font-medium text-white/75">
+          <label className="fl-search-label mb-1 block text-xs font-medium text-white/75">
             Nationality
           </label>
 
@@ -1124,18 +1124,18 @@ const HotelsForm = () => {
               }));
               setNationalitySuggestions(searchNationalities(value));
             }}
-            className={`w-full h-11 px-3 rounded-xl text-sm text-white bg-white/[0.07] border border-white/20 shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_8px_24px_rgba(0,0,0,0.18)] backdrop-blur-xl outline-none placeholder:text-white/55 transition hover:border-white/30 focus:border-[#E6B35C]/70 focus:bg-white/[0.09] focus:ring-2 focus:ring-[#E6B35C]/15 ${isInternationalHotelSearch ? "cursor-not-allowed opacity-70" : ""}`}
+            className={`fl-search-control w-full h-11 px-3 rounded-xl text-sm text-white bg-white/[0.07] border border-white/20 shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_8px_24px_rgba(0,0,0,0.18)] backdrop-blur-xl outline-none placeholder:text-white/55 transition hover:border-white/30 focus:border-[#E6B35C]/70 focus:bg-white/[0.09] focus:ring-2 focus:ring-[#E6B35C]/15 ${isInternationalHotelSearch ? "cursor-not-allowed opacity-70" : ""}`}
           />
 
           {isInternationalHotelSearch && (
-            <p className="mt-1 text-[11px] text-(--gold-main) text-center">
+            <p className="fl-search-muted mt-1 text-[11px] text-(--gold-main) text-center">
               For international hotel search, only Indian nationality is
               allowed.
             </p>
           )}
 
           {nationalitySuggestions.length > 0 && (
-            <div className="absolute left-0 top-full z-[200] mt-2 max-h-64 w-full overflow-y-auto overscroll-contain rounded-xl border border-white/15 bg-[#0C1520]/98 p-1.5 text-white shadow-[0_22px_60px_rgba(0,0,0,0.75)] backdrop-blur-xl">
+            <div className="fl-search-popup absolute left-0 top-full z-[200] mt-2 max-h-64 w-full overflow-y-auto overscroll-contain rounded-xl border border-white/15 bg-[#0C1520]/98 p-1.5 text-white shadow-[0_22px_60px_rgba(0,0,0,0.75)] backdrop-blur-xl">
               {nationalitySuggestions.map((country) => (
                 <button
                   type="button"
@@ -1162,10 +1162,10 @@ const HotelsForm = () => {
                     setNationalityInput(country.Name);
                     setNationalitySuggestions([]);
                   }}
-                  className="w-full p-3 rounded-xl hover:bg-(--bg-secondary) cursor-pointer text-sm flex items-center justify-between text-left transition"
+                  className="fl-search-option w-full p-3 rounded-xl hover:bg-(--bg-secondary) cursor-pointer text-sm flex items-center justify-between text-left transition"
                 >
                   <span>{country.Name}</span>
-                  <span className="text-xs text-(--text-muted)">
+                  <span className="fl-search-muted text-xs text-(--text-muted)">
                     {country.Code}
                   </span>
                 </button>
@@ -1176,7 +1176,7 @@ const HotelsForm = () => {
 
         <div className="col-span-12 grid grid-cols-2 gap-2 min-w-0 md:col-span-4 md:gap-3 w-full">
           <div>
-            <label className="mb-1 block text-xs font-medium text-white/75">
+            <label className="fl-search-label mb-1 block text-xs font-medium text-white/75">
               Check-in
             </label>
 
@@ -1190,12 +1190,12 @@ const HotelsForm = () => {
                   checkIn: e.target.value,
                 }))
               }
-              className="hotel-date-input w-full min-w-0 h-11 px-3 pr-10 rounded-xl text-sm text-white bg-white/[0.07] border border-white/20 shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_8px_24px_rgba(0,0,0,0.18)] backdrop-blur-xl outline-none transition hover:border-white/30 focus:border-[#E6B35C]/70 focus:bg-white/[0.09] focus:ring-2 focus:ring-[#E6B35C]/15"
+              className="fl-search-control fl-search-date hotel-date-input w-full min-w-0 h-11 px-3 pr-10 rounded-xl text-sm text-white bg-white/[0.07] border border-white/20 shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_8px_24px_rgba(0,0,0,0.18)] backdrop-blur-xl outline-none transition hover:border-white/30 focus:border-[#E6B35C]/70 focus:bg-white/[0.09] focus:ring-2 focus:ring-[#E6B35C]/15"
             />
           </div>
 
           <div>
-            <label className="mb-1 block text-xs font-medium text-white/75">
+            <label className="fl-search-label mb-1 block text-xs font-medium text-white/75">
               Check-out
             </label>
 
@@ -1209,48 +1209,48 @@ const HotelsForm = () => {
                   checkOut: e.target.value,
                 }))
               }
-              className="hotel-date-input w-full min-w-0 h-11 px-3 pr-10 rounded-xl text-sm text-white bg-white/[0.07] border border-white/20 shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_8px_24px_rgba(0,0,0,0.18)] backdrop-blur-xl outline-none transition hover:border-white/30 focus:border-[#E6B35C]/70 focus:bg-white/[0.09] focus:ring-2 focus:ring-[#E6B35C]/15"
+              className="fl-search-control fl-search-date hotel-date-input w-full min-w-0 h-11 px-3 pr-10 rounded-xl text-sm text-white bg-white/[0.07] border border-white/20 shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_8px_24px_rgba(0,0,0,0.18)] backdrop-blur-xl outline-none transition hover:border-white/30 focus:border-[#E6B35C]/70 focus:bg-white/[0.09] focus:ring-2 focus:ring-[#E6B35C]/15"
             />
           </div>
         </div>
 
         <div className="relative col-span-12 min-w-0 sm:col-span-6 md:col-span-2 w-full" ref={guestRef}>
-          <label className="mb-1 block text-xs font-medium text-white/75">
+          <label className="fl-search-label mb-1 block text-xs font-medium text-white/75">
             Guests
           </label>
 
           <button
             type="button"
             onClick={() => setGuestOpen(true)}
-            className="w-full h-11 px-3 rounded-xl text-sm text-white bg-white/[0.07] border border-white/20 shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_8px_24px_rgba(0,0,0,0.18)] backdrop-blur-xl text-left flex items-center justify-between gap-2 transition hover:border-[#E6B35C]/60 hover:bg-white/[0.09] focus:ring-2 focus:ring-[#E6B35C]/15"
+            className="fl-search-control w-full h-11 px-3 rounded-xl text-sm text-white bg-white/[0.07] border border-white/20 shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_8px_24px_rgba(0,0,0,0.18)] backdrop-blur-xl text-left flex items-center justify-between gap-2 transition hover:border-[#E6B35C]/60 hover:bg-white/[0.09] focus:ring-2 focus:ring-[#E6B35C]/15"
           >
-            <span className="truncate">
+            <span className="fl-search-ink truncate">
               {totalGuests} Guest{totalGuests > 1 && "s"} · {guests.rooms} Room
               {guests.rooms > 1 && "s"}
             </span>
 
-            <span className="text-(--gold-main)">▾</span>
+            <span className="fl-search-ink text-(--gold-main)">▾</span>
           </button>
 
           {guestOpen && (
             <>
               <div
-                className="fixed inset-0 z-[9998] bg-black/70 backdrop-blur-sm"
+                className="fl-search-backdrop fixed inset-0 z-[9998] bg-black/70 backdrop-blur-sm"
                 onClick={() => setGuestOpen(false)}
               />
 
               <div
-                className="fixed z-[9999] left-1/2 top-1/2 flex w-[calc(100vw-24px)] max-w-2xl max-h-[calc(100svh-32px)] -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#101721]/95 shadow-[0_30px_90px_rgba(0,0,0,0.65)] backdrop-blur-xl sm:w-[calc(100vw-40px)] sm:rounded-3xl"
+                className="fl-search-modal fixed z-[9999] left-1/2 top-1/2 flex w-[calc(100vw-24px)] max-w-2xl max-h-[calc(100svh-32px)] -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#101721]/95 shadow-[0_30px_90px_rgba(0,0,0,0.65)] backdrop-blur-xl sm:w-[calc(100vw-40px)] sm:rounded-3xl"
                 onClick={(e) => e.stopPropagation()}
               >
-                <div className="shrink-0 border-b border-white/10 bg-[#101721]/95 p-3 sm:p-4">
+                <div className="fl-search-modal-surface shrink-0 border-b border-white/10 bg-[#101721]/95 p-3 sm:p-4">
                   <div className="flex items-start justify-between gap-3">
                     <div>
-                      <h3 className="text-base sm:text-lg font-bold text-(--text-main)">
+                      <h3 className="fl-search-title text-base sm:text-lg font-bold text-(--text-main)">
                         Rooms & Guests
                       </h3>
 
-                      <p className="mt-1 text-xs text-(--text-muted)">
+                      <p className="fl-search-muted mt-1 text-xs text-(--text-muted)">
                         Add rooms, adults, children and child age.
                       </p>
                     </div>
@@ -1258,36 +1258,36 @@ const HotelsForm = () => {
                     <button
                       type="button"
                       onClick={() => setGuestOpen(false)}
-                      className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-white/[0.06] text-sm font-bold text-white/80 transition hover:border-[#E6B35C]/60 hover:bg-white/[0.10] hover:text-[#E6B35C]"
+                      className="fl-search-secondary flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-white/[0.06] text-sm font-bold text-white/80 transition hover:border-[#E6B35C]/60 hover:bg-white/[0.10] hover:text-[#E6B35C]"
                     >
                       ✕
                     </button>
                   </div>
 
                   <div className="mt-3 grid grid-cols-3 gap-2">
-                    <div className="rounded-xl border border-white/10 bg-white/[0.04] p-2.5 text-center">
-                      <p className="text-[10px] uppercase tracking-wide text-(--text-muted)">
+                    <div className="fl-search-soft rounded-xl border border-white/10 bg-white/[0.04] p-2.5 text-center">
+                      <p className="fl-search-muted text-[10px] uppercase tracking-wide text-(--text-muted)">
                         Adults
                       </p>
-                      <p className="text-lg sm:text-xl font-bold text-(--gold-main)">
+                      <p className="fl-search-ink text-lg sm:text-xl font-bold text-(--gold-main)">
                         {guests.adults}
                       </p>
                     </div>
 
-                    <div className="rounded-xl border border-white/10 bg-white/[0.04] p-2.5 text-center">
-                      <p className="text-[10px] uppercase tracking-wide text-(--text-muted)">
+                    <div className="fl-search-soft rounded-xl border border-white/10 bg-white/[0.04] p-2.5 text-center">
+                      <p className="fl-search-muted text-[10px] uppercase tracking-wide text-(--text-muted)">
                         Children
                       </p>
-                      <p className="text-lg sm:text-xl font-bold text-(--gold-main)">
+                      <p className="fl-search-ink text-lg sm:text-xl font-bold text-(--gold-main)">
                         {guests.children}
                       </p>
                     </div>
 
-                    <div className="rounded-xl border border-white/10 bg-white/[0.04] p-2.5 text-center">
-                      <p className="text-[10px] uppercase tracking-wide text-(--text-muted)">
+                    <div className="fl-search-soft rounded-xl border border-white/10 bg-white/[0.04] p-2.5 text-center">
+                      <p className="fl-search-muted text-[10px] uppercase tracking-wide text-(--text-muted)">
                         Rooms
                       </p>
-                      <p className="text-lg sm:text-xl font-bold text-(--gold-main)">
+                      <p className="fl-search-ink text-lg sm:text-xl font-bold text-(--gold-main)">
                         {guests.rooms}
                       </p>
                     </div>
@@ -1298,15 +1298,15 @@ const HotelsForm = () => {
                   {rooms.map((room, roomIndex) => (
                     <div
                       key={roomIndex}
-                      className="rounded-2xl border border-white/10 bg-white/[0.035] p-3 space-y-3 sm:p-4"
+                      className="fl-search-soft rounded-2xl border border-white/10 bg-white/[0.035] p-3 space-y-3 sm:p-4"
                     >
                       <div className="flex items-center justify-between gap-3">
                         <div>
-                          <p className="text-sm font-bold text-(--text-main)">
+                          <p className="fl-search-ink text-sm font-bold text-(--text-main)">
                             Room {roomIndex + 1}
                           </p>
 
-                          <p className="text-xs text-(--text-muted)">
+                          <p className="fl-search-muted text-xs text-(--text-muted)">
                             {room.adults} Adult{room.adults > 1 && "s"} ·{" "}
                             {room.children} Child
                             {room.children !== 1 && "ren"}
@@ -1317,7 +1317,7 @@ const HotelsForm = () => {
                           <button
                             type="button"
                             onClick={() => removeRoom(roomIndex)}
-                            className="px-3 py-1.5 rounded-full text-xs font-semibold text-red-400 bg-red-500/10 border border-red-500/30 hover:bg-red-500/20 transition"
+                            className="fl-search-danger px-3 py-1.5 rounded-full text-xs font-semibold text-red-400 bg-red-500/10 border border-red-500/30 hover:bg-red-500/20 transition"
                           >
                             Remove
                           </button>
@@ -1325,13 +1325,13 @@ const HotelsForm = () => {
                       </div>
 
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <div className="rounded-2xl bg-(--bg-card) border border-(--border-soft) p-3">
+                        <div className="fl-search-soft rounded-2xl bg-(--bg-card) border border-(--border-soft) p-3">
                           <div className="flex items-center justify-between gap-3">
                             <div>
-                              <p className="text-sm font-medium text-(--text-main)">
+                              <p className="fl-search-ink text-sm font-medium text-(--text-main)">
                                 Adults
                               </p>
-                              <p className="text-xs text-(--text-muted)">
+                              <p className="fl-search-muted text-xs text-(--text-muted)">
                                 Age 12+
                               </p>
                             </div>
@@ -1343,12 +1343,12 @@ const HotelsForm = () => {
                                   updateRoomValue(roomIndex, "adults", "dec")
                                 }
                                 disabled={room.adults <= 1}
-                                className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-white/[0.06] text-base font-bold text-white transition hover:border-[#E6B35C]/60 hover:bg-white/[0.10] hover:text-[#E6B35C] disabled:cursor-not-allowed disabled:text-white/35 disabled:opacity-60"
+                                className="fl-search-secondary flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-white/[0.06] text-base font-bold text-white transition hover:border-[#E6B35C]/60 hover:bg-white/[0.10] hover:text-[#E6B35C] disabled:cursor-not-allowed disabled:text-white/35 disabled:opacity-60"
                               >
                                 -
                               </button>
 
-                              <span className="min-w-6 text-center font-bold text-white">
+                              <span className="fl-search-ink min-w-6 text-center font-bold text-white">
                                 {room.adults}
                               </span>
 
@@ -1358,7 +1358,7 @@ const HotelsForm = () => {
                                   updateRoomValue(roomIndex, "adults", "inc")
                                 }
                                 disabled={room.adults >= MAX_ADULTS_PER_ROOM}
-                                className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-white/[0.06] text-base font-bold text-white transition hover:border-[#E6B35C]/60 hover:bg-white/[0.10] hover:text-[#E6B35C] disabled:cursor-not-allowed disabled:text-white/35 disabled:opacity-60"
+                                className="fl-search-secondary flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-white/[0.06] text-base font-bold text-white transition hover:border-[#E6B35C]/60 hover:bg-white/[0.10] hover:text-[#E6B35C] disabled:cursor-not-allowed disabled:text-white/35 disabled:opacity-60"
                               >
                                 +
                               </button>
@@ -1366,13 +1366,13 @@ const HotelsForm = () => {
                           </div>
                         </div>
 
-                        <div className="rounded-2xl bg-(--bg-card) border border-(--border-soft) p-3">
+                        <div className="fl-search-soft rounded-2xl bg-(--bg-card) border border-(--border-soft) p-3">
                           <div className="flex items-center justify-between gap-3">
                             <div>
-                              <p className="text-sm font-medium text-(--text-main)">
+                              <p className="fl-search-ink text-sm font-medium text-(--text-main)">
                                 Children
                               </p>
-                              <p className="text-xs text-(--text-muted)">
+                              <p className="fl-search-muted text-xs text-(--text-muted)">
                                 Age 1 - 12
                               </p>
                             </div>
@@ -1384,12 +1384,12 @@ const HotelsForm = () => {
                                   updateRoomValue(roomIndex, "children", "dec")
                                 }
                                 disabled={room.children <= 0}
-                                className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-white/[0.06] text-base font-bold text-white transition hover:border-[#E6B35C]/60 hover:bg-white/[0.10] hover:text-[#E6B35C] disabled:cursor-not-allowed disabled:text-white/35 disabled:opacity-60"
+                                className="fl-search-secondary flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-white/[0.06] text-base font-bold text-white transition hover:border-[#E6B35C]/60 hover:bg-white/[0.10] hover:text-[#E6B35C] disabled:cursor-not-allowed disabled:text-white/35 disabled:opacity-60"
                               >
                                 -
                               </button>
 
-                              <span className="min-w-6 text-center font-bold text-white">
+                              <span className="fl-search-ink min-w-6 text-center font-bold text-white">
                                 {room.children}
                               </span>
 
@@ -1401,7 +1401,7 @@ const HotelsForm = () => {
                                 disabled={
                                   room.children >= MAX_CHILDREN_PER_ROOM
                                 }
-                                className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-white/[0.06] text-base font-bold text-white transition hover:border-[#E6B35C]/60 hover:bg-white/[0.10] hover:text-[#E6B35C] disabled:cursor-not-allowed disabled:text-white/35 disabled:opacity-60"
+                                className="fl-search-secondary flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-white/[0.06] text-base font-bold text-white transition hover:border-[#E6B35C]/60 hover:bg-white/[0.10] hover:text-[#E6B35C] disabled:cursor-not-allowed disabled:text-white/35 disabled:opacity-60"
                               >
                                 +
                               </button>
@@ -1411,8 +1411,8 @@ const HotelsForm = () => {
                       </div>
 
                       {room.children > 0 && (
-                        <div className="rounded-2xl bg-(--bg-card) border border-(--border-soft) p-3">
-                          <p className="text-xs font-semibold text-(--text-muted) mb-3">
+                        <div className="fl-search-soft rounded-2xl bg-(--bg-card) border border-(--border-soft) p-3">
+                          <p className="fl-search-muted text-xs font-semibold text-(--text-muted) mb-3">
                             Child age is required
                           </p>
 
@@ -1420,7 +1420,7 @@ const HotelsForm = () => {
                             {Array.from({ length: room.children }).map(
                               (_, childIndex) => (
                                 <div key={childIndex}>
-                                  <label className="text-[11px] text-(--text-muted)">
+                                  <label className="fl-search-label text-[11px] text-(--text-muted)">
                                     Child {childIndex + 1}
                                   </label>
 
@@ -1437,7 +1437,7 @@ const HotelsForm = () => {
                                       )
                                     }
                                     placeholder="1-12"
-                                    className="w-full mt-1 h-10 px-3 rounded-xl text-sm text-white bg-white/[0.06] border border-white/15 outline-none shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] transition placeholder:text-white/40 focus:border-[#E6B35C]/70 focus:bg-white/[0.09] focus:ring-2 focus:ring-[#E6B35C]/15"
+                                    className="fl-search-control fl-search-age w-full mt-1 h-10 px-3 rounded-xl text-sm text-white bg-white/[0.06] border border-white/15 outline-none shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] transition placeholder:text-white/40 focus:border-[#E6B35C]/70 focus:bg-white/[0.09] focus:ring-2 focus:ring-[#E6B35C]/15"
                                   />
                                 </div>
                               ),
@@ -1449,13 +1449,13 @@ const HotelsForm = () => {
                   ))}
                 </div>
 
-                <div className="shrink-0 border-t border-white/10 bg-[#101721]/95 p-3 sm:p-4">
+                <div className="fl-search-modal-surface shrink-0 border-t border-white/10 bg-[#101721]/95 p-3 sm:p-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <button
                       type="button"
                       onClick={addRoom}
                       disabled={rooms.length >= MAX_ROOMS}
-                      className="w-full rounded-xl border border-white/15 bg-white/[0.06] py-3 text-sm font-semibold text-white/90 transition hover:border-[#E6B35C]/60 hover:bg-white/[0.10] hover:text-[#E6B35C] disabled:cursor-not-allowed disabled:text-white/35 disabled:opacity-50"
+                      className="fl-search-secondary w-full rounded-xl border border-white/15 bg-white/[0.06] py-3 text-sm font-semibold text-white/90 transition hover:border-[#E6B35C]/60 hover:bg-white/[0.10] hover:text-[#E6B35C] disabled:cursor-not-allowed disabled:text-white/35 disabled:opacity-50"
                     >
                       + Add Room
                     </button>
@@ -1463,7 +1463,7 @@ const HotelsForm = () => {
                     <button
                       type="button"
                       onClick={() => setGuestOpen(false)}
-                      className="w-full py-3 rounded-2xl bg-linear-to-r from-start to-end text-black text-sm font-bold hover:scale-[1.01] active:scale-[0.98] transition"
+                      className="fl-search-primary w-full py-3 rounded-2xl bg-linear-to-r from-start to-end text-black text-sm font-bold hover:scale-[1.01] active:scale-[0.98] transition"
                     >
                       Done
                     </button>
@@ -1478,11 +1478,11 @@ const HotelsForm = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full sm:w-52 md:w-60 xl:w-64 px-4 py-2.5 rounded-xl font-semibold text-sm text-black bg-linear-to-r from-start to-end transition hover:brightness-105 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            className="fl-search-primary w-full sm:w-52 md:w-60 xl:w-64 px-4 py-2.5 rounded-xl font-semibold text-sm text-black bg-linear-to-r from-start to-end transition hover:brightness-105 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
             {loading ? (
               <>
-                <span className="w-5 h-5 border-2 border-black/30 border-t-black rounded-full animate-spin" />
+                <span className="fl-search-spinner w-5 h-5 border-2 border-black/30 border-t-black rounded-full animate-spin" />
 
                 <span>Searching Hotels...</span>
               </>

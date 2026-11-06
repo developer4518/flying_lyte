@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "react-toastify";
 import { useAuthStore } from "../../store/authStore";
 import { Helmet } from "react-helmet-async";
+import PackageItineraryDownload from "./PackageItineraryDownload";
 import {
   ArrowLeft,
   Heart,
@@ -331,10 +332,10 @@ Please share the best quote and itinerary.`;
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-(--bg-main) flex items-center justify-center text-white px-4">
+      <div data-fl-theme="model2" className="fl-package-detail fl-pkg-empty fl-pkg-ink fl-pkg-inset min-h-screen bg-(--bg-main) flex items-center justify-center text-white px-4">
         <div className="text-center">
-          <div className="w-14 h-14 mx-auto mb-4 rounded-full border-2 border-(--gold-main) border-t-transparent animate-spin" />
-          <p className="text-gray-300">Loading package...</p>
+          <div className="fl-pkg-spinner w-14 h-14 mx-auto mb-4 rounded-full border-2 border-(--gold-main) border-t-transparent animate-spin" />
+          <p className="fl-pkg-muted fl-pkg-ink text-gray-300">Loading package...</p>
         </div>
       </div>
     );
@@ -342,7 +343,7 @@ Please share the best quote and itinerary.`;
 
   if (isError || !pkg) {
     return (
-      <div className="min-h-screen bg-(--bg-main) flex items-center justify-center text-red-400 px-4 text-center">
+      <div data-fl-theme="model2" className="fl-package-detail fl-pkg-empty fl-pkg-inset min-h-screen bg-(--bg-main) flex items-center justify-center text-red-400 px-4 text-center">
         Package not found
       </div>
     );
@@ -419,34 +420,34 @@ Please share the best quote and itinerary.`;
           })}
         </script>
       </Helmet>
-      <div className="bg-(--bg-main) text-white min-h-screen pb-28 sm:pb-32 lg:pb-12 overflow-hidden">
+      <div data-fl-theme="model2" className="fl-package-detail fl-pkg-page fl-pkg-ink fl-pkg-inset bg-(--bg-main) text-white min-h-screen pb-28 sm:pb-32 lg:pb-12 overflow-hidden">
         {/* HERO */}
-      <section className="relative overflow-hidden">
+      <section className="fl-pkg-hero relative overflow-hidden">
         <div className="absolute inset-0">
           <img
             src={heroImage}
             alt={packageTitle}
-            className="w-full h-full object-cover object-center scale-100 brightness-[1.18] contrast-[1.08] saturate-[1.12]"
+            className="fl-pkg-hero-image w-full h-full object-cover object-center scale-100 brightness-[1.18] contrast-[1.08] saturate-[1.12]"
            loading="lazy" />
 
           {/* Very light overlay for clean image visibility */}
-          <div className="absolute inset-0 bg-black/5" />
+          <div className="fl-pkg-hero-cover absolute inset-0 bg-black/5" />
 
           {/* Soft bottom fade only */}
-          <div className="absolute inset-0 bg-linear-to-b from-transparent via-transparent to-(--bg-main)" />
+          <div className="fl-pkg-hero-fade absolute inset-0 bg-linear-to-b from-transparent via-transparent to-(--bg-main)" />
 
           {/* Light left shade for text readability */}
-          <div className="absolute inset-0 bg-linear-to-r from-[#020617b3] via-[#02061733] to-transparent" />
+          <div className="fl-pkg-hero-shade absolute inset-0 bg-linear-to-r from-[#020617b3] via-[#02061733] to-transparent" />
         </div>
 
-        <div className="absolute -top-24 -left-24 w-65 h-65 sm:w-[320px] sm:h-80 bg-yellow-500/8 blur-[90px] rounded-full" />
-        <div className="absolute top-40 -right-24 w-65 h-65 sm:w-[320px] sm:h-80 bg-cyan-500/5 blur-[90px] rounded-full" />
+        <div className="fl-pkg-decor absolute -top-24 -left-24 w-65 h-65 sm:w-[320px] sm:h-80 bg-yellow-500/8 blur-[90px] rounded-full" />
+        <div className="fl-pkg-decor absolute top-40 -right-24 w-65 h-65 sm:w-[320px] sm:h-80 bg-cyan-500/5 blur-[90px] rounded-full" />
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-5 md:px-6 lg:px-8 pt-22 sm:pt-24 md:pt-28 lg:pt-30 pb-7 sm:pb-10 md:pb-12 lg:pb-16">
           <div className="flex items-center justify-between gap-3 mb-6 sm:mb-8 md:mb-10 lg:mb-12">
             <button
               onClick={() => navigate("/packages")}
-              className="inline-flex items-center gap-1.5 bg-white/10 hover:bg-white/15 border border-white/15 rounded-full px-3 sm:px-5 py-2 sm:py-2.5 text-[11px] sm:text-sm transition backdrop-blur-md"
+              className="fl-pkg-photo-control fl-pkg-button inline-flex items-center gap-1.5 bg-white/10 hover:bg-white/15 border border-white/15 rounded-full px-3 sm:px-5 py-2 sm:py-2.5 text-[11px] sm:text-sm transition backdrop-blur-md"
             >
               <ArrowLeft size={15} />
               <span className="sm:hidden">Back</span>
@@ -454,13 +455,13 @@ Please share the best quote and itinerary.`;
             </button>
 
             <div className="flex items-center gap-2 sm:gap-3">
-              <button className="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white/10 border border-white/15 backdrop-blur-md flex items-center justify-center text-(--gold-main) hover:scale-105 transition">
+              <button className="fl-pkg-photo-control fl-pkg-button w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white/10 border border-white/15 backdrop-blur-md flex items-center justify-center text-(--gold-main) hover:scale-105 transition">
                 <Heart size={18} />
               </button>
 
               <button
                 onClick={handleShare}
-                className="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white/10 border border-white/15 backdrop-blur-md flex items-center justify-center text-(--gold-main) hover:scale-105 transition"
+                className="fl-pkg-photo-control fl-pkg-button w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white/10 border border-white/15 backdrop-blur-md flex items-center justify-center text-(--gold-main) hover:scale-105 transition"
               >
                 <Share2 size={18} />
               </button>
@@ -475,29 +476,29 @@ Please share the best quote and itinerary.`;
               className="max-w-4xl min-w-0"
             >
               <div className="flex flex-wrap items-center gap-2 mb-4">
-                <div className="inline-flex items-center gap-1.5 bg-yellow-400/15 border border-yellow-400/30 text-(--gold-main) px-3 py-1.5 rounded-full text-[11px] sm:text-sm font-semibold backdrop-blur-md">
+                <div className="fl-pkg-badge inline-flex items-center gap-1.5 bg-yellow-400/15 border border-yellow-400/30 text-(--gold-main) px-3 py-1.5 rounded-full text-[11px] sm:text-sm font-semibold backdrop-blur-md">
                   <Sparkles size={14} />
                   Best Selling
                 </div>
 
-                <div className="inline-flex items-center gap-1.5 bg-red-500/15 border border-red-400/30 text-red-200 px-3 py-1.5 rounded-full text-[11px] sm:text-sm font-semibold backdrop-blur-md">
+                <div className="fl-pkg-peach-badge inline-flex items-center gap-1.5 bg-red-500/15 border border-red-400/30 text-red-200 px-3 py-1.5 rounded-full text-[11px] sm:text-sm font-semibold backdrop-blur-md">
                   <BadgePercent size={14} />
                   Limited Seats
                 </div>
 
-                <div className="inline-flex items-center gap-1.5 bg-white/10 border border-white/15 text-white px-3 py-1.5 rounded-full text-[11px] sm:text-sm backdrop-blur-md max-w-full">
+                <div className="fl-pkg-badge fl-pkg-ink inline-flex items-center gap-1.5 bg-white/10 border border-white/15 text-white px-3 py-1.5 rounded-full text-[11px] sm:text-sm backdrop-blur-md max-w-full">
                   <MapPin size={14} className="text-(--gold-main) shrink-0" />
-                  <span className="truncate max-w-55 sm:max-w-[320px] md:max-w-none">
+                  <span className="fl-pkg-destination truncate max-w-55 sm:max-w-[320px] md:max-w-none">
                     {destination}
                   </span>
                 </div>
               </div>
 
-              <h1 className="text-[27px] sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-(--font-hero) leading-[1.08] mb-3 sm:mb-4 md:mb-5 break-words">
+              <h1 className="fl-pkg-title fl-pkg-heading text-[27px] sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-(--font-hero) leading-[1.08] mb-3 sm:mb-4 md:mb-5 break-words">
                 {packageTitle}
               </h1>
 
-              <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-200 max-w-3xl leading-6 sm:leading-7 md:leading-8 mb-5 sm:mb-6 md:mb-7 line-clamp-3 sm:line-clamp-4">
+              <p className="fl-pkg-description fl-pkg-ink text-sm sm:text-base md:text-lg lg:text-xl text-gray-200 max-w-3xl leading-6 sm:leading-7 md:leading-8 mb-5 sm:mb-6 md:mb-7 line-clamp-3 sm:line-clamp-4">
                 {shortDescription}
               </p>
 
@@ -520,45 +521,46 @@ Please share the best quote and itinerary.`;
                 />
               </div>
 
-              <div className="relative bg-black/30 border border-white/15 rounded-[22px] sm:rounded-3xl p-4 sm:p-5 md:p-6 backdrop-blur-md max-w-3xl mb-5 sm:mb-6 md:mb-7 overflow-hidden shadow-2xl">
-                <div className="absolute -top-16 -right-16 w-44 h-44 rounded-full bg-yellow-400/15 blur-[70px]" />
+              <div className="fl-pkg-price-card relative bg-black/30 border border-white/15 rounded-[22px] sm:rounded-3xl p-4 sm:p-5 md:p-6 backdrop-blur-md max-w-3xl mb-5 sm:mb-6 md:mb-7 overflow-hidden shadow-2xl">
+                <div className="fl-pkg-decor absolute -top-16 -right-16 w-44 h-44 rounded-full bg-yellow-400/15 blur-[70px]" />
 
                 <div className="relative grid md:grid-cols-[minmax(0,1fr)_auto] gap-5 md:gap-6 items-center">
                   <div className="min-w-0">
-                    <p className="text-gray-300 text-xs sm:text-sm mb-1">
+                    <p className="fl-pkg-eyebrow fl-pkg-ink text-gray-300 text-xs sm:text-sm mb-1">
                       Starting From
                     </p>
 
                     <div className="flex flex-wrap items-end gap-1.5 sm:gap-2">
-                      <span className="text-3xl sm:text-5xl md:text-6xl font-black text-(--gold-main)">
+                      <span className="fl-pkg-hero-price text-3xl sm:text-5xl md:text-6xl font-black text-(--gold-main)">
                         ₹{formatPrice(pkg.price)}
                       </span>
-                      <span className="text-gray-200 mb-1 sm:mb-2 text-xs sm:text-base">
+                      <span className="fl-pkg-muted fl-pkg-ink text-gray-200 mb-1 sm:mb-2 text-xs sm:text-base">
                         / Per Person
                       </span>
                     </div>
 
-                    <div className="flex flex-wrap items-center gap-2.5 sm:gap-4 mt-3 sm:mt-4 text-[11px] sm:text-sm text-gray-200">
+                    <div className="fl-pkg-rating fl-pkg-ink flex flex-wrap items-center gap-2.5 sm:gap-4 mt-3 sm:mt-4 text-[11px] sm:text-sm text-gray-200">
                       <span className="inline-flex items-center gap-1.5">
                         <Star
                           size={15}
                           fill="currentColor"
-                          className="text-(--gold-main)"
+                          className="fl-pkg-star text-(--gold-main)"
                         />
                         {rating}/5 Rating
                       </span>
 
                       <span className="inline-flex items-center gap-1.5">
-                        <Award size={15} className="text-(--gold-main)" />
+                        <Award size={15} className="fl-pkg-accent text-(--gold-main)" />
                         Trusted Travelers
                       </span>
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 gap-2.5 md:min-w-57.5">
+                    <PackageItineraryDownload pkg={pkg} />
                     <button
                       onClick={handleBookClick}
-                      className="relative overflow-hidden bg-linear-to-r from-start to-end text-black font-bold py-3.5 sm:py-4 rounded-2xl flex items-center justify-center gap-2 hover:scale-[1.02] transition shadow-[0_15px_40px_rgba(245,186,74,0.25)]"
+                      className="fl-pkg-primary fl-pkg-button relative overflow-hidden bg-linear-to-r from-start to-end text-black font-bold py-3.5 sm:py-4 rounded-2xl flex items-center justify-center gap-2 hover:scale-[1.02] transition shadow-[0_15px_40px_rgba(245,186,74,0.25)]"
                     >
                       <CalendarDays size={18} />
                       Book Now
@@ -566,7 +568,7 @@ Please share the best quote and itinerary.`;
 
                     <button
                       onClick={handleWhatsappInquiry}
-                      className="bg-green-600/95 hover:bg-green-600 text-white font-bold py-3.5 sm:py-4 rounded-2xl flex items-center justify-center gap-2 transition"
+                      className="fl-pkg-secondary fl-pkg-ink fl-pkg-button bg-green-600/95 hover:bg-green-600 text-white font-bold py-3.5 sm:py-4 rounded-2xl flex items-center justify-center gap-2 transition"
                     >
                       <MessageCircle size={18} />
                       WhatsApp Enquiry
@@ -592,19 +594,19 @@ Please share the best quote and itinerary.`;
               transition={{ duration: 0.65 }}
               className="hidden lg:block"
             >
-              <div className="relative bg-black/35 backdrop-blur-lg border border-white/15 rounded-[30px] p-6 shadow-2xl overflow-hidden">
-                <div className="absolute top-0 right-0 w-36 h-36 bg-yellow-400/20 blur-[75px] rounded-full" />
+              <div className="fl-pkg-surface fl-pkg-quote-card relative bg-black/35 backdrop-blur-lg border border-white/15 rounded-[30px] p-6 shadow-2xl overflow-hidden">
+                <div className="fl-pkg-decor absolute top-0 right-0 w-36 h-36 bg-yellow-400/20 blur-[75px] rounded-full" />
 
                 <div className="relative">
-                  <div className="w-14 h-14 rounded-2xl bg-yellow-400/15 border border-yellow-400/30 flex items-center justify-center text-(--gold-main) mb-4">
+                  <div className="fl-pkg-icon w-14 h-14 rounded-2xl bg-yellow-400/15 border border-yellow-400/30 flex items-center justify-center text-(--gold-main) mb-4">
                     <Navigation size={26} />
                   </div>
 
-                  <h3 className="text-2xl font-bold text-white">
+                  <h3 className="fl-pkg-heading fl-pkg-ink text-2xl font-bold text-white">
                     Plan Your {destinationName} Trip
                   </h3>
 
-                  <p className="text-gray-300 text-sm mt-1 mb-5 leading-6">
+                  <p className="fl-pkg-muted fl-pkg-ink text-gray-300 text-sm mt-1 mb-5 leading-6">
                     Get a personalized itinerary and best quote from our travel
                     expert.
                   </p>
@@ -641,7 +643,7 @@ Please share the best quote and itinerary.`;
                     <button
                       type="button"
                       onClick={handleQuoteWhatsapp}
-                      className="w-full bg-linear-to-r from-start to-end text-black font-bold py-3.5 rounded-2xl hover:scale-[1.02] transition"
+                      className="fl-pkg-primary fl-pkg-button w-full bg-linear-to-r from-start to-end text-black font-bold py-3.5 rounded-2xl hover:scale-[1.02] transition"
                     >
                       Get Best Quote
                     </button>
@@ -649,13 +651,13 @@ Please share the best quote and itinerary.`;
                     <button
                       type="button"
                       onClick={handleQuoteWhatsapp}
-                      className="w-full border border-green-500/50 bg-green-500/10 text-green-300 font-semibold py-3.5 rounded-2xl flex items-center justify-center gap-2 hover:bg-green-500/15 transition"
+                      className="fl-pkg-secondary fl-pkg-button w-full border border-green-500/50 bg-green-500/10 text-green-300 font-semibold py-3.5 rounded-2xl flex items-center justify-center gap-2 hover:bg-green-500/15 transition"
                     >
                       <MessageCircle size={18} />
                       Send Quote on WhatsApp
                     </button>
 
-                    <p className="text-xs text-gray-400 text-center pt-2">
+                    <p className="fl-pkg-muted text-xs text-gray-400 text-center pt-2">
                       Our expert will call you within a few minutes.
                     </p>
                   </div>
@@ -668,13 +670,13 @@ Please share the best quote and itinerary.`;
 
       {/* MINI GALLERY */}
       <section className="max-w-7xl mx-auto px-4 sm:px-5 md:px-6 lg:px-8 mt-6 sm:mt-8 md:mt-10 relative z-10">
-        <div className="bg-white/3 border border-white/10 rounded-[22px] sm:rounded-[28px] p-3.5 sm:p-5 md:p-6 backdrop-blur-xl shadow-2xl">
+        <div className="fl-pkg-surface bg-white/3 border border-white/10 rounded-[22px] sm:rounded-[28px] p-3.5 sm:p-5 md:p-6 backdrop-blur-xl shadow-2xl">
           <div className="flex items-center justify-between gap-4 mb-4 sm:mb-5">
             <div className="min-w-0">
-              <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-white">
+              <h2 className="fl-pkg-heading fl-pkg-ink text-lg sm:text-xl md:text-2xl font-bold text-white">
                 Trip Gallery
               </h2>
-              <p className="text-xs sm:text-sm text-gray-400 mt-1 leading-5">
+              <p className="fl-pkg-muted text-xs sm:text-sm text-gray-400 mt-1 leading-5">
                 Explore beautiful moments from this package
               </p>
             </div>
@@ -682,7 +684,7 @@ Please share the best quote and itinerary.`;
             <button
               type="button"
               onClick={() => setActiveTab("gallery")}
-              className="hidden md:inline-flex items-center gap-2 border border-(--gold-main)/50 text-(--gold-main) px-4 py-2 rounded-full text-sm font-semibold hover:bg-(--gold-main) hover:text-black transition shrink-0"
+              className="fl-pkg-secondary fl-pkg-button hidden md:inline-flex items-center gap-2 border border-(--gold-main)/50 text-(--gold-main) px-4 py-2 rounded-full text-sm font-semibold hover:bg-(--gold-main) hover:text-black transition shrink-0"
             >
               <Camera size={16} />
               View All
@@ -690,18 +692,15 @@ Please share the best quote and itinerary.`;
           </div>
 
           {images.length > 0 ? (
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
+            <div className="fl-pkg-gallery-mosaic" data-count={Math.min(images.length, 4)}>
               {images.slice(0, 4).map((img, index) => (
                 <motion.button
                   key={img.id || index}
                   type="button"
                   onClick={() => setSelectedImage(img.image)}
                   whileTap={{ scale: 0.97 }}
-                  className={`relative overflow-hidden group border border-white/10 bg-black/30 shadow-xl rounded-2xl sm:rounded-3xl ${
-                    index === 0
-                      ? "h-44 col-span-2 sm:h-72 lg:h-64 lg:col-span-2"
-                      : "h-32 sm:h-64"
-                  }`}
+                  aria-label={`Open ${packageTitle} photo ${index + 1}`}
+                  className="fl-pkg-gallery-card relative overflow-hidden group border border-white/10 bg-black/30 shadow-xl rounded-2xl sm:rounded-3xl"
                 >
                   <img
                     src={img.image}
@@ -709,14 +708,14 @@ Please share the best quote and itinerary.`;
                     className="w-full h-full object-cover group-hover:scale-110 transition duration-700"
                    loading="lazy" />
 
-                  <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/25 to-transparent" />
+                  <div className="fl-pkg-photo-gradient absolute inset-0 bg-linear-to-t from-black/90 via-black/25 to-transparent" />
 
-                  <div className="absolute top-3 right-3 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-black/60 border border-white/15 backdrop-blur-md flex items-center justify-center text-(--gold-main)">
+                  <div className="fl-pkg-photo-icon absolute top-3 right-3 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-black/60 border border-white/15 backdrop-blur-md flex items-center justify-center text-(--gold-main)">
                     <Camera size={16} />
                   </div>
 
                   <div className="absolute bottom-3 left-3 right-3 text-left">
-                    <p className="text-white font-bold text-xs sm:text-base leading-tight">
+                    <p className="fl-pkg-photo-caption fl-pkg-ink text-white font-bold text-xs sm:text-base leading-tight">
                       {index === 0
                         ? "Destination View"
                         : index === 1
@@ -730,7 +729,7 @@ Please share the best quote and itinerary.`;
               ))}
             </div>
           ) : (
-            <div className="bg-(--bg-card) border border-white/10 rounded-2xl p-6 sm:p-8 text-center text-gray-400 text-sm">
+            <div className="fl-pkg-inset fl-pkg-muted fl-pkg-surface bg-(--bg-card) border border-white/10 rounded-2xl p-6 sm:p-8 text-center text-gray-400 text-sm">
               No gallery images available.
             </div>
           )}
@@ -739,7 +738,7 @@ Please share the best quote and itinerary.`;
 
       {/* FEATURE STRIP */}
       <section className="max-w-7xl mx-auto px-4 sm:px-5 md:px-6 lg:px-8 mt-6 sm:mt-8 md:mt-10">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 bg-(--bg-card) border border-white/10 rounded-3xl sm:rounded-[26px] p-3.5 sm:p-4 md:p-5 shadow-xl">
+        <div className="fl-pkg-surface grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 bg-(--bg-card) border border-white/10 rounded-3xl sm:rounded-[26px] p-3.5 sm:p-4 md:p-5 shadow-xl">
           <FeatureCard
             icon={<Building2 />}
             title="Hotels Included"
@@ -766,13 +765,13 @@ Please share the best quote and itinerary.`;
       {/* MAIN CONTENT */}
       <section className="max-w-7xl mx-auto px-4 sm:px-5 md:px-6 lg:px-8 mt-6 sm:mt-8 md:mt-10 grid lg:grid-cols-[minmax(0,1fr)_360px] gap-6 sm:gap-8 lg:gap-10">
         <div className="space-y-6 sm:space-y-8 min-w-0">
-          <div className="bg-(--bg-card) border border-white/10 rounded-3xl sm:rounded-[26px] overflow-hidden shadow-2xl">
-            <div className="flex overflow-x-auto border-b border-white/10 bg-black/20 scrollbar-hide">
+          <div className="fl-pkg-surface bg-(--bg-card) border border-white/10 rounded-3xl sm:rounded-[26px] overflow-hidden shadow-2xl">
+            <div className="fl-pkg-tabs flex overflow-x-auto border-b border-white/10 bg-black/20 scrollbar-hide">
               {tabs.map((tab) => (
-                <button
+                <button data-fl-active={activeTab === tab.id}
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`relative min-w-max px-4 sm:px-5 py-3.5 sm:py-4 text-xs sm:text-sm md:text-base font-semibold transition ${
+                  className={`fl-pkg-tab fl-pkg-button relative min-w-max px-4 sm:px-5 py-3.5 sm:py-4 text-xs sm:text-sm md:text-base font-semibold transition ${
                     activeTab === tab.id
                       ? "text-(--gold-main)"
                       : "text-gray-400 hover:text-white"
@@ -783,7 +782,7 @@ Please share the best quote and itinerary.`;
                   {activeTab === tab.id && (
                     <motion.span
                       layoutId="activePackageTab"
-                      className="absolute left-4 right-4 bottom-0 h-0.5 rounded-full bg-(--gold-main)"
+                      className="fl-pkg-tab-indicator absolute left-4 right-4 bottom-0 h-0.5 rounded-full bg-(--gold-main)"
                     />
                   )}
                 </button>
@@ -794,17 +793,17 @@ Please share the best quote and itinerary.`;
               {activeTab === "overview" && (
                 <div>
                   <div className="mb-5">
-                    <p className="text-[11px] sm:text-xs uppercase tracking-[0.22em] sm:tracking-[0.25em] text-(--gold-main) mb-2">
+                    <p className="fl-pkg-eyebrow text-[11px] sm:text-xs uppercase tracking-[0.22em] sm:tracking-[0.25em] text-(--gold-main) mb-2">
                       Package Details
                     </p>
 
-                    <h2 className="text-xl sm:text-2xl md:text-3xl font-(--font-heading) text-(--gold-main)">
+                    <h2 className="fl-pkg-section-title fl-pkg-heading text-xl sm:text-2xl md:text-3xl font-(--font-heading) text-(--gold-main)">
                       Tour Overview
                     </h2>
                   </div>
 
-                  <div className="bg-black/20 border border-white/10 rounded-2xl p-4 sm:p-5">
-                    <p className="text-gray-300 leading-7 text-sm sm:text-base wrap-break-words">
+                  <div className="fl-pkg-inset bg-black/20 border border-white/10 rounded-2xl p-4 sm:p-5">
+                    <p className="fl-pkg-body fl-pkg-ink text-gray-300 leading-7 text-sm sm:text-base wrap-break-words">
                       {pkg.description}
                     </p>
                   </div>
@@ -828,14 +827,15 @@ Please share the best quote and itinerary.`;
 
               {activeTab === "itinerary" && (
                 <div>
-                  <div className="mb-5 sm:mb-6">
-                    <p className="text-[11px] sm:text-xs uppercase tracking-[0.22em] sm:tracking-[0.25em] text-(--gold-main) mb-2">
+                  <div className="fl-pkg-itinerary-heading mb-5 sm:mb-6">
+                    <p className="fl-pkg-eyebrow text-[11px] sm:text-xs uppercase tracking-[0.22em] sm:tracking-[0.25em] text-(--gold-main) mb-2">
                       Day Wise Plan
                     </p>
 
-                    <h2 className="text-xl sm:text-2xl md:text-3xl font-(--font-heading) text-(--gold-main)">
+                    <h2 className="fl-pkg-section-title fl-pkg-heading text-xl sm:text-2xl md:text-3xl font-(--font-heading) text-(--gold-main)">
                       Itinerary Highlights
                     </h2>
+                    <PackageItineraryDownload pkg={pkg} />
                   </div>
 
                   {itineraryDays.length > 0 ? (
@@ -846,17 +846,17 @@ Please share the best quote and itinerary.`;
                           className="relative grid grid-cols-1 md:grid-cols-[96px_minmax(0,1fr)] gap-3 sm:gap-4"
                         >
                           <div className="md:sticky md:top-24 h-fit">
-                            <div className="inline-flex md:flex w-fit md:w-full items-center justify-center bg-yellow-400/10 border border-yellow-400/30 rounded-full md:rounded-2xl px-4 py-2.5 text-(--gold-main) font-bold text-xs sm:text-sm md:text-base">
+                            <div className="fl-pkg-day inline-flex md:flex w-fit md:w-full items-center justify-center bg-yellow-400/10 border border-yellow-400/30 rounded-full md:rounded-2xl px-4 py-2.5 text-(--gold-main) font-bold text-xs sm:text-sm md:text-base">
                               Day {item.day}
                             </div>
                           </div>
 
-                          <div className="bg-black/25 border border-white/10 rounded-2xl p-4 sm:p-5 hover:border-yellow-400/30 transition min-w-0">
-                            <h3 className="font-semibold text-white mb-2 text-sm sm:text-base md:text-lg leading-snug">
+                          <div className="fl-pkg-itinerary-card bg-black/25 border border-white/10 rounded-2xl p-4 sm:p-5 hover:border-yellow-400/30 transition min-w-0">
+                            <h3 className="fl-pkg-heading fl-pkg-ink font-semibold text-white mb-2 text-sm sm:text-base md:text-lg leading-snug">
                               {item.title}
                             </h3>
 
-                            <p className="text-gray-300 leading-7 text-sm sm:text-base wrap-break-words">
+                            <p className="fl-pkg-body fl-pkg-ink text-gray-300 leading-7 text-sm sm:text-base wrap-break-words">
                               {item.description}
                             </p>
                           </div>
@@ -864,8 +864,8 @@ Please share the best quote and itinerary.`;
                       ))}
                     </div>
                   ) : (
-                    <div className="bg-black/20 border border-white/10 rounded-2xl p-5 text-center">
-                      <p className="text-gray-400 text-sm">
+                    <div className="fl-pkg-inset bg-black/20 border border-white/10 rounded-2xl p-5 text-center">
+                      <p className="fl-pkg-muted text-gray-400 text-sm">
                         No itinerary available.
                       </p>
                     </div>
@@ -892,11 +892,11 @@ Please share the best quote and itinerary.`;
               {activeTab === "gallery" && (
                 <div>
                   <div className="mb-5 sm:mb-6">
-                    <p className="text-[11px] sm:text-xs uppercase tracking-[0.22em] sm:tracking-[0.25em] text-(--gold-main) mb-2">
+                    <p className="fl-pkg-eyebrow text-[11px] sm:text-xs uppercase tracking-[0.22em] sm:tracking-[0.25em] text-(--gold-main) mb-2">
                       Trip Photos
                     </p>
 
-                    <h2 className="text-xl sm:text-2xl md:text-3xl font-(--font-heading) text-(--gold-main)">
+                    <h2 className="fl-pkg-section-title fl-pkg-heading text-xl sm:text-2xl md:text-3xl font-(--font-heading) text-(--gold-main)">
                       Gallery
                     </h2>
                   </div>
@@ -907,7 +907,7 @@ Please share the best quote and itinerary.`;
                         <button
                           key={img.id || index}
                           onClick={() => setSelectedImage(img.image)}
-                          className={`relative overflow-hidden border border-white/10 bg-black/30 group shadow-lg ${
+                          className={`fl-pkg-gallery-card fl-pkg-button relative overflow-hidden border border-white/10 bg-black/30 group shadow-lg ${
                             index === 0
                               ? "col-span-2 h-44 sm:h-72 lg:h-80 rounded-2xl sm:rounded-3xl"
                               : "h-32 sm:h-56 lg:h-64 rounded-2xl sm:rounded-3xl"
@@ -919,17 +919,17 @@ Please share the best quote and itinerary.`;
                             className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
                            loading="lazy" />
 
-                          <div className="absolute inset-0 bg-linear-to-t from-black/70 via-transparent to-transparent opacity-80" />
+                          <div className="fl-pkg-photo-gradient absolute inset-0 bg-linear-to-t from-black/70 via-transparent to-transparent opacity-80" />
 
-                          <div className="absolute top-3 right-3 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-black/60 border border-white/15 backdrop-blur-md flex items-center justify-center text-(--gold-main)">
+                          <div className="fl-pkg-photo-icon absolute top-3 right-3 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-black/60 border border-white/15 backdrop-blur-md flex items-center justify-center text-(--gold-main)">
                             <Camera size={16} />
                           </div>
                         </button>
                       ))}
                     </div>
                   ) : (
-                    <div className="bg-black/20 border border-white/10 rounded-2xl p-5 text-center">
-                      <p className="text-gray-400 text-sm">
+                    <div className="fl-pkg-inset bg-black/20 border border-white/10 rounded-2xl p-5 text-center">
+                      <p className="fl-pkg-muted text-gray-400 text-sm">
                         No gallery images available.
                       </p>
                     </div>
@@ -940,24 +940,24 @@ Please share the best quote and itinerary.`;
           </div>
 
           {pkg.faqs?.length > 0 && (
-            <div className="bg-(--bg-card) border border-white/10 rounded-3xl sm:rounded-[26px] p-4 sm:p-6 md:p-8 shadow-xl">
-              <h2 className="text-xl sm:text-2xl font-(--font-heading) text-(--gold-main) mb-5 sm:mb-6">
+            <div className="fl-pkg-surface bg-(--bg-card) border border-white/10 rounded-3xl sm:rounded-[26px] p-4 sm:p-6 md:p-8 shadow-xl">
+              <h2 className="fl-pkg-section-title fl-pkg-heading text-xl sm:text-2xl font-(--font-heading) text-(--gold-main) mb-5 sm:mb-6">
                 Frequently Asked Questions
               </h2>
 
               <div className="grid md:grid-cols-2 gap-3 sm:gap-4">
                 {pkg.faqs.map((faq, index) => (
-                  <div
+                  <div data-fl-open={openFaq === index}
                     key={faq.id || index}
-                    className="bg-black/25 border border-white/10 rounded-2xl overflow-hidden"
+                    className="fl-pkg-faq-item bg-black/25 border border-white/10 rounded-2xl overflow-hidden"
                   >
                     <button
                       onClick={() =>
                         setOpenFaq(openFaq === index ? null : index)
                       }
-                      className="w-full flex items-center justify-between gap-3 p-4 text-left"
+                      className="fl-pkg-faq-toggle fl-pkg-button w-full flex items-center justify-between gap-3 p-4 text-left"
                     >
-                      <span className="font-semibold text-sm sm:text-base leading-snug">
+                      <span className="fl-pkg-ink font-semibold text-sm sm:text-base leading-snug">
                         {faq.question}
                       </span>
                       <ChevronDown
@@ -974,7 +974,7 @@ Please share the best quote and itinerary.`;
                           initial={{ height: 0, opacity: 0 }}
                           animate={{ height: "auto", opacity: 1 }}
                           exit={{ height: 0, opacity: 0 }}
-                          className="px-4 pb-4 text-gray-300 text-sm leading-6 overflow-hidden"
+                          className="fl-pkg-faq-answer fl-pkg-ink px-4 pb-4 text-gray-300 text-sm leading-6 overflow-hidden"
                         >
                           {faq.answer}
                         </motion.p>
@@ -986,7 +986,7 @@ Please share the best quote and itinerary.`;
             </div>
           )}
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 bg-(--bg-card) border border-white/10 rounded-[24px] sm:rounded-[26px] p-4 sm:p-5 shadow-xl">
+          <div className="fl-pkg-surface grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 bg-(--bg-card) border border-white/10 rounded-[24px] sm:rounded-[26px] p-4 sm:p-5 shadow-xl">
             <TrustCard
               icon={<ShieldCheck />}
               title="100% Secure Booking"
@@ -1012,11 +1012,11 @@ Please share the best quote and itinerary.`;
 
         <aside className="hidden lg:block">
           <div className="sticky top-24 space-y-5">
-            <div className="bg-(--bg-card) border border-white/10 rounded-[26px] p-6 shadow-xl">
-              <p className="text-gray-400 text-sm mb-1">Starting From</p>
-              <p className="text-4xl font-bold text-(--gold-main)">
+            <div className="fl-pkg-surface fl-pkg-sidebar-price bg-(--bg-card) border border-white/10 rounded-[26px] p-6 shadow-xl">
+              <p className="fl-pkg-muted text-gray-400 text-sm mb-1">Starting From</p>
+              <p className="fl-pkg-price text-4xl font-bold text-(--gold-main)">
                 ₹{formatPrice(pkg.price)}
-                <span className="text-base text-white font-normal">
+                <span className="fl-pkg-muted fl-pkg-ink text-base text-white font-normal">
                   {" "}
                   / Per Person
                 </span>
@@ -1025,7 +1025,7 @@ Please share the best quote and itinerary.`;
               <div className="space-y-3 mt-6">
                 <button
                   onClick={handleBookClick}
-                  className="w-full bg-linear-to-r from-start to-end text-black font-bold py-4 rounded-2xl flex items-center justify-center gap-2 hover:scale-[1.02] transition"
+                  className="fl-pkg-primary fl-pkg-button w-full bg-linear-to-r from-start to-end text-black font-bold py-4 rounded-2xl flex items-center justify-center gap-2 hover:scale-[1.02] transition"
                 >
                   <CalendarDays size={18} />
                   Book Now
@@ -1033,7 +1033,7 @@ Please share the best quote and itinerary.`;
 
                 <button
                   onClick={handleWhatsappInquiry}
-                  className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 rounded-2xl flex items-center justify-center gap-2 transition"
+                  className="fl-pkg-secondary fl-pkg-ink fl-pkg-button w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 rounded-2xl flex items-center justify-center gap-2 transition"
                 >
                   <MessageCircle size={18} />
                   Enquire Now
@@ -1041,19 +1041,19 @@ Please share the best quote and itinerary.`;
 
                 <button
                   onClick={handleBookClick}
-                  className="w-full border border-(--gold-main) text-(--gold-main) font-bold py-4 rounded-2xl hover:bg-(--gold-main) hover:text-black transition"
+                  className="fl-pkg-secondary fl-pkg-button w-full border border-(--gold-main) text-(--gold-main) font-bold py-4 rounded-2xl hover:bg-(--gold-main) hover:text-black transition"
                 >
                   Customize This Trip
                 </button>
               </div>
             </div>
 
-            <div className="bg-(--bg-card) border border-white/10 rounded-[26px] p-6 shadow-xl">
-              <h3 className="text-xl font-bold text-(--gold-main) mb-4">
+            <div className="fl-pkg-surface bg-(--bg-card) border border-white/10 rounded-[26px] p-6 shadow-xl">
+              <h3 className="fl-pkg-heading text-xl font-bold text-(--gold-main) mb-4">
                 Why Book With FlyingLyte?
               </h3>
 
-              <div className="space-y-3 text-sm text-gray-300">
+              <div className="fl-pkg-muted fl-pkg-ink space-y-3 text-sm text-gray-300">
                 <WhyPoint text="Personalized Travel Planning" />
                 <WhyPoint text="Best Price & No Hidden Charges" />
                 <WhyPoint text="Comfortable Stays" />
@@ -1063,14 +1063,14 @@ Please share the best quote and itinerary.`;
               </div>
             </div>
 
-            <div className="bg-(--bg-card) border border-white/10 rounded-[26px] p-6 shadow-xl">
-              <h3 className="font-bold mb-2">Trusted Travel Partner</h3>
-              <div className="flex text-(--gold-main) gap-1 mb-2">
+            <div className="fl-pkg-surface bg-(--bg-card) border border-white/10 rounded-[26px] p-6 shadow-xl">
+              <h3 className="fl-pkg-heading font-bold mb-2">Trusted Travel Partner</h3>
+              <div className="fl-pkg-star flex text-(--gold-main) gap-1 mb-2">
                 {[...Array(5)].map((_, i) => (
                   <Star key={i} size={17} fill="currentColor" />
                 ))}
               </div>
-              <p className="text-sm text-gray-300">
+              <p className="fl-pkg-muted fl-pkg-ink text-sm text-gray-300">
                 4.8/5 based on our service quality
               </p>
             </div>
@@ -1079,11 +1079,11 @@ Please share the best quote and itinerary.`;
       </section>
 
       {/* MOBILE BOTTOM CTA */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 bg-[#050812]/95 backdrop-blur-xl border-t border-white/10 px-3 sm:px-4 pt-2.5 pb-[calc(0.75rem+env(safe-area-inset-bottom))] lg:hidden">
+      <div className="fl-pkg-mobile-actions fixed bottom-0 left-0 right-0 z-40 bg-[#050812]/95 backdrop-blur-xl border-t border-white/10 px-3 sm:px-4 pt-2.5 pb-[calc(0.75rem+env(safe-area-inset-bottom))] lg:hidden">
         <div className="grid grid-cols-4 gap-2">
           <button
             onClick={handleWhatsappInquiry}
-            className="border border-green-500/30 bg-green-500/10 rounded-2xl py-2.5 flex flex-col items-center justify-center gap-1 text-green-400 font-semibold text-[10px] sm:text-[11px]"
+            className="fl-pkg-secondary fl-pkg-button border border-green-500/30 bg-green-500/10 rounded-2xl py-2.5 flex flex-col items-center justify-center gap-1 text-green-400 font-semibold text-[10px] sm:text-[11px]"
           >
             <MessageCircle size={17} />
             WhatsApp
@@ -1091,7 +1091,7 @@ Please share the best quote and itinerary.`;
 
           <a
             href="tel:+919667455591"
-            className="border border-white/10 bg-white/5 rounded-2xl py-2.5 flex flex-col items-center justify-center gap-1 text-(--gold-main) font-semibold text-[10px] sm:text-[11px]"
+            className="fl-pkg-secondary border border-white/10 bg-white/5 rounded-2xl py-2.5 flex flex-col items-center justify-center gap-1 text-(--gold-main) font-semibold text-[10px] sm:text-[11px]"
           >
             <Phone size={17} />
             Call
@@ -1099,7 +1099,7 @@ Please share the best quote and itinerary.`;
 
           <button
             onClick={() => setOpenQuoteForm(true)}
-            className="border border-(--gold-main)/50 bg-(--gold-main)/10 rounded-2xl py-2.5 flex flex-col items-center justify-center gap-1 text-(--gold-main) font-bold text-[10px] sm:text-[11px]"
+            className="fl-pkg-secondary fl-pkg-button border border-(--gold-main)/50 bg-(--gold-main)/10 rounded-2xl py-2.5 flex flex-col items-center justify-center gap-1 text-(--gold-main) font-bold text-[10px] sm:text-[11px]"
           >
             <SlidersHorizontal size={17} />
             Custom
@@ -1107,7 +1107,7 @@ Please share the best quote and itinerary.`;
 
           <button
             onClick={handleBookClick}
-            className="bg-linear-to-r from-start to-end rounded-2xl py-2.5 flex flex-col items-center justify-center gap-1 text-black font-bold text-[10px] sm:text-[11px] shadow-[0_10px_30px_rgba(245,186,74,0.25)]"
+            className="fl-pkg-primary fl-pkg-button bg-linear-to-r from-start to-end rounded-2xl py-2.5 flex flex-col items-center justify-center gap-1 text-black font-bold text-[10px] sm:text-[11px] shadow-[0_10px_30px_rgba(245,186,74,0.25)]"
           >
             <Plane size={17} />
             Plan
@@ -1122,7 +1122,7 @@ Please share the best quote and itinerary.`;
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-end justify-center p-3 lg:hidden"
+            className="fl-pkg-backdrop fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-end justify-center p-3 lg:hidden"
             onClick={() => setOpenQuoteForm(false)}
           >
             <motion.div
@@ -1131,22 +1131,22 @@ Please share the best quote and itinerary.`;
               exit={{ y: 90, opacity: 0 }}
               transition={{ duration: 0.3 }}
               onClick={(e) => e.stopPropagation()}
-              className="relative w-full max-w-md bg-(--bg-card) border border-white/10 rounded-[28px] shadow-2xl overflow-hidden"
+              className="fl-pkg-surface fl-pkg-quote-sheet relative w-full max-w-md bg-(--bg-card) border border-white/10 rounded-[28px] shadow-2xl overflow-hidden"
             >
-              <div className="absolute top-0 right-0 w-36 h-36 bg-yellow-400/20 blur-[75px] rounded-full" />
+              <div className="fl-pkg-decor absolute top-0 right-0 w-36 h-36 bg-yellow-400/20 blur-[75px] rounded-full" />
 
               <div className="relative p-4 sm:p-5">
                 <div className="flex items-start justify-between gap-4 mb-5">
                   <div>
-                    <div className="w-12 h-12 rounded-2xl bg-yellow-400/15 border border-yellow-400/30 flex items-center justify-center text-(--gold-main) mb-3">
+                    <div className="fl-pkg-icon w-12 h-12 rounded-2xl bg-yellow-400/15 border border-yellow-400/30 flex items-center justify-center text-(--gold-main) mb-3">
                       <Navigation size={23} />
                     </div>
 
-                    <h3 className="text-xl sm:text-2xl font-bold text-white">
+                    <h3 className="fl-pkg-heading fl-pkg-ink text-xl sm:text-2xl font-bold text-white">
                       Plan Your {destinationName} Trip
                     </h3>
 
-                    <p className="text-gray-300 text-sm mt-1 leading-6">
+                    <p className="fl-pkg-muted fl-pkg-ink text-gray-300 text-sm mt-1 leading-6">
                       Get a personalized itinerary and best quote from our
                       travel expert.
                     </p>
@@ -1155,7 +1155,7 @@ Please share the best quote and itinerary.`;
                   <button
                     type="button"
                     onClick={() => setOpenQuoteForm(false)}
-                    className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/15 border border-white/10 text-white shrink-0"
+                    className="fl-pkg-control fl-pkg-ink fl-pkg-button w-9 h-9 rounded-full bg-white/10 hover:bg-white/15 border border-white/10 text-white shrink-0"
                   >
                     ✕
                   </button>
@@ -1193,7 +1193,7 @@ Please share the best quote and itinerary.`;
                   <button
                     type="button"
                     onClick={handleQuoteWhatsapp}
-                    className="w-full bg-linear-to-r from-start to-end text-black font-bold py-3.5 rounded-2xl active:scale-[0.98] transition"
+                    className="fl-pkg-primary fl-pkg-button w-full bg-linear-to-r from-start to-end text-black font-bold py-3.5 rounded-2xl active:scale-[0.98] transition"
                   >
                     Get Best Quote
                   </button>
@@ -1201,13 +1201,13 @@ Please share the best quote and itinerary.`;
                   <button
                     type="button"
                     onClick={handleQuoteWhatsapp}
-                    className="w-full border border-green-500/50 bg-green-500/10 text-green-300 font-semibold py-3.5 rounded-2xl flex items-center justify-center gap-2 hover:bg-green-500/15 transition"
+                    className="fl-pkg-secondary fl-pkg-button w-full border border-green-500/50 bg-green-500/10 text-green-300 font-semibold py-3.5 rounded-2xl flex items-center justify-center gap-2 hover:bg-green-500/15 transition"
                   >
                     <MessageCircle size={18} />
                     Send Quote on WhatsApp
                   </button>
 
-                  <p className="text-xs text-gray-400 text-center pt-1">
+                  <p className="fl-pkg-muted text-xs text-gray-400 text-center pt-1">
                     Our expert will call you within a few minutes.
                   </p>
                 </div>
@@ -1224,48 +1224,48 @@ Please share the best quote and itinerary.`;
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex justify-center items-end md:items-center p-2 sm:p-6 overflow-y-auto"
+            className="fl-pkg-backdrop fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex justify-center items-end md:items-center p-2 sm:p-6 overflow-y-auto"
           >
             <motion.div
               initial={{ y: 80, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: 80, opacity: 0 }}
               transition={{ duration: 0.35 }}
-              className="bg-(--bg-card) border border-white/10 w-full max-w-2xl max-h-[94vh] overflow-hidden rounded-3xl sm:rounded-[26px] shadow-2xl flex flex-col"
+              className="fl-pkg-surface fl-pkg-booking-panel bg-(--bg-card) border border-white/10 w-full max-w-2xl max-h-[94vh] overflow-hidden rounded-3xl sm:rounded-[26px] shadow-2xl flex flex-col"
             >
-              <div className="flex items-center justify-between border-b border-white/10 p-4 md:p-6 sticky top-0 bg-(--bg-card) z-10">
-                <h2 className="text-xl md:text-2xl font-(--font-heading) text-(--gold-main)">
+              <div className="fl-pkg-modal-header fl-pkg-surface flex items-center justify-between border-b border-white/10 p-4 md:p-6 sticky top-0 bg-(--bg-card) z-10">
+                <h2 className="fl-pkg-heading text-xl md:text-2xl font-(--font-heading) text-(--gold-main)">
                   Book Package
                 </h2>
 
                 <button
                   onClick={() => setOpenBookingForm(false)}
-                  className="text-gray-400 hover:text-white text-xl"
+                  className="fl-pkg-control fl-pkg-muted fl-pkg-button text-gray-400 hover:text-white text-xl"
                 >
                   ✕
                 </button>
               </div>
 
               <div className="overflow-y-auto p-4 md:p-6 space-y-6">
-                <div className="bg-black/30 border border-white/10 p-4 rounded-2xl space-y-2 text-sm">
+                <div className="fl-pkg-inset bg-black/30 border border-white/10 p-4 rounded-2xl space-y-2 text-sm">
                   <p>
-                    <span className="text-gray-400">Package:</span>{" "}
+                    <span className="fl-pkg-muted text-gray-400">Package:</span>{" "}
                     <span className="font-semibold">{packageTitle}</span>
                   </p>
 
                   <p>
-                    <span className="text-gray-400">Destination:</span>{" "}
+                    <span className="fl-pkg-muted text-gray-400">Destination:</span>{" "}
                     {destination}
                   </p>
 
                   <p>
-                    <span className="text-gray-400">Duration:</span> {pkg.days}{" "}
+                    <span className="fl-pkg-muted text-gray-400">Duration:</span> {pkg.days}{" "}
                     Days / {pkg.Number_of_nights} Nights
                   </p>
 
                   <p>
-                    <span className="text-gray-400">Price:</span>{" "}
-                    <span className="text-(--gold-main) font-semibold">
+                    <span className="fl-pkg-muted text-gray-400">Price:</span>{" "}
+                    <span className="fl-pkg-accent text-(--gold-main) font-semibold">
                       ₹{formatPrice(pkg.price)} / person
                     </span>
                   </p>
@@ -1323,7 +1323,7 @@ Please share the best quote and itinerary.`;
                   />
 
                   <div>
-                    <label className="text-sm text-gray-400">
+                    <label className="fl-pkg-muted text-sm text-gray-400">
                       Special Requests
                     </label>
                     <textarea
@@ -1332,22 +1332,22 @@ Please share the best quote and itinerary.`;
                       onChange={handleChange}
                       rows="3"
                       placeholder="Optional message..."
-                      className="w-full mt-1 p-3 rounded-xl bg-black/30 border border-white/10 focus:border-(--gold-main) outline-none text-white placeholder:text-gray-500 transition"
+                      className="fl-pkg-input fl-pkg-muted w-full mt-1 p-3 rounded-xl bg-black/30 border border-white/10 focus:border-(--gold-main) outline-none text-white placeholder:text-gray-500 transition"
                     />
                   </div>
 
-                  <div className="bg-black/30 border border-white/10 p-4 rounded-2xl text-sm space-y-2">
+                  <div className="fl-pkg-inset bg-black/30 border border-white/10 p-4 rounded-2xl text-sm space-y-2">
                     <p>
-                      <span className="text-gray-400">Passengers:</span>{" "}
+                      <span className="fl-pkg-muted text-gray-400">Passengers:</span>{" "}
                       {totalPassengers}
                     </p>
 
                     <p>
-                      <span className="text-gray-400">Price Per Person:</span> ₹
+                      <span className="fl-pkg-muted text-gray-400">Price Per Person:</span> ₹
                       {formatPrice(pricePerPerson)}
                     </p>
 
-                    <p className="text-lg font-bold text-(--gold-main)">
+                    <p className="fl-pkg-total text-lg font-bold text-(--gold-main)">
                       Total Price: ₹{formatPrice(totalPrice)}
                     </p>
                   </div>
@@ -1357,7 +1357,7 @@ Please share the best quote and itinerary.`;
                     disabled={bookingMutation.isPending}
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.97 }}
-                    className="bg-linear-to-r from-start to-end text-black py-3 rounded-2xl font-semibold w-full disabled:opacity-60"
+                    className="fl-pkg-primary bg-linear-to-r from-start to-end text-black py-3 rounded-2xl font-semibold w-full disabled:opacity-60"
                   >
                     {bookingMutation.isPending
                       ? "Processing..."
@@ -1378,11 +1378,11 @@ Please share the best quote and itinerary.`;
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setSelectedImage(null)}
-            className="fixed inset-0 z-50 bg-black/90 p-4 flex items-center justify-center"
+            className="fl-pkg-lightbox fixed inset-0 z-50 bg-black/90 p-4 flex items-center justify-center"
           >
             <button
               onClick={() => setSelectedImage(null)}
-              className="absolute top-5 right-5 bg-white/10 hover:bg-white/20 w-11 h-11 rounded-full text-white"
+              className="fl-pkg-photo-control fl-pkg-ink fl-pkg-button absolute top-5 right-5 bg-white/10 hover:bg-white/20 w-11 h-11 rounded-full text-white"
             >
               ✕
             </button>
@@ -1405,34 +1405,34 @@ Please share the best quote and itinerary.`;
 };
 
 const HeroInfo = ({ icon, title, subtitle }) => (
-  <div className="bg-black/25 backdrop-blur-md border border-white/15 rounded-2xl p-3.5 sm:p-4 transition group shadow-lg min-h-22 sm:min-h-26">
-    <div className="text-(--gold-main) mb-2 sm:mb-3 group-hover:scale-110 transition [&>svg]:w-5 sm:[&>svg]:w-7 [&>svg]:h-5 sm:[&>svg]:h-7">
+  <div className="fl-pkg-info bg-black/25 backdrop-blur-md border border-white/15 rounded-2xl p-3.5 sm:p-4 transition group shadow-lg min-h-22 sm:min-h-26">
+    <div className="fl-pkg-icon text-(--gold-main) mb-2 sm:mb-3 group-hover:scale-110 transition [&>svg]:w-5 sm:[&>svg]:w-7 [&>svg]:h-5 sm:[&>svg]:h-7">
       {icon}
     </div>
 
-    <p className="font-bold text-white text-xs sm:text-base leading-tight">
+    <p className="fl-pkg-ink font-bold text-white text-xs sm:text-base leading-tight">
       {title}
     </p>
-    <p className="text-[11px] sm:text-sm text-gray-300 mt-1 leading-snug">
+    <p className="fl-pkg-muted fl-pkg-ink text-[11px] sm:text-sm text-gray-300 mt-1 leading-snug">
       {subtitle}
     </p>
   </div>
 );
 
 const TrustPill = ({ icon, title }) => (
-  <div className="bg-white/6 border border-white/10 backdrop-blur-md rounded-2xl px-3 py-2.5 sm:py-3 flex items-center gap-2 sm:gap-3 transition shadow-lg min-h-12">
-    <div className="text-(--gold-main) shrink-0 [&>svg]:w-4 sm:[&>svg]:w-5 [&>svg]:h-4 sm:[&>svg]:h-5">
+  <div className="fl-pkg-trust-pill bg-white/6 border border-white/10 backdrop-blur-md rounded-2xl px-3 py-2.5 sm:py-3 flex items-center gap-2 sm:gap-3 transition shadow-lg min-h-12">
+    <div className="fl-pkg-accent text-(--gold-main) shrink-0 [&>svg]:w-4 sm:[&>svg]:w-5 [&>svg]:h-4 sm:[&>svg]:h-5">
       {icon}
     </div>
-    <p className="text-[11px] sm:text-sm font-semibold leading-tight">
+    <p className="fl-pkg-ink text-[11px] sm:text-sm font-semibold leading-tight">
       {title}
     </p>
   </div>
 );
 
 const TrustCard = ({ icon, title, small }) => (
-  <div className="bg-black/20 border border-white/10 rounded-2xl p-3.5 sm:p-4 flex items-start gap-3 hover:bg-white/5 transition">
-    <div className="text-(--gold-main) shrink-0 [&>svg]:w-6 sm:[&>svg]:w-7 [&>svg]:h-6 sm:[&>svg]:h-7">
+  <div className="fl-pkg-surface bg-black/20 border border-white/10 rounded-2xl p-3.5 sm:p-4 flex items-start gap-3 hover:bg-white/5 transition">
+    <div className="fl-pkg-icon text-(--gold-main) shrink-0 [&>svg]:w-6 sm:[&>svg]:w-7 [&>svg]:h-6 sm:[&>svg]:h-7">
       {icon}
     </div>
     <div className="min-w-0">
@@ -1440,20 +1440,20 @@ const TrustCard = ({ icon, title, small }) => (
         {title}
       </p>
       {small && (
-        <p className="text-xs text-gray-400 mt-1 leading-relaxed">{small}</p>
+        <p className="fl-pkg-muted text-xs text-gray-400 mt-1 leading-relaxed">{small}</p>
       )}
     </div>
   </div>
 );
 
 const FeatureCard = ({ icon, title, text }) => (
-  <div className="flex gap-3 sm:gap-4 items-start p-3.5 sm:p-4 rounded-2xl hover:bg-white/4 transition">
-    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-(--gold-main) shrink-0 [&>svg]:w-5 sm:[&>svg]:w-6 [&>svg]:h-5 sm:[&>svg]:h-6">
+  <div className="fl-pkg-feature flex gap-3 sm:gap-4 items-start p-3.5 sm:p-4 rounded-2xl hover:bg-white/4 transition">
+    <div className="fl-pkg-icon w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-(--gold-main) shrink-0 [&>svg]:w-5 sm:[&>svg]:w-6 [&>svg]:h-5 sm:[&>svg]:h-6">
       {icon}
     </div>
     <div className="min-w-0">
-      <h3 className="font-bold text-sm sm:text-base leading-tight">{title}</h3>
-      <p className="text-xs sm:text-sm text-gray-300 mt-1 leading-relaxed">
+      <h3 className="fl-pkg-heading font-bold text-sm sm:text-base leading-tight">{title}</h3>
+      <p className="fl-pkg-muted fl-pkg-ink text-xs sm:text-sm text-gray-300 mt-1 leading-relaxed">
         {text}
       </p>
     </div>
@@ -1461,12 +1461,12 @@ const FeatureCard = ({ icon, title, text }) => (
 );
 
 const SmallBenefit = ({ title, text }) => (
-  <div className="bg-black/25 border border-white/10 rounded-2xl p-4 hover:border-yellow-400/30 transition">
+  <div className="fl-pkg-inset bg-black/25 border border-white/10 rounded-2xl p-4 hover:border-yellow-400/30 transition">
     <div className="flex items-start gap-2 text-(--gold-main) font-semibold text-sm sm:text-base">
       <CheckCircle2 size={18} className="shrink-0 mt-0.5" />
       <span>{title}</span>
     </div>
-    <p className="text-xs sm:text-sm text-gray-300 mt-1.5 leading-relaxed">
+    <p className="fl-pkg-muted fl-pkg-ink text-xs sm:text-sm text-gray-300 mt-1.5 leading-relaxed">
       {text}
     </p>
   </div>
@@ -1474,29 +1474,29 @@ const SmallBenefit = ({ title, text }) => (
 
 const ListSection = ({ title, items, type }) => (
   <div>
-    <h2 className="text-xl sm:text-2xl font-(--font-heading) text-(--gold-main) mb-5 sm:mb-6">
+    <h2 className="fl-pkg-section-title fl-pkg-heading text-xl sm:text-2xl font-(--font-heading) text-(--gold-main) mb-5 sm:mb-6">
       {title}
     </h2>
 
     {items.length === 0 ? (
-      <p className="text-gray-400 text-sm">No details available.</p>
+      <p className="fl-pkg-muted text-gray-400 text-sm">No details available.</p>
     ) : (
       <div className="grid md:grid-cols-2 gap-3">
         {items.map((item, index) => (
           <div
             key={index}
-            className="bg-black/25 border border-white/10 rounded-2xl p-4 flex gap-3 hover:bg-white/4 transition"
+            className="fl-pkg-list-item bg-black/25 border border-white/10 rounded-2xl p-4 flex gap-3 hover:bg-white/4 transition"
           >
             {type === "include" ? (
               <CheckCircle2
-                className="text-green-400 shrink-0 mt-0.5"
+                className="fl-pkg-inclusion text-green-400 shrink-0 mt-0.5"
                 size={18}
               />
             ) : (
-              <XCircle className="text-red-400 shrink-0 mt-0.5" size={18} />
+              <XCircle className="fl-pkg-exclusion text-red-400 shrink-0 mt-0.5" size={18} />
             )}
 
-            <p className="text-gray-300 text-sm leading-6">{item}</p>
+            <p className="fl-pkg-body fl-pkg-ink text-gray-300 text-sm leading-6">{item}</p>
           </div>
         ))}
       </div>
@@ -1505,8 +1505,8 @@ const ListSection = ({ title, items, type }) => (
 );
 
 const WhyPoint = ({ text }) => (
-  <p className="flex items-center gap-2 leading-6">
-    <CheckCircle2 className="text-green-400 shrink-0" size={17} />
+  <p className="fl-pkg-body flex items-center gap-2 leading-6">
+    <CheckCircle2 className="fl-pkg-inclusion text-green-400 shrink-0" size={17} />
     {text}
   </p>
 );
@@ -1518,7 +1518,7 @@ const QuoteInput = ({ type = "text", name, value, onChange, placeholder }) => (
     value={value}
     onChange={onChange}
     placeholder={placeholder}
-    className="w-full bg-black/35 border border-white/10 rounded-2xl px-4 py-3 outline-none focus:border-(--gold-main) text-sm text-white placeholder:text-gray-500 transition"
+    className="fl-pkg-input fl-pkg-muted w-full bg-black/35 border border-white/10 rounded-2xl px-4 py-3 outline-none focus:border-(--gold-main) text-sm text-white placeholder:text-gray-500 transition"
   />
 );
 
@@ -1531,30 +1531,30 @@ const InputField = ({
   placeholder,
 }) => (
   <div>
-    <label className="text-sm text-gray-400">{label}</label>
+    <label className="fl-pkg-muted text-sm text-gray-400">{label}</label>
     <input
       name={name}
       value={value}
       onChange={onChange}
       type={type}
       placeholder={placeholder}
-      className="w-full mt-1 p-3 rounded-xl bg-black/30 border border-white/10 focus:border-(--gold-main) outline-none text-white placeholder:text-gray-500 transition"
+      className="fl-pkg-input fl-pkg-muted w-full mt-1 p-3 rounded-xl bg-black/30 border border-white/10 focus:border-(--gold-main) outline-none text-white placeholder:text-gray-500 transition"
     />
   </div>
 );
 
 const CounterBox = ({ label, value, onMinus, onPlus }) => (
-  <div className="bg-black/30 border border-white/10 rounded-2xl p-3 flex items-center justify-between">
+  <div className="fl-pkg-counter bg-black/30 border border-white/10 rounded-2xl p-3 flex items-center justify-between">
     <div>
-      <p className="text-xs sm:text-sm text-gray-400">{label}</p>
-      <p className="text-base sm:text-lg font-semibold">{value}</p>
+      <p className="fl-pkg-muted text-xs sm:text-sm text-gray-400">{label}</p>
+      <p className="fl-pkg-ink text-base sm:text-lg font-semibold">{value}</p>
     </div>
 
     <div className="flex gap-1.5 sm:gap-2">
       <button
         type="button"
         onClick={onMinus}
-        className="w-8 h-8 rounded-xl bg-white/10 hover:bg-white/15"
+        className="fl-pkg-control fl-pkg-button w-8 h-8 rounded-xl bg-white/10 hover:bg-white/15"
       >
         −
       </button>
@@ -1562,7 +1562,7 @@ const CounterBox = ({ label, value, onMinus, onPlus }) => (
       <button
         type="button"
         onClick={onPlus}
-        className="w-8 h-8 rounded-xl bg-(--gold-main) text-black font-bold"
+        className="fl-pkg-counter-plus fl-pkg-button w-8 h-8 rounded-xl bg-(--gold-main) text-black font-bold"
       >
         +
       </button>

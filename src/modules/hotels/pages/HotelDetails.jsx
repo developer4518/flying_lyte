@@ -847,7 +847,7 @@ const HotelDetails = () => {
 
   if (!hotel) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#0B0B0F] text-gray-400">
+      <div data-fl-theme="model2" className="fl-detail-page fl-hotel-details fl-detail-empty fl-detail-muted fl-detail-inset min-h-screen flex items-center justify-center bg-[#0B0B0F] text-gray-400">
         No hotel data found
       </div>
     );
@@ -1022,20 +1022,20 @@ const HotelDetails = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0B0B0F] text-white px-4 md:px-10 py-16 md:py-24">
+    <div data-fl-theme="model2" className="fl-detail-page fl-hotel-details fl-detail-ink fl-detail-inset min-h-screen bg-[#0B0B0F] text-white px-4 md:px-10 py-16 md:py-24">
       <SEO
         title={`${hotelName || "Hotel Details"} - Luxury Stays`}
         description={`Book your stay at ${hotelName || "this hotel"}. Explore verified photos, rooms, amenities, location, and guest policies with FlyingLyte.`}
         image={images?.[0]}
       />
-      <div className="relative group mb-6 overflow-hidden rounded-2xl bg-[#15151C]">
+      <div className="fl-detail-gallery fl-detail-surface relative group mb-6 overflow-hidden rounded-2xl bg-[#15151C]">
         <div
-          className="relative w-full h-64 sm:h-80 md:h-[460px] lg:h-[520px] overflow-hidden"
+          className="fl-detail-gallery-viewport relative w-full h-64 sm:h-80 md:h-[460px] lg:h-[520px] overflow-hidden"
           onTouchStart={handleImageTouchStart}
           onTouchEnd={handleImageTouchEnd}
         >
           <div
-            className="flex h-full transition-transform duration-500 ease-in-out"
+            className="fl-detail-gallery-track flex h-full transition-transform duration-500 ease-in-out"
             style={{
               transform: `translateX(-${currentImageIndex * 100}%)`,
             }}
@@ -1043,7 +1043,7 @@ const HotelDetails = () => {
             {images.map((img, index) => (
               <div
                 key={`${img}-${index}`}
-                className="relative w-full h-full shrink-0 flex items-center justify-center bg-[#0B0B0F] overflow-hidden cursor-pointer"
+                className="fl-detail-image-slide fl-detail-inset relative w-full h-full shrink-0 flex items-center justify-center bg-[#0B0B0F] overflow-hidden cursor-pointer"
                 onClick={() => {
                   if (wasImageSwiped.current) {
                     wasImageSwiped.current = false;
@@ -1054,7 +1054,7 @@ const HotelDetails = () => {
               >
                 {/* Background blurred fill */}
                 <div 
-                  className="absolute inset-0 bg-cover bg-center blur-2xl opacity-40 scale-110"
+                  className="fl-detail-image-fill absolute inset-0 bg-cover bg-center blur-2xl opacity-40 scale-110"
                   style={{ backgroundImage: `url(${img})` }}
                 />
                 
@@ -1063,7 +1063,7 @@ const HotelDetails = () => {
                   src={img}
                   alt={`${hotelName} ${index + 1}`}
                   loading={index === 0 ? "eager" : "lazy"}
-                  className="relative z-10 w-full h-full object-contain"
+                  className="fl-detail-gallery-image relative z-10 w-full h-full object-contain"
                 />
               </div>
             ))}
@@ -1077,7 +1077,7 @@ const HotelDetails = () => {
                 type="button"
                 aria-label="Previous hotel image"
                 onClick={showPreviousImage}
-                className="
+                className="fl-detail-image-control fl-detail-ink fl-detail-button
             absolute
             left-3
             top-1/2
@@ -1104,7 +1104,7 @@ const HotelDetails = () => {
                 type="button"
                 aria-label="Next hotel image"
                 onClick={showNextImage}
-                className="
+                className="fl-detail-image-control fl-detail-ink fl-detail-button
             absolute
             right-3
             top-1/2
@@ -1132,7 +1132,7 @@ const HotelDetails = () => {
           {/* IMAGE COUNTER */}
 
           {images.length > 1 && (
-            <div className="
+            <div className="fl-detail-image-label fl-detail-ink
         absolute
         top-3
         right-3
@@ -1152,7 +1152,7 @@ const HotelDetails = () => {
           {/* DOTS */}
 
           {images.length > 1 && (
-            <div className="
+            <div className="fl-detail-image-dots
         absolute
         bottom-4
         left-1/2
@@ -1168,7 +1168,7 @@ sm:flex
         px-3 py-2
       ">
               {images.map((_, index) => (
-                <button
+                <button data-fl-active={currentImageIndex === index}
                   key={index}
                   type="button"
                   aria-label={`Show image ${index + 1}`}
@@ -1176,7 +1176,7 @@ sm:flex
                     e.stopPropagation();
                     setCurrentImageIndex(index);
                   }}
-                  className={`rounded-full transition-all ${currentImageIndex === index
+                  className={`fl-detail-image-dot fl-detail-button rounded-full transition-all ${currentImageIndex === index
                     ? "w-6 h-2 bg-yellow-400"
                     : "w-2 h-2 bg-white/60 hover:bg-white"
                     }`}
@@ -1188,10 +1188,10 @@ sm:flex
       </div>
 
       {selectedImage && (
-        <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50 px-4">
+        <div className="fl-detail-lightbox fixed inset-0 bg-black/90 flex items-center justify-center z-50 px-4">
           <button
             onClick={() => setSelectedImage(null)}
-            className="absolute top-5 right-5 text-white text-xl bg-white/10 hover:bg-white/20 w-10 h-10 rounded-full"
+            className="fl-detail-image-control fl-detail-ink fl-detail-button absolute top-5 right-5 text-white text-xl bg-white/10 hover:bg-white/20 w-10 h-10 rounded-full"
           >
             ✕
           </button>
@@ -1199,29 +1199,29 @@ sm:flex
           <img
             src={selectedImage}
             alt="Selected hotel"
-            className="max-h-[90%] max-w-[90%] rounded-xl"
+            className="fl-detail-lightbox-image max-h-[90%] max-w-[90%] rounded-xl"
             loading="lazy" />
         </div>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="md:col-span-2 space-y-6">
-          <div className="bg-[#15151C] p-5 rounded-2xl border border-gray-800">
+      <div className="fl-detail-layout grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="fl-detail-main md:col-span-2 space-y-6">
+          <div className="fl-detail-overview fl-detail-enter fl-detail-surface bg-[#15151C] p-5 rounded-2xl border border-gray-800">
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
-                <p className="mb-2 text-xs tracking-[0.35em] uppercase text-yellow-300">
+                <p className="fl-detail-eyebrow mb-2 text-xs tracking-[0.35em] uppercase text-yellow-300">
                   {isInternationalHotel
                     ? "International Hotel"
                     : "Domestic Hotel"}
                 </p>
 
-                <h1 className="text-2xl md:text-3xl font-semibold text-yellow-400">
+                <h1 className="fl-detail-title fl-detail-heading text-2xl md:text-3xl font-semibold text-yellow-400">
                   {hotelName}
                 </h1>
               </div>
 
               <span
-                className={`px-3 py-1 rounded-full text-xs font-semibold border ${isInternationalHotel
+                className={`fl-detail-badge px-3 py-1 rounded-full text-xs font-semibold border ${isInternationalHotel
                   ? "bg-purple-500/10 text-purple-300 border-purple-500/30"
                   : "bg-green-500/10 text-green-300 border-green-500/30"
                   }`}
@@ -1233,60 +1233,60 @@ sm:flex
             </div>
 
             <div className="flex flex-wrap items-center gap-3 mt-3">
-              <span className="text-yellow-300 text-sm">
+              <span className="fl-detail-accent text-yellow-300 text-sm">
                 ⭐ {hotel?.rating || hotel?.Rating || "4.2"}
               </span>
 
               {hotelFacilities.length > 0 && (
-                <span className="rounded-full border border-yellow-400/20 bg-yellow-400/10 px-3 py-1 text-xs text-yellow-300">
+                <span className="fl-detail-badge rounded-full border border-yellow-400/20 bg-yellow-400/10 px-3 py-1 text-xs text-yellow-300">
                   {hotelFacilities.length} facilities
                 </span>
               )}
 
               {hotelAttractions.length > 0 && (
-                <span className="rounded-full border border-cyan-400/20 bg-cyan-400/10 px-3 py-1 text-xs text-cyan-300">
+                <span className="fl-detail-badge rounded-full border border-cyan-400/20 bg-cyan-400/10 px-3 py-1 text-xs text-cyan-300">
                   {hotelAttractions.length} nearby places
                 </span>
               )}
             </div>
 
-            <p className="mt-3 text-sm text-gray-400">
+            <p className="fl-detail-muted mt-3 text-sm text-gray-400">
               📅 {checkIn || "Check-in"} → {checkOut || "Check-out"} • 👤{" "}
               {totalGuests || 1} Guests
             </p>
           </div>
 
           {roomOptions.length > 0 && (
-            <div className="overflow-hidden rounded-3xl border border-yellow-400/20 bg-[#15151C] shadow-xl shadow-black/30">
-              <div className="relative overflow-hidden bg-linear-to-r from-[#fff7cc] via-[#e8e5ff] to-[#d8f5ff] px-4 py-5 text-black">
-                <div className="absolute -right-10 -top-10 h-28 w-28 rounded-full bg-yellow-400/30 blur-2xl" />
-                <div className="absolute -bottom-10 -left-10 h-28 w-28 rounded-full bg-cyan-400/20 blur-2xl" />
+            <div className="fl-detail-room-section fl-detail-surface overflow-hidden rounded-3xl border border-yellow-400/20 bg-[#15151C] shadow-xl shadow-black/30">
+              <div className="fl-detail-room-heading relative overflow-hidden bg-linear-to-r from-[#fff7cc] via-[#e8e5ff] to-[#d8f5ff] px-4 py-5 text-black">
+                <div className="fl-detail-decor absolute -right-10 -top-10 h-28 w-28 rounded-full bg-yellow-400/30 blur-2xl" />
+                <div className="fl-detail-decor absolute -bottom-10 -left-10 h-28 w-28 rounded-full bg-cyan-400/20 blur-2xl" />
 
                 <div className="relative flex flex-col gap-4">
                   <div className="flex flex-wrap items-center justify-between gap-3">
                     <div>
-                      <p className="text-xs font-bold uppercase tracking-[0.25em] text-gray-600">
+                      <p className="fl-detail-eyebrow fl-detail-muted text-xs font-bold uppercase tracking-[0.25em] text-gray-600">
                         Select Room
                       </p>
 
-                      <h2 className="mt-1 text-xl font-semibold text-[#111827]">
+                      <h2 className="fl-detail-ink fl-detail-heading mt-1 text-xl font-semibold text-[#111827]">
                         {getRoomCountTitle()}
                       </h2>
                     </div>
 
-                    <div className="rounded-2xl bg-white/70 px-4 py-2 text-right shadow-sm ring-1 ring-black/5">
-                      <p className="text-lg font-semibold text-[#111827]">
+                    <div className="fl-detail-count rounded-2xl bg-white/70 px-4 py-2 text-right shadow-sm ring-1 ring-black/5">
+                      <p className="fl-detail-ink text-lg font-semibold text-[#111827]">
                         {filteredRoomOptions.length}
                       </p>
-                      <p className="text-[11px] font-semibold text-gray-500">
+                      <p className="fl-detail-muted text-[11px] font-semibold text-gray-500">
                         Available Rooms
                       </p>
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 gap-3 md:grid-cols-[1fr_220px_170px]">
+                  <div className="fl-detail-room-controls grid grid-cols-1 gap-3 md:grid-cols-[1fr_220px_170px]">
                     <div className="relative">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                      <span className="fl-detail-muted absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
                         🔍
                       </span>
 
@@ -1294,20 +1294,20 @@ sm:flex
                         value={roomSearch}
                         onChange={(e) => setRoomSearch(e.target.value)}
                         placeholder="Search room type..."
-                        className="h-12 w-full rounded-2xl border border-white/70 bg-white/90 pl-10 pr-4 text-sm font-medium text-gray-900 shadow-sm outline-none transition placeholder:text-gray-400 focus:border-yellow-400 focus:ring-4 focus:ring-yellow-400/20"
+                        className="fl-detail-control fl-detail-muted h-12 w-full rounded-2xl border border-white/70 bg-white/90 pl-10 pr-4 text-sm font-medium text-gray-900 shadow-sm outline-none transition placeholder:text-gray-400 focus:border-yellow-400 focus:ring-4 focus:ring-yellow-400/20"
                       />
                     </div>
 
                     <select
                       value={sortBy}
                       onChange={(e) => setSortBy(e.target.value)}
-                      className="h-12 rounded-2xl border border-white/70 bg-white/90 px-4 text-sm font-semibold text-gray-900 shadow-sm outline-none transition focus:border-yellow-400 focus:ring-4 focus:ring-yellow-400/20"
+                      className="fl-detail-control fl-detail-ink h-12 rounded-2xl border border-white/70 bg-white/90 px-4 text-sm font-semibold text-gray-900 shadow-sm outline-none transition focus:border-yellow-400 focus:ring-4 focus:ring-yellow-400/20"
                     >
                       <option value="price">Price Low to High</option>
                       <option value="priceHigh">Price High to Low</option>
                     </select>
 
-                    <label className="flex h-12 items-center justify-center gap-3 rounded-2xl border border-white/70 bg-white/90 px-4 text-sm font-bold text-gray-900 shadow-sm">
+                    <label className="fl-detail-control fl-detail-toggle fl-detail-ink flex h-12 items-center justify-center gap-3 rounded-2xl border border-white/70 bg-white/90 px-4 text-sm font-bold text-gray-900 shadow-sm">
                       <input
                         type="checkbox"
                         checked={splitRoom}
@@ -1320,7 +1320,7 @@ sm:flex
                 </div>
               </div>
 
-              <div className="divide-y divide-gray-800 bg-[#0B0B0F]">
+              <div className="fl-detail-room-list fl-detail-inset divide-y divide-gray-800 bg-[#0B0B0F]">
                 {filteredRoomOptions.map((roomItem, index) => {
                   const roomKey = roomItem.BookingCode || index;
 
@@ -1358,26 +1358,26 @@ sm:flex
                     : [];
 
                   return (
-                    <div
+                    <div data-fl-selected={isSelected}
                       key={roomKey}
                       onClick={() => {
                         setActiveRoom(roomItem);
                         setSelectedRoom(roomItem);
                       }}
-                      className={`group cursor-pointer px-4 py-4 transition ${isSelected
+                      className={`fl-detail-rate-row group cursor-pointer px-4 py-4 transition ${isSelected
                         ? "bg-linear-to-r from-yellow-400/20 via-yellow-300/10 to-transparent"
                         : "bg-[#0B0B0F] hover:bg-white/3"
                         }`}
                     >
-                      <div
-                        className={`rounded-3xl border p-4 transition ${isSelected
+                      <div data-fl-selected={isSelected}
+                        className={`fl-detail-rate-card rounded-3xl border p-4 transition ${isSelected
                           ? "border-yellow-400/50 bg-yellow-400/10 shadow-lg shadow-yellow-400/10"
                           : "border-gray-800 bg-[#15151C] hover:border-yellow-400/25"
                           }`}
                       >
-                        <div className="grid grid-cols-1 gap-5 lg:grid-cols-[1.35fr_0.8fr_0.85fr_0.75fr] lg:items-start">
+                        <div className="fl-detail-rate-grid grid grid-cols-1 gap-5 lg:grid-cols-[1.35fr_0.8fr_0.85fr_0.75fr] lg:items-start">
                           <div>
-                            <div className="flex items-start gap-3">
+                            <div className="fl-detail-rate-name flex items-start gap-3">
                               <div className="pt-1">
                                 <input
                                   type="radio"
@@ -1392,14 +1392,14 @@ sm:flex
 
                               <div className="min-w-0">
                                 <div className="flex flex-wrap items-center gap-2">
-                                  <h3 className="text-base font-medium leading-6 text-white">
+                                  <h3 className="fl-detail-ink fl-detail-heading text-base font-medium leading-6 text-white">
                                     {roomItem.room_name ||
                                       roomItem.Name ||
                                       "Standard Room"}
                                   </h3>
 
                                   {isSelected && (
-                                    <span className="rounded-full border border-yellow-400/30 bg-yellow-400/15 px-2.5 py-1 text-[11px] font-bold text-yellow-300">
+                                    <span className="fl-detail-badge fl-detail-selected-label rounded-full border border-yellow-400/30 bg-yellow-400/15 px-2.5 py-1 text-[11px] font-bold text-yellow-300">
                                       Selected
                                     </span>
                                   )}
@@ -1412,7 +1412,7 @@ sm:flex
                                     "N/A"}
                                 </p> */}
 
-                                <button
+                                <button data-fl-open={Boolean(openDescriptions[roomKey])}
                                   type="button"
                                   onClick={(e) => {
                                     e.stopPropagation();
@@ -1421,7 +1421,7 @@ sm:flex
                                       [roomKey]: !prev[roomKey],
                                     }));
                                   }}
-                                  className="mt-3 inline-flex items-center gap-2 rounded-full border border-blue-400/20 bg-blue-400/10 px-3 py-1.5 text-xs font-bold text-blue-300 transition hover:bg-blue-400 hover:text-black"
+                                  className="fl-detail-disclosure-button fl-detail-button mt-3 inline-flex items-center gap-2 rounded-full border border-blue-400/20 bg-blue-400/10 px-3 py-1.5 text-xs font-bold text-blue-300 transition hover:bg-blue-400 hover:text-black"
                                 >
                                   {openDescriptions[roomKey]
                                     ? "Hide Room Description"
@@ -1434,14 +1434,14 @@ sm:flex
                             </div>
 
                             {openDescriptions[roomKey] && (
-                              <div className="mt-4 rounded-2xl border border-gray-800 bg-black/30 p-4 text-sm leading-6 text-gray-300 whitespace-pre-line">
+                              <div className="fl-detail-disclosure-content fl-detail-inset fl-detail-ink mt-4 rounded-2xl border border-gray-800 bg-black/30 p-4 text-sm leading-6 text-gray-300 whitespace-pre-line">
                                 {roomDesc}
                               </div>
                             )}
                           </div>
 
                           <div>
-                            <p className="mb-2 text-xs font-bold uppercase tracking-[0.18em] text-gray-500">
+                            <p className="fl-detail-muted mb-2 text-xs font-bold uppercase tracking-[0.18em] text-gray-500">
                               Inclusions
                             </p>
 
@@ -1450,7 +1450,7 @@ sm:flex
                                 {inclusions.map((item, i) => (
                                   <span
                                     key={i}
-                                    className="
+                                    className="fl-detail-badge
   inline-flex
   w-fit
   max-w-full
@@ -1472,20 +1472,20 @@ sm:flex
                                 ))}
                               </div>
                             ) : (
-                              <span className="rounded-full border border-gray-700 bg-gray-800/60 px-3 py-1.5 text-xs font-semibold text-gray-300">
+                              <span className="fl-detail-badge fl-detail-ink rounded-full border border-gray-700 bg-gray-800/60 px-3 py-1.5 text-xs font-semibold text-gray-300">
                                 Room Only
                               </span>
                             )}
                           </div>
 
                           <div>
-                            <p className="mb-2 text-xs font-bold uppercase tracking-[0.18em] text-gray-500">
+                            <p className="fl-detail-muted mb-2 text-xs font-bold uppercase tracking-[0.18em] text-gray-500">
                               Cancellation
                             </p>
 
                             {policies.length > 0 ? (
                               <>
-                                <button
+                                <button data-fl-open={Boolean(openPolicies[roomKey])}
                                   type="button"
                                   onClick={(e) => {
                                     e.stopPropagation();
@@ -1494,7 +1494,7 @@ sm:flex
                                       [roomKey]: !prev[roomKey],
                                     }));
                                   }}
-                                  className="inline-flex items-center gap-2 rounded-full border border-purple-400/20 bg-purple-400/10 px-3 py-1.5 text-xs font-bold text-purple-300 transition hover:bg-purple-400 hover:text-black"
+                                  className="fl-detail-disclosure-button fl-detail-button inline-flex items-center gap-2 rounded-full border border-purple-400/20 bg-purple-400/10 px-3 py-1.5 text-xs font-bold text-purple-300 transition hover:bg-purple-400 hover:text-black"
                                 >
                                   View Policies
                                   <span>
@@ -1503,23 +1503,23 @@ sm:flex
                                 </button>
 
                                 {openPolicies[roomKey] && (
-                                  <div className="mt-3 space-y-2 rounded-2xl border border-gray-800 bg-black/30 p-3 text-xs text-gray-300">
+                                  <div className="fl-detail-disclosure-content fl-detail-inset fl-detail-ink mt-3 space-y-2 rounded-2xl border border-gray-800 bg-black/30 p-3 text-xs text-gray-300">
                                     {policies.map((policy, i) => (
                                       <div
                                         key={i}
-                                        className="flex justify-between gap-3 rounded-xl border border-white/5 bg-white/3 px-3 py-2"
+                                        className="fl-detail-policy-row flex justify-between gap-3 rounded-xl border border-white/5 bg-white/3 px-3 py-2"
                                       >
                                         <span>
                                           From {policy.FromDate || "N/A"}
                                         </span>
 
-                                        <span
+                                        <span data-fl-tone={Number(policy.CancellationCharge || 0) === 0 ? "success" : "warning"}
                                           className={
-                                            Number(
+                                            `fl-detail-charge ${Number(
                                               policy.CancellationCharge || 0,
                                             ) === 0
                                               ? "font-bold text-green-300"
-                                              : "font-bold text-red-300"
+                                              : "font-bold text-red-300"}`
                                           }
                                         >
                                           {getCancellationText(
@@ -1533,33 +1533,33 @@ sm:flex
                                 )}
                               </>
                             ) : (
-                              <span className="text-sm text-gray-500">
+                              <span className="fl-detail-muted text-sm text-gray-500">
                                 Policy not available
                               </span>
                             )}
                           </div>
 
-                          <div className="rounded-3xl border border-yellow-400/20 bg-linear-to-br from-yellow-400/15 to-orange-400/10 p-4 text-right">
-                            <p className="text-xs font-semibold text-gray-400">
+                          <div className="fl-detail-price-box rounded-3xl border border-yellow-400/20 bg-linear-to-br from-yellow-400/15 to-orange-400/10 p-4 text-right">
+                            <p className="fl-detail-muted text-xs font-semibold text-gray-400">
                               Base Fare
                             </p>
-                            <p className="text-lg font-semibold text-white">
+                            <p className="fl-detail-amount fl-detail-ink text-lg font-semibold text-white">
                               ₹ {formatPrice(itemBasePrice)}
                             </p>
 
-                            <p className="mt-2 text-xs font-semibold text-gray-400">
+                            <p className="fl-detail-muted mt-2 text-xs font-semibold text-gray-400">
                               Taxes
                             </p>
-                            <p className="text-sm font-medium text-gray-200">
+                            <p className="fl-detail-amount fl-detail-ink text-sm font-medium text-gray-200">
                               ₹ {formatPrice(itemTax)}
                             </p>
 
-                            <div className="my-3 border-t border-yellow-400/20" />
+                            <div className="fl-detail-rule my-3 border-t border-yellow-400/20" />
 
-                            <p className="text-xs font-semibold text-yellow-300">
+                            <p className="fl-detail-accent text-xs font-semibold text-yellow-300">
                               Total Price
                             </p>
-                            <p className="text-xl md:text-2xl font-semibold text-yellow-300">
+                            <p className="fl-detail-price-primary text-xl md:text-2xl font-semibold text-yellow-300">
                               ₹ {formatPrice(roomTotal)}
                             </p>
                           </div>
@@ -1570,16 +1570,16 @@ sm:flex
                 })}
 
                 {filteredRoomOptions.length === 0 && (
-                  <div className="p-8 text-center">
+                  <div className="fl-detail-empty p-8 text-center">
                     <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-white/5 text-2xl">
                       🔍
                     </div>
 
-                    <p className="mt-3 text-base font-bold text-gray-300">
+                    <p className="fl-detail-ink mt-3 text-base font-bold text-gray-300">
                       No rooms found
                     </p>
 
-                    <p className="mt-1 text-sm text-gray-500">
+                    <p className="fl-detail-muted mt-1 text-sm text-gray-500">
                       Try another room name or clear your search.
                     </p>
                   </div>
@@ -1588,8 +1588,8 @@ sm:flex
             </div>
           )}
 
-          <div className="bg-[#15151C] p-5 rounded-2xl border border-gray-800">
-            <h2 className="text-lg text-yellow-300 mb-3">Room Details</h2>
+          <div className="fl-detail-enter fl-detail-surface bg-[#15151C] p-5 rounded-2xl border border-gray-800">
+            <h2 className="fl-detail-heading text-lg text-yellow-300 mb-3">Room Details</h2>
 
             <p className="text-sm mb-2">
               🛏 <strong>{roomName}</strong>
@@ -1601,20 +1601,20 @@ sm:flex
               </p>
             )}
 
-            <p className="text-sm text-gray-400">
+            <p className="fl-detail-muted text-sm text-gray-400">
               ✔ Free WiFi • ✔ AC • ✔ 24h Support
             </p>
 
             {(room?.BookingCode || room?.booking_code) && (
-              <p className="mt-3 text-xs text-gray-500 break-all">
+              <p className="fl-detail-muted mt-3 text-xs text-gray-500 break-all">
                 Booking Code: {room.BookingCode || room.booking_code}
               </p>
             )}
           </div>
 
           {selectedRoomPolicies.length > 0 && (
-            <div className="bg-[#15151C] p-5 rounded-2xl border border-gray-800">
-              <h2 className="text-lg text-yellow-300 mb-4">
+            <div className="fl-detail-enter fl-detail-surface bg-[#15151C] p-5 rounded-2xl border border-gray-800">
+              <h2 className="fl-detail-heading text-lg text-yellow-300 mb-4">
                 Cancellation Policy
               </h2>
 
@@ -1626,19 +1626,19 @@ sm:flex
                   return (
                     <div
                       key={index}
-                      className="rounded-xl border border-gray-800 bg-[#0B0B0F] p-4"
+                      className="fl-detail-policy-item fl-detail-inset rounded-xl border border-gray-800 bg-[#0B0B0F] p-4"
                     >
-                      <p className="text-sm text-gray-300">
+                      <p className="fl-detail-ink text-sm text-gray-300">
                         From:
-                        <span className="text-white ml-2">
+                        <span className="fl-detail-ink text-white ml-2">
                           {policy.FromDate || "N/A"}
                         </span>
                       </p>
 
                       <p className="text-sm mt-2">
                         Charge:
-                        <span
-                          className={`ml-2 ${rawCharge === 0 ? "text-green-300" : "text-red-300"
+                        <span data-fl-tone={rawCharge === 0 ? "success" : "warning"}
+                          className={`fl-detail-charge ml-2 ${rawCharge === 0 ? "text-green-300" : "text-red-300"
                             }`}
                         >
                           {rawCharge === 0
@@ -1647,7 +1647,7 @@ sm:flex
                         </span>
                       </p>
 
-                      <p className="text-xs text-gray-500 mt-1">
+                      <p className="fl-detail-muted text-xs text-gray-500 mt-1">
                         {String(policy.ChargeType || "")
                           .toLowerCase()
                           .includes("percent")
@@ -1661,10 +1661,10 @@ sm:flex
             </div>
           )}
 
-          <div className="bg-[#15151C] p-5 rounded-2xl border border-gray-800">
-            <h2 className="text-lg text-yellow-300 mb-3">About this hotel</h2>
+          <div className="fl-detail-enter fl-detail-surface bg-[#15151C] p-5 rounded-2xl border border-gray-800">
+            <h2 className="fl-detail-heading text-lg text-yellow-300 mb-3">About this hotel</h2>
 
-            <p className="text-sm text-gray-400 leading-relaxed">
+            <p className="fl-detail-muted text-sm text-gray-400 leading-relaxed">
               {showFullDesc
                 ? description
                 : description.length > 160
@@ -1675,7 +1675,7 @@ sm:flex
             {description.length > 160 && (
               <button
                 onClick={() => setShowFullDesc(!showFullDesc)}
-                className="mt-2 text-sm text-yellow-400 hover:underline"
+                className="fl-detail-link fl-detail-button mt-2 text-sm text-yellow-400 hover:underline"
               >
                 {showFullDesc ? "Show Less" : "Read More"}
               </button>
@@ -1683,9 +1683,9 @@ sm:flex
           </div>
 
           {hotelFacilities.length > 0 && (
-            <div className="relative overflow-hidden rounded-3xl border border-yellow-400/20 bg-linear-to-br from-[#17171f] via-[#12121a] to-[#0B0B0F] p-5 shadow-xl shadow-black/30">
-              <div className="absolute -right-16 -top-16 h-40 w-40 rounded-full bg-yellow-400/10 blur-3xl" />
-              <div className="absolute -bottom-16 -left-16 h-40 w-40 rounded-full bg-orange-500/10 blur-3xl" />
+            <div className="fl-detail-surface fl-detail-enter relative overflow-hidden rounded-3xl border border-yellow-400/20 bg-linear-to-br from-[#17171f] via-[#12121a] to-[#0B0B0F] p-5 shadow-xl shadow-black/30">
+              <div className="fl-detail-decor absolute -right-16 -top-16 h-40 w-40 rounded-full bg-yellow-400/10 blur-3xl" />
+              <div className="fl-detail-decor absolute -bottom-16 -left-16 h-40 w-40 rounded-full bg-orange-500/10 blur-3xl" />
 
               <div className="relative flex flex-wrap items-start justify-between gap-4 mb-5">
                 <div>
@@ -1693,20 +1693,20 @@ sm:flex
                     Amenities
                   </p> */}
 
-                  <h2 className="mt-1 text-xl font-bold text-yellow-300">
+                  <h2 className="fl-detail-heading mt-1 text-xl font-bold text-yellow-300">
                     Hotel Facilities
                   </h2>
 
-                  <p className="mt-1 text-sm text-gray-400">
+                  <p className="fl-detail-muted mt-1 text-sm text-gray-400">
                     Popular Facilities and services available at this property.
                   </p>
                 </div>
 
-                <div className="rounded-2xl border border-yellow-400/20 bg-yellow-400/10 px-4 py-2 text-right">
-                  <p className="text-xl font-bold text-yellow-300">
+                <div className="fl-detail-count rounded-2xl border border-yellow-400/20 bg-yellow-400/10 px-4 py-2 text-right">
+                  <p className="fl-detail-accent text-xl font-bold text-yellow-300">
                     {hotelFacilities.length}
                   </p>
-                  <p className="text-[11px] text-gray-400">Facilities</p>
+                  <p className="fl-detail-muted text-[11px] text-gray-400">Facilities</p>
                 </div>
               </div>
 
@@ -1714,14 +1714,14 @@ sm:flex
                 {visibleFacilities.map((facility, index) => (
                   <div
                     key={`${facility}-${index}`}
-                    className="group flex items-start gap-3 rounded-2xl border border-white/10 bg-white/4 px-4 py-3 transition hover:-translate-y-0.5 hover:border-yellow-400/30 hover:bg-yellow-400/10"
+                    className="fl-detail-feature-card group flex items-start gap-3 rounded-2xl border border-white/10 bg-white/4 px-4 py-3 transition hover:-translate-y-0.5 hover:border-yellow-400/30 hover:bg-yellow-400/10"
                   >
-                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-black/30 text-lg ring-1 ring-white/10 group-hover:bg-yellow-400/20">
+                    <span className="fl-detail-icon flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-black/30 text-lg ring-1 ring-white/10 group-hover:bg-yellow-400/20">
                       {getFacilityIcon(facility)}
                     </span>
 
                     <div className="min-w-0">
-                      <p className="text-sm font-medium leading-5 text-gray-200">
+                      <p className="fl-detail-ink text-sm font-medium leading-5 text-gray-200">
                         {facility}
                       </p>
                     </div>
@@ -1732,7 +1732,7 @@ sm:flex
               {hotelFacilities.length > 18 && (
                 <button
                   onClick={() => setShowAllFacilities(!showAllFacilities)}
-                  className="relative mt-5 inline-flex items-center gap-2 rounded-full border border-yellow-400/30 bg-yellow-400/10 px-5 py-2 text-sm font-semibold text-yellow-300 transition hover:bg-yellow-400 hover:text-black"
+                  className="fl-detail-secondary fl-detail-button relative mt-5 inline-flex items-center gap-2 rounded-full border border-yellow-400/30 bg-yellow-400/10 px-5 py-2 text-sm font-semibold text-yellow-300 transition hover:bg-yellow-400 hover:text-black"
                 >
                   {showAllFacilities
                     ? "Show Less Facilities"
@@ -1744,30 +1744,30 @@ sm:flex
           )}
 
           {hotelAttractions.length > 0 && (
-            <div className="relative overflow-hidden rounded-3xl border border-cyan-400/20 bg-linear-to-br from-[#151923] via-[#111820] to-[#0B0B0F] p-5 shadow-xl shadow-black/30">
-              <div className="absolute -right-16 -top-16 h-40 w-40 rounded-full bg-cyan-400/10 blur-3xl" />
-              <div className="absolute -bottom-16 -left-16 h-40 w-40 rounded-full bg-blue-500/10 blur-3xl" />
+            <div className="fl-detail-surface fl-detail-enter relative overflow-hidden rounded-3xl border border-cyan-400/20 bg-linear-to-br from-[#151923] via-[#111820] to-[#0B0B0F] p-5 shadow-xl shadow-black/30">
+              <div className="fl-detail-decor absolute -right-16 -top-16 h-40 w-40 rounded-full bg-cyan-400/10 blur-3xl" />
+              <div className="fl-detail-decor absolute -bottom-16 -left-16 h-40 w-40 rounded-full bg-blue-500/10 blur-3xl" />
 
               <div className="relative flex flex-wrap items-start justify-between gap-4 mb-5">
                 <div>
-                  <p className="text-xs uppercase tracking-[0.3em] text-cyan-300/80">
+                  <p className="fl-detail-eyebrow fl-detail-muted text-xs uppercase tracking-[0.3em] text-cyan-300/80">
                     Around the hotel
                   </p>
 
-                  <h2 className="mt-1 text-xl font-bold text-cyan-300">
+                  <h2 className="fl-detail-heading mt-1 text-xl font-bold text-cyan-300">
                     Nearby Attractions
                   </h2>
 
-                  <p className="mt-1 text-sm text-gray-400">
+                  <p className="fl-detail-muted mt-1 text-sm text-gray-400">
                     Important places and landmarks close to this hotel.
                   </p>
                 </div>
 
-                <div className="rounded-2xl border border-cyan-400/20 bg-cyan-400/10 px-4 py-2 text-right">
-                  <p className="text-xl font-bold text-cyan-300">
+                <div className="fl-detail-count rounded-2xl border border-cyan-400/20 bg-cyan-400/10 px-4 py-2 text-right">
+                  <p className="fl-detail-accent text-xl font-bold text-cyan-300">
                     {hotelAttractions.length}
                   </p>
-                  <p className="text-[11px] text-gray-400">Places</p>
+                  <p className="fl-detail-muted text-[11px] text-gray-400">Places</p>
                 </div>
               </div>
 
@@ -1775,14 +1775,14 @@ sm:flex
                 {visibleAttractions.map((attraction, index) => (
                   <div
                     key={`${attraction}-${index}`}
-                    className="group flex items-center gap-3 rounded-2xl border border-cyan-400/10 bg-cyan-400/6 px-4 py-3 transition hover:-translate-y-0.5 hover:border-cyan-300/30 hover:bg-cyan-400/10"
+                    className="fl-detail-feature-card group flex items-center gap-3 rounded-2xl border border-cyan-400/10 bg-cyan-400/6 px-4 py-3 transition hover:-translate-y-0.5 hover:border-cyan-300/30 hover:bg-cyan-400/10"
                   >
-                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-cyan-400/10 text-sm font-bold text-cyan-200 ring-1 ring-cyan-300/20">
+                    <span className="fl-detail-icon fl-detail-ink flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-cyan-400/10 text-sm font-bold text-cyan-200 ring-1 ring-cyan-300/20">
                       {index + 1}
                     </span>
 
                     <div className="min-w-0 flex-1">
-                      <p className="text-sm font-medium text-cyan-100">
+                      <p className="fl-detail-ink text-sm font-medium text-cyan-100">
                         {attraction}
                       </p>
                     </div>
@@ -1797,7 +1797,7 @@ sm:flex
               {hotelAttractions.length > 12 && (
                 <button
                   onClick={() => setShowAllAttractions(!showAllAttractions)}
-                  className="relative mt-5 inline-flex items-center gap-2 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-5 py-2 text-sm font-semibold text-cyan-300 transition hover:bg-cyan-400 hover:text-black"
+                  className="fl-detail-secondary fl-detail-button relative mt-5 inline-flex items-center gap-2 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-5 py-2 text-sm font-semibold text-cyan-300 transition hover:bg-cyan-400 hover:text-black"
                 >
                   {showAllAttractions
                     ? "Show Less Attractions"
@@ -1809,37 +1809,37 @@ sm:flex
           )}
         </div>
 
-        <div className="bg-[#15151C] p-5 rounded-2xl border border-gray-800 md:sticky md:top-24 h-fit">
-          <h2 className="text-lg text-yellow-300 mb-4">Price Details</h2>
+        <div className="fl-detail-summary fl-detail-surface bg-[#15151C] p-5 rounded-2xl border border-gray-800 md:sticky md:top-24 h-fit">
+          <h2 className="fl-detail-heading text-lg text-yellow-300 mb-4">Price Details</h2>
 
           <div className="space-y-2 text-sm">
-            <div className="flex justify-between gap-4">
+            <div className="fl-detail-summary-row flex justify-between gap-4">
               <span>Base Room Price</span>
               <span>₹ {formatPrice(roomPrice)}</span>
             </div>
 
-            <div className="flex justify-between gap-4">
+            <div className="fl-detail-summary-row flex justify-between gap-4">
               <span>Taxes</span>
               <span>₹ {formatPrice(tax)}</span>
             </div>
 
             <hr className="border-gray-700 my-2" />
 
-            <div className="flex justify-between text-lg font-bold gap-4">
+            <div className="fl-detail-summary-row flex justify-between text-lg font-bold gap-4">
               <span>Total</span>
-              <span className="text-yellow-400">
+              <span className="fl-detail-price-total text-yellow-400">
                 ₹ {formatPrice(totalAmount)}
               </span>
             </div>
           </div>
 
           {selectedRoomPolicies.length > 0 && (
-            <div className="mt-5 rounded-xl border border-yellow-400/20 bg-yellow-400/10 p-3">
-              <p className="text-xs text-yellow-300 font-semibold">
+            <div className="fl-detail-notice mt-5 rounded-xl border border-yellow-400/20 bg-yellow-400/10 p-3">
+              <p className="fl-detail-accent text-xs text-yellow-300 font-semibold">
                 Cancellation
               </p>
 
-              <p className="mt-1 text-xs text-gray-300">
+              <p className="fl-detail-ink mt-1 text-xs text-gray-300">
                 {selectedRoomPolicies.some(
                   (policy) => Number(policy.CancellationCharge || 0) === 0,
                 )
@@ -1849,14 +1849,14 @@ sm:flex
             </div>
           )}
 
-          <div className="mt-5 rounded-xl border border-gray-800 bg-black/20 p-3">
-            <p className="text-xs text-gray-400">Hotel Type</p>
+          <div className="fl-detail-inset mt-5 rounded-xl border border-gray-800 bg-black/20 p-3">
+            <p className="fl-detail-muted text-xs text-gray-400">Hotel Type</p>
 
-            <p className="mt-1 text-sm font-semibold text-white">
+            <p className="fl-detail-ink mt-1 text-sm font-semibold text-white">
               {isInternationalHotel ? "International Hotel" : "Domestic Hotel"}
             </p>
 
-            <p className="mt-1 text-xs text-gray-500">
+            <p className="fl-detail-muted mt-1 text-xs text-gray-500">
               {isInternationalHotel
                 ? "Passport details will be required on guest details page."
                 : "Passport details are not required for Indian domestic hotels."}
@@ -1864,24 +1864,24 @@ sm:flex
           </div>
 
           {hotelFacilities.length > 0 && (
-            <div className="mt-5 rounded-xl border border-yellow-400/20 bg-yellow-400/10 p-3">
-              <p className="text-xs text-yellow-300 font-semibold">
+            <div className="fl-detail-notice mt-5 rounded-xl border border-yellow-400/20 bg-yellow-400/10 p-3">
+              <p className="fl-detail-accent text-xs text-yellow-300 font-semibold">
                 Facilities
               </p>
 
-              <p className="mt-1 text-sm font-semibold text-white">
+              <p className="fl-detail-ink mt-1 text-sm font-semibold text-white">
                 {hotelFacilities.length} amenities available
               </p>
             </div>
           )}
 
           {hotelAttractions.length > 0 && (
-            <div className="mt-5 rounded-xl border border-cyan-400/20 bg-cyan-400/10 p-3">
-              <p className="text-xs text-cyan-300 font-semibold">
+            <div className="fl-detail-notice mt-5 rounded-xl border border-cyan-400/20 bg-cyan-400/10 p-3">
+              <p className="fl-detail-accent text-xs text-cyan-300 font-semibold">
                 Nearby Attractions
               </p>
 
-              <p className="mt-1 text-sm font-semibold text-white">
+              <p className="fl-detail-ink mt-1 text-sm font-semibold text-white">
                 {hotelAttractions.length} places nearby
               </p>
             </div>
@@ -1890,14 +1890,14 @@ sm:flex
           <button
             onClick={handlePreBook}
             disabled={loading}
-            className="mt-6 w-full py-3 rounded-xl font-semibold text-lg bg-linear-to-r from-yellow-400 to-orange-400 text-black hover:scale-105 disabled:opacity-60 disabled:hover:scale-100 transition"
+            className="fl-detail-primary fl-detail-button mt-6 w-full py-3 rounded-xl font-semibold text-lg bg-linear-to-r from-yellow-400 to-orange-400 text-black hover:scale-105 disabled:opacity-60 disabled:hover:scale-100 transition"
           >
             {loading ? "Processing..." : "Book Now"}
           </button>
 
           <button
             onClick={() => navigate(-1)}
-            className="mt-3 w-full text-sm text-gray-400 hover:text-white transition"
+            className="fl-detail-link fl-detail-muted fl-detail-button mt-3 w-full text-sm text-gray-400 hover:text-white transition"
           >
             ← Back to results
           </button>

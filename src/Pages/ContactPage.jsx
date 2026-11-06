@@ -48,7 +48,7 @@ const ContactPage = () => {
   };
 
   return (
-    <section className="min-h-screen bg-(--bg-main) py-25 px-4">
+    <section className="fl-booking-base min-h-screen bg-(--bg-main) py-25 px-4">
       <SEO
         title="Contact Us - Customer Support & Travel Bookings"
         description="Get in touch with FlyingLyte for flight bookings, hotel reservations, and custom holiday packages. 24/7 travel assistance via phone, email, and WhatsApp."
@@ -62,7 +62,7 @@ const ContactPage = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-14"
         >
-          <h2 className="text-4xl md:text-5xl font-(--font-heading) text-(--gold-main) mb-4">
+          <h2 className="fl-booking-heading fl-booking-subtitle fl-booking-accent text-4xl md:text-5xl font-(--font-heading) text-(--gold-main) mb-4">
             Contact Us
           </h2>
           <p className="text-(--text-muted) max-w-2xl mx-auto">
@@ -79,7 +79,7 @@ const ContactPage = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
             whileHover={{ y: -6 }}
-            className="
+            className="fl-booking-surface fl-booking-line
               bg-(--bg-card)
               border border-(--border-soft)
               rounded-3xl
@@ -87,13 +87,13 @@ const ContactPage = () => {
               p-8 sm:p-10
             "
           >
-            <h3 className="text-2xl font-semibold text-white mb-6">
+            <h3 className="fl-booking-heading fl-booking-subtitle fl-booking-ink text-2xl font-semibold text-white mb-6">
               Send us a message
             </h3>
 
             <form className="grid gap-5" onSubmit={handleSubmit}>
               {["name", "email", "subject"].map((field) => (
-                <motion.input
+                <motion.input aria-label={field.charAt(0).toUpperCase() + field.slice(1)}
                   key={field}
                   whileFocus={{ scale: 1.02 }}
                   type={field === "email" ? "email" : "text"}
@@ -101,7 +101,7 @@ const ContactPage = () => {
                   value={formData[field]}
                   onChange={handleChange}
                   placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
-                  className="
+                  className="fl-booking-ink fl-booking-line fl-booking-field
                     bg-(--bg-secondary)
                     border border-(--border-soft)
                     rounded-xl
@@ -116,14 +116,14 @@ const ContactPage = () => {
                 />
               ))}
 
-              <motion.textarea
+              <motion.textarea aria-label="Your Message"
                 whileFocus={{ scale: 1.02 }}
                 name="message"
                 value={formData.message}
                 onChange={handleChange}
                 rows={5}
                 placeholder="Your Message"
-                className="
+                className="fl-booking-ink fl-booking-line fl-booking-field
                   bg-(--bg-secondary)
                   border border-(--border-soft)
                   rounded-xl
@@ -142,7 +142,7 @@ const ContactPage = () => {
                 whileTap={{ scale: 0.94 }}
                 type="submit"
                 disabled={loading}
-                className="
+                className="fl-booking-ink fl-booking-surface fl-booking-button fl-booking-primary
                   mt-2
                   w-full sm:w-fit
                   px-8 py-3
@@ -163,7 +163,7 @@ const ContactPage = () => {
             initial={{ opacity: 0, x: 60 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
-            className="
+            className="fl-booking-surface fl-booking-line
               flex flex-col justify-center
               bg-(--bg-card)
               border border-(--border-soft)
@@ -180,10 +180,10 @@ const ContactPage = () => {
             >
               <Mail className="text-(--gold-main) w-6 h-6 mt-1" />
               <div>
-                <h4 className="text-white font-semibold">Email</h4>
+                <h4 className="fl-booking-heading fl-booking-subtitle fl-booking-ink text-white font-semibold">Email</h4>
                 <a
                   href="mailto:info@flyinglyte.com"
-                  className="text-(--text-muted) hover:text-(--gold-main) hover:underline transition"
+                  className="fl-booking-accent text-(--text-muted) hover:text-(--gold-main) hover:underline transition"
                 >
                   info@flyinglyte.com
                 </a>
@@ -197,10 +197,10 @@ const ContactPage = () => {
             >
               <Phone className="text-(--gold-main) w-6 h-6 mt-1" />
               <div>
-                <h4 className="text-white font-semibold">Phone</h4>
+                <h4 className="fl-booking-heading fl-booking-subtitle fl-booking-ink text-white font-semibold">Phone</h4>
                 <a
                   href="tel:+919667455591"
-                  className="text-(--text-muted) hover:text-(--gold-main) hover:underline transition"
+                  className="fl-booking-accent text-(--text-muted) hover:text-(--gold-main) hover:underline transition"
                 >
                   +91 9667455591
                 </a>
@@ -214,14 +214,14 @@ const ContactPage = () => {
             >
               <MapPin className="text-(--gold-main) w-6 h-6 mt-1" />
               <div>
-                <h4 className="text-white font-semibold">Office</h4>
+                <h4 className="fl-booking-heading fl-booking-subtitle fl-booking-ink text-white font-semibold">Office</h4>
                 <p className="text-(--text-muted)">
                   316, Basement, Gagan Vihar, Near Preet Vihar Metro, Delhi, 110051
                 </p>
               </div>
             </motion.div>
 
-            <div className="pt-4 border-t border-(--border-soft) text-(--text-muted)">
+            <div className="fl-booking-line pt-4 border-t border-(--border-soft) text-(--text-muted)">
               Our team usually responds within 24 hours.
             </div>
           </motion.div>

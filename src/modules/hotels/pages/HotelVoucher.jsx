@@ -827,7 +827,7 @@ Lead Guest: ${leadGuestName || "N/A"}`,
   };
 
   return (
-    <div className="min-h-screen bg-(--bg-main) px-3 py-10 font-(--font-body) text-(--text-main) md:py-24">
+    <div className="fl-booking-base min-h-screen bg-(--bg-main) px-3 py-10 font-(--font-body) text-(--text-main) md:py-24">
       <style>
         {`
           .voucher-wrapper {
@@ -1228,19 +1228,19 @@ Lead Guest: ${leadGuestName || "N/A"}`,
 
       <div
         ref={voucherRef}
-        className={`voucher-wrapper ${pdfCaptureMode ? "pdf-capture" : ""}`}
+        className={`fl-booking-paper voucher-wrapper ${pdfCaptureMode ? "pdf-capture" : ""}`}
       >
         <div className="voucher-top">
           <div className="voucher-title">Hotel Voucher</div>
 
           <div className="voucher-actions no-print">
-            <button onClick={handleEmail}>Email Voucher</button>
+            <button className="fl-booking-button" onClick={handleEmail}>Email Voucher</button>
             <span className="text-(--text-muted)">|</span>
 
-            <button onClick={handlePrint}>Print Voucher</button>
+            <button className="fl-booking-button" onClick={handlePrint}>Print Voucher</button>
             <span className="text-(--text-muted)">|</span>
 
-            <button onClick={handleGeneratePdf} disabled={pdfLoading}>
+            <button className="fl-booking-button" onClick={handleGeneratePdf} disabled={pdfLoading}>
               {pdfLoading ? "Generating..." : "Generate PDF 🧾"}
             </button>
           </div>
@@ -1253,21 +1253,21 @@ Lead Guest: ${leadGuestName || "N/A"}`,
             {confirmationNo && (
               <div className="info-item">
                 <span className="voucher-gold">Confirmation No:</span>
-                <span className="text-white">{confirmationNo}</span>
+                <span className="fl-booking-ink text-white">{confirmationNo}</span>
               </div>
             )}
 
             {bookingReference && (
               <div className="info-item">
                 <span className="voucher-gold">Booking Ref:</span>
-                <span className="text-white">{bookingReference}</span>
+                <span className="fl-booking-ink text-white">{bookingReference}</span>
               </div>
             )}
 
             {bookingStatus && (
               <div className="info-item">
                 <span className="voucher-gold">Status:</span>
-                <span className="text-white">{bookingStatus}</span>
+                <span className="fl-booking-ink text-white">{bookingStatus}</span>
               </div>
             )}
           </div>
@@ -1279,7 +1279,7 @@ Lead Guest: ${leadGuestName || "N/A"}`,
               <div className="voucher-gold">Hotel Address Details</div>
 
               {hotelName && (
-                <div className="mt-1 font-semibold text-white">
+                <div className="fl-booking-ink mt-1 font-semibold text-white">
                   {hotelName}
                   {hotelRating ? ` (${hotelRating} Star)` : ""}
                 </div>
@@ -1311,7 +1311,7 @@ Lead Guest: ${leadGuestName || "N/A"}`,
                 <div className="voucher-gold">Agency Address Details</div>
 
                 {agencyName && (
-                  <div className="mt-1 font-semibold text-white">
+                  <div className="fl-booking-ink mt-1 font-semibold text-white">
                     {agencyName}
                   </div>
                 )}
@@ -1345,7 +1345,7 @@ Lead Guest: ${leadGuestName || "N/A"}`,
           {leadGuestName && (
             <div>
               <span className="voucher-gold">Lead Passenger Name:</span>{" "}
-              <span className="text-white">{leadGuestName}</span>
+              <span className="fl-booking-ink text-white">{leadGuestName}</span>
             </div>
           )}
 
@@ -1353,28 +1353,28 @@ Lead Guest: ${leadGuestName || "N/A"}`,
             {checkIn && (
               <div className="date-item">
                 <span className="voucher-gold">Check In Date:</span>
-                <span className="text-white">{formatDate(checkIn)}</span>
+                <span className="fl-booking-ink text-white">{formatDate(checkIn)}</span>
               </div>
             )}
 
             {checkOut && (
               <div className="date-item">
                 <span className="voucher-gold">Check Out Date:</span>
-                <span className="text-white">{formatDate(checkOut)}</span>
+                <span className="fl-booking-ink text-white">{formatDate(checkOut)}</span>
               </div>
             )}
 
             {nights !== "N/A" && (
               <div className="date-item">
                 <span className="voucher-gold">No of Nights:</span>
-                <span className="text-white">{nights}</span>
+                <span className="fl-booking-ink text-white">{nights}</span>
               </div>
             )}
           </div>
         </section>
 
         <section className="table-scroll">
-          <table className="voucher-table">
+          <div className="fl-booking-table-scroll"><table className="fl-booking-table voucher-table">
             <thead>
               <tr>
                 <th className="sno-col">S.No</th>
@@ -1466,7 +1466,7 @@ Lead Guest: ${leadGuestName || "N/A"}`,
 
                     <td className="guest-cell">
                       {(roomAdults.length > 0 || roomChildren.length > 0) && (
-                        <div className="font-semibold text-white">
+                        <div className="fl-booking-ink font-semibold text-white">
                           {roomAdults.length > 0
                             ? `${roomAdults.length} Adult(s)`
                             : ""}
@@ -1485,7 +1485,7 @@ Lead Guest: ${leadGuestName || "N/A"}`,
                 );
               })}
             </tbody>
-          </table>
+          </table></div>
         </section>
 
         {(roomPromotions.length > 0 || supplements.length > 0) && (
@@ -1493,7 +1493,7 @@ Lead Guest: ${leadGuestName || "N/A"}`,
             <div className="voucher-cell">
               {roomPromotions.length > 0 && (
                 <>
-                  <h2 className="voucher-gold mb-2 text-lg">Room Promotions</h2>
+                  <h2 className="fl-booking-heading fl-booking-subtitle voucher-gold mb-2 text-lg">Room Promotions</h2>
 
                   <ul className="terms-list list-disc">
                     {roomPromotions.map((promotion, index) => (
@@ -1505,7 +1505,7 @@ Lead Guest: ${leadGuestName || "N/A"}`,
 
               {supplements.length > 0 && (
                 <>
-                  <h2 className="voucher-gold mb-2 mt-4 text-lg">
+                  <h2 className="fl-booking-heading fl-booking-subtitle voucher-gold mb-2 mt-4 text-lg">
                     Supplements
                   </h2>
 
@@ -1525,10 +1525,10 @@ Lead Guest: ${leadGuestName || "N/A"}`,
         {cancelPolicies.length > 0 && (
           <section className="voucher-row">
             <div className="voucher-cell">
-              <h2 className="voucher-gold mb-3 text-lg">Cancellation Policy</h2>
+              <h2 className="fl-booking-heading fl-booking-subtitle voucher-gold mb-3 text-lg">Cancellation Policy</h2>
 
               <div className="table-scroll">
-                <table className="voucher-table">
+                <div className="fl-booking-table-scroll"><table className="fl-booking-table voucher-table">
                   <thead>
                     <tr>
                       <th>Cancelled On or After</th>
@@ -1556,7 +1556,7 @@ Lead Guest: ${leadGuestName || "N/A"}`,
                       </tr>
                     ))}
                   </tbody>
-                </table>
+                </table></div>
               </div>
             </div>
           </section>
@@ -1565,7 +1565,7 @@ Lead Guest: ${leadGuestName || "N/A"}`,
         {(netAmount || convenienceFee || totalPaid) && (
   <section className="voucher-row">
     <div className="voucher-cell">
-      <h2 className="voucher-gold mb-3 text-lg">
+      <h2 className="fl-booking-heading fl-booking-subtitle voucher-gold mb-3 text-lg">
         Amount Details
       </h2>
 
@@ -1613,7 +1613,7 @@ Lead Guest: ${leadGuestName || "N/A"}`,
         {specialRequest && (
           <section className="voucher-row">
             <div className="voucher-cell">
-              <h2 className="voucher-gold mb-4 text-lg">Package Details:</h2>
+              <h2 className="fl-booking-heading fl-booking-subtitle voucher-gold mb-4 text-lg">Package Details:</h2>
 
               <div className="voucher-gold text-sm">
                 Special Service Request:
@@ -1627,7 +1627,7 @@ Lead Guest: ${leadGuestName || "N/A"}`,
         {remarks && (
           <section className="voucher-row">
             <div className="voucher-cell">
-              <h2 className="voucher-gold mb-2 text-lg">Remarks</h2>
+              <h2 className="fl-booking-heading fl-booking-subtitle voucher-gold mb-2 text-lg">Remarks</h2>
               <p>{remarks}</p>
             </div>
           </section>
@@ -1636,7 +1636,7 @@ Lead Guest: ${leadGuestName || "N/A"}`,
         {agentRemarks && (
           <section className="voucher-row">
             <div className="voucher-cell">
-              <h2 className="voucher-gold mb-2 text-lg">Agent Remarks</h2>
+              <h2 className="fl-booking-heading fl-booking-subtitle voucher-gold mb-2 text-lg">Agent Remarks</h2>
               <p>{agentRemarks}</p>
             </div>
           </section>
@@ -1644,7 +1644,7 @@ Lead Guest: ${leadGuestName || "N/A"}`,
         {rateConditions.length > 0 && (
           <section className="voucher-row">
             <div className="voucher-cell">
-              <h2 className="voucher-gold text-lg">Rate Conditions</h2>
+              <h2 className="fl-booking-heading fl-booking-subtitle voucher-gold text-lg">Rate Conditions</h2>
 
               <ol className="rate-list">
                 {rateConditions.map((condition, index) => (
@@ -1663,7 +1663,7 @@ Lead Guest: ${leadGuestName || "N/A"}`,
         {bookingTerms.length > 0 && (
           <section className="voucher-row">
             <div className="voucher-cell">
-              <h2 className="voucher-gold text-lg">
+              <h2 className="fl-booking-heading fl-booking-subtitle voucher-gold text-lg">
                 Booking Terms & Conditions
               </h2>
 
@@ -1679,7 +1679,7 @@ Lead Guest: ${leadGuestName || "N/A"}`,
         {hotelNorms.length > 0 && (
           <section className="voucher-row">
             <div className="voucher-cell">
-              <h2 className="voucher-gold text-lg">Hotel Policies</h2>
+              <h2 className="fl-booking-heading fl-booking-subtitle voucher-gold text-lg">Hotel Policies</h2>
 
               <ul className="policy-list list-disc">
                 {hotelNorms.map((norm, index) => (
@@ -1693,7 +1693,7 @@ Lead Guest: ${leadGuestName || "N/A"}`,
         {hotelFacilities.length > 0 && (
           <section className="voucher-row">
             <div className="voucher-cell">
-              <h2 className="voucher-gold text-lg">Hotel Facilities</h2>
+              <h2 className="fl-booking-heading fl-booking-subtitle voucher-gold text-lg">Hotel Facilities</h2>
 
               <ul className="policy-list list-disc">
                 {hotelFacilities.map((facility, index) => (
@@ -1706,7 +1706,7 @@ Lead Guest: ${leadGuestName || "N/A"}`,
 
         {(contactPhone || contactEmail) && (
           <section className="voucher-cell">
-            <h2 className="voucher-gold mb-2 text-lg">Contact Details:</h2>
+            <h2 className="fl-booking-heading fl-booking-subtitle voucher-gold mb-2 text-lg">Contact Details:</h2>
 
             {contactPhone && (
               <div>
@@ -1730,7 +1730,7 @@ Lead Guest: ${leadGuestName || "N/A"}`,
       </div>
 
       <div className="no-print mx-auto mt-5 flex max-w-262.5 justify-end">
-        <button onClick={() => navigate(-1)} className="back-btn">
+        <button onClick={() => navigate(-1)} className="fl-booking-button back-btn">
           Back
         </button>
       </div>

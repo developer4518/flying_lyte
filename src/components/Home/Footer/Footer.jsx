@@ -23,28 +23,28 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="bg-gray-900 text-gray-300">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-14">
+    <footer className="fl-footer" data-fl-theme="model2">
+      <div className="fl-footer__wrap">
         {/* Top Section */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-10">
+        <div className="fl-footer__top">
           {/* Brand */}
-          <div className="md:col-span-2">
+          <div className="fl-footer__brand">
             <img
                src="/images/flying_logo.png"
                alt="FlyingLyte Logo"
-               className="w-42 md:w-52 cursor-pointer"
+               className="fl-footer__logo cursor-pointer"
                onClick={() => navigate("/")}
              loading="lazy" />
 
-            <p className="mt-3 text-sm leading-relaxed text-gray-400">
+            <p className="fl-footer__description">
               FlyingLyte helps you book flights, hotels, and holiday packages at
               the best prices with a fast and secure experience.
             </p>
 
             {/* Contact */}
-            <div className="mt-4 space-y-2 text-sm">
+            <div className="fl-footer__contacts">
               {/* Address */}
-              <div className="flex items-start gap-2 text-gray-400">
+              <div className="fl-footer__address">
                 <MapPin size={16} className="mt-0.5 shrink-0" />
                 <span>
                   316, Gagan Vihar,Nearest Metro : Preet Vihar
@@ -55,7 +55,7 @@ const Footer = () => {
               {/* Email */}
               <a
                 href="mailto:info@flyinglyte.com"
-                className="flex items-center gap-2 hover:text-(--gold-soft) active:text-(--gold-soft) transition"
+                className="fl-footer__contact-link transition"
               >
                 <Mail size={16} /> info@flyinglyte.com
               </a>
@@ -63,7 +63,7 @@ const Footer = () => {
               {/* Phone Call */}
               <a
                 href="tel:+919667455591"
-                className="flex items-center gap-2 hover:text-(--gold-main) active:text-(--gold-main) transition"
+                className="fl-footer__contact-link transition"
               >
                 <Phone size={16} /> +91 9667455591
               </a>
@@ -73,15 +73,15 @@ const Footer = () => {
                 href="https://wa.me/919667455591"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 hover:text-(--gold-main) active:text-(--gold-main) transition"
+                className="fl-footer__contact-link transition"
               >
                 <Phone size={16} /> Chat on WhatsApp
               </a>
 
 
               {/* GST Number */}
-              <div className="flex items-center gap-2 text-gray-400">
-                <span className="font-medium text-gray-300">GSTIN:</span>
+              <div className="fl-footer__gst">
+                <span className="fl-footer__gst-label">GSTIN:</span>
                 <span>07AALFF0579Q1ZP</span>
               </div>
             </div>
@@ -89,17 +89,17 @@ const Footer = () => {
 
           {/* Link Columns */}
           {Object.entries(footerLinks).map(([section, links]) => (
-            <div key={section}>
-              <h3 className="text-white font-semibold capitalize mb-4">
+            <div key={section} className="fl-footer__column">
+              <h3 className="fl-footer__heading">
                 {section}
               </h3>
 
-              <ul className="space-y-2 text-sm">
+              <ul className="fl-footer__links">
                 {links.map((link) => (
                   <li key={link.name}>
                     <a
                       href={link.href}
-                      className="hover:text-white active:text-white transition-colors"
+                      className="fl-footer__nav-link transition-colors"
                     >
                       {link.name}
                     </a>
@@ -112,35 +112,35 @@ const Footer = () => {
 
 
         {/* We Accept */}
-        <div className="flex items-center justify-end gap-2 mb-5">
-          <span className="text-sm font-semibold text-white mr-1">
+        <div className="fl-footer__payments">
+          <span className="fl-footer__payment-label">
             WE ACCEPT:
           </span>
 
           {paymentMethods.map((payment) => (
             <div
               key={payment.name}
-              className="w-10 h-10 rounded-full bg-white flex items-center justify-center overflow-hidden"
+              className="fl-footer__payment"
             >
               <img
                 src={payment.image}
                 alt={payment.name}
-                className="w-full h-full object-contain p-1"
+                className="fl-footer__payment-image"
                loading="lazy" />
             </div>
           ))}
         </div>
 
         {/* Divider */}
-        <div className="border-t border-gray-800 mt-10 pt-6">
+        <div className="fl-footer__divider">
           {/* Bottom Bar */}
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-xs text-gray-400 text-center md:text-left">
+          <div className="fl-footer__bottom">
+            <p className="fl-footer__copyright">
               © 2024 FlyingLyte. All rights reserved.
             </p>
 
             {/* Payment + Social Icons */}
-            <div className="flex flex-col items-center md:items-end gap-4">
+            <div className="fl-footer__social-wrap">
 
               {/* We Accept */}
               {/* <div className="flex flex-wrap items-center justify-center md:justify-end gap-2">
@@ -163,13 +163,13 @@ const Footer = () => {
               </div> */}
 
               {/* Social Icons */}
-              <div className="flex gap-5">
+              <div className="fl-footer__socials">
                 <a
                   href="https://www.facebook.com/Flying-Lyte/"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Facebook"
-                  className="hover:text-white active:text-white transition"
+                  className="fl-footer__social-link transition"
                 >
                   <Facebook size={18} />
                 </a>
@@ -179,7 +179,7 @@ const Footer = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Instagram"
-                  className="hover:text-white active:text-white transition"
+                  className="fl-footer__social-link transition"
                 >
                   <Instagram size={18} />
                 </a>
@@ -189,7 +189,7 @@ const Footer = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="X (Twitter)"
-                  className="hover:text-white active:text-white transition"
+                  className="fl-footer__social-link transition"
                 >
                   <Twitter size={18} />
                 </a>
@@ -198,14 +198,14 @@ const Footer = () => {
             </div>
           </div>
 
-          <div className="text-center text-xs mt-5">
+          <div className="fl-footer__credit">
             <p>
               Designed & Developed By
               <a
                 href="https://www.infrivasolutions.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="pl-1 hover:text-white transition"
+                className="fl-footer__credit-link transition"
               >
                 Infriva Solutions
               </a>

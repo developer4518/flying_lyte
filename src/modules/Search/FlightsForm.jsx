@@ -617,7 +617,7 @@ const FlightsForm = () => {
 
       {showRoundTripNotice && (
         <div
-          className="
+          className="fl-search-backdrop
       fixed inset-0 z-[9999]
       flex items-center justify-center
       bg-black/70
@@ -628,7 +628,7 @@ const FlightsForm = () => {
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="
+            className="fl-search-modal
         relative
         w-full max-w-md
         overflow-hidden
@@ -653,7 +653,7 @@ const FlightsForm = () => {
 
             <div className="flex items-start gap-4">
               <div
-                className="
+                className="fl-search-badge
             flex h-11 w-11
             shrink-0
             items-center justify-center
@@ -667,7 +667,7 @@ const FlightsForm = () => {
 
               <div className="min-w-0 flex-1">
                 <p
-                  className="
+                  className="fl-search-muted
               text-xs font-semibold
               uppercase
               tracking-[0.18em]
@@ -678,7 +678,7 @@ const FlightsForm = () => {
                 </p>
 
                 <h3
-                  className="
+                  className="fl-search-title
               mt-1
               text-lg sm:text-xl
               font-semibold
@@ -689,7 +689,7 @@ const FlightsForm = () => {
                 </h3>
 
                 <p
-                  className="
+                  className="fl-search-muted
               mt-2
               text-sm
               leading-6
@@ -706,7 +706,7 @@ const FlightsForm = () => {
             <button
               type="button"
               onClick={() => setShowRoundTripNotice(false)}
-              className="
+              className="fl-search-primary
           mt-5
           w-full
           rounded-xl
@@ -729,7 +729,7 @@ const FlightsForm = () => {
 
       <div
 
-        className="rounded-2xl border border-white/10 bg-[#07111c]/10 p-2.5 shadow-2xl backdrop-blur-none space-y-2.5 md:p-4"
+        className="fl-search-card rounded-2xl border border-white/10 bg-[#07111c]/10 p-2.5 shadow-2xl backdrop-blur-none space-y-2.5 md:p-4"
 
       >
 
@@ -739,7 +739,7 @@ const FlightsForm = () => {
 
           <div
 
-            className="
+            className="fl-search-badge
 
       flex
 
@@ -781,7 +781,7 @@ const FlightsForm = () => {
 
             <p
 
-              className="
+              className="fl-search-muted
 
         text-[10px]
 
@@ -805,7 +805,7 @@ const FlightsForm = () => {
 
 
 
-            <p className="mt-0.5 text-sm text-white/90 sm:text-base">
+            <p className="fl-search-ink mt-0.5 text-sm text-white/90 sm:text-base">
 
               Your next journey starts here
 
@@ -868,7 +868,7 @@ const FlightsForm = () => {
                 }));
               }}
 
-              className={`px-3.5 py-1.5 rounded-full transition ${tripType === type
+              className={`fl-search-choice fl-search-secondary px-3.5 py-1.5 rounded-full transition ${tripType === type
 
                 ? "bg-linear-to-r from-start to-end text-black"
 
@@ -876,6 +876,7 @@ const FlightsForm = () => {
 
                 }`}
 
+              data-fl-active={tripType === type ? "true" : undefined}
             >
 
               {type === "oneway" ? "One Way" : "Round Trip"}
@@ -890,7 +891,7 @@ const FlightsForm = () => {
 
         {error && (
 
-          <div className="text-red-400 text-xs bg-red-900/20 border border-red-800 p-2 rounded-lg">
+          <div className="fl-search-error text-red-400 text-xs bg-red-900/20 border border-red-800 p-2 rounded-lg">
 
             {error}
 
@@ -916,7 +917,7 @@ const FlightsForm = () => {
 
           >
 
-            <label className="text-xs font-medium text-white/75">From</label>
+            <label className="fl-search-label text-xs font-medium text-white/75">From</label>
 
 
 
@@ -946,7 +947,7 @@ const FlightsForm = () => {
 
               }}
 
-              className="w-full min-w-0 rounded-xl border border-white/20 bg-white/[0.08] px-3 py-2.5 text-sm text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_8px_24px_rgba(0,0,0,0.18)] outline-none backdrop-blur-xl transition placeholder:text-white/70 hover:border-white/30 hover:bg-white/[0.10] focus:border-[#E6B35C]/70 focus:bg-white/[0.11] focus:ring-2 focus:ring-[#E6B35C]/15"
+              className="fl-search-control w-full min-w-0 rounded-xl border border-white/20 bg-white/[0.08] px-3 py-2.5 text-sm text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_8px_24px_rgba(0,0,0,0.18)] outline-none backdrop-blur-xl transition placeholder:text-white/70 hover:border-white/30 hover:bg-white/[0.10] focus:border-[#E6B35C]/70 focus:bg-white/[0.11] focus:ring-2 focus:ring-[#E6B35C]/15"
 
 
 
@@ -956,7 +957,7 @@ const FlightsForm = () => {
 
             {originSuggestions.length > 0 && (
 
-              <div className="absolute top-full z-[100] mt-2 max-h-60 w-full overflow-y-auto rounded-xl border border-white/15 bg-[#07111c]/95 shadow-2xl backdrop-blur-xl">
+              <div className="fl-search-popup absolute top-full z-[100] mt-2 max-h-60 w-full overflow-y-auto rounded-xl border border-white/15 bg-[#07111c]/95 shadow-2xl backdrop-blur-xl">
 
                 {originSuggestions.map((airport) => (
 
@@ -982,15 +983,15 @@ const FlightsForm = () => {
 
                     }}
 
-                    className="cursor-pointer border-b border-white/10 p-3 transition hover:bg-white/[0.08]"
+                    className="fl-search-option cursor-pointer border-b border-white/10 p-3 transition hover:bg-white/[0.08]"
 
                   >
 
                     <div className="flex justify-between">
 
-                      <span className="font-medium">{airport.city}</span>
+                      <span className="fl-search-ink font-medium">{airport.city}</span>
 
-                      <span className="font-semibold text-(--gold-main)">
+                      <span className="fl-search-ink font-semibold text-(--gold-main)">
 
                         {airport.iata}
 
@@ -1000,7 +1001,7 @@ const FlightsForm = () => {
 
 
 
-                    <div className="text-xs text-(--text-muted)">
+                    <div className="fl-search-muted text-xs text-(--text-muted)">
 
                       {airport.name}
 
@@ -1026,7 +1027,7 @@ const FlightsForm = () => {
 
               onClick={swapAirports}
 
-              className="flex h-8 w-8 items-center justify-center rounded-full border border-white/20 bg-white/[0.08] text-xs text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_8px_20px_rgba(0,0,0,0.16)] backdrop-blur-xl transition hover:border-[#E6B35C]/50 hover:bg-white/[0.12] sm:h-9 sm:w-9"
+              className="fl-search-secondary flex h-8 w-8 items-center justify-center rounded-full border border-white/20 bg-white/[0.08] text-xs text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_8px_20px_rgba(0,0,0,0.16)] backdrop-blur-xl transition hover:border-[#E6B35C]/50 hover:bg-white/[0.12] sm:h-9 sm:w-9"
 
             >
 
@@ -1046,7 +1047,7 @@ const FlightsForm = () => {
 
           >
 
-            <label className="text-xs font-medium text-white/75">To</label>
+            <label className="fl-search-label text-xs font-medium text-white/75">To</label>
 
 
 
@@ -1076,7 +1077,7 @@ const FlightsForm = () => {
 
               }}
 
-              className="w-full min-w-0 rounded-xl border border-white/20 bg-white/[0.08] px-3 py-2.5 text-sm text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_8px_24px_rgba(0,0,0,0.18)] outline-none backdrop-blur-xl transition placeholder:text-white/70 hover:border-white/30 hover:bg-white/[0.10] focus:border-[#E6B35C]/70 focus:bg-white/[0.11] focus:ring-2 focus:ring-[#E6B35C]/15"
+              className="fl-search-control w-full min-w-0 rounded-xl border border-white/20 bg-white/[0.08] px-3 py-2.5 text-sm text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_8px_24px_rgba(0,0,0,0.18)] outline-none backdrop-blur-xl transition placeholder:text-white/70 hover:border-white/30 hover:bg-white/[0.10] focus:border-[#E6B35C]/70 focus:bg-white/[0.11] focus:ring-2 focus:ring-[#E6B35C]/15"
 
             />
 
@@ -1084,7 +1085,7 @@ const FlightsForm = () => {
 
             {destinationSuggestions.length > 0 && (
 
-              <div className="absolute top-full z-[100] mt-2 max-h-60 w-full overflow-y-auto rounded-xl border border-white/15 bg-[#07111c]/95 shadow-2xl backdrop-blur-xl">
+              <div className="fl-search-popup absolute top-full z-[100] mt-2 max-h-60 w-full overflow-y-auto rounded-xl border border-white/15 bg-[#07111c]/95 shadow-2xl backdrop-blur-xl">
 
                 {destinationSuggestions.map((airport) => (
 
@@ -1110,15 +1111,15 @@ const FlightsForm = () => {
 
                     }}
 
-                    className="cursor-pointer border-b border-white/10 p-3 transition hover:bg-white/[0.08]"
+                    className="fl-search-option cursor-pointer border-b border-white/10 p-3 transition hover:bg-white/[0.08]"
 
                   >
 
                     <div className="flex justify-between">
 
-                      <span className="font-medium">{airport.city}</span>
+                      <span className="fl-search-ink font-medium">{airport.city}</span>
 
-                      <span className="font-semibold text-(--gold-main)">
+                      <span className="fl-search-ink font-semibold text-(--gold-main)">
 
                         {airport.iata}
 
@@ -1128,7 +1129,7 @@ const FlightsForm = () => {
 
 
 
-                    <div className="text-xs text-(--text-muted)">
+                    <div className="fl-search-muted text-xs text-(--text-muted)">
 
                       {airport.name}
 
@@ -1150,7 +1151,7 @@ const FlightsForm = () => {
 
             <div className="min-w-0">
 
-              <label className="text-xs text-(--text-muted)">
+              <label className="fl-search-label text-xs text-(--text-muted)">
 
                 Departure
 
@@ -1192,7 +1193,7 @@ const FlightsForm = () => {
 
                   }
 
-                  className="custom-date-input w-full min-w-0 rounded-xl border border-white/20 bg-white/[0.08] px-3 py-2.5 pr-11 text-sm text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_8px_24px_rgba(0,0,0,0.18)] outline-none backdrop-blur-xl transition hover:border-white/30 hover:bg-white/[0.10] focus:border-[#E6B35C]/70 focus:bg-white/[0.11] focus:ring-2 focus:ring-[#E6B35C]/15"
+                  className="fl-search-control fl-search-date custom-date-input w-full min-w-0 rounded-xl border border-white/20 bg-white/[0.08] px-3 py-2.5 pr-11 text-sm text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_8px_24px_rgba(0,0,0,0.18)] outline-none backdrop-blur-xl transition hover:border-white/30 hover:bg-white/[0.10] focus:border-[#E6B35C]/70 focus:bg-white/[0.11] focus:ring-2 focus:ring-[#E6B35C]/15"
 
                 />
 
@@ -1208,7 +1209,7 @@ const FlightsForm = () => {
 
                   }
 
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#E6B35C] text-lg z-10"
+                  className="fl-search-secondary absolute right-3 top-1/2 -translate-y-1/2 text-[#E6B35C] text-lg z-10"
 
                   aria-label="Select departure date"
 
@@ -1226,7 +1227,7 @@ const FlightsForm = () => {
 
             <div>
 
-              <label className="text-xs text-(--text-muted)">
+              <label className="fl-search-label text-xs text-(--text-muted)">
 
                 Return
 
@@ -1260,7 +1261,7 @@ const FlightsForm = () => {
 
                   }
 
-                  className="custom-date-input w-full min-w-0 rounded-xl border border-white/20 bg-white/[0.08] px-3 py-2.5 pr-11 text-sm text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_8px_24px_rgba(0,0,0,0.18)] outline-none backdrop-blur-xl transition hover:border-white/30 hover:bg-white/[0.10] focus:border-[#E6B35C]/70 focus:bg-white/[0.11] focus:ring-2 focus:ring-[#E6B35C]/15 disabled:cursor-not-allowed disabled:bg-white/[0.04] disabled:text-white/50 disabled:opacity-70"
+                  className="fl-search-control fl-search-date custom-date-input w-full min-w-0 rounded-xl border border-white/20 bg-white/[0.08] px-3 py-2.5 pr-11 text-sm text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_8px_24px_rgba(0,0,0,0.18)] outline-none backdrop-blur-xl transition hover:border-white/30 hover:bg-white/[0.10] focus:border-[#E6B35C]/70 focus:bg-white/[0.11] focus:ring-2 focus:ring-[#E6B35C]/15 disabled:cursor-not-allowed disabled:bg-white/[0.04] disabled:text-white/50 disabled:opacity-70"
 
                 />
 
@@ -1278,7 +1279,7 @@ const FlightsForm = () => {
 
                   }
 
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#E6B35C] text-lg z-10 disabled:opacity-30 disabled:cursor-not-allowed"
+                  className="fl-search-secondary absolute right-3 top-1/2 -translate-y-1/2 text-[#E6B35C] text-lg z-10 disabled:opacity-30 disabled:cursor-not-allowed"
 
                   aria-label="Select return date"
 
@@ -1304,7 +1305,7 @@ const FlightsForm = () => {
 
           >
 
-            <label className="text-xs text-(--text-muted)">
+            <label className="fl-search-label text-xs text-(--text-muted)">
 
               Travellers & Class
 
@@ -1318,7 +1319,7 @@ const FlightsForm = () => {
 
               onClick={() => setTravellersOpen(!travellersOpen)}
 
-              className="w-full rounded-xl border border-white/20 bg-white/[0.08] px-3 py-2.5 text-left text-sm text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_8px_24px_rgba(0,0,0,0.18)] backdrop-blur-xl transition hover:border-[#E6B35C]/50 hover:bg-white/[0.10] focus:border-[#E6B35C]/70 focus:outline-none focus:ring-2 focus:ring-[#E6B35C]/15"
+              className="fl-search-control w-full rounded-xl border border-white/20 bg-white/[0.08] px-3 py-2.5 text-left text-sm text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_8px_24px_rgba(0,0,0,0.18)] backdrop-blur-xl transition hover:border-[#E6B35C]/50 hover:bg-white/[0.10] focus:border-[#E6B35C]/70 focus:outline-none focus:ring-2 focus:ring-[#E6B35C]/15"
 
             >
 
@@ -1334,7 +1335,7 @@ const FlightsForm = () => {
 
               <div
 
-                className="
+                className="fl-search-popup fl-flight-passengers
 
                 absolute bottom-full mb-2
 
@@ -1412,9 +1413,9 @@ const FlightsForm = () => {
 
                         <div className="min-w-0">
 
-                          <p className="font-medium text-sm">{item.label}</p>
+                          <p className="fl-search-ink font-medium text-sm">{item.label}</p>
 
-                          <p className="text-xs text-(--text-muted)">
+                          <p className="fl-search-muted text-xs text-(--text-muted)">
 
                             {item.subLabel}
 
@@ -1432,7 +1433,7 @@ const FlightsForm = () => {
 
                             onClick={() => updateCount(item.key, -1)}
 
-                            className="w-8 h-8 border border-(--border-soft) rounded-lg"
+                            className="fl-search-secondary w-8 h-8 border border-(--border-soft) rounded-lg"
 
                           >
 
@@ -1442,7 +1443,7 @@ const FlightsForm = () => {
 
 
 
-                          <span className="w-6 text-center">
+                          <span className="fl-search-ink w-6 text-center">
 
                             {travellers[item.key]}
 
@@ -1456,7 +1457,7 @@ const FlightsForm = () => {
 
                             onClick={() => updateCount(item.key, 1)}
 
-                            className="w-8 h-8 border border-(--border-soft) rounded-lg"
+                            className="fl-search-secondary w-8 h-8 border border-(--border-soft) rounded-lg"
 
                           >
 
@@ -1476,7 +1477,7 @@ const FlightsForm = () => {
 
                   <div className="space-y-2">
 
-                    <label className="text-xs font-medium text-(--text-muted)">
+                    <label className="fl-search-label text-xs font-medium text-(--text-muted)">
 
                       Cabin Class
 
@@ -1516,7 +1517,7 @@ const FlightsForm = () => {
 
                           }
 
-                          className={`
+                          className={`fl-search-choice fl-search-secondary
 
                           text-sm px-3 py-2 rounded-lg border transition text-center
 
@@ -1530,6 +1531,7 @@ const FlightsForm = () => {
 
                         `}
 
+                          data-fl-active={travellers.cabin === cabin ? "true" : undefined}
                         >
 
                           {cabin}
@@ -1552,7 +1554,7 @@ const FlightsForm = () => {
 
                   onClick={() => setTravellersOpen(false)}
 
-                  className="w-full mt-4 bg-linear-to-r from-start to-end text-black rounded-lg py-2 font-semibold"
+                  className="fl-search-primary w-full mt-4 bg-linear-to-r from-start to-end text-black rounded-lg py-2 font-semibold"
 
                 >
 
@@ -1574,7 +1576,7 @@ const FlightsForm = () => {
 
             disabled={loading}
 
-            className="col-span-12 justify-self-center w-full sm:w-52 md:col-span-12 md:w-60 xl:col-span-24 xl:w-64 bg-linear-to-r from-start to-end text-black rounded-xl px-4 py-2 font-semibold text-sm transition hover:brightness-105 disabled:opacity-60 disabled:cursor-not-allowed"
+            className="fl-search-primary col-span-12 justify-self-center w-full sm:w-52 md:col-span-12 md:w-60 xl:col-span-24 xl:w-64 bg-linear-to-r from-start to-end text-black rounded-xl px-4 py-2 font-semibold text-sm transition hover:brightness-105 disabled:opacity-60 disabled:cursor-not-allowed"
 
           >
 

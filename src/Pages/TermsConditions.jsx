@@ -4,7 +4,7 @@ import SEO from "../components/SEO";
 
 const TermsConditions = () => {
   return (
-    <div className="min-h-screen bg-linear-to-b from-blue-50 via-white to-white py-24 px-4">
+    <div className="fl-booking-surface min-h-screen bg-linear-to-b from-blue-50 via-white to-white py-24 px-4">
       <SEO
         title="Terms & Conditions"
         description="Review FlyingLyte's Terms and Conditions governing user bookings, flight ticketing, hotel reservations, payments, and platform usage."
@@ -12,21 +12,21 @@ const TermsConditions = () => {
       />
       {/* Hero */}
       <div className="max-w-5xl mx-auto text-center mb-10">
-        <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-3">
+        <h1 className="fl-booking-heading fl-booking-title fl-booking-ink text-4xl md:text-5xl font-bold text-gray-800 mb-3">
           Terms & Conditions
         </h1>
-        <p className="text-gray-500 text-sm md:text-base">
+        <p className="fl-booking-muted text-gray-500 text-sm md:text-base">
           Last Updated: March 2026
         </p>
-        <p className="text-gray-600 mt-4 max-w-2xl mx-auto">
+        <p className="fl-booking-muted text-gray-600 mt-4 max-w-2xl mx-auto">
           Welcome to{" "}
-          <span className="font-semibold text-blue-600">Flyinglyte</span>.
+          <span className="fl-booking-info font-semibold text-blue-600">Flyinglyte</span>.
           Please read these terms carefully before using our platform.
         </p>
       </div>
 
       {/* Card Container */}
-      <div className="max-w-5xl mx-auto bg-white shadow-xl rounded-3xl p-6 md:p-10 space-y-8">
+      <div className="fl-booking-surface max-w-5xl mx-auto bg-white shadow-xl rounded-3xl p-6 md:p-10 space-y-8">
         <Section icon={<FileText />} title="1. About Flyinglyte">
           <p>
             Flyinglyte provides an online platform that allows users to search,
@@ -142,7 +142,7 @@ const TermsConditions = () => {
         <Section icon={<Mail />} title="10. Contact">
           <p>If you have questions regarding these Terms and Conditions:</p>
 
-          <div className="bg-blue-50 p-4 rounded-xl mt-3">
+          <div className="fl-booking-notice bg-blue-50 p-4 rounded-xl mt-3">
             <p className="font-medium">Email: info@flyinglyte.com</p>
             <p className="font-medium">Website: www.flyinglyte.com</p>
           </div>
@@ -154,17 +154,17 @@ const TermsConditions = () => {
 
 const Section = ({ icon, title, children }) => {
   return (
-    <div className="group border border-gray-100 rounded-xl p-5 hover:shadow-md transition">
+    <div className="fl-booking-line group border border-gray-100 rounded-xl p-5 hover:shadow-md transition">
       <div className="flex items-center gap-3 mb-3">
         {icon && (
-          <div className="text-blue-600 bg-blue-100 p-2 rounded-lg">{icon}</div>
+          <div className="fl-booking-info fl-booking-notice text-blue-600 bg-blue-100 p-2 rounded-lg">{icon}</div>
         )}
-        <h2 className="text-lg md:text-xl font-semibold text-gray-800">
+        <h2 className="fl-booking-heading fl-booking-subtitle fl-booking-ink text-lg md:text-xl font-semibold text-gray-800">
           {title}
         </h2>
       </div>
 
-      <div className="text-gray-600 leading-relaxed space-y-2 text-sm md:text-base">
+      <div className="fl-booking-muted text-gray-600 leading-relaxed space-y-2 text-sm md:text-base">
         {children}
       </div>
     </div>

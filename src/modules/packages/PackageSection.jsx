@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 import { Search, ArrowLeft, ArrowRight, MapPin } from "lucide-react";
 import PackageCard from "./PackageCard";
+import MobileCardDeck from "../../components/common/MobileCardDeck";
 import { publicApi } from "../../services/api";
 import SEO from "../../components/SEO";
+import { PackageHero } from "../../components/Home/TravelEditorial";
+import CTASection from "../../components/Home/CTASection";
 
 const PACKAGE_BG_IMAGE = "/images/travel-pattern-bg.jpeg";
 
@@ -30,7 +33,8 @@ const fetchPackages = async (page = 1, limit = 8, destination = "") => {
   };
 };
 
-const PackageSection = ({ limit = 8 }) => {
+const PackageSection = ({ limit = 8, appearance = "default" }) => {
+  const reducedMotion = useReducedMotion();
   const navigate = useNavigate();
   const location = useLocation();
   const [searchParams] = useSearchParams();
@@ -135,25 +139,76 @@ const PackageSection = ({ limit = 8 }) => {
 
   const cardVariants = {
     hidden: {
-      opacity: 0,
-      y: 35,
+      opacity: reducedMotion ? 1 : 0,
+      y: reducedMotion ? 0 : 24,
     },
     visible: {
       opacity: 1,
       y: 0,
       transition: {
-        duration: 0.45,
+        duration: reducedMotion ? 0 : 0.8,
         ease: "easeOut",
       },
     },
   };
 
+  const packageSearch = (
+<motion.div
+          initial={reducedMotion ? false : { opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45 }}
+          className="
+            fl-editorial__search
+            mx-auto max-w-2xl
+            mb-8 sm:mb-9 md:mb-10 lg:mb-12
+          "
+        >
+          {isPackagesPage && <p className="fl-package-search-label">Where would you like to go?</p>}
+          <div
+            className="
+              fl-editorial__search-surface
+              relative rounded-2xl border border-white/10
+              bg-black/35 p-1.5 sm:p-2
+              shadow-2xl shadow-black/20 backdrop-blur-xl
+            "
+          >
+            <div className="relative">
+              <Search
+                className="fl-editorial__search-icon absolute left-3.5 top-1/2 -translate-y-1/2 text-(--gold-main) sm:left-4"
+                size={19}
+              />
+
+              <input aria-label="Search destination, city or country"
+                type="text"
+                placeholder="Search destination, city or country..."
+                value={destination}
+                onChange={(e) => setDestination(e.target.value)}
+                className="
+                  fl-editorial__input
+                  w-full rounded-xl border border-white/10 bg-black/70
+                  py-3 pl-11 pr-3 text-sm text-white outline-none
+                  transition-all duration-300 placeholder:text-gray-500
+                  focus:border-(--gold-main) focus:ring-2 focus:ring-(--gold-main)/25
+                  sm:py-3.5 sm:pl-12 sm:pr-4 sm:text-base
+                  md:py-4
+                "
+              />
+            </div>
+          </div>
+        </motion.div>
+  );
+
+  const PackageGrid = appearance === "home-model2" ? MobileCardDeck : motion.div;
+
   return (
+    <>
     <section
-      className="
+      data-fl-theme={appearance === "home-model2" || appearance === "page-model2" ? "model2" : undefined}
+      className={`
+        ${appearance === "home-model2" ? "fl-editorial fl-home-packages" : appearance === "page-model2" ? "fl-editorial fl-packages-page" : ""}
         relative isolate overflow-hidden bg-[#090909]
         py-20 sm:py-22 md:py-24 lg:py-28 xl:py-32
-      "
+      `}
     >
       {isPackagesPage && (
         <SEO
@@ -168,6 +223,7 @@ const PackageSection = ({ limit = 8 }) => {
         alt=""
         aria-hidden="true"
         className="
+          fl-editorial__background
           pointer-events-none absolute inset-0 z-0
           h-full w-full object-cover object-center
           opacity-90
@@ -175,18 +231,19 @@ const PackageSection = ({ limit = 8 }) => {
        loading="lazy" />
 
       {/* Very light dark overlay */}
-      <div className="pointer-events-none absolute inset-0 z-0 bg-black/15" />
+      <div className="fl-editorial__decor pointer-events-none absolute inset-0 z-0 bg-black/15" />
 
       {/* Top-bottom gradient only */}
       <div
         className="
+          fl-editorial__decor
           pointer-events-none absolute inset-0 z-0
           bg-linear-to-b from-black/55 via-transparent to-black/65
         "
       />
 
       {/* Decorative Glow */}
-      <div className="pointer-events-none absolute inset-0 z-0">
+      <div className="fl-editorial__decor pointer-events-none absolute inset-0 z-0">
         <div className="absolute -top-20 left-1/2 h-56 w-56 -translate-x-1/2 rounded-full bg-(--gold-main)/10 blur-3xl sm:h-72 sm:w-72 md:h-96 md:w-96" />
         <div className="absolute bottom-10 -left-24 h-56 w-56 rounded-full bg-white/5 blur-3xl sm:h-72 sm:w-72" />
         <div className="absolute -right-28 top-1/3 h-64 w-64 rounded-full bg-(--gold-main)/5 blur-3xl md:h-80 md:w-80" />
@@ -194,23 +251,29 @@ const PackageSection = ({ limit = 8 }) => {
 
       <div
         className="
+          fl-editorial__wrap
           relative z-10 mx-auto w-full max-w-7xl
           px-4 sm:px-5 md:px-6 lg:px-8
         "
       >
+        {isPackagesPage && packageSearch}
+        {isPackagesPage && appearance === "page-model2" && <PackageHero />}
+        <div className={isPackagesPage && appearance === "page-model2" ? "fl-package-collection" : undefined}>
         {/* Heading */}
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
+          initial={reducedMotion ? false : { opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.55, ease: "easeOut" }}
           className="
+            fl-editorial__heading
             mx-auto max-w-3xl text-center
             mb-7 sm:mb-8 md:mb-10 lg:mb-12
           "
         >
           <div
             className="
+    fl-editorial__eyebrow
     mb-3 sm:mb-4 inline-flex items-center gap-2 rounded-full
     border border-(--gold-main)/30 bg-black/30
     px-3 py-1.5 sm:px-4 sm:py-2
@@ -221,24 +284,26 @@ const PackageSection = ({ limit = 8 }) => {
   "
           >
             <MapPin size={15} />
-            Explore Packages
+            {appearance === "home-model2" ? "A WORLD OF POSSIBILITIES / CURATED TRAVEL PACKAGES" : "Explore Packages"}
           </div>
 
           <h2
             className="
+    fl-editorial__title
     text-2xl font-bold leading-tight text-white
     [text-shadow:0_5px_24px_rgba(0,0,0,0.95)]
     sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl
   "
           >
-            Curated Travel{" "}
-            <span className="text-(--gold-main) [text-shadow:0_5px_24px_rgba(0,0,0,0.95)]">
+            {appearance === "home-model2" ? <>Big feelings.<br /><em>Beautiful places.</em></> : <>Curated Travel{" "}
+            <span className="fl-editorial__emphasis text-(--gold-main) [text-shadow:0_5px_24px_rgba(0,0,0,0.95)]">
               Packages
-            </span>
+            </span></>}
           </h2>
 
           <p
             className="
+    fl-editorial__description
     mx-auto mt-3 max-w-2xl
     text-sm leading-6 text-gray-100
     [text-shadow:0_3px_16px_rgba(0,0,0,0.95)]
@@ -251,51 +316,13 @@ const PackageSection = ({ limit = 8 }) => {
           </p>
         </motion.div>
 
-        {/* Search Bar */}
-        <motion.div
-          initial={{ opacity: 0, y: 18 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.45 }}
-          className="
-            mx-auto max-w-2xl
-            mb-8 sm:mb-9 md:mb-10 lg:mb-12
-          "
-        >
-          <div
-            className="
-              relative rounded-2xl border border-white/10
-              bg-black/35 p-1.5 sm:p-2
-              shadow-2xl shadow-black/20 backdrop-blur-xl
-            "
-          >
-            <div className="relative">
-              <Search
-                className="absolute left-3.5 top-1/2 -translate-y-1/2 text-(--gold-main) sm:left-4"
-                size={19}
-              />
-
-              <input
-                type="text"
-                placeholder="Search destination, city or country..."
-                value={destination}
-                onChange={(e) => setDestination(e.target.value)}
-                className="
-                  w-full rounded-xl border border-white/10 bg-black/70
-                  py-3 pl-11 pr-3 text-sm text-white outline-none
-                  transition-all duration-300 placeholder:text-gray-500
-                  focus:border-(--gold-main) focus:ring-2 focus:ring-(--gold-main)/25
-                  sm:py-3.5 sm:pl-12 sm:pr-4 sm:text-base
-                  md:py-4
-                "
-              />
-            </div>
-          </div>
-        </motion.div>
+        {!isPackagesPage && packageSearch}
 
         {/* Loading Skeleton */}
         {isLoading && (
           <div
             className="
+              fl-editorial__grid
               grid grid-cols-1
               gap-4 sm:grid-cols-2 sm:gap-5
               lg:grid-cols-4 lg:gap-6 xl:gap-8
@@ -305,12 +332,13 @@ const PackageSection = ({ limit = 8 }) => {
               <div
                 key={i}
                 className="
+                  fl-editorial__card fl-editorial__skeleton
                   overflow-hidden rounded-2xl border border-white/10
                   bg-black/35 p-2.5 shadow-xl shadow-black/20
                   backdrop-blur-md sm:rounded-3xl sm:p-3
                 "
               >
-                <div className="h-44 animate-pulse rounded-xl bg-white/10 sm:h-52 sm:rounded-2xl md:h-56" />
+                <div className="fl-editorial__skeleton-media h-44 animate-pulse rounded-xl bg-white/10 sm:h-52 sm:rounded-2xl md:h-56" />
 
                 <div className="mt-4 space-y-2.5 px-1 pb-2 sm:mt-5 sm:space-y-3 sm:pb-3">
                   <div className="h-4 w-3/4 animate-pulse rounded-full bg-white/10" />
@@ -325,8 +353,14 @@ const PackageSection = ({ limit = 8 }) => {
         {/* Package Grid */}
         {!isLoading && packages.length > 0 && (
           <>
-            <motion.div
+            {appearance === "home-model2" && packages.length > 1 && <p className="fl-mobile-swipe-hint">Swipe to explore <span aria-hidden="true">&rarr;</span></p>}
+            <PackageGrid
+              as={appearance === "home-model2" ? motion.div : undefined}
+              label={appearance === "home-model2" ? "package" : undefined}
+              aria-label={appearance === "home-model2" ? "Holiday packages, swipe to explore" : undefined}
+              tabIndex={appearance === "home-model2" ? 0 : undefined}
               className="
+                fl-editorial__grid
                 grid grid-cols-1
                 gap-4 sm:grid-cols-2 sm:gap-5
                 lg:grid-cols-4 lg:gap-6 xl:gap-8
@@ -342,12 +376,12 @@ const PackageSection = ({ limit = 8 }) => {
                   variants={cardVariants}
                 />
               ))}
-            </motion.div>
+            </PackageGrid>
 
             {/* Pagination */}
             {isPackagesPage && totalPages > 1 && (
               <div
-                className="
+                className="fl-packages-page__pagination
                   mt-8 flex flex-col items-center justify-center gap-3
                   sm:mt-10 sm:flex-row sm:gap-4
                   md:mt-12 lg:mt-14
@@ -357,7 +391,7 @@ const PackageSection = ({ limit = 8 }) => {
                   whileTap={{ scale: 0.96 }}
                   onClick={() => handlePageChange(page - 1)}
                   disabled={page <= 1 || !data?.previous}
-                  className="
+                  className="fl-packages-page__previous
                     flex w-full items-center justify-center gap-2 rounded-xl
                     border border-(--gold-main)/70 px-5 py-2.5
                     text-sm font-semibold text-(--gold-main)
@@ -372,22 +406,22 @@ const PackageSection = ({ limit = 8 }) => {
                 </motion.button>
 
                 <div
-                  className="
+                  className="fl-packages-page__status
                     w-full rounded-xl border border-white/10
                     bg-black/35 px-5 py-2.5 text-center
                     text-sm font-medium text-white backdrop-blur-md
                     sm:w-auto sm:py-3
                   "
                 >
-                  Page <span className="text-(--gold-main)">{page}</span> of{" "}
-                  <span className="text-(--gold-main)">{totalPages}</span>
+                  Page <span className="fl-packages-page__number text-(--gold-main)">{page}</span> of{" "}
+                  <span className="fl-packages-page__number text-(--gold-main)">{totalPages}</span>
                 </div>
 
                 <motion.button
                   whileTap={{ scale: 0.96 }}
                   onClick={() => handlePageChange(page + 1)}
                   disabled={page >= totalPages || !data?.next}
-                  className="
+                  className="fl-packages-page__next
                     flex w-full items-center justify-center gap-2 rounded-xl
                     bg-(--gold-main) px-5 py-2.5
                     text-sm font-semibold text-black
@@ -411,6 +445,7 @@ const PackageSection = ({ limit = 8 }) => {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             className="
+              fl-editorial__empty
               mx-auto mt-8 flex min-h-75 max-w-xl flex-col
               items-center justify-center rounded-2xl border border-white/10
               bg-black/35 px-5 py-10 text-center
@@ -419,15 +454,15 @@ const PackageSection = ({ limit = 8 }) => {
               md:min-h-90
             "
           >
-            <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-(--gold-main)/10 text-(--gold-main) sm:mb-5 sm:h-16 sm:w-16">
+            <div className="fl-editorial__empty-icon mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-(--gold-main)/10 text-(--gold-main) sm:mb-5 sm:h-16 sm:w-16">
               <Search size={26} />
             </div>
 
-            <h3 className="text-xl font-bold text-white sm:text-2xl">
+            <h3 className="fl-editorial__card-title text-xl font-bold text-white sm:text-2xl">
               No packages found
             </h3>
 
-            <p className="mt-3 text-sm leading-6 text-gray-300 sm:text-base">
+            <p className="fl-editorial__meta mt-3 text-sm leading-6 text-gray-300 sm:text-base">
               We could not find any package for this destination. Try searching
               another city, country, or travel place.
             </p>
@@ -437,6 +472,7 @@ const PackageSection = ({ limit = 8 }) => {
                 type="button"
                 onClick={() => setDestination("")}
                 className="
+                  fl-editorial__action
                   mt-5 rounded-xl bg-(--gold-main)
                   px-5 py-2.5 text-sm font-semibold text-black
                   transition hover:opacity-90
@@ -448,8 +484,11 @@ const PackageSection = ({ limit = 8 }) => {
             )}
           </motion.div>
         )}
+        </div>
       </div>
     </section>
+    {isPackagesPage && appearance === "page-model2" && <CTASection appearance="planner" />}
+    </>
   );
 };
 

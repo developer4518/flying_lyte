@@ -1259,10 +1259,10 @@ const ReviewBooking = () => {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-24">
-      <h2 className="text-xl font-bold mb-6">Review Booking</h2>
+      <h2 className="fl-booking-heading fl-booking-subtitle text-xl font-bold mb-6">Review Booking</h2>
 
-      <div className="bg-white rounded-xl shadow p-4 mb-4">
-        <h3 className="font-semibold mb-3">Passengers</h3>
+      <div className="fl-booking-surface bg-white rounded-xl shadow p-4 mb-4">
+        <h3 className="fl-booking-heading fl-booking-subtitle font-semibold mb-3">Passengers</h3>
         {passengers.map((p, i) => {
           const seat = getSSR(selectedSeats, i);
           const outboundSeat =
@@ -1277,7 +1277,7 @@ const ReviewBooking = () => {
               {!isRoundTrip &&
                 isLcc &&
                 seat?.Code && (
-                  <span className="ml-2 text-blue-600">
+                  <span className="fl-booking-info ml-2 text-blue-600">
                     Seat {seat.Code}
                   </span>
                 )}
@@ -1285,7 +1285,7 @@ const ReviewBooking = () => {
               {isRoundTrip && (
                 <div className="mt-1 flex flex-wrap gap-2 text-xs">
                   {outboundSeat?.Code && (
-                    <span className="rounded-full bg-blue-50 px-2 py-1 text-blue-600">
+                    <span className="fl-booking-info fl-booking-notice rounded-full bg-blue-50 px-2 py-1 text-blue-600">
                       Outbound Seat {outboundSeat.Code}
                     </span>
                   )}
@@ -1302,8 +1302,8 @@ const ReviewBooking = () => {
         })}
       </div>
 
-      <div className="bg-white rounded-xl shadow p-4 mb-6">
-        <h3 className="font-semibold mb-3">Fare Summary</h3>
+      <div className="fl-booking-surface bg-white rounded-xl shadow p-4 mb-6">
+        <h3 className="fl-booking-heading fl-booking-subtitle font-semibold mb-3">Fare Summary</h3>
 
         <div className="text-sm space-y-2">
           {!isRoundTrip ? (
@@ -1409,7 +1409,7 @@ const ReviewBooking = () => {
         <button
           type="button"
           disabled
-          className="
+          className="fl-booking-ink fl-booking-inset fl-booking-button fl-booking-secondary
       px-6 py-3
       rounded-lg
       bg-gray-400
@@ -1423,7 +1423,7 @@ const ReviewBooking = () => {
         <button
           onClick={handleBook}
           disabled={loading}
-          className={`px-6 py-3 rounded-lg text-white ${loading
+          className={`fl-booking-ink fl-booking-button px-6 py-3 rounded-lg text-white ${loading
               ? "bg-gray-400"
               : "bg-green-600"
             }`}
@@ -1436,8 +1436,8 @@ const ReviewBooking = () => {
 
 
       {popup.show && (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 px-4 backdrop-blur-sm">
-          <div className="w-full max-w-md overflow-hidden rounded-3xl border border-white/10 bg-[#11141B] text-white shadow-2xl">
+        <div className="fl-booking-inset fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 px-4 backdrop-blur-sm">
+          <div className="fl-booking-ink fl-booking-inset fl-booking-line w-full max-w-md overflow-hidden rounded-3xl border border-white/10 bg-[#11141B] text-white shadow-2xl">
 
             <div className="p-7 text-center">
 
@@ -1456,18 +1456,18 @@ const ReviewBooking = () => {
                     : "×"}
               </div>
 
-              <h3 className="mt-5 text-xl font-bold">
+              <h3 className="fl-booking-heading fl-booking-subtitle mt-5 text-xl font-bold">
                 {popup.title}
               </h3>
 
-              <p className="mt-3 text-sm leading-6 text-gray-400">
+              <p className="fl-booking-muted mt-3 text-sm leading-6 text-gray-400">
                 {popup.message}
               </p>
 
               <button
                 type="button"
                 onClick={closePopup}
-                className="mt-7 w-full rounded-xl bg-linear-to-r from-yellow-400 to-orange-400 px-5 py-3 font-bold text-black transition hover:scale-[1.01]"
+                className="fl-booking-ink fl-booking-surface fl-booking-button fl-booking-primary mt-7 w-full rounded-xl bg-linear-to-r from-yellow-400 to-orange-400 px-5 py-3 font-bold text-black transition hover:scale-[1.01]"
               >
                 {popup.actionLabel}
               </button>

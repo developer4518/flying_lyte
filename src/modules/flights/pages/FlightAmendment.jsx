@@ -1185,9 +1185,9 @@ const FlightAmendment = () => {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-(--bg-main) text-(--text-main) flex items-center justify-center">
+            <div className="fl-booking-base min-h-screen bg-(--bg-main) text-(--text-main) flex items-center justify-center">
                 <div className="text-center">
-                    <div className="text-(--gold-main) font-semibold text-lg">
+                    <div className="fl-booking-accent text-(--gold-main) font-semibold text-lg">
                         Loading Flight Amendment...
                     </div>
 
@@ -1206,8 +1206,8 @@ const FlightAmendment = () => {
 
     if (error) {
         return (
-            <div className="min-h-screen bg-(--bg-main) text-(--text-main) flex flex-col items-center justify-center px-4">
-                <p className="text-red-400 font-semibold text-center">
+            <div className="fl-booking-base min-h-screen bg-(--bg-main) text-(--text-main) flex flex-col items-center justify-center px-4">
+                <p className="fl-booking-danger text-red-400 font-semibold text-center">
                     {error}
                 </p>
 
@@ -1218,7 +1218,7 @@ const FlightAmendment = () => {
                             "/bookings",
                         )
                     }
-                    className="mt-5 px-6 py-3 rounded-xl bg-linear-to-r from-start to-end text-black font-semibold"
+                    className="fl-booking-ink fl-booking-surface fl-booking-button fl-booking-primary mt-5 px-6 py-3 rounded-xl bg-linear-to-r from-start to-end text-black font-semibold"
                 >
                     Back to My Bookings
                 </button>
@@ -1232,7 +1232,7 @@ const FlightAmendment = () => {
 
     return (
         <>
-            <div className="min-h-screen bg-(--bg-main) text-(--text-main)">
+            <div className="fl-booking-base min-h-screen bg-(--bg-main) text-(--text-main)">
                 <div className="max-w-6xl mx-auto px-4 py-24">
 
                     {/* ===============================================
@@ -1240,11 +1240,11 @@ const FlightAmendment = () => {
           =============================================== */}
 
                     <div className="mb-8">
-                        <p className="text-sm text-(--gold-soft) uppercase tracking-[0.2em]">
+                        <p className="fl-booking-accent text-sm text-(--gold-soft) uppercase tracking-[0.2em]">
                             Post Booking Service
                         </p>
 
-                        <h1 className="text-2xl md:text-3xl font-bold mt-2">
+                        <h1 className="fl-booking-heading fl-booking-title text-2xl md:text-3xl font-bold mt-2">
                             Flight Amendment
                         </h1>
 
@@ -1259,7 +1259,7 @@ const FlightAmendment = () => {
               BOOKING SUMMARY
           =============================================== */}
 
-                    <div className="bg-(--bg-card) border border-(--border-soft) rounded-2xl p-5 mb-6">
+                    <div className="fl-booking-surface fl-booking-line bg-(--bg-card) border border-(--border-soft) rounded-2xl p-5 mb-6">
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
 
                             <div>
@@ -1323,9 +1323,9 @@ const FlightAmendment = () => {
               PASSENGERS
           =============================================== */}
 
-                    <div className="bg-(--bg-card) border border-(--border-soft) rounded-2xl p-4 mb-6">
+                    <div className="fl-booking-surface fl-booking-line bg-(--bg-card) border border-(--border-soft) rounded-2xl p-4 mb-6">
 
-                        <p className="font-semibold text-(--gold-soft) mb-3">
+                        <p className="fl-booking-accent font-semibold text-(--gold-soft) mb-3">
                             Passenger
                         </p>
 
@@ -1346,7 +1346,7 @@ const FlightAmendment = () => {
                                                 index,
                                             )
                                         }
-                                        className={`px-4 py-2.5 rounded-xl border text-sm transition ${activePassenger ===
+                                        className={`fl-booking-line fl-booking-button px-4 py-2.5 rounded-xl border text-sm transition ${activePassenger ===
                                             index
                                             ? "bg-linear-to-r from-start to-end text-black border-transparent"
                                             : "bg-(--bg-secondary) border-(--border-soft) hover:border-(--gold-soft)"
@@ -1369,9 +1369,9 @@ const FlightAmendment = () => {
           =============================================== */}
 
                     {segments.length > 1 && (
-                        <div className="bg-(--bg-card) border border-(--border-soft) rounded-2xl p-4 mb-6">
+                        <div className="fl-booking-surface fl-booking-line bg-(--bg-card) border border-(--border-soft) rounded-2xl p-4 mb-6">
 
-                            <p className="font-semibold text-(--gold-soft) mb-3">
+                            <p className="fl-booking-accent font-semibold text-(--gold-soft) mb-3">
                                 Flight Sector
                             </p>
 
@@ -1395,7 +1395,7 @@ const FlightAmendment = () => {
                                                         index,
                                                     )
                                                 }
-                                                className={`px-4 py-2.5 rounded-xl border text-sm ${activeSegment ===
+                                                className={`fl-booking-line fl-booking-button px-4 py-2.5 rounded-xl border text-sm ${activeSegment ===
                                                     index
                                                     ? "bg-(--gold-soft) text-black border-transparent"
                                                     : "bg-(--bg-secondary) border-(--border-soft)"
@@ -1419,9 +1419,9 @@ const FlightAmendment = () => {
               SERVICE TABS
           =============================================== */}
 
-                    <div className="bg-(--bg-card) border border-(--border-soft) rounded-2xl overflow-hidden">
+                    <div className="fl-booking-surface fl-booking-line bg-(--bg-card) border border-(--border-soft) rounded-2xl overflow-hidden">
 
-                        <div className="grid grid-cols-3 border-b border-(--border-soft)">
+                        <div className="fl-booking-line grid grid-cols-3 border-b border-(--border-soft)">
 
                             {[
                                 {
@@ -1446,7 +1446,7 @@ const FlightAmendment = () => {
                                                 tab.key,
                                             )
                                         }
-                                        className={`py-4 text-sm md:text-base font-semibold transition ${activeTab ===
+                                        className={`fl-booking-button py-4 text-sm md:text-base font-semibold transition ${activeTab ===
                                             tab.key
                                             ? "bg-linear-to-r from-start to-end text-black"
                                             : "text-(--text-muted) hover:text-(--gold-soft)"
@@ -1496,7 +1496,7 @@ const FlightAmendment = () => {
                                 "meal" && (
                                     <div className="max-w-2xl">
 
-                                        <label className="block text-sm font-semibold mb-2 text-(--gold-soft)">
+                                        <label className="fl-booking-accent block text-sm font-semibold mb-2 text-(--gold-soft)">
                                             Meal Preference
                                         </label>
 
@@ -1517,7 +1517,7 @@ const FlightAmendment = () => {
                                             onChange={
                                                 handleMealChange
                                             }
-                                            className="w-full bg-(--bg-secondary) border border-(--border-soft) rounded-xl px-4 py-3.5 outline-none focus:border-(--gold-soft)"
+                                            className="fl-booking-line fl-booking-field w-full bg-(--bg-secondary) border border-(--border-soft) rounded-xl px-4 py-3.5 outline-none focus:border-(--gold-soft)"
                                         >
                                             <option value="">
                                                 No Meal
@@ -1545,7 +1545,7 @@ const FlightAmendment = () => {
                                         </select>
 
                                         {currentMeal && (
-                                            <div className="mt-4 bg-(--bg-secondary) border border-(--border-soft) rounded-xl p-4">
+                                            <div className="fl-booking-line mt-4 bg-(--bg-secondary) border border-(--border-soft) rounded-xl p-4">
                                                 <p className="text-xs text-(--text-muted)">
                                                     Selected Meal
                                                 </p>
@@ -1556,7 +1556,7 @@ const FlightAmendment = () => {
                                                     )}
                                                 </p>
 
-                                                <p className="text-(--gold-soft) font-semibold mt-1">
+                                                <p className="fl-booking-accent text-(--gold-soft) font-semibold mt-1">
                                                     ₹
                                                     {getPrice(
                                                         currentMeal
@@ -1585,7 +1585,7 @@ const FlightAmendment = () => {
                                 "baggage" && (
                                     <div className="max-w-2xl">
 
-                                        <label className="block text-sm font-semibold mb-2 text-(--gold-soft)">
+                                        <label className="fl-booking-accent block text-sm font-semibold mb-2 text-(--gold-soft)">
                                             Extra Baggage
                                         </label>
 
@@ -1606,7 +1606,7 @@ const FlightAmendment = () => {
                                             onChange={
                                                 handleBaggageChange
                                             }
-                                            className="w-full bg-(--bg-secondary) border border-(--border-soft) rounded-xl px-4 py-3.5 outline-none focus:border-(--gold-soft)"
+                                            className="fl-booking-line fl-booking-field w-full bg-(--bg-secondary) border border-(--border-soft) rounded-xl px-4 py-3.5 outline-none focus:border-(--gold-soft)"
                                         >
                                             <option value="">
                                                 No Extra Baggage
@@ -1634,7 +1634,7 @@ const FlightAmendment = () => {
                                         </select>
 
                                         {currentBag && (
-                                            <div className="mt-4 bg-(--bg-secondary) border border-(--border-soft) rounded-xl p-4">
+                                            <div className="fl-booking-line mt-4 bg-(--bg-secondary) border border-(--border-soft) rounded-xl p-4">
 
                                                 <p className="text-xs text-(--text-muted)">
                                                     Selected Baggage
@@ -1646,7 +1646,7 @@ const FlightAmendment = () => {
                                                     )}
                                                 </p>
 
-                                                <p className="text-(--gold-soft) font-semibold mt-1">
+                                                <p className="fl-booking-accent text-(--gold-soft) font-semibold mt-1">
                                                     ₹
                                                     {getPrice(
                                                         currentBag?.Price,
@@ -1676,7 +1676,7 @@ const FlightAmendment = () => {
                                     <div>
 
                                         {currentSeat && (
-                                            <div className="mb-5 flex items-center justify-between gap-4 bg-(--bg-secondary) border border-(--border-soft) rounded-xl p-4">
+                                            <div className="fl-booking-line mb-5 flex items-center justify-between gap-4 bg-(--bg-secondary) border border-(--border-soft) rounded-xl p-4">
 
                                                 <div>
                                                     <p className="text-xs text-(--text-muted)">
@@ -1689,7 +1689,7 @@ const FlightAmendment = () => {
                                                         }
                                                     </p>
 
-                                                    <p className="text-(--gold-soft) text-sm">
+                                                    <p className="fl-booking-accent text-(--gold-soft) text-sm">
                                                         ₹
                                                         {getPrice(
                                                             currentSeat
@@ -1717,7 +1717,7 @@ const FlightAmendment = () => {
                                                             },
                                                         )
                                                     }
-                                                    className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm"
+                                                    className="fl-booking-ink fl-booking-danger-notice fl-booking-button fl-booking-danger-button bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm"
                                                 >
                                                     Remove
                                                 </button>
@@ -1727,7 +1727,7 @@ const FlightAmendment = () => {
 
                                         <div className="flex gap-4 flex-wrap text-xs mb-5">
                                             <span className="flex items-center gap-2">
-                                                <span className="w-4 h-4 rounded bg-(--bg-secondary) border border-(--border-soft)" />
+                                                <span className="fl-booking-line w-4 h-4 rounded bg-(--bg-secondary) border border-(--border-soft)" />
                                                 Available
                                             </span>
 
@@ -1737,12 +1737,12 @@ const FlightAmendment = () => {
                                             </span>
 
                                             <span className="flex items-center gap-2">
-                                                <span className="w-4 h-4 rounded bg-green-600" />
+                                                <span className="fl-booking-success-notice w-4 h-4 rounded bg-green-600" />
                                                 Selected
                                             </span>
 
                                             <span className="flex items-center gap-2">
-                                                <span className="w-4 h-4 rounded bg-gray-600" />
+                                                <span className="fl-booking-inset w-4 h-4 rounded bg-gray-600" />
                                                 Unavailable
                                             </span>
                                         </div>
@@ -1800,7 +1800,7 @@ const FlightAmendment = () => {
                                                                                         seat,
                                                                                     )
                                                                                 }
-                                                                                className={`w-12 h-12 rounded-lg border flex flex-col items-center justify-center text-[10px] transition ${unavailable
+                                                                                className={`fl-booking-line fl-booking-button w-12 h-12 rounded-lg border flex flex-col items-center justify-center text-[10px] transition ${unavailable
                                                                                     ? "bg-gray-700 text-gray-500 cursor-not-allowed border-gray-700"
                                                                                     : selected
                                                                                         ? "bg-green-600 text-white border-green-500"
@@ -1854,8 +1854,8 @@ const FlightAmendment = () => {
 
                     <div className="mt-6 grid md:grid-cols-[1fr_360px] gap-5">
 
-                        <div className="bg-(--bg-card) border border-(--border-soft) rounded-2xl p-5">
-                            <h3 className="font-semibold text-(--gold-soft)">
+                        <div className="fl-booking-surface fl-booking-line bg-(--bg-card) border border-(--border-soft) rounded-2xl p-5">
+                            <h3 className="fl-booking-heading fl-booking-subtitle fl-booking-accent font-semibold text-(--gold-soft)">
                                 Amendment Information
                             </h3>
 
@@ -1868,9 +1868,9 @@ const FlightAmendment = () => {
                             </p>
                         </div>
 
-                        <div className="bg-(--bg-card) border border-(--border-soft) rounded-2xl p-5">
+                        <div className="fl-booking-surface fl-booking-line bg-(--bg-card) border border-(--border-soft) rounded-2xl p-5">
 
-                            <h3 className="font-semibold mb-4">
+                            <h3 className="fl-booking-heading fl-booking-subtitle font-semibold mb-4">
                                 Amendment Charges
                             </h3>
 
@@ -1915,12 +1915,12 @@ const FlightAmendment = () => {
                                     </span>
                                 </div>
 
-                                <div className="border-t border-(--border-soft) pt-3 flex justify-between font-bold text-lg">
+                                <div className="fl-booking-line border-t border-(--border-soft) pt-3 flex justify-between font-bold text-lg">
                                     <span>
                                         Total
                                     </span>
 
-                                    <span className="text-(--gold-soft)">
+                                    <span className="fl-booking-accent text-(--gold-soft)">
                                         ₹
                                         {amendmentTotal.toFixed(
                                             2,
@@ -1947,7 +1947,7 @@ const FlightAmendment = () => {
                                     "/bookings",
                                 )
                             }
-                            className="px-6 py-3 rounded-xl bg-(--bg-card) border border-(--border-soft) hover:border-(--gold-soft)"
+                            className="fl-booking-surface fl-booking-line fl-booking-button fl-booking-secondary px-6 py-3 rounded-xl bg-(--bg-card) border border-(--border-soft) hover:border-(--gold-soft)"
                         >
                             Cancel
                         </button>
@@ -1960,7 +1960,7 @@ const FlightAmendment = () => {
                             disabled={
                                 !hasAnySelection
                             }
-                            className={`px-6 py-3 rounded-xl font-semibold ${hasAnySelection
+                            className={`fl-booking-button px-6 py-3 rounded-xl font-semibold ${hasAnySelection
                                 ? "bg-linear-to-r from-start to-end text-black hover:opacity-90"
                                 : "bg-gray-600 text-gray-400 cursor-not-allowed"
                                 }`}
@@ -1978,16 +1978,16 @@ const FlightAmendment = () => {
       =================================================== */}
 
             {showConfirmModal && (
-                <div className="fixed inset-0 z-[300] bg-black/75 flex items-center justify-center p-4">
+                <div className="fl-booking-inset fixed inset-0 z-[300] bg-black/75 flex items-center justify-center p-4">
 
-                    <div className="w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-(--bg-card) text-(--text-main) border border-(--border-soft) rounded-2xl shadow-2xl">
+                    <div className="fl-booking-surface fl-booking-line w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-(--bg-card) text-(--text-main) border border-(--border-soft) rounded-2xl shadow-2xl">
 
                         {/* HEADER */}
 
-                        <div className="px-5 py-4 border-b border-(--border-soft) flex justify-between items-center">
+                        <div className="fl-booking-line px-5 py-4 border-b border-(--border-soft) flex justify-between items-center">
 
                             <div>
-                                <h2 className="text-xl font-bold">
+                                <h2 className="fl-booking-heading fl-booking-subtitle text-xl font-bold">
                                     Confirm Flight Amendment
                                 </h2>
 
@@ -2008,7 +2008,7 @@ const FlightAmendment = () => {
                                         false,
                                     )
                                 }
-                                className="text-xl"
+                                className="fl-booking-button text-xl"
                             >
                                 ✕
                             </button>
@@ -2133,10 +2133,10 @@ const FlightAmendment = () => {
                                                 passenger?.PaxId ||
                                                 passengerIndex
                                             }
-                                            className="border border-(--border-soft) rounded-xl p-4"
+                                            className="fl-booking-line border border-(--border-soft) rounded-xl p-4"
                                         >
 
-                                            <p className="font-semibold text-(--gold-soft) mb-3">
+                                            <p className="fl-booking-accent font-semibold text-(--gold-soft) mb-3">
                                                 {getPassengerName(
                                                     passenger,
                                                 )}
@@ -2189,13 +2189,13 @@ const FlightAmendment = () => {
 
                             {/* TOTAL */}
 
-                            <div className="border-t border-(--border-soft) pt-4 flex justify-between text-lg font-bold">
+                            <div className="fl-booking-line border-t border-(--border-soft) pt-4 flex justify-between text-lg font-bold">
 
                                 <span>
                                     Total Amendment Charges
                                 </span>
 
-                                <span className="text-(--gold-soft)">
+                                <span className="fl-booking-accent text-(--gold-soft)">
                                     ₹
                                     {amendmentTotal.toFixed(
                                         2,
@@ -2204,7 +2204,7 @@ const FlightAmendment = () => {
 
                             </div>
 
-                            <div className="bg-yellow-500/10 border border-yellow-500/30 text-yellow-300 rounded-xl p-3 text-sm">
+                            <div className="fl-booking-accent fl-booking-notice fl-booking-line bg-yellow-500/10 border border-yellow-500/30 text-yellow-300 rounded-xl p-3 text-sm">
                                 Once submitted, the
                                 amendment request will be
                                 sent to the airline. Please
@@ -2215,7 +2215,7 @@ const FlightAmendment = () => {
 
                         {/* FOOTER */}
 
-                        <div className="border-t border-(--border-soft) p-4 flex flex-col sm:flex-row justify-end gap-3">
+                        <div className="fl-booking-line border-t border-(--border-soft) p-4 flex flex-col sm:flex-row justify-end gap-3">
 
                             <button
                                 type="button"
@@ -2227,7 +2227,7 @@ const FlightAmendment = () => {
                                         false,
                                     )
                                 }
-                                className="px-5 py-3 rounded-xl border border-(--border-soft)"
+                                className="fl-booking-line fl-booking-button px-5 py-3 rounded-xl border border-(--border-soft)"
                             >
                                 Back / Edit
                             </button>
@@ -2240,7 +2240,7 @@ const FlightAmendment = () => {
                                 onClick={
                                     handleConfirmAmendment
                                 }
-                                className="px-5 py-3 rounded-xl bg-linear-to-r from-start to-end text-black font-semibold disabled:opacity-60"
+                                className="fl-booking-ink fl-booking-surface fl-booking-button fl-booking-primary px-5 py-3 rounded-xl bg-linear-to-r from-start to-end text-black font-semibold disabled:opacity-60"
                             >
                                 {submitting
                                     ? "Submitting..."

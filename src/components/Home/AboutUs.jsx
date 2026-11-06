@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Plane, Hotel, Package, Globe, Calendar } from "lucide-react";
 import SEO from "../SEO";
+import HangingTag from "./HangingTag";
 
 const AboutUs = () => {
   const navigate = useNavigate();
@@ -48,7 +49,7 @@ const AboutUs = () => {
   const isAboutPage = location.pathname === "/about";
 
   return (
-    <section className="py-24 px-6 bg-(--bg-main) text-(--text-main)">
+    <section className="fl-about" data-fl-theme="model2">
       {isAboutPage && (
         <SEO
           title="About Us - Elevating The Way The World Travels"
@@ -56,30 +57,30 @@ const AboutUs = () => {
           canonical="https://www.flyinglyte.com/about"
         />
       )}
-      <div className="max-w-6xl mx-auto space-y-24">
+      <div className="fl-about__wrap">
         {/* ABOUT */}
         <motion.div
           variants={fadeUp}
           initial="hidden"
           whileInView="visible"
-          className="text-center max-w-3xl mx-auto"
+          className="fl-about__intro"
         >
-          <h2 className=" text-4xl md:text-6xl font-bold text-(--gold-main) mb-4">
+          <h2 className="fl-about__title">
             About Flyinglyte
           </h2>
 
-          <h3 className="font-(--font-hero) text-md md:xl mb-4">
+          <h3 className="fl-about__tagline">
             Elevating the Way the World Travels
           </h3>
 
-          <p className="text-(--text-muted) leading-relaxed mb-4">
+          <p className="fl-about__copy fl-about__copy--lead">
             At Flyinglyte, we believe travel should be effortless, inspiring,
             and accessible. Our mission is to simplify the way people discover
             and book travel by bringing flights, hotels, and curated experiences
             together on a single trusted platform.
           </p>
 
-          <p className="text-(--text-muted)">
+          <p className="fl-about__copy">
             Whether you're planning a luxury getaway, a family vacation, or a
             quick business trip, Flyinglyte is designed to help you explore the
             world with confidence and convenience.
@@ -91,30 +92,33 @@ const AboutUs = () => {
           variants={fadeUp}
           initial="hidden"
           whileInView="visible"
-          className="grid md:grid-cols-2 gap-12 items-center"
+          className="fl-about__vision"
         >
-          <div>
-            <h2 className=" text-3xl font-bold text-center md:text-left text-(--gold-main) mb-6">
+          <div className="fl-about__vision-copy">
+            <h2 className="fl-about__section-title">
               Our Vision
             </h2>
 
-            <p className="text-(--text-muted) leading-relaxed mb-4">
+            <p className="fl-about__copy">
               Our vision is to build a next-generation travel platform that
               combines smart technology, transparent pricing, and personalized
               recommendations to create a seamless travel experience.
             </p>
 
-            <p className="text-(--text-muted)">
+            <p className="fl-about__copy">
               We aim to make travel planning simpler while helping travelers
               unlock more opportunities to explore the world.
             </p>
           </div>
 
+          <div className="fl-about__image-frame">
           <img
             src="/images/about_vision.jpg"
             alt="FlyingLyte Elevated Travel Experience"
-            className="rounded-2xl shadow-2xl border border-[var(--border-soft)] w-full h-[320px] md:h-[380px] object-cover"
+            className="fl-about__image"
             loading="lazy" />
+          <HangingTag />
+          </div>
         </motion.div>
 
         {/* WHAT WE OFFER */}
@@ -124,30 +128,30 @@ const AboutUs = () => {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.2 }}
-          className="relative"
+          className="fl-about__offers"
         >
           {/* Background glow */}
-          <div className="pointer-events-none absolute left-1/2 top-24 h-64 w-64 -translate-x-1/2 rounded-full bg-yellow-400/5 blur-3xl" />
+          <div className="fl-about__ambient pointer-events-none" />
 
           {/* Heading */}
-          <div className="relative mb-10 text-center md:mb-14">
-            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.32em] text-(--gold-soft)">
+          <div className="fl-about__offer-heading">
+            <p className="fl-about__eyebrow">
               Travel Made Simple
             </p>
 
-            <h2 className="text-3xl font-bold text-(--gold-main) md:text-4xl">
+            <h2 className="fl-about__section-title">
               What We Offer
             </h2>
 
-            <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-(--text-muted) md:text-base">
+            <p className="fl-about__offer-description">
               Everything you need to search, plan and manage your journey in one place.
             </p>
 
-            <div className="mx-auto mt-5 h-1 w-16 rounded-full bg-linear-to-r from-yellow-500 to-yellow-300" />
+            <div className="fl-about__rule" />
           </div>
 
           {/* Cards */}
-          <div className="relative grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="fl-about__grid">
             {features.map((item, index) => {
               const Icon = item.icon;
 
@@ -192,43 +196,27 @@ const AboutUs = () => {
                   }}
                   whileHover={{ y: -6 }}
                   transition={{ duration: 0.25 }}
-                  className={`
-    group
-    relative
-    w-full
-    cursor-pointer
-    overflow-hidden
-    rounded-2xl
-    border
-    border-(--border-soft)
-    bg-(--bg-card)
-    p-6
-    text-left
-    transition-all
-    duration-300
-    hover:border-yellow-400/40
-    hover:shadow-[0_18px_50px_rgba(234,168,42,0.12)]
-  `}
+                  className="fl-about__card group relative w-full cursor-pointer overflow-hidden text-left transition-all duration-300"
                 >
                   {/* Card glow */}
-                  <div className="pointer-events-none absolute -right-12 -top-12 h-28 w-28 rounded-full bg-yellow-400/0 blur-3xl transition duration-300 group-hover:bg-yellow-400/10" />
+                  <div className="fl-about__card-glow pointer-events-none transition duration-300" />
 
                   {/* Icon */}
-                  <div className="relative mb-5 flex h-12 w-12 items-center justify-center rounded-xl border border-yellow-400/20 bg-yellow-400/10 text-(--gold-soft) transition duration-300 group-hover:scale-110 group-hover:border-yellow-400/40 group-hover:bg-yellow-400/15">
+                  <div className="fl-about__icon relative transition duration-300 group-hover:scale-110">
                     <Icon size={24} strokeWidth={1.8} />
                   </div>
 
                   {/* Content */}
                   <div className="relative">
-                    <h3 className="text-lg font-semibold text-(--text-main)">
+                    <h3 className="fl-about__card-title">
                       {item.title}
                     </h3>
 
-                    <p className="mt-2 text-sm leading-6 text-(--text-muted)">
+                    <p className="fl-about__card-description">
                       {item.text}
                     </p>
 
-                    <div className="mt-5 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-(--gold-soft) opacity-70 transition group-hover:opacity-100">
+                    <div className="fl-about__explore opacity-70 transition group-hover:opacity-100">
                       Explore
                       <span className="transition-transform duration-300 group-hover:translate-x-1">
                         →

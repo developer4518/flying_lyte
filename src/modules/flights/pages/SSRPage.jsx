@@ -590,7 +590,7 @@ const SSRPage = () => {
         type="button"
         disabled={unavailable}
         onClick={() => handleSeatClick(seat)}
-        className={`w-12 h-12 rounded-md text-[10px] flex flex-col justify-center items-center border transition
+        className={`fl-booking-line fl-booking-button w-12 h-12 rounded-md text-[10px] flex flex-col justify-center items-center border transition
           ${unavailable
             ? "bg-gray-300 text-gray-500 cursor-not-allowed"
             : isSelectedByActivePassenger
@@ -1045,7 +1045,7 @@ const SSRPage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-(--bg-main) text-(--text-main) flex items-center justify-center">
+      <div className="fl-booking-base min-h-screen bg-(--bg-main) text-(--text-main) flex items-center justify-center">
         Loading SSR...
       </div>
     );
@@ -1053,13 +1053,13 @@ const SSRPage = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-(--bg-main) flex flex-col items-center justify-center text-red-400 px-4 text-center">
+      <div className="fl-booking-danger fl-booking-base min-h-screen bg-(--bg-main) flex flex-col items-center justify-center text-red-400 px-4 text-center">
         <p className="font-semibold">{error}</p>
 
         <button
           type="button"
           onClick={() => navigate("/", { replace: true })}
-          className="mt-4 px-4 py-2 bg-linear-to-r from-start to-end text-black rounded"
+          className="fl-booking-ink fl-booking-surface fl-booking-button fl-booking-primary mt-4 px-4 py-2 bg-linear-to-r from-start to-end text-black rounded"
         >
           Search Flights Again
         </button>
@@ -1068,9 +1068,9 @@ const SSRPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-(--bg-main) text-(--text-main)">
+    <div className="fl-booking-base min-h-screen bg-(--bg-main) text-(--text-main)">
       <div className="max-w-6xl mx-auto px-4 py-24">
-        <h2 className="text-2xl font-bold mb-3 text-(--gold-main)">
+        <h2 className="fl-booking-heading fl-booking-subtitle fl-booking-accent text-2xl font-bold mb-3 text-(--gold-main)">
           Select Add-ons
         </h2>
 
@@ -1086,7 +1086,7 @@ const SSRPage = () => {
                 setActiveJourney("outbound");
                 setActivePassenger(0);
               }}
-              className={`
+              className={`fl-booking-line fl-booking-button
         rounded-xl border p-4 text-left transition
         ${activeJourney === "outbound"
                   ? "border-[#E6B35C] bg-[#E6B35C]/10"
@@ -1098,7 +1098,7 @@ const SSRPage = () => {
                 Outbound
               </p>
 
-              <p className="mt-1 text-sm font-semibold text-(--gold-soft)">
+              <p className="fl-booking-accent mt-1 text-sm font-semibold text-(--gold-soft)">
                 {getRouteLabel(outboundFareQuote)}
               </p>
             </button>
@@ -1109,7 +1109,7 @@ const SSRPage = () => {
                 setActiveJourney("inbound");
                 setActivePassenger(0);
               }}
-              className={`
+              className={`fl-booking-line fl-booking-button
         rounded-xl border p-4 text-left transition
         ${activeJourney === "inbound"
                   ? "border-[#E6B35C] bg-[#E6B35C]/10"
@@ -1121,7 +1121,7 @@ const SSRPage = () => {
                 Return
               </p>
 
-              <p className="mt-1 text-sm font-semibold text-(--gold-soft)">
+              <p className="fl-booking-accent mt-1 text-sm font-semibold text-(--gold-soft)">
                 {getRouteLabel(inboundFareQuote)}
               </p>
             </button>
@@ -1129,26 +1129,26 @@ const SSRPage = () => {
         )}
 
         {(isSeatMandatory || isMealMandatory || shouldAutoIncludeFreeSSR) && (
-          <div className="mb-8 p-4 border border-(--border-soft) rounded-xl bg-(--bg-card)">
-            <h3 className="font-semibold text-(--gold-soft) mb-2">
+          <div className="fl-booking-surface fl-booking-line mb-8 p-4 border border-(--border-soft) rounded-xl bg-(--bg-card)">
+            <h3 className="fl-booking-heading fl-booking-subtitle fl-booking-accent font-semibold text-(--gold-soft) mb-2">
               SSR Requirements
             </h3>
 
             <div className="flex flex-wrap gap-2 text-xs">
               {isSeatMandatory && (
-                <span className="px-3 py-1 rounded-full bg-(--gold-soft) text-black">
+                <span className="fl-booking-ink px-3 py-1 rounded-full bg-(--gold-soft) text-black">
                   Seat Required
                 </span>
               )}
 
               {isMealMandatory && (
-                <span className="px-3 py-1 rounded-full bg-(--gold-soft) text-black">
+                <span className="fl-booking-ink px-3 py-1 rounded-full bg-(--gold-soft) text-black">
                   Meal Required
                 </span>
               )}
 
               {shouldAutoIncludeFreeSSR && (
-                <span className="px-3 py-1 rounded-full bg-green-500/20 text-green-400">
+                <span className="fl-booking-success fl-booking-success-notice px-3 py-1 rounded-full bg-green-500/20 text-green-400">
                   Free SSR Auto Added Where Available
                 </span>
               )}
@@ -1157,8 +1157,8 @@ const SSRPage = () => {
         )}
 
         {/* Passenger Selector */}
-        <div className="mb-8 p-4 border border-(--border-soft) rounded-xl bg-(--bg-card) shadow-sm">
-          <h3 className="font-semibold mb-3 text-(--gold-soft)">
+        <div className="fl-booking-surface fl-booking-line mb-8 p-4 border border-(--border-soft) rounded-xl bg-(--bg-card) shadow-sm">
+          <h3 className="fl-booking-heading fl-booking-subtitle fl-booking-accent font-semibold mb-3 text-(--gold-soft)">
             Select Passenger
           </h3>
 
@@ -1177,7 +1177,7 @@ const SSRPage = () => {
                   key={index}
                   type="button"
                   onClick={() => setActivePassenger(index)}
-                  className={`px-4 py-2 rounded border text-sm transition ${activePassenger === index
+                  className={`fl-booking-line fl-booking-button px-4 py-2 rounded border text-sm transition ${activePassenger === index
                     ? "bg-linear-to-r from-start to-end text-black border-transparent"
                     : hasSeat || hasMeal
                       ? "bg-green-500/10 border-green-500 text-green-400"
@@ -1197,7 +1197,7 @@ const SSRPage = () => {
         <div className="mb-10">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-3">
             <div>
-              <h3 className="font-semibold text-(--gold-soft)">
+              <h3 className="fl-booking-heading fl-booking-subtitle fl-booking-accent font-semibold text-(--gold-soft)">
                 Meals {isMealMandatory ? "(Required)" : "(Optional)"}
               </h3>
 
@@ -1218,7 +1218,7 @@ const SSRPage = () => {
 
                   setCurrentSelectedMeals(updatedMeals);
                 }}
-                className="px-4 py-2 rounded bg-red-600 text-white text-sm"
+                className="fl-booking-ink fl-booking-danger-notice fl-booking-button fl-booking-danger-button px-4 py-2 rounded bg-red-600 text-white text-sm"
               >
                 Remove Meal
               </button>
@@ -1226,9 +1226,9 @@ const SSRPage = () => {
           </div>
 
           {activePassengerMeal && (
-            <div className="mb-4 p-3 border border-(--border-soft) rounded bg-(--bg-card) text-sm">
+            <div className="fl-booking-surface fl-booking-line mb-4 p-3 border border-(--border-soft) rounded bg-(--bg-card) text-sm">
               Selected Meal:{" "}
-              <span className="font-semibold text-(--gold-soft)">
+              <span className="fl-booking-accent font-semibold text-(--gold-soft)">
                 {getMealName(activePassengerMeal)}
               </span>{" "}
               - ₹{getPrice(activePassengerMeal.Price)}
@@ -1249,7 +1249,7 @@ const SSRPage = () => {
                     key={`${getMealKey(meal)}-${index}`}
                     type="button"
                     onClick={() => handleMealSelect(meal)}
-                    className={`p-3 border rounded text-left transition ${isSelected
+                    className={`fl-booking-line fl-booking-button p-3 border rounded text-left transition ${isSelected
                       ? "bg-blue-600 text-white border-blue-700"
                       : "bg-(--bg-card) border-(--border-soft) hover:bg-(--bg-secondary)"
                       }`}
@@ -1272,7 +1272,7 @@ const SSRPage = () => {
               })}
             </div>
           ) : (
-            <div className="text-(--text-muted) border border-(--border-soft) rounded p-4 bg-(--bg-card)">
+            <div className="fl-booking-surface fl-booking-line text-(--text-muted) border border-(--border-soft) rounded p-4 bg-(--bg-card)">
               No meals available for this flight.
             </div>
           )}
@@ -1280,12 +1280,12 @@ const SSRPage = () => {
 
         {/* Baggage */}
         <div className="mb-10">
-          <h3 className="font-semibold mb-3 text-(--gold-soft)">Baggage</h3>
+          <h3 className="fl-booking-heading fl-booking-subtitle fl-booking-accent font-semibold mb-3 text-(--gold-soft)">Baggage</h3>
 
           {activePassengerBaggage.length > 0 && (
-            <div className="mb-4 p-3 border border-(--border-soft) rounded bg-(--bg-card) text-sm">
+            <div className="fl-booking-surface fl-booking-line mb-4 p-3 border border-(--border-soft) rounded bg-(--bg-card) text-sm">
               Passenger {activePassenger + 1} Baggage:{" "}
-              <span className="font-semibold text-(--gold-soft)">
+              <span className="fl-booking-accent font-semibold text-(--gold-soft)">
                 {activePassengerBaggage
                   .map((bag) => getBaggageName(bag))
                   .join(", ")}
@@ -1298,7 +1298,7 @@ const SSRPage = () => {
               <button
                 type="button"
                 onClick={() => handleBaggageSelect(noBaggageOption)}
-                className={`p-3 border rounded ${currentSelectedBaggage.length === 0
+                className={`fl-booking-line fl-booking-button p-3 border rounded ${currentSelectedBaggage.length === 0
                   ? "bg-gray-800 text-white"
                   : "bg-(--bg-card) border-(--border-soft)"
                   }`}
@@ -1317,7 +1317,7 @@ const SSRPage = () => {
                     key={`${getBaggageKey(bag)}-${index}`}
                     type="button"
                     onClick={() => handleBaggageSelect(bag)}
-                    className={`p-3 border rounded ${isSelected
+                    className={`fl-booking-line fl-booking-button p-3 border rounded ${isSelected
                       ? "bg-purple-600 text-white"
                       : "bg-(--bg-card) border-(--border-soft)"
                       }`}
@@ -1337,7 +1337,7 @@ const SSRPage = () => {
         <div className="mb-10">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
             <div>
-              <h3 className="font-semibold text-(--gold-soft)">
+              <h3 className="fl-booking-heading fl-booking-subtitle fl-booking-accent font-semibold text-(--gold-soft)">
                 Seats ({currentSelectedSeats.length}/{passengerCount}){" "}
                 {isSeatMandatory ? "(Required)" : "(Optional)"}
               </h3>
@@ -1348,7 +1348,7 @@ const SSRPage = () => {
             </div>
           </div>
 
-          <div className="mb-4 p-3 border border-(--border-soft) rounded bg-(--bg-card) flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+          <div className="fl-booking-surface fl-booking-line mb-4 p-3 border border-(--border-soft) rounded bg-(--bg-card) flex flex-col md:flex-row md:items-center md:justify-between gap-3">
             <div>
               <p className="text-sm font-semibold">
                 Passenger {activePassenger + 1}
@@ -1375,7 +1375,7 @@ const SSRPage = () => {
 
                   setCurrentSelectedSeats(updatedSeats);
                 }}
-                className="px-4 py-2 rounded bg-red-600 text-white text-sm"
+                className="fl-booking-ink fl-booking-danger-notice fl-booking-button fl-booking-danger-button px-4 py-2 rounded bg-red-600 text-white text-sm"
               >
                 Remove Seat
               </button>
@@ -1394,7 +1394,7 @@ const SSRPage = () => {
                   </div>
                 ))
               ) : (
-                <div className="text-(--text-muted) border border-(--border-soft) rounded p-4 bg-(--bg-card)">
+                <div className="fl-booking-surface fl-booking-line text-(--text-muted) border border-(--border-soft) rounded p-4 bg-(--bg-card)">
                   No seats available for this flight.
                 </div>
               )}
@@ -1403,8 +1403,8 @@ const SSRPage = () => {
         </div>
 
         {/* Price */}
-        <div className="border border-(--border-soft) p-4 rounded-xl mb-6 bg-(--bg-card) shadow">
-          <h3 className="font-semibold mb-3 text-(--gold-soft)">
+        <div className="fl-booking-surface fl-booking-line border border-(--border-soft) p-4 rounded-xl mb-6 bg-(--bg-card) shadow">
+          <h3 className="fl-booking-heading fl-booking-subtitle fl-booking-accent font-semibold mb-3 text-(--gold-soft)">
             Fare Summary
           </h3>
 
@@ -1440,7 +1440,7 @@ const SSRPage = () => {
               <span>₹{convenienceFee.toFixed(2)}</span>
             </div> */}
 
-            <hr className="border-(--border-soft)" />
+            <hr className="fl-booking-line border-(--border-soft)" />
 
             <div className="flex justify-between font-bold text-lg">
               <span>Total Payable</span>
@@ -1454,7 +1454,7 @@ const SSRPage = () => {
           <button
             type="button"
             onClick={handleContinue}
-            className={`px-6 py-3 rounded text-black font-semibold transition ${canContinue
+            className={`fl-booking-ink fl-booking-button px-6 py-3 rounded text-black font-semibold transition ${canContinue
               ? "bg-linear-to-r from-start to-end hover:opacity-90"
               : "bg-gray-400 cursor-not-allowed"
               }`}

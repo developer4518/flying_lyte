@@ -2,23 +2,10 @@ import React from "react";
 import { Link, useParams } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { blogs } from "../data/blogs";
+import { getBlogImage, handleBlogImageError } from "../components/common/blogImages";
 
 const SITE_URL = "https://www.flyinglyte.com";
-const BLOG_IMAGE_PATH = "/images/blogs/";
 
-const getBlogImage = (blog) => {
-  const image = String(blog?.image || "").trim();
-
-  if (image.startsWith("http://") || image.startsWith("https://")) {
-    return image;
-  }
-
-  if (image.startsWith("/")) {
-    return image;
-  }
-
-  return `${BLOG_IMAGE_PATH}${image || `${blog.slug}.jpg`}`;
-};
 
 const createSlug = (text = "") =>
   String(text)
@@ -88,7 +75,7 @@ const BlogDetails = () => {
 
   if (!blog) {
     return (
-      <main className="min-h-screen bg-[var(--bg-main)] text-white flex items-center justify-center px-4">
+      <main className="fl-booking-ink fl-booking-base min-h-screen bg-[var(--bg-main)] text-white flex items-center justify-center px-4">
         <Helmet>
           <title>Blog Not Found | FlyingLyte</title>
           <meta
@@ -98,7 +85,7 @@ const BlogDetails = () => {
         </Helmet>
 
         <div className="text-center">
-          <h1 className="font-heading text-4xl text-[var(--gold-main)] mb-4">
+          <h1 className="fl-booking-heading fl-booking-title font-heading text-4xl text-[var(--gold-main)] mb-4">
             Blog Not Found
           </h1>
 
@@ -158,7 +145,7 @@ const BlogDetails = () => {
   };
 
   return (
-    <main className="min-h-screen bg-[var(--bg-main)] text-white">
+    <main className="fl-booking-ink fl-booking-base min-h-screen bg-[var(--bg-main)] text-white">
       <Helmet>
         <title>{`${blog.title} | FlyingLyte Travel Blog`}</title>
         <meta name="description" content={metaDescription} />
@@ -219,7 +206,7 @@ const BlogDetails = () => {
               {blog.category ? `• ${blog.category}` : ""}
             </p>
 
-            <h1 className="font-heading text-4xl md:text-7xl text-[var(--gold-main)] leading-tight">
+            <h1 className="fl-booking-heading fl-booking-title font-heading text-4xl md:text-7xl text-[var(--gold-main)] leading-tight">
               {blog.title}
             </h1>
 
@@ -230,21 +217,21 @@ const BlogDetails = () => {
             <div className="mt-8 flex flex-wrap gap-4">
               <Link
                 to="/blogs"
-                className="rounded-full border border-[var(--border-soft)] px-5 py-2 font-body text-sm text-[var(--gold-soft)] hover:border-[var(--gold-main)] hover:text-[var(--gold-main)] transition"
+                className="fl-booking-line fl-booking-button rounded-full border border-[var(--border-soft)] px-5 py-2 font-body text-sm text-[var(--gold-soft)] hover:border-[var(--gold-main)] hover:text-[var(--gold-main)] transition"
               >
                 ← Back to Blogs
               </Link>
 
               <Link
                 to="/packages"
-                className="rounded-full border border-[var(--border-soft)] px-5 py-2 font-body text-sm text-[var(--gold-soft)] hover:border-[var(--gold-main)] hover:text-[var(--gold-main)] transition"
+                className="fl-booking-line fl-booking-button rounded-full border border-[var(--border-soft)] px-5 py-2 font-body text-sm text-[var(--gold-soft)] hover:border-[var(--gold-main)] hover:text-[var(--gold-main)] transition"
               >
                 Explore Tour Packages
               </Link>
 
               <Link
                 to="/contact"
-                className="rounded-full border border-[var(--border-soft)] px-5 py-2 font-body text-sm text-[var(--gold-soft)] hover:border-[var(--gold-main)] hover:text-[var(--gold-main)] transition"
+                className="fl-booking-line fl-booking-button rounded-full border border-[var(--border-soft)] px-5 py-2 font-body text-sm text-[var(--gold-soft)] hover:border-[var(--gold-main)] hover:text-[var(--gold-main)] transition"
               >
                 Get Travel Help
               </Link>
@@ -255,9 +242,10 @@ const BlogDetails = () => {
 
       {/* Full Clear Blog Image */}
       <section className="max-w-7xl mx-auto px-4">
-        <div className="rounded-3xl overflow-hidden border border-[var(--border-soft)] bg-black/30 shadow-[0_30px_80px_rgba(0,0,0,0.45)] p-2 md:p-3">
+        <div className="fl-booking-inset fl-booking-line rounded-3xl overflow-hidden border border-[var(--border-soft)] bg-black/30 shadow-[0_30px_80px_rgba(0,0,0,0.45)] p-2 md:p-3">
           <img
             src={blogImage}
+            onError={handleBlogImageError}
             alt={blog.title}
             className="w-full h-auto max-h-[780px] object-contain rounded-2xl"
             loading="eager"
@@ -267,7 +255,7 @@ const BlogDetails = () => {
 
       {/* Blog Content */}
       <section className="max-w-5xl mx-auto px-4 py-14">
-        <article className="relative overflow-hidden bg-[var(--bg-card)] border border-[var(--border-soft)] rounded-3xl p-6 md:p-10 shadow-[0_24px_70px_rgba(0,0,0,0.32)]">
+        <article className="fl-booking-surface fl-booking-line relative overflow-hidden bg-[var(--bg-card)] border border-[var(--border-soft)] rounded-3xl p-6 md:p-10 shadow-[0_24px_70px_rgba(0,0,0,0.32)]">
           <div className="absolute top-0 right-0 w-64 h-64 bg-[radial-gradient(circle,rgba(248,222,130,0.14),transparent_65%)]" />
 
           <div className="relative">
@@ -276,7 +264,7 @@ const BlogDetails = () => {
                 Travel Guide
               </p>
 
-              <h2 className="font-heading text-3xl md:text-5xl text-[var(--gold-main)] leading-tight">
+              <h2 className="fl-booking-heading fl-booking-subtitle font-heading text-3xl md:text-5xl text-[var(--gold-main)] leading-tight">
                 About This Travel Experience
               </h2>
 
@@ -291,9 +279,9 @@ const BlogDetails = () => {
             {sections.length > 0 && (
               <nav
                 aria-label="Blog table of contents"
-                className="mb-10 rounded-3xl border border-[var(--border-soft)] bg-white/[0.04] p-5 md:p-6"
+                className="fl-booking-surface fl-booking-line mb-10 rounded-3xl border border-[var(--border-soft)] bg-white/[0.04] p-5 md:p-6"
               >
-                <h2 className="font-heading text-2xl text-[var(--gold-main)] mb-4">
+                <h2 className="fl-booking-heading fl-booking-subtitle font-heading text-2xl text-[var(--gold-main)] mb-4">
                   What You Will Read
                 </h2>
 
@@ -331,15 +319,15 @@ const BlogDetails = () => {
                   <section
                     id={createSlug(section.title)}
                     key={section.number}
-                    className="scroll-mt-28 group rounded-3xl border border-[var(--border-soft)] bg-white/[0.04] hover:bg-white/[0.07] transition p-5 md:p-7"
+                    className="fl-booking-surface fl-booking-line scroll-mt-28 group rounded-3xl border border-[var(--border-soft)] bg-white/[0.04] hover:bg-white/[0.07] transition p-5 md:p-7"
                   >
                     <div className="flex gap-4 items-start">
-                      <div className="shrink-0 w-12 h-12 rounded-2xl bg-linear-to-r from-start to-end text-black font-heading text-xl flex items-center justify-center shadow-lg">
+                      <div className="fl-booking-ink fl-booking-surface shrink-0 w-12 h-12 rounded-2xl bg-linear-to-r from-start to-end text-black font-heading text-xl flex items-center justify-center shadow-lg">
                         {section.number}
                       </div>
 
                       <div>
-                        <h2 className="font-heading text-2xl md:text-3xl text-[var(--gold-main)] leading-tight">
+                        <h2 className="fl-booking-heading fl-booking-subtitle font-heading text-2xl md:text-3xl text-[var(--gold-main)] leading-tight">
                           {section.title}
                         </h2>
 
@@ -361,8 +349,8 @@ const BlogDetails = () => {
             )}
 
             {conclusion && (
-              <section className="mt-10 rounded-3xl border border-[var(--gold-soft)]/30 bg-[linear-gradient(135deg,rgba(248,222,130,0.12),rgba(255,255,255,0.04))] p-6 md:p-8">
-                <h2 className="font-heading text-3xl md:text-4xl text-[var(--gold-main)] mb-4">
+              <section className="fl-booking-line mt-10 rounded-3xl border border-[var(--gold-soft)]/30 bg-[linear-gradient(135deg,rgba(248,222,130,0.12),rgba(255,255,255,0.04))] p-6 md:p-8">
+                <h2 className="fl-booking-heading fl-booking-subtitle font-heading text-3xl md:text-4xl text-[var(--gold-main)] mb-4">
                   {conclusion.title}
                 </h2>
 
@@ -384,8 +372,8 @@ const BlogDetails = () => {
 
       {/* Internal Links */}
       <section className="max-w-5xl mx-auto px-4 pb-10">
-        <div className="rounded-3xl border border-[var(--border-soft)] bg-[var(--bg-card)] p-6 md:p-8">
-          <h2 className="font-heading text-3xl text-[var(--gold-main)] mb-4">
+        <div className="fl-booking-surface fl-booking-line rounded-3xl border border-[var(--border-soft)] bg-[var(--bg-card)] p-6 md:p-8">
+          <h2 className="fl-booking-heading fl-booking-subtitle font-heading text-3xl text-[var(--gold-main)] mb-4">
             Plan Your Trip with FlyingLyte
           </h2>
 
@@ -399,28 +387,28 @@ const BlogDetails = () => {
           <div className="flex flex-wrap gap-4">
             <Link
               to="/flights"
-              className="rounded-full border border-[var(--border-soft)] px-5 py-2 font-body text-sm text-[var(--gold-soft)] hover:border-[var(--gold-main)] hover:text-[var(--gold-main)] transition"
+              className="fl-booking-line fl-booking-button rounded-full border border-[var(--border-soft)] px-5 py-2 font-body text-sm text-[var(--gold-soft)] hover:border-[var(--gold-main)] hover:text-[var(--gold-main)] transition"
             >
               Book Flights
             </Link>
 
             <Link
               to="/hotels"
-              className="rounded-full border border-[var(--border-soft)] px-5 py-2 font-body text-sm text-[var(--gold-soft)] hover:border-[var(--gold-main)] hover:text-[var(--gold-main)] transition"
+              className="fl-booking-line fl-booking-button rounded-full border border-[var(--border-soft)] px-5 py-2 font-body text-sm text-[var(--gold-soft)] hover:border-[var(--gold-main)] hover:text-[var(--gold-main)] transition"
             >
               Book Hotels
             </Link>
 
             <Link
               to="/packages"
-              className="rounded-full border border-[var(--border-soft)] px-5 py-2 font-body text-sm text-[var(--gold-soft)] hover:border-[var(--gold-main)] hover:text-[var(--gold-main)] transition"
+              className="fl-booking-line fl-booking-button rounded-full border border-[var(--border-soft)] px-5 py-2 font-body text-sm text-[var(--gold-soft)] hover:border-[var(--gold-main)] hover:text-[var(--gold-main)] transition"
             >
               Tour Packages
             </Link>
 
             <Link
               to="/contact"
-              className="rounded-full border border-[var(--border-soft)] px-5 py-2 font-body text-sm text-[var(--gold-soft)] hover:border-[var(--gold-main)] hover:text-[var(--gold-main)] transition"
+              className="fl-booking-line fl-booking-button rounded-full border border-[var(--border-soft)] px-5 py-2 font-body text-sm text-[var(--gold-soft)] hover:border-[var(--gold-main)] hover:text-[var(--gold-main)] transition"
             >
               Contact FlyingLyte
             </Link>
@@ -436,7 +424,7 @@ const BlogDetails = () => {
               More Travel Ideas
             </p>
 
-            <h2 className="mt-3 font-heading text-3xl md:text-5xl text-[var(--gold-main)]">
+            <h2 className="fl-booking-heading fl-booking-subtitle mt-3 font-heading text-3xl md:text-5xl text-[var(--gold-main)]">
               Related Travel Blogs
             </h2>
           </div>
@@ -445,7 +433,7 @@ const BlogDetails = () => {
             {relatedBlogs.map((item) => (
               <article
                 key={item.slug}
-                className="rounded-3xl border border-[var(--border-soft)] bg-[var(--bg-card)] overflow-hidden hover:-translate-y-1 transition"
+                className="fl-booking-surface fl-booking-line rounded-3xl border border-[var(--border-soft)] bg-[var(--bg-card)] overflow-hidden hover:-translate-y-1 transition"
               >
                 <Link to={`/blogs/${item.slug}`}>
                   <img
@@ -461,7 +449,7 @@ const BlogDetails = () => {
                     {item.date}
                   </p>
 
-                  <h3 className="font-heading text-xl text-white leading-snug hover:text-[var(--gold-main)] transition">
+                  <h3 className="fl-booking-heading fl-booking-subtitle fl-booking-ink font-heading text-xl text-white leading-snug hover:text-[var(--gold-main)] transition">
                     <Link to={`/blogs/${item.slug}`}>{item.title}</Link>
                   </h3>
 
@@ -481,7 +469,7 @@ const BlogDetails = () => {
       <section className="max-w-5xl mx-auto px-4 pb-20">
         <Link
           to="/blogs"
-          className="inline-flex items-center justify-center rounded-full px-8 py-3 font-body text-lg text-black bg-linear-to-r from-start to-end hover:scale-105 transition"
+          className="fl-booking-ink fl-booking-surface fl-booking-button fl-booking-primary inline-flex items-center justify-center rounded-full px-8 py-3 font-body text-lg text-black bg-linear-to-r from-start to-end hover:scale-105 transition"
         >
           View More Blogs
         </Link>

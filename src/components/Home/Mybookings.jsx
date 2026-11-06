@@ -9,16 +9,18 @@ const MyBookings = () => {
   const tabs = ["packages", "flights", "hotels"];
 
   return (
-    <div className="min-h-screen bg-black text-white pt-28 px-4 md:px-10">
-      <h1 className="text-3xl font-bold text-[#E6B35C] mb-6">My Bookings</h1>
+    <div className="fl-public-dashboard fl-booking-ink fl-booking-inset min-h-screen bg-black text-white pt-28 px-4 md:px-10">
+      <h1 className="fl-booking-heading fl-booking-title fl-booking-accent text-3xl font-bold text-[#E6B35C] mb-6">My Bookings</h1>
 
       {/* Tabs */}
-      <div className="flex gap-4 mb-8">
+      <div className="fl-public-tabs flex gap-4 mb-8">
         {tabs.map((tab) => (
           <button
+            data-fl-active={activeTab === tab}
+            aria-pressed={activeTab === tab}
             key={tab}
             onClick={() => setActiveTab(tab)}
-            className={`px-5 py-2 rounded-full capitalize transition ${
+            className={`fl-booking-button px-5 py-2 rounded-full capitalize transition ${
               activeTab === tab
                 ? "bg-[#E6B35C] text-black"
                 : "bg-white/10 text-gray-300"

@@ -3,27 +3,14 @@ import { Link } from "react-router-dom";
 import SEO from "../components/SEO";
 import { blogs } from "../data/blogs";
 
-const BLOG_IMAGE_PATH = "/images/blogs/";
+import { getBlogImage, handleBlogImageError } from "../components/common/blogImages";
 
-const getBlogImage = (blog) => {
-  const image = String(blog?.image || "").trim();
-
-  if (image.startsWith("http://") || image.startsWith("https://")) {
-    return image;
-  }
-
-  if (image.startsWith("/")) {
-    return image;
-  }
-
-  return `${BLOG_IMAGE_PATH}${image || `${blog.slug}.jpg`}`;
-};
 
 const Blogs = () => {
   const latestBlogs = [...blogs].reverse();
 
   return (
-    <main className="min-h-screen bg-[var(--bg-main)] text-white py-24">
+    <main className="fl-booking-ink fl-booking-base min-h-screen bg-[var(--bg-main)] text-white py-24">
       <SEO
         title="Travel Blogs, Guides & Tips"
         description="Read FlyingLyte travel blogs for destination guides, flight booking tips, hotel booking advice, honeymoon packages, group tours, international trips, and travel planning ideas."
@@ -36,7 +23,7 @@ const Blogs = () => {
             FlyingLyte Travel Blog
           </p>
 
-          <h1 className="mt-4 font-heading text-4xl md:text-7xl text-[var(--gold-main)] leading-tight">
+          <h1 className="fl-booking-heading fl-booking-title mt-4 font-heading text-4xl md:text-7xl text-[var(--gold-main)] leading-tight">
             Travel Blogs, Guides & Tips
           </h1>
 
@@ -61,35 +48,35 @@ const Blogs = () => {
           >
             <Link
               to="/"
-              className="rounded-full border border-[var(--border-soft)] px-5 py-2 font-body text-sm text-[var(--gold-soft)] hover:border-[var(--gold-main)] hover:text-[var(--gold-main)] transition"
+              className="fl-booking-line fl-booking-button rounded-full border border-[var(--border-soft)] px-5 py-2 font-body text-sm text-[var(--gold-soft)] hover:border-[var(--gold-main)] hover:text-[var(--gold-main)] transition"
             >
               Home
             </Link>
 
             <Link
               to="/flights"
-              className="rounded-full border border-[var(--border-soft)] px-5 py-2 font-body text-sm text-[var(--gold-soft)] hover:border-[var(--gold-main)] hover:text-[var(--gold-main)] transition"
+              className="fl-booking-line fl-booking-button rounded-full border border-[var(--border-soft)] px-5 py-2 font-body text-sm text-[var(--gold-soft)] hover:border-[var(--gold-main)] hover:text-[var(--gold-main)] transition"
             >
               Book Flights
             </Link>
 
             <Link
               to="/hotels"
-              className="rounded-full border border-[var(--border-soft)] px-5 py-2 font-body text-sm text-[var(--gold-soft)] hover:border-[var(--gold-main)] hover:text-[var(--gold-main)] transition"
+              className="fl-booking-line fl-booking-button rounded-full border border-[var(--border-soft)] px-5 py-2 font-body text-sm text-[var(--gold-soft)] hover:border-[var(--gold-main)] hover:text-[var(--gold-main)] transition"
             >
               Book Hotels
             </Link>
 
             <Link
               to="/packages"
-              className="rounded-full border border-[var(--border-soft)] px-5 py-2 font-body text-sm text-[var(--gold-soft)] hover:border-[var(--gold-main)] hover:text-[var(--gold-main)] transition"
+              className="fl-booking-line fl-booking-button rounded-full border border-[var(--border-soft)] px-5 py-2 font-body text-sm text-[var(--gold-soft)] hover:border-[var(--gold-main)] hover:text-[var(--gold-main)] transition"
             >
               Tour Packages
             </Link>
 
             <Link
               to="/contact"
-              className="rounded-full border border-[var(--border-soft)] px-5 py-2 font-body text-sm text-[var(--gold-soft)] hover:border-[var(--gold-main)] hover:text-[var(--gold-main)] transition"
+              className="fl-booking-line fl-booking-button rounded-full border border-[var(--border-soft)] px-5 py-2 font-body text-sm text-[var(--gold-soft)] hover:border-[var(--gold-main)] hover:text-[var(--gold-main)] transition"
             >
               Contact FlyingLyte
             </Link>
@@ -100,28 +87,29 @@ const Blogs = () => {
           aria-labelledby="latest-travel-blogs"
           className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3"
         >
-          <h2 id="latest-travel-blogs" className="sr-only">
+          <h2 id="latest-travel-blogs" className="fl-booking-heading fl-booking-subtitle sr-only">
             Latest Travel Blogs and Guides
           </h2>
 
           {latestBlogs.map((blog) => (
             <article
               key={blog.id || blog.slug}
-              className="group bg-[var(--bg-card)] border border-[var(--border-soft)] rounded-3xl overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.35)] hover:-translate-y-2 transition-all duration-300"
+              className="fl-booking-surface fl-booking-line group bg-[var(--bg-card)] border border-[var(--border-soft)] rounded-3xl overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.35)] hover:-translate-y-2 transition-all duration-300"
             >
               <Link to={`/blogs/${blog.slug}`} aria-label={blog.title}>
                 <div className="relative h-60 overflow-hidden">
                   <img
                     src={getBlogImage(blog)}
+                    onError={handleBlogImageError}
                     alt={blog.title}
                     loading="lazy"
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                   />
 
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                  <div aria-hidden="true" className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent" />
 
                   {blog.category && (
-                    <span className="absolute top-4 left-4 rounded-full bg-black/60 border border-[var(--border-soft)] px-4 py-1 font-body text-sm text-[var(--gold-soft)] backdrop-blur">
+                    <span className="fl-booking-inset fl-booking-line absolute top-4 left-4 rounded-full bg-black/60 border border-[var(--border-soft)] px-4 py-1 font-body text-sm text-[var(--gold-soft)] backdrop-blur">
                       {blog.category}
                     </span>
                   )}
@@ -133,7 +121,7 @@ const Blogs = () => {
                   {blog.date} {blog.author ? `• ${blog.author}` : ""}
                 </p>
 
-                <h3 className="font-heading text-2xl text-white leading-snug mb-4 group-hover:text-[var(--gold-main)] transition">
+                <h3 className="fl-booking-heading fl-booking-subtitle fl-booking-ink font-heading text-2xl text-white leading-snug mb-4 group-hover:text-[var(--gold-main)] transition">
                   <Link to={`/blogs/${blog.slug}`}>{blog.title}</Link>
                 </h3>
 
@@ -156,12 +144,12 @@ const Blogs = () => {
           ))}
         </section>
 
-        <section className="mt-20 rounded-3xl bg-[var(--bg-card)] border border-[var(--border-soft)] p-8 md:p-10 text-center shadow-[0_20px_60px_rgba(0,0,0,0.25)]">
+        <section className="fl-booking-surface fl-booking-line mt-20 rounded-3xl bg-[var(--bg-card)] border border-[var(--border-soft)] p-8 md:p-10 text-center shadow-[0_20px_60px_rgba(0,0,0,0.25)]">
           <p className="font-body text-sm md:text-base tracking-[0.25em] uppercase text-[var(--gold-soft)]">
             Plan Better with FlyingLyte
           </p>
 
-          <h2 className="mt-4 font-heading text-3xl md:text-5xl text-[var(--gold-main)]">
+          <h2 className="fl-booking-heading fl-booking-subtitle mt-4 font-heading text-3xl md:text-5xl text-[var(--gold-main)]">
             Book Flights, Hotels and Holiday Packages
           </h2>
 
@@ -176,14 +164,14 @@ const Blogs = () => {
           <div className="mt-8 flex flex-wrap justify-center gap-4">
             <Link
               to="/packages"
-              className="rounded-full bg-[var(--gold-main)] px-7 py-3 font-body text-base font-semibold text-black hover:bg-[var(--gold-soft)] transition"
+              className="fl-booking-ink fl-booking-button fl-booking-secondary rounded-full bg-[var(--gold-main)] px-7 py-3 font-body text-base font-semibold text-black hover:bg-[var(--gold-soft)] transition"
             >
               Explore Packages
             </Link>
 
             <Link
               to="/contact"
-              className="rounded-full border border-[var(--border-soft)] px-7 py-3 font-body text-base font-semibold text-[var(--gold-soft)] hover:border-[var(--gold-main)] hover:text-[var(--gold-main)] transition"
+              className="fl-booking-line fl-booking-button rounded-full border border-[var(--border-soft)] px-7 py-3 font-body text-base font-semibold text-[var(--gold-soft)] hover:border-[var(--gold-main)] hover:text-[var(--gold-main)] transition"
             >
               Get Travel Assistance
             </Link>

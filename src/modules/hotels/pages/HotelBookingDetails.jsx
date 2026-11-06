@@ -49,10 +49,10 @@ const HotelBookingDetails = () => {
   }, [id, navigate]);
 
   if (loading)
-    return <div className="text-white text-center py-24">Loading...</div>;
+    return <div className="fl-booking-ink text-white text-center py-24">Loading...</div>;
 
   if (!data)
-    return <div className="text-white text-center py-24">Not Found</div>;
+    return <div className="fl-booking-ink text-white text-center py-24">Not Found</div>;
 
   // ✅ Pricing Fix
   const net = Number(data?.net_amount || data?.NetAmount || 0);
@@ -60,13 +60,13 @@ const HotelBookingDetails = () => {
   const total = Number(data?.total_amount || net + fee);
 
   return (
-    <div className="min-h-screen bg-[#0B0B0F] text-white px-4 md:px-10 py-24">
+    <div className="fl-booking-ink fl-booking-base min-h-screen bg-[#0B0B0F] text-white px-4 md:px-10 py-24">
       <div className="max-w-6xl mx-auto space-y-6">
         {/* HEADER */}
-        <div className="bg-[#15151C] p-6 rounded-2xl border border-gray-800">
-          <h2 className="text-2xl text-yellow-400">{data.HotelName}</h2>
+        <div className="fl-booking-surface fl-booking-line bg-[#15151C] p-6 rounded-2xl border border-gray-800">
+          <h2 className="fl-booking-heading fl-booking-subtitle fl-booking-accent text-2xl text-yellow-400">{data.HotelName}</h2>
 
-          <div className="text-sm text-gray-400 mt-3 space-y-1">
+          <div className="fl-booking-muted text-sm text-gray-400 mt-3 space-y-1">
             <p>Booking ID: {data.BookingId}</p>
             <p>Invoice: {data.InvoiceNo}</p>
             <p>Ref: {data.BookingRefNo}</p>
@@ -82,17 +82,17 @@ const HotelBookingDetails = () => {
               {data.HotelBookingStatus}
             </span>
 
-            <p className="text-xs text-gray-500 mt-2">
+            <p className="fl-booking-muted text-xs text-gray-500 mt-2">
               Booked: {new Date(data.BookingDate).toLocaleString()}
             </p>
           </div>
         </div>
 
         {/* HOTEL INFO */}
-        <div className="bg-[#15151C] p-6 rounded-2xl border border-gray-800">
-          <h3 className="text-yellow-300 mb-3">Hotel Info</h3>
+        <div className="fl-booking-surface fl-booking-line bg-[#15151C] p-6 rounded-2xl border border-gray-800">
+          <h3 className="fl-booking-heading fl-booking-subtitle fl-booking-accent text-yellow-300 mb-3">Hotel Info</h3>
 
-          <p className="text-sm text-gray-400">
+          <p className="fl-booking-muted text-sm text-gray-400">
             {data.AddressLine1}, {data.City}
           </p>
 
@@ -108,14 +108,14 @@ const HotelBookingDetails = () => {
         {data.Rooms?.map((room, idx) => (
           <div
             key={idx}
-            className="bg-[#15151C] p-6 rounded-2xl border border-gray-800"
+            className="fl-booking-surface fl-booking-line bg-[#15151C] p-6 rounded-2xl border border-gray-800"
           >
-            <h3 className="text-yellow-300 mb-3">
+            <h3 className="fl-booking-heading fl-booking-subtitle fl-booking-accent text-yellow-300 mb-3">
               Room {idx + 1} - {room.RoomTypeName}
             </h3>
 
             <div
-              className="text-sm text-gray-400"
+              className="fl-booking-muted text-sm text-gray-400"
               dangerouslySetInnerHTML={{
                 __html: room.RoomDescription,
               }}
@@ -126,7 +126,7 @@ const HotelBookingDetails = () => {
             </p>
 
             {/* Amenities */}
-            <div className="mt-3 grid grid-cols-2 md:grid-cols-3 gap-2 text-sm text-gray-400">
+            <div className="fl-booking-muted mt-3 grid grid-cols-2 md:grid-cols-3 gap-2 text-sm text-gray-400">
               {room.Amenities?.slice(0, 9).map((a, i) => (
                 <div key={i}>• {a}</div>
               ))}
@@ -134,7 +134,7 @@ const HotelBookingDetails = () => {
 
             {/* Guests */}
             <div className="mt-4">
-              <h4 className="text-yellow-200 text-sm mb-1">Guests</h4>
+              <h4 className="fl-booking-heading fl-booking-subtitle fl-booking-accent text-yellow-200 text-sm mb-1">Guests</h4>
               {room.HotelPassenger?.map((p, i) => (
                 <div key={i} className="text-sm">
                   {p.Title} {p.FirstName} {p.LastName} ({p.Age})
@@ -144,7 +144,7 @@ const HotelBookingDetails = () => {
             </div>
 
             {/* Room Price */}
-            <div className="mt-4 text-sm text-gray-300">
+            <div className="fl-booking-ink mt-4 text-sm text-gray-300">
               <p>
                 Room Price: ₹ {formatPrice(room.PriceBreakUp?.RoomRate || 0)}
               </p>
@@ -154,8 +154,8 @@ const HotelBookingDetails = () => {
         ))}
 
         {/* PRICE SUMMARY ✅ */}
-        <div className="bg-yellow-400/10 p-6 rounded-3xl border border-yellow-400/20">
-          <h3 className="text-yellow-300 mb-3 font-semibold">Price Summary</h3>
+        <div className="fl-booking-notice fl-booking-line bg-yellow-400/10 p-6 rounded-3xl border border-yellow-400/20">
+          <h3 className="fl-booking-heading fl-booking-subtitle fl-booking-accent text-yellow-300 mb-3 font-semibold">Price Summary</h3>
 
           <div className="space-y-2 text-sm">
             <div className="flex justify-between">
@@ -168,16 +168,16 @@ const HotelBookingDetails = () => {
               <span>₹ {formatPrice(fee)}</span>
             </div>
 
-            <hr className="border-gray-700" />
+            <hr className="fl-booking-line border-gray-700" />
 
             <div className="flex justify-between text-lg font-bold">
               <span>Total</span>
-              <span className="text-yellow-400">₹ {formatPrice(total)}</span>
+              <span className="fl-booking-accent text-yellow-400">₹ {formatPrice(total)}</span>
             </div>
 
             {/* REFUND */}
             {data?.HotelBookingStatus === "Cancelled" && (
-              <div className="flex justify-between text-green-400 font-semibold pt-2">
+              <div className="fl-booking-success flex justify-between text-green-400 font-semibold pt-2">
                 <span>Refund</span>
                 <span>
                   ₹{" "}
@@ -191,10 +191,10 @@ const HotelBookingDetails = () => {
         </div>
 
         {/* POLICIES */}
-        <div className="bg-[#15151C] p-6 rounded-2xl border border-gray-800">
-          <h3 className="text-yellow-300 mb-3">Policies</h3>
+        <div className="fl-booking-surface fl-booking-line bg-[#15151C] p-6 rounded-2xl border border-gray-800">
+          <h3 className="fl-booking-heading fl-booking-subtitle fl-booking-accent text-yellow-300 mb-3">Policies</h3>
 
-          <ul className="text-sm text-gray-400 space-y-2">
+          <ul className="fl-booking-muted text-sm text-gray-400 space-y-2">
             {data?.RateConditions?.slice(0, 6).map((r, i) => (
               <li key={i}>• {r.replace(/<[^>]+>/g, "")}</li>
             ))}

@@ -285,21 +285,21 @@ paymentVerified: true,
   }, [txnid, navigate, setGuestDetails]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#0B0B0F] px-4 text-white">
-      <div className="w-full max-w-md rounded-3xl border border-yellow-400/20 bg-[#15151C] p-8 text-center shadow-2xl">
+    <div className="fl-booking-ink fl-booking-base flex min-h-screen items-center justify-center bg-[#0B0B0F] px-4 text-white">
+      <div className="fl-booking-surface fl-booking-line w-full max-w-md rounded-3xl border border-yellow-400/20 bg-[#15151C] p-8 text-center shadow-2xl">
         {status === "verifying" && (
           <>
-            <div className="mx-auto h-14 w-14 animate-spin rounded-full border-4 border-gray-700 border-t-yellow-400" />
+            <div className="fl-booking-line fl-booking-spinner mx-auto h-14 w-14 animate-spin rounded-full border-4 border-gray-700 border-t-yellow-400" />
 
-            <h1 className="mt-6 text-xl font-bold text-yellow-300">
+            <h1 className="fl-booking-heading fl-booking-title fl-booking-accent mt-6 text-xl font-bold text-yellow-300">
               Verifying Payment...
             </h1>
 
-            <p className="mt-2 text-sm text-gray-400">
+            <p className="fl-booking-muted mt-2 text-sm text-gray-400">
               Please do not refresh or close this page.
             </p>
 
-            <p className="mt-4 break-all text-xs text-gray-500">
+            <p className="fl-booking-muted mt-4 break-all text-xs text-gray-500">
               Transaction ID: {txnid || "N/A"}
             </p>
           </>
@@ -307,18 +307,18 @@ paymentVerified: true,
 
         {status === "booking" && (
           <>
-            <div className="mx-auto h-14 w-14 animate-spin rounded-full border-4 border-gray-700 border-t-green-400" />
+            <div className="fl-booking-line fl-booking-spinner mx-auto h-14 w-14 animate-spin rounded-full border-4 border-gray-700 border-t-green-400" />
 
-            <h1 className="mt-6 text-xl font-bold text-green-300">
+            <h1 className="fl-booking-heading fl-booking-title fl-booking-success mt-6 text-xl font-bold text-green-300">
               Generating Your Voucher...
             </h1>
 
-            <p className="mt-2 text-sm text-gray-400">
+            <p className="fl-booking-muted mt-2 text-sm text-gray-400">
               Payment verified successfully. We are now confirming your hotel
               booking.
             </p>
 
-            <p className="mt-4 text-xs text-yellow-300">
+            <p className="fl-booking-accent mt-4 text-xs text-yellow-300">
               Please do not refresh or close this page.
             </p>
           </>
@@ -328,11 +328,11 @@ paymentVerified: true,
           <>
             <div className="mb-4 text-6xl">✅</div>
 
-            <h1 className="text-2xl font-bold text-green-400">
+            <h1 className="fl-booking-heading fl-booking-title fl-booking-success text-2xl font-bold text-green-400">
               Booking Successful
             </h1>
 
-            <p className="mt-3 text-sm text-gray-400">
+            <p className="fl-booking-muted mt-3 text-sm text-gray-400">
               Opening your booking details...
             </p>
           </>
@@ -342,17 +342,17 @@ paymentVerified: true,
           <>
             <div className="mb-4 text-6xl">❌</div>
 
-            <h1 className="text-2xl font-bold text-red-400">
+            <h1 className="fl-booking-heading fl-booking-title fl-booking-danger text-2xl font-bold text-red-400">
               Unable To Generate Voucher
             </h1>
 
-            <p className="mt-3 text-sm text-gray-400">{error}</p>
+            <p className="fl-booking-muted mt-3 text-sm text-gray-400">{error}</p>
 
             {txnid && (
-              <div className="mt-5 rounded-xl border border-gray-800 bg-[#0B0B0F] p-4">
-                <p className="text-xs text-gray-500">Transaction ID</p>
+              <div className="fl-booking-base fl-booking-line mt-5 rounded-xl border border-gray-800 bg-[#0B0B0F] p-4">
+                <p className="fl-booking-muted text-xs text-gray-500">Transaction ID</p>
 
-                <p className="mt-1 break-all text-sm font-semibold text-white">
+                <p className="fl-booking-ink mt-1 break-all text-sm font-semibold text-white">
                   {txnid}
                 </p>
               </div>
@@ -361,7 +361,7 @@ paymentVerified: true,
             <button
               type="button"
               onClick={() => window.location.reload()}
-              className="mt-6 w-full rounded-xl bg-linear-to-r from-yellow-400 to-orange-400 py-3 font-bold text-black"
+              className="fl-booking-ink fl-booking-surface fl-booking-button fl-booking-primary mt-6 w-full rounded-xl bg-linear-to-r from-yellow-400 to-orange-400 py-3 font-bold text-black"
             >
               Retry Voucher Generation
             </button>

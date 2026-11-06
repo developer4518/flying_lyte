@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { publicApi } from "../../../services/api";
 import { useFlightStore } from "../../../store/flightStore";
+import FareRuleDetails from "../components/FareRuleDetails";
 
 const hasValidResultIndex = (value) => {
   return value !== null && value !== undefined && value !== "";
@@ -398,13 +399,13 @@ const FareRule = () => {
 
   if (sessionMissing) {
     return (
-      <div className="min-h-screen bg-(--bg-main) text-(--text-main) flex flex-col items-center justify-center gap-4 px-4">
-        <p className="text-lg text-center">Flight session expired.</p>
+      <div data-fl-theme="model2" className="fl-detail-page fl-fare-rule fl-detail-empty fl-detail-inset min-h-screen bg-(--bg-main) text-(--text-main) flex flex-col items-center justify-center gap-4 px-4">
+        <p className="fl-detail-heading text-lg text-center">Flight session expired.</p>
 
         <button
           type="button"
           onClick={handleSearchAgain}
-          className="px-6 py-3 rounded-xl bg-linear-to-r from-start to-end text-black font-semibold"
+          className="fl-detail-primary fl-detail-button px-6 py-3 rounded-xl bg-linear-to-r from-start to-end text-black font-semibold"
         >
           Search Flights Again
         </button>
@@ -414,18 +415,18 @@ const FareRule = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-(--bg-main) flex flex-col items-center justify-center gap-4 text-(--text-main)">
-        <div className="w-10 h-10 border-4 border-gray-700 border-t-(--gold-main) rounded-full animate-spin" />
+      <div data-fl-theme="model2" className="fl-detail-page fl-fare-rule fl-detail-inset min-h-screen bg-(--bg-main) flex flex-col items-center justify-center gap-4 text-(--text-main)">
+        <div className="fl-detail-loading-ring w-10 h-10 border-4 border-gray-700 border-t-(--gold-main) rounded-full animate-spin" />
         <p className="text-sm text-(--text-muted)">Fetching Fare Rules...</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-(--bg-main) text-(--text-main)">
-      <div className="max-w-5xl mx-auto px-4 md:px-6 py-24 space-y-8">
+    <div data-fl-theme="model2" className="fl-detail-page fl-fare-rule fl-detail-inset min-h-screen bg-(--bg-main) text-(--text-main)">
+      <div className="fl-detail-wrap max-w-5xl mx-auto px-4 md:px-6 py-24 space-y-8">
         <div>
-          <h1 className="text-2xl md:text-3xl font-bold text-(--gold-main)">
+          <h1 className="fl-detail-title fl-detail-heading text-2xl md:text-3xl font-bold text-(--gold-main)">
             Fare Rules
           </h1>
 
@@ -437,14 +438,14 @@ const FareRule = () => {
         {!isRoundTrip && (
           <>
             {selectedFlight && firstSegment && lastSegment && (
-              <div className="bg-(--bg-card) border border-(--border-soft) rounded-2xl p-6">
-                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-                  <div className="flex items-center justify-between md:justify-start gap-6 w-full md:w-auto">
+              <div className="fl-detail-journey fl-detail-enter fl-detail-surface bg-(--bg-card) border border-(--border-soft) rounded-2xl p-6">
+                <div className="fl-detail-journey-layout flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+                  <div className="fl-detail-route flex items-center justify-between md:justify-start gap-6 w-full md:w-auto">
                     <div className="text-center">
-                      <p className="text-xl font-bold text-(--gold-soft)">
+                      <p className="fl-detail-airport text-xl font-bold text-(--gold-soft)">
                         {firstSegment?.Origin?.Airport?.AirportCode || "-"}
                       </p>
-                      <p className="text-xs text-(--text-muted)">
+                      <p className="fl-detail-wrap-text text-xs text-(--text-muted)">
                         {firstSegment?.Origin?.Airport?.CityName || "-"}
                       </p>
                     </div>
@@ -452,17 +453,17 @@ const FareRule = () => {
                     <div className="text-(--gold-main) text-xl">✈</div>
 
                     <div className="text-center">
-                      <p className="text-xl font-bold text-(--gold-soft)">
+                      <p className="fl-detail-airport text-xl font-bold text-(--gold-soft)">
                         {lastSegment?.Destination?.Airport?.AirportCode || "-"}
                       </p>
-                      <p className="text-xs text-(--text-muted)">
+                      <p className="fl-detail-wrap-text text-xs text-(--text-muted)">
                         {lastSegment?.Destination?.Airport?.CityName || "-"}
                       </p>
                     </div>
                   </div>
 
-                  <div className="text-left md:text-right">
-                    <p className="text-sm font-semibold text-(--gold-main)">
+                  <div className="fl-detail-journey-info text-left md:text-right">
+                    <p className="fl-detail-wrap-text text-sm font-semibold text-(--gold-main)">
                       {airline?.AirlineName || "Airline"}
                     </p>
 
@@ -472,15 +473,15 @@ const FareRule = () => {
                       {airline?.FlightNumber || ""}
                     </p>
 
-                    <p className="mt-2 text-xl font-bold text-(--gold-soft)">
+                    <p className="fl-detail-price-total mt-2 text-xl font-bold text-(--gold-soft)">
                       ₹
                       {Number(
                         fare?.PublishedFare || fare?.OfferedFare || 0,
                       ).toLocaleString("en-IN")}
                     </p>
 
-                    <span
-                      className={`inline-block mt-2 text-xs px-2 py-1 rounded ${selectedFlight?.IsLCC
+                    <span data-fl-service={selectedFlight?.IsLCC ? "lcc" : "full"}
+                      className={`fl-detail-badge inline-block mt-2 text-xs px-2 py-1 rounded ${selectedFlight?.IsLCC
                         ? "bg-yellow-500/20 text-yellow-400"
                         : "bg-green-500/20 text-green-400"
                         }`}
@@ -525,20 +526,20 @@ const FareRule = () => {
                 return (
                   <div
                     key={label}
-                    className="
+                    className="fl-detail-journey fl-detail-enter fl-detail-surface
               rounded-2xl
               border border-(--border-soft)
               bg-(--bg-card)
               p-5
             "
                   >
-                    <p className="text-xs font-semibold uppercase tracking-[0.16em] text-(--gold-main)">
+                    <p className="fl-detail-eyebrow text-xs font-semibold uppercase tracking-[0.16em] text-(--gold-main)">
                       {label}
                     </p>
 
-                    <div className="mt-4 flex items-center justify-between gap-4">
+                    <div className="fl-detail-journey-layout mt-4 flex items-center justify-between gap-4">
                       <div>
-                        <p className="text-lg font-bold text-(--gold-soft)">
+                        <p className="fl-detail-wrap-text text-lg font-bold text-(--gold-soft)">
                           {first?.Origin?.Airport
                             ?.AirportCode || "-"}
                           {" → "}
@@ -546,7 +547,7 @@ const FareRule = () => {
                             ?.AirportCode || "-"}
                         </p>
 
-                        <p className="mt-1 text-xs text-(--text-muted)">
+                        <p className="fl-detail-wrap-text mt-1 text-xs text-(--text-muted)">
                           {first?.Airline
                             ?.AirlineName ||
                             "Airline"}
@@ -564,7 +565,7 @@ const FareRule = () => {
                         </p>
                       </div>
 
-                      <p className="text-lg font-bold text-(--gold-soft)">
+                      <p className="fl-detail-price-primary text-lg font-bold text-(--gold-soft)">
                         ₹
                         {Number(
                           currentFare
@@ -584,13 +585,13 @@ const FareRule = () => {
           )}
 
         {error && (
-          <div className="bg-red-500/10 text-red-400 border border-red-500/20 p-3 rounded-lg text-sm flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+          <div className="fl-detail-error bg-red-500/10 text-red-400 border border-red-500/20 p-3 rounded-lg text-sm flex flex-col md:flex-row md:items-center md:justify-between gap-3">
             <span>{error}</span>
 
             <button
               type="button"
               onClick={handleSearchAgain}
-              className="text-(--gold-main) underline text-left md:text-right"
+              className="fl-detail-link fl-detail-button text-(--gold-main) underline text-left md:text-right"
             >
               Search again
             </button>
@@ -599,7 +600,7 @@ const FareRule = () => {
 
         <div className="space-y-4">
           {fareRules.length === 0 ? (
-            <div className="bg-(--bg-card) border border-(--border-soft) rounded-xl p-5">
+            <div className="fl-detail-empty fl-detail-surface bg-(--bg-card) border border-(--border-soft) rounded-xl p-5">
               <p className="text-sm text-(--text-muted)">
                 No fare rules available for this flight.
               </p>
@@ -611,23 +612,23 @@ const FareRule = () => {
               const airlineCode = rule?.Airline || rule?.AirlineCode;
 
               return (
-                <div
+                <div data-fl-open={openRule === index}
                   key={`${origin || "rule"}-${destination || index}-${index}`}
-                  className="bg-(--bg-card) border border-(--border-soft) rounded-xl shadow-sm"
+                  className="fl-detail-rule-card fl-detail-surface bg-(--bg-card) border border-(--border-soft) rounded-xl shadow-sm"
                 >
-                  <button
+                  <button data-fl-open={openRule === index}
                     type="button"
                     onClick={() =>
                       setOpenRule(openRule === index ? null : index)
                     }
-                    className="w-full flex items-center justify-between px-5 py-4 text-left"
+                    className="fl-detail-rule-toggle fl-detail-button w-full flex items-center justify-between px-5 py-4 text-left"
                   >
-                    <span className="font-semibold text-(--gold-soft)">
+                    <span className="fl-detail-wrap-text font-semibold text-(--gold-soft)">
                       {/* Round Trip Direction */}
                       {isRoundTrip &&
                         rule?.__tripDirection && (
                           <span
-                            className="
+                            className="fl-detail-badge
           mr-2
           rounded-full
           bg-[#E6B35C]/10
@@ -655,14 +656,14 @@ const FareRule = () => {
                       ) : null}
                     </span>
 
-                    <span className="text-lg font-bold text-(--gold-main)">
+                    <span className="fl-detail-rule-icon text-lg font-bold text-(--gold-main)">
                       {openRule === index ? "−" : "+"}
                     </span>
                   </button>
 
                   {openRule === index && (
                     <div
-                      className="
+                      className="fl-detail-disclosure-content
       border-t border-(--border-soft)
       px-4 sm:px-5
       py-5
@@ -683,7 +684,7 @@ const FareRule = () => {
       "
                       >
                         <div
-                          className="
+                          className="fl-detail-inset
           rounded-xl
           border border-(--border-soft)
           bg-(--bg-main)
@@ -694,14 +695,14 @@ const FareRule = () => {
                             Fare Basis
                           </p>
 
-                          <p className="mt-1 font-semibold text-(--gold-soft)">
+                          <p className="fl-detail-wrap-text mt-1 font-semibold text-(--gold-soft)">
                             {rule?.FareBasisCode || "Not provided"}
                           </p>
                         </div>
 
 
                         <div
-                          className="
+                          className="fl-detail-inset
           rounded-xl
           border border-(--border-soft)
           bg-(--bg-main)
@@ -713,8 +714,8 @@ const FareRule = () => {
                           </p>
 
                           <div className="mt-2">
-                            <span
-                              className={`
+                            <span data-fl-tone={rule?.NonRefundable ? "warning" : "success"}
+                              className={`fl-detail-badge
               inline-flex
               items-center
               rounded-full
@@ -736,7 +737,7 @@ const FareRule = () => {
 
 
                         <div
-                          className="
+                          className="fl-detail-inset
           rounded-xl
           border border-(--border-soft)
           bg-(--bg-main)
@@ -756,7 +757,7 @@ const FareRule = () => {
 
 
                         <div
-                          className="
+                          className="fl-detail-inset
           rounded-xl
           border border-(--border-soft)
           bg-(--bg-main)
@@ -787,7 +788,7 @@ const FareRule = () => {
                         0 ? (
                         <div className="space-y-3">
                           <div>
-                            <h3 className="font-semibold text-(--gold-main)">
+                            <h3 className="fl-detail-heading font-semibold text-(--gold-main)">
                               Cancellation & Change Charges
                             </h3>
 
@@ -823,7 +824,7 @@ const FareRule = () => {
                                 return (
                                   <div
                                     key={`${miniRule?.Type}-${ruleIndex}`}
-                                    className="
+                                    className="fl-detail-penalty-card fl-detail-inset
                     rounded-xl
                     border border-(--border-soft)
                     bg-(--bg-main)
@@ -841,8 +842,8 @@ const FareRule = () => {
                       gap-2
                     "
                                     >
-                                      <span
-                                        className={`
+                                      <span data-fl-tone={isCancellation ? "warning" : "info"}
+                                        className={`fl-detail-badge
                         w-fit
                         rounded-full
                         px-3 py-1
@@ -891,7 +892,7 @@ const FareRule = () => {
                                               key={
                                                 penaltyIndex
                                               }
-                                              className="
+                                              className="fl-detail-penalty-row
                               flex
                               items-center
                               justify-between
@@ -915,7 +916,7 @@ const FareRule = () => {
                                                 </p>
                                               </div>
 
-                                              <p className="font-bold text-(--gold-soft) whitespace-nowrap">
+                                              <p className="fl-detail-amount font-bold text-(--gold-soft) whitespace-nowrap">
                                                 {penalty?.Currency ||
                                                   "INR"}{" "}
                                                 {Number(
@@ -943,7 +944,7 @@ const FareRule = () => {
                         </div>
                       ) : (
                         <div
-                          className="
+                          className="fl-detail-inset
           rounded-xl
           border border-(--border-soft)
           bg-(--bg-main)
@@ -968,7 +969,7 @@ const FareRule = () => {
                       ) &&
                         rule.FareInclusions.length > 0 && (
                           <div>
-                            <h3 className="font-semibold text-(--gold-main)">
+                            <h3 className="fl-detail-heading font-semibold text-(--gold-main)">
                               Fare Inclusions
                             </h3>
 
@@ -977,7 +978,7 @@ const FareRule = () => {
                                 (item, inclusionIndex) => (
                                   <span
                                     key={inclusionIndex}
-                                    className="
+                                    className="fl-detail-badge fl-detail-inset
                   rounded-full
                   border border-(--border-soft)
                   bg-(--bg-main)
@@ -1001,7 +1002,7 @@ const FareRule = () => {
 
                       {rule?.FareRestriction && (
                         <div
-                          className="
+                          className="fl-detail-notice
           rounded-xl
           border border-yellow-500/20
           bg-yellow-500/5
@@ -1027,37 +1028,17 @@ const FareRule = () => {
 
                       {rule?.FareRuleDetail && (
                         <div>
-                          <h3 className="font-semibold text-(--gold-main)">
+                          <h3 className="fl-detail-heading font-semibold text-(--gold-main)">
                             Additional Fare Details
                           </h3>
 
-                          <div
-                            className="
-            mt-2
-            rounded-xl
-            border border-(--border-soft)
-            bg-(--bg-main)
-            p-4
-            text-sm
-            text-(--text-muted)
-            leading-relaxed
-            prose prose-sm
-            max-w-none
-            prose-invert
-          "
-                            dangerouslySetInnerHTML={{
-                              __html:
-                                sanitizeFareRuleHtml(
-                                  rule?.FareRuleDetail
-                                ),
-                            }}
-                          />
+                          <FareRuleDetails html={sanitizeFareRuleHtml(rule?.FareRuleDetail)} />
                         </div>
                       )}
 
 
                       <div
-                        className="
+                        className="fl-detail-inset
         rounded-xl
         border border-(--border-soft)
         bg-(--bg-main)
@@ -1081,12 +1062,12 @@ const FareRule = () => {
         </div>
       </div>
 
-      <div className="sticky bottom-0 bg-(--bg-card) border-t border-(--border-soft)">
-        <div className="max-w-5xl mx-auto px-4 py-4 flex flex-col md:flex-row items-center justify-between gap-4">
+      <div className="fl-detail-bottom-actions fl-detail-surface sticky bottom-0 bg-(--bg-card) border-t border-(--border-soft)">
+        <div className="fl-detail-action-layout max-w-5xl mx-auto px-4 py-4 flex flex-col md:flex-row items-center justify-between gap-4">
           <button
             type="button"
             onClick={() => navigate("/flights/results")}
-            className="w-full md:w-auto px-6 py-3 rounded-xl font-semibold border border-(--border-soft) text-(--text-main)"
+            className="fl-detail-secondary fl-detail-button w-full md:w-auto px-6 py-3 rounded-xl font-semibold border border-(--border-soft) text-(--text-main)"
           >
             Back to Results
           </button>
@@ -1095,7 +1076,7 @@ const FareRule = () => {
             type="button"
             onClick={handleContinueBooking}
             disabled={Boolean(error && sessionExpired)}
-            className="w-full md:w-auto px-8 py-3 rounded-xl font-semibold text-black
+            className="fl-detail-primary fl-detail-button w-full md:w-auto px-8 py-3 rounded-xl font-semibold text-black
             bg-linear-to-r from-start to-end
             hover:opacity-90 transition disabled:opacity-60 disabled:cursor-not-allowed"
           >

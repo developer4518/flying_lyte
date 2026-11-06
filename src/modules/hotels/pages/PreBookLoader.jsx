@@ -857,25 +857,25 @@ total_amount: finalTotalAmount,
 
   if (status === "error") {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-[#0B0B0F] text-white px-4">
-        <div className="max-w-md w-full bg-[#15151C] border border-red-500/30 rounded-2xl p-6 text-center">
-          <h2 className="text-xl font-semibold text-red-400 mb-3">
+      <div className="fl-booking-ink fl-booking-base min-h-screen flex flex-col items-center justify-center bg-[#0B0B0F] text-white px-4">
+        <div className="fl-booking-surface fl-booking-line max-w-md w-full bg-[#15151C] border border-red-500/30 rounded-2xl p-6 text-center">
+          <h2 className="fl-booking-heading fl-booking-subtitle fl-booking-danger text-xl font-semibold text-red-400 mb-3">
             ⚠️ PreBooking Failed
           </h2>
 
-          <p className="text-gray-400 text-sm text-center mb-5">{error}</p>
+          <p className="fl-booking-muted text-gray-400 text-sm text-center mb-5">{error}</p>
 
           <div className="flex flex-col sm:flex-row gap-3">
             <button
               onClick={() => navigate(-1)}
-              className="w-full px-5 py-3 bg-yellow-400 text-black rounded-xl font-semibold"
+              className="fl-booking-ink fl-booking-notice fl-booking-button fl-booking-primary w-full px-5 py-3 bg-yellow-400 text-black rounded-xl font-semibold"
             >
               Go Back
             </button>
 
             <button
               onClick={() => navigate("/hotels")}
-              className="w-full px-5 py-3 bg-white/10 text-white rounded-xl font-semibold border border-white/10"
+              className="fl-booking-ink fl-booking-surface fl-booking-line fl-booking-button fl-booking-secondary w-full px-5 py-3 bg-white/10 text-white rounded-xl font-semibold border border-white/10"
             >
               Search Again
             </button>
@@ -886,17 +886,17 @@ total_amount: finalTotalAmount,
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-[#0B0B0F] text-white px-4">
+    <div className="fl-booking-ink fl-booking-base min-h-screen flex flex-col items-center justify-center bg-[#0B0B0F] text-white px-4">
       <div className="relative mb-6">
-        <div className="w-20 h-20 border-4 border-yellow-400/30 rounded-full"></div>
-        <div className="absolute inset-0 w-20 h-20 border-4 border-yellow-400 border-t-transparent rounded-full animate-spin"></div>
+        <div className="fl-booking-line w-20 h-20 border-4 border-yellow-400/30 rounded-full"></div>
+        <div className="fl-booking-line fl-booking-spinner absolute inset-0 w-20 h-20 border-4 border-yellow-400 border-t-transparent rounded-full animate-spin"></div>
       </div>
 
-      <h2 className="text-xl font-semibold text-yellow-300">
+      <h2 className="fl-booking-heading fl-booking-subtitle fl-booking-accent text-xl font-semibold text-yellow-300">
         Confirming your room...
       </h2>
 
-      <p className="text-gray-400 text-sm mt-2 text-center max-w-sm">
+      <p className="fl-booking-muted text-gray-400 text-sm mt-2 text-center max-w-sm">
         Please wait while we verify price, cancellation policy, inclusions, meal
         type, supplements and room availability.
       </p>

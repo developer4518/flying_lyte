@@ -444,8 +444,8 @@ const FareQuote = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-(--bg-main) flex flex-col items-center justify-center gap-4 text-(--text-main)">
-        <div className="w-10 h-10 border-4 border-gray-700 border-t-(--gold-main) rounded-full animate-spin" />
+      <div className="fl-booking-base min-h-screen bg-(--bg-main) flex flex-col items-center justify-center gap-4 text-(--text-main)">
+        <div className="fl-booking-line fl-booking-spinner w-10 h-10 border-4 border-gray-700 border-t-(--gold-main) rounded-full animate-spin" />
         <p className="text-sm text-(--text-muted)">Fetching Fare Quote...</p>
       </div>
     );
@@ -461,13 +461,13 @@ const FareQuote = () => {
   if (error && !hasFareQuote) {
 
     return (
-      <div className="min-h-screen bg-(--bg-main) text-(--text-main) flex flex-col items-center justify-center gap-4 px-4">
-        <div className="text-center text-red-400">{error}</div>
+      <div className="fl-booking-base min-h-screen bg-(--bg-main) text-(--text-main) flex flex-col items-center justify-center gap-4 px-4">
+        <div className="fl-booking-danger text-center text-red-400">{error}</div>
 
         <button
           type="button"
           onClick={handleSearchAgain}
-          className="px-6 py-3 rounded-xl font-semibold text-black bg-linear-to-r from-start to-end"
+          className="fl-booking-ink fl-booking-surface fl-booking-button fl-booking-primary px-6 py-3 rounded-xl font-semibold text-black bg-linear-to-r from-start to-end"
         >
           Search Flights Again
         </button>
@@ -489,10 +489,10 @@ const FareQuote = () => {
         getPricing(quote);
 
       return (
-        <div className="rounded-2xl border border-(--border-soft) bg-(--bg-card) p-5 sm:p-6">
+        <div className="fl-booking-surface fl-booking-line rounded-2xl border border-(--border-soft) bg-(--bg-card) p-5 sm:p-6">
           <div className="mb-5 flex items-center justify-between gap-3">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-(--gold-main)">
+              <p className="fl-booking-accent text-xs font-semibold uppercase tracking-[0.16em] text-(--gold-main)">
                 {label}
               </p>
 
@@ -501,7 +501,7 @@ const FareQuote = () => {
               </p>
             </div>
 
-            <p className="text-lg font-bold text-(--gold-soft)">
+            <p className="fl-booking-accent text-lg font-bold text-(--gold-soft)">
               ₹
               {quotePricing.totalPayable.toLocaleString(
                 "en-IN",
@@ -529,11 +529,11 @@ const FareQuote = () => {
                   return (
                     <div
                       key={`${label}-${index}`}
-                      className="rounded-xl border border-(--border-soft) bg-(--bg-main) p-4"
+                      className="fl-booking-base fl-booking-line rounded-xl border border-(--border-soft) bg-(--bg-main) p-4"
                     >
                       <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
                         <div>
-                          <p className="font-semibold text-(--gold-soft)">
+                          <p className="fl-booking-accent font-semibold text-(--gold-soft)">
                             {airline?.AirlineName ||
                               "Airline"}
                           </p>
@@ -562,7 +562,7 @@ const FareQuote = () => {
                             </p>
                           </div>
 
-                          <span className="text-(--gold-main)">
+                          <span className="fl-booking-accent text-(--gold-main)">
                             ✈
                           </span>
 
@@ -607,11 +607,11 @@ const FareQuote = () => {
     };
 
     return (
-      <div className="min-h-screen bg-(--bg-main) text-(--text-main)">
+      <div className="fl-booking-base min-h-screen bg-(--bg-main) text-(--text-main)">
         <div className="mx-auto max-w-6xl space-y-6 px-4 py-24">
 
           <div>
-            <h1 className="text-2xl font-bold text-(--gold-main) sm:text-3xl">
+            <h1 className="fl-booking-heading fl-booking-title fl-booking-accent text-2xl font-bold text-(--gold-main) sm:text-3xl">
               Round Trip Fare Quote
             </h1>
 
@@ -621,7 +621,7 @@ const FareQuote = () => {
           </div>
 
           {error && (
-            <div className="rounded-xl border border-red-500/20 bg-red-500/10 p-3 text-sm text-red-400">
+            <div className="fl-booking-danger fl-booking-danger-notice fl-booking-line rounded-xl border border-red-500/20 bg-red-500/10 p-3 text-sm text-red-400">
               {error}
             </div>
           )}
@@ -638,8 +638,8 @@ const FareQuote = () => {
             )}
           </div>
 
-          <div className="rounded-2xl border border-[#E6B35C]/25 bg-(--bg-card) p-5">
-            <h2 className="font-semibold text-(--gold-soft)">
+          <div className="fl-booking-surface fl-booking-line rounded-2xl border border-[#E6B35C]/25 bg-(--bg-card) p-5">
+            <h2 className="fl-booking-heading fl-booking-subtitle fl-booking-accent font-semibold text-(--gold-soft)">
               Fare Breakdown
             </h2>
 
@@ -670,12 +670,12 @@ const FareQuote = () => {
                 </span>
               </div>
 
-              <div className="flex justify-between gap-4 border-t border-(--border-soft) pt-3 text-base font-bold">
+              <div className="fl-booking-line flex justify-between gap-4 border-t border-(--border-soft) pt-3 text-base font-bold">
                 <span>
                   Total Payable
                 </span>
 
-                <span className="text-(--gold-soft)">
+                <span className="fl-booking-accent text-(--gold-soft)">
                   ₹{" "}
                   {roundTripPricing.totalPayable.toFixed(
                     2,
@@ -686,10 +686,10 @@ const FareQuote = () => {
           </div>
         </div>
 
-        <div className="sticky bottom-0 border-t border-(--border-soft) bg-(--bg-card)">
+        <div className="fl-booking-surface fl-booking-line fl-booking-toolbar sticky bottom-0 border-t border-(--border-soft) bg-(--bg-card)">
           <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-4 py-4 md:flex-row">
 
-            <div className="text-lg font-bold text-(--gold-main)">
+            <div className="fl-booking-accent text-lg font-bold text-(--gold-main)">
               ₹{" "}
               {roundTripPricing.totalPayable.toFixed(
                 2,
@@ -702,7 +702,7 @@ const FareQuote = () => {
                 onClick={() =>
                   navigate("/fare-rule")
                 }
-                className="w-full rounded-xl border border-(--border-soft) px-6 py-3 font-semibold md:w-auto"
+                className="fl-booking-line fl-booking-button w-full rounded-xl border border-(--border-soft) px-6 py-3 font-semibold md:w-auto"
               >
                 Back
               </button>
@@ -710,7 +710,7 @@ const FareQuote = () => {
               <button
                 type="button"
                 disabled
-                className="
+                className="fl-booking-ink fl-booking-surface fl-booking-button fl-booking-primary
                 w-full rounded-xl
                 bg-linear-to-r
                 from-start to-end
@@ -736,10 +736,10 @@ const FareQuote = () => {
   }
 
   return (
-    <div className="min-h-screen bg-(--bg-main) text-(--text-main)">
+    <div className="fl-booking-base min-h-screen bg-(--bg-main) text-(--text-main)">
       <div className="max-w-6xl mx-auto px-4 py-24 space-y-8">
         <div>
-          <h1 className="text-3xl font-bold text-(--gold-main)">Fare Quote</h1>
+          <h1 className="fl-booking-heading fl-booking-title fl-booking-accent text-3xl font-bold text-(--gold-main)">Fare Quote</h1>
 
           <p className="text-sm text-(--text-muted)">
             Review the final price before continuing booking.
@@ -747,7 +747,7 @@ const FareQuote = () => {
         </div>
 
         {(isPriceChanged || isTimeChanged || flightDetailChangeInfo) && (
-          <div className="bg-yellow-500/10 text-yellow-300 border border-yellow-500/20 p-4 rounded-xl text-sm">
+          <div className="fl-booking-accent fl-booking-notice fl-booking-line bg-yellow-500/10 text-yellow-300 border border-yellow-500/20 p-4 rounded-xl text-sm">
             <p className="font-semibold mb-1">Flight details updated</p>
 
             {isPriceChanged && (
@@ -769,38 +769,38 @@ const FareQuote = () => {
           isPassportRequired ||
           isSeatMandatory ||
           isMealMandatory) && (
-            <div className="bg-(--bg-card) border border-(--border-soft) rounded-xl p-4 text-sm">
-              <h2 className="font-semibold text-(--gold-soft) mb-3">
+            <div className="fl-booking-surface fl-booking-line bg-(--bg-card) border border-(--border-soft) rounded-xl p-4 text-sm">
+              <h2 className="fl-booking-heading fl-booking-subtitle fl-booking-accent font-semibold text-(--gold-soft) mb-3">
                 Booking Requirements
               </h2>
 
               <div className="flex flex-wrap gap-2">
                 {isGSTMandatory && (
-                  <span className="px-3 py-1 rounded-full bg-(--gold-soft) text-black text-xs">
+                  <span className="fl-booking-ink px-3 py-1 rounded-full bg-(--gold-soft) text-black text-xs">
                     GST Required
                   </span>
                 )}
 
                 {isPanRequired && (
-                  <span className="px-3 py-1 rounded-full bg-(--gold-soft) text-black text-xs">
+                  <span className="fl-booking-ink px-3 py-1 rounded-full bg-(--gold-soft) text-black text-xs">
                     PAN Required
                   </span>
                 )}
 
                 {isPassportRequired && (
-                  <span className="px-3 py-1 rounded-full bg-(--gold-soft) text-black text-xs">
+                  <span className="fl-booking-ink px-3 py-1 rounded-full bg-(--gold-soft) text-black text-xs">
                     Passport Required
                   </span>
                 )}
 
                 {isSeatMandatory && (
-                  <span className="px-3 py-1 rounded-full bg-(--gold-soft) text-black text-xs">
+                  <span className="fl-booking-ink px-3 py-1 rounded-full bg-(--gold-soft) text-black text-xs">
                     Seat Required
                   </span>
                 )}
 
                 {isMealMandatory && (
-                  <span className="px-3 py-1 rounded-full bg-(--gold-soft) text-black text-xs">
+                  <span className="fl-booking-ink px-3 py-1 rounded-full bg-(--gold-soft) text-black text-xs">
                     Meal Required
                   </span>
                 )}
@@ -810,7 +810,7 @@ const FareQuote = () => {
 
         <div className="space-y-4">
           {allSegments.length === 0 ? (
-            <div className="bg-(--bg-card) border border-(--border-soft) rounded-xl p-5 text-sm text-(--text-muted)">
+            <div className="fl-booking-surface fl-booking-line bg-(--bg-card) border border-(--border-soft) rounded-xl p-5 text-sm text-(--text-muted)">
               No segment details available.
             </div>
           ) : (
@@ -823,11 +823,11 @@ const FareQuote = () => {
                 <div
                   key={`${airline?.AirlineCode || "air"}-${airline?.FlightNumber || index
                     }-${index}`}
-                  className="bg-(--bg-card) border border-(--border-soft) rounded-xl p-5"
+                  className="fl-booking-surface fl-booking-line bg-(--bg-card) border border-(--border-soft) rounded-xl p-5"
                 >
                   <div className="flex flex-col md:flex-row justify-between gap-6">
                     <div>
-                      <p className="font-semibold text-(--gold-soft)">
+                      <p className="fl-booking-accent font-semibold text-(--gold-soft)">
                         {airline?.AirlineName || "Airline"}
                       </p>
 
@@ -860,7 +860,7 @@ const FareQuote = () => {
                         </p>
                       </div>
 
-                      <div className="text-(--gold-main)">✈</div>
+                      <div className="fl-booking-accent text-(--gold-main)">✈</div>
 
                       <div className="text-center">
                         <p className="text-lg font-bold">
@@ -888,8 +888,8 @@ const FareQuote = () => {
           )}
         </div>
 
-        <div className="bg-(--bg-card) border border-(--border-soft) rounded-xl p-6">
-          <h2 className="text-lg font-semibold text-(--gold-soft) mb-4">
+        <div className="fl-booking-surface fl-booking-line bg-(--bg-card) border border-(--border-soft) rounded-xl p-6">
+          <h2 className="fl-booking-heading fl-booking-subtitle fl-booking-accent text-lg font-semibold text-(--gold-soft) mb-4">
             Fare Breakdown
           </h2>
 
@@ -904,7 +904,7 @@ const FareQuote = () => {
               <span>₹ {pricing.convenienceFee.toFixed(2)}</span>
             </div> */}
 
-            <div className="border-t border-(--border-soft) pt-3 flex justify-between font-bold">
+            <div className="fl-booking-line border-t border-(--border-soft) pt-3 flex justify-between font-bold">
               <span>Total Payable</span>
               <span>₹ {pricing.totalPayable.toFixed(2)}</span>
             </div>
@@ -912,15 +912,15 @@ const FareQuote = () => {
         </div>
 
         {error && (
-          <div className="bg-red-500/10 text-red-400 border border-red-500/20 p-3 rounded-lg text-sm">
+          <div className="fl-booking-danger fl-booking-danger-notice fl-booking-line bg-red-500/10 text-red-400 border border-red-500/20 p-3 rounded-lg text-sm">
             {error}
           </div>
         )}
       </div>
 
-      <div className="sticky bottom-0 bg-(--bg-card) border-t border-(--border-soft)">
+      <div className="fl-booking-surface fl-booking-line fl-booking-toolbar sticky bottom-0 bg-(--bg-card) border-t border-(--border-soft)">
         <div className="max-w-6xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
-          <div className="text-lg font-bold text-(--gold-main)">
+          <div className="fl-booking-accent text-lg font-bold text-(--gold-main)">
             ₹ {pricing.totalPayable.toFixed(2)}
           </div>
 
@@ -928,7 +928,7 @@ const FareQuote = () => {
             <button
               type="button"
               onClick={() => navigate("/fare-rule")}
-              className="w-full md:w-auto px-6 py-3 rounded-xl font-semibold border border-(--border-soft)"
+              className="fl-booking-line fl-booking-button w-full md:w-auto px-6 py-3 rounded-xl font-semibold border border-(--border-soft)"
             >
               Back
             </button>
@@ -936,7 +936,7 @@ const FareQuote = () => {
             <button
               type="button"
               onClick={handleContinue}
-              className="w-full md:w-auto px-8 py-3 rounded-xl font-semibold text-black
+              className="fl-booking-ink fl-booking-surface fl-booking-button fl-booking-primary w-full md:w-auto px-8 py-3 rounded-xl font-semibold text-black
               bg-linear-to-r from-start to-end
               hover:opacity-90 transition"
             >

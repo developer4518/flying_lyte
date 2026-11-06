@@ -14,21 +14,21 @@ const PackageBookings = () => {
 
   if (isLoading)
     return (
-      <div className="text-center text-gray-400 mt-20">
+      <div className="fl-booking-muted text-center text-gray-400 mt-20">
         Loading your bookings...
       </div>
     );
 
   if (isError)
     return (
-      <div className="text-center text-red-400 mt-20">
+      <div className="fl-booking-danger text-center text-red-400 mt-20">
         Failed to load bookings
       </div>
     );
 
   if (!data.length)
     return (
-      <div className="text-center text-gray-500 mt-24">
+      <div className="fl-booking-muted text-center text-gray-500 mt-24">
         No package bookings found
       </div>
     );
@@ -43,53 +43,53 @@ const PackageBookings = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.05 }}
             whileHover={{ scale: 1.03 }}
-            className="group relative rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-5 shadow-lg hover:shadow-xl transition-all duration-300"
+            className="fl-booking-surface fl-booking-line group relative rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-5 shadow-lg hover:shadow-xl transition-all duration-300"
           >
             {/* Top */}
             <div className="flex justify-between items-start mb-3">
-              <h2 className="text-lg font-semibold text-[#E6B35C] leading-snug">
+              <h2 className="fl-booking-heading fl-booking-subtitle fl-booking-accent text-lg font-semibold text-[#E6B35C] leading-snug">
                 {b.package_name}
               </h2>
 
-              <span className="text-xs px-2 py-1 rounded-full bg-green-500/20 text-green-400">
+              <span className="fl-booking-success fl-booking-success-notice text-xs px-2 py-1 rounded-full bg-green-500/20 text-green-400">
                 Confirmed
               </span>
             </div>
 
             {/* Divider */}
-            <div className="h-px bg-white/10 mb-4" />
+            <div className="fl-booking-surface h-px bg-white/10 mb-4" />
 
             {/* Details */}
-            <div className="space-y-2 text-sm text-gray-300">
+            <div className="fl-booking-ink space-y-2 text-sm text-gray-300">
               <p>
-                <span className="text-gray-400">Travel:</span> {b.travel_date}
+                <span className="fl-booking-muted text-gray-400">Travel:</span> {b.travel_date}
               </p>
 
               <p>
-                <span className="text-gray-400">Guests:</span> {b.adults} Adults
+                <span className="fl-booking-muted text-gray-400">Guests:</span> {b.adults} Adults
                 • {b.children} Children
               </p>
 
               <p>
-                <span className="text-gray-400">Total:</span>{" "}
+                <span className="fl-booking-muted text-gray-400">Total:</span>{" "}
                 {b.total_passengers} Person(s)
               </p>
 
               <p>
-                <span className="text-gray-400">Price:</span>{" "}
-                <span className="text-white font-medium">
+                <span className="fl-booking-muted text-gray-400">Price:</span>{" "}
+                <span className="fl-booking-ink text-white font-medium">
                   ₹ {b.total_price}
                 </span>
               </p>
             </div>
 
             {/* Footer */}
-            <div className="mt-4 flex justify-between items-center text-xs text-gray-500">
+            <div className="fl-booking-muted mt-4 flex justify-between items-center text-xs text-gray-500">
               <span>{new Date(b.created_at).toLocaleDateString()}</span>
             </div>
 
             {/* Glow hover effect */}
-            <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition bg-linear-to-r from-[#E6B35C]/10 to-transparent pointer-events-none" />
+            <div className="fl-booking-surface absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition bg-linear-to-r from-[#E6B35C]/10 to-transparent pointer-events-none" />
           </motion.div>
         ))}
       </div>

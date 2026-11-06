@@ -559,12 +559,12 @@ const FlightsResults = () => {
       );
 
     return (
-      <div
+      <div data-fl-selected={isSelected}
         key={
           flight?.ResultIndex ||
           `${direction}-${index}`
         }
-        className={`
+        className={`fl-result-card fl-result-card--round
         rounded-2xl
         border
         bg-(--bg-card)
@@ -579,8 +579,8 @@ const FlightsResults = () => {
       `}
       >
         {/* Airline + Price */}
-        <div className="flex items-start justify-between gap-3">
-          <div className="flex min-w-0 items-center gap-3">
+        <div className="fl-result-header flex items-start justify-between gap-3">
+          <div className="fl-result-airline flex min-w-0 items-center gap-3">
             <AirlineLogo
               airlineCode={
                 first?.Airline?.AirlineCode
@@ -588,11 +588,11 @@ const FlightsResults = () => {
               airlineName={
                 first?.Airline?.AirlineName
               }
-              className="h-9 w-9 shrink-0 object-contain"
+              className="fl-result-airline-logo h-9 w-9 shrink-0 object-contain"
             />
 
-            <div className="min-w-0">
-              <p className="truncate text-sm font-semibold text-(--gold-main)">
+            <div className="fl-result-airline-copy min-w-0">
+              <p className="fl-result-airline-name truncate text-sm font-semibold text-(--gold-main)">
                 {first?.Airline?.AirlineName}
               </p>
 
@@ -601,8 +601,8 @@ const FlightsResults = () => {
                 {first?.Airline?.FlightNumber}
               </p>
 
-              <span
-                className={`
+              <span data-fl-service={flight?.IsLCC ? "lcc" : "full"}
+                className={`fl-result-badge
                 mt-1 inline-flex rounded-md
                 px-2 py-0.5 text-[10px]
                 ${flight?.IsLCC
@@ -618,8 +618,8 @@ const FlightsResults = () => {
             </div>
           </div>
 
-          <div className="shrink-0 text-right">
-            <p className="text-base font-bold text-(--gold-soft) sm:text-lg">
+          <div className="fl-result-price-group shrink-0 text-right">
+            <p className="fl-result-price text-base font-bold text-(--gold-soft) sm:text-lg">
               ₹{price.toLocaleString("en-IN")}
             </p>
 
@@ -630,9 +630,9 @@ const FlightsResults = () => {
         </div>
 
         {/* Journey */}
-        <div className="mt-5 grid grid-cols-[1fr_auto_1fr] items-center gap-3">
+        <div className="fl-result-journey mt-5 grid grid-cols-[1fr_auto_1fr] items-center gap-3">
           <div>
-            <p className="text-lg font-bold sm:text-xl">
+            <p className="fl-result-time text-lg font-bold sm:text-xl">
               {formatTime(
                 first?.Origin?.DepTime,
               )}
@@ -670,7 +670,7 @@ const FlightsResults = () => {
           </div>
 
           <div className="text-right">
-            <p className="text-lg font-bold sm:text-xl">
+            <p className="fl-result-time text-lg font-bold sm:text-xl">
               {formatTime(
                 last?.Destination?.ArrTime,
               )}
@@ -686,7 +686,7 @@ const FlightsResults = () => {
         </div>
 
         {/* Actions */}
-        <div className="mt-4 flex items-center justify-between gap-3 border-t border-(--border-soft) pt-3">
+        <div className="fl-result-actions mt-4 flex items-center justify-between gap-3 border-t border-(--border-soft) pt-3">
           <button
             type="button"
             onClick={() =>
@@ -696,14 +696,14 @@ const FlightsResults = () => {
                   : expandedKey,
               )
             }
-            className="text-xs text-(--text-muted) transition hover:text-(--gold-main)"
+            className="fl-result-link fl-result-button text-xs text-(--text-muted) transition hover:text-(--gold-main)"
           >
             {isExpanded
               ? "Hide Details"
               : "View Details"}
           </button>
 
-          <button
+          <button data-fl-active={isSelected}
             type="button"
             onClick={() => {
               if (isOutbound) {
@@ -712,7 +712,7 @@ const FlightsResults = () => {
                 setInboundFlight(flight);
               }
             }}
-            className={`
+            className={`fl-result-primary fl-result-choice fl-result-button
             rounded-lg
             px-4 py-2
             text-xs font-semibold
@@ -733,11 +733,11 @@ const FlightsResults = () => {
 
         {/* Expanded details */}
         {isExpanded && (
-          <div className="mt-4 space-y-2 border-t border-(--border-soft) pt-4">
+          <div className="fl-result-details mt-4 space-y-2 border-t border-(--border-soft) pt-4">
             {segments.map((seg, i) => (
               <div
                 key={i}
-                className="flex items-center justify-between gap-3 text-xs"
+                className="fl-result-segment flex items-center justify-between gap-3 text-xs"
               >
                 <span className="text-(--text-muted)">
                   {
@@ -771,8 +771,8 @@ const FlightsResults = () => {
 
   if (restoringSearch) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center gap-3 bg-(--bg-main) text-(--text-main)">
-        <div className="h-9 w-9 animate-spin rounded-full border-2 border-white/20 border-t-[#E6B35C]" />
+      <div data-fl-theme="model2" className="fl-results-page fl-flight-results min-h-screen flex flex-col items-center justify-center gap-3 bg-(--bg-main) text-(--text-main)">
+        <div className="fl-result-loader h-9 w-9 animate-spin rounded-full border-2 border-white/20 border-t-[#E6B35C]" />
 
         <p className="text-sm text-(--text-muted)">
           Refreshing flight results...
@@ -794,15 +794,15 @@ const FlightsResults = () => {
       (!flights.length && !selectedFlight)
   ) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center gap-4 bg-(--bg-main) text-(--text-main)">
-        <p className="text-lg font-semibold">
+      <div data-fl-theme="model2" className="fl-results-page fl-flight-results min-h-screen flex flex-col items-center justify-center gap-4 bg-(--bg-main) text-(--text-main)">
+        <p className="fl-results-heading text-lg font-semibold">
           {restoreError || "No flight search found"}
         </p>
 
         <button
           type="button"
           onClick={() => navigate("/flights")}
-          className="rounded-xl bg-linear-to-r from-start to-end px-6 py-3 font-semibold text-black"
+          className="fl-result-primary fl-result-button rounded-xl bg-linear-to-r from-start to-end px-6 py-3 font-semibold text-black"
         >
           Search Flights
         </button>
@@ -828,16 +828,16 @@ const FlightsResults = () => {
       outboundPrice + inboundPrice;
 
     return (
-      <div className="min-h-screen bg-(--bg-main) pb-24 pt-20 text-(--text-main)">
+      <div data-fl-theme="model2" className="fl-results-page fl-flight-results min-h-screen bg-(--bg-main) pb-24 pt-20 text-(--text-main)">
         <div className="mx-auto w-full max-w-7xl px-3 py-6 sm:px-4 lg:px-6">
 
           {/* Page heading */}
-          <div className="mb-5 rounded-2xl border border-(--border-soft) bg-(--bg-card) p-4 sm:p-5">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-(--gold-main)">
+          <div className="fl-result-surface fl-results-summary mb-5 rounded-2xl border border-(--border-soft) bg-(--bg-card) p-4 sm:p-5">
+            <p className="fl-results-eyebrow text-xs font-semibold uppercase tracking-[0.2em] text-(--gold-main)">
               Round Trip Flights
             </p>
 
-            <div className="mt-2 flex flex-wrap items-center gap-2 text-lg font-semibold sm:text-xl">
+            <div className="fl-results-heading mt-2 flex flex-wrap items-center gap-2 text-lg font-semibold sm:text-xl">
               <span>
                 {lastSearchPayload?.origin}
               </span>
@@ -857,7 +857,7 @@ const FlightsResults = () => {
           </div>
 
           {pageError && (
-            <div className="mb-4 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-center text-sm text-red-300">
+            <div className="fl-result-error mb-4 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-center text-sm text-red-300">
               {pageError}
             </div>
           )}
@@ -867,7 +867,7 @@ const FlightsResults = () => {
 
             {/* OUTBOUND */}
             <section className="min-w-0">
-              <div className="mb-3 flex items-center justify-between rounded-xl border border-(--border-soft) bg-(--bg-card) px-4 py-3">
+              <div className="fl-result-surface mb-3 flex items-center justify-between rounded-xl border border-(--border-soft) bg-(--bg-card) px-4 py-3">
                 <div>
                   <p className="text-xs uppercase tracking-[0.16em] text-(--text-muted)">
                     Outbound
@@ -880,7 +880,7 @@ const FlightsResults = () => {
                   </p>
                 </div>
 
-                <span className="rounded-full bg-[#E6B35C]/10 px-3 py-1 text-xs text-[#E6B35C]">
+                <span className="fl-result-badge rounded-full bg-[#E6B35C]/10 px-3 py-1 text-xs text-[#E6B35C]">
                   {outboundFlights?.length || 0}
                 </span>
               </div>
@@ -896,7 +896,7 @@ const FlightsResults = () => {
                       ),
                   )
                 ) : (
-                  <div className="rounded-xl border border-(--border-soft) bg-(--bg-card) p-5 text-center text-sm text-(--text-muted)">
+                  <div className="fl-result-surface fl-result-state rounded-xl border border-(--border-soft) bg-(--bg-card) p-5 text-center text-sm text-(--text-muted)">
                     No outbound flights on this page.
                   </div>
                 )}
@@ -905,7 +905,7 @@ const FlightsResults = () => {
 
             {/* INBOUND */}
             <section className="min-w-0">
-              <div className="mb-3 flex items-center justify-between rounded-xl border border-(--border-soft) bg-(--bg-card) px-4 py-3">
+              <div className="fl-result-surface mb-3 flex items-center justify-between rounded-xl border border-(--border-soft) bg-(--bg-card) px-4 py-3">
                 <div>
                   <p className="text-xs uppercase tracking-[0.16em] text-(--text-muted)">
                     Return
@@ -918,7 +918,7 @@ const FlightsResults = () => {
                   </p>
                 </div>
 
-                <span className="rounded-full bg-[#E6B35C]/10 px-3 py-1 text-xs text-[#E6B35C]">
+                <span className="fl-result-badge rounded-full bg-[#E6B35C]/10 px-3 py-1 text-xs text-[#E6B35C]">
                   {inboundFlights?.length || 0}
                 </span>
               </div>
@@ -934,7 +934,7 @@ const FlightsResults = () => {
                       ),
                   )
                 ) : (
-                  <div className="rounded-xl border border-(--border-soft) bg-(--bg-card) p-5 text-center text-sm text-(--text-muted)">
+                  <div className="fl-result-surface fl-result-state rounded-xl border border-(--border-soft) bg-(--bg-card) p-5 text-center text-sm text-(--text-muted)">
                     No return flights on this page.
                   </div>
                 )}
@@ -943,7 +943,7 @@ const FlightsResults = () => {
           </div>
 
           {/* Selected Journey Summary */}
-          <div className="mt-6 rounded-2xl border border-[#E6B35C]/25 bg-(--bg-card) p-4 sm:p-5">
+          <div className="fl-result-surface fl-results-summary mt-6 rounded-2xl border border-[#E6B35C]/25 bg-(--bg-card) p-4 sm:p-5">
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_auto] lg:items-center">
 
               <div>
@@ -952,7 +952,7 @@ const FlightsResults = () => {
                 </p>
 
                 {selectedOutboundFlight ? (
-                  <p className="mt-1 text-sm font-semibold">
+                  <p className="fl-result-wrap mt-1 text-sm font-semibold">
                     {
                       selectedOutboundFlight
                         ?.Segments?.[0]?.[0]
@@ -976,7 +976,7 @@ const FlightsResults = () => {
                 </p>
 
                 {selectedInboundFlight ? (
-                  <p className="mt-1 text-sm font-semibold">
+                  <p className="fl-result-wrap mt-1 text-sm font-semibold">
                     {
                       selectedInboundFlight
                         ?.Segments?.[0]?.[0]
@@ -999,7 +999,7 @@ const FlightsResults = () => {
                   Selected Fare
                 </p>
 
-                <p className="mt-1 text-xl font-bold text-(--gold-soft)">
+                <p className="fl-result-price mt-1 text-xl font-bold text-(--gold-soft)">
                   ₹
                   {selectedTotal.toLocaleString(
                     "en-IN",
@@ -1011,7 +1011,7 @@ const FlightsResults = () => {
 
           {/* Pagination */}
           {pagination?.total_pages > 1 && (
-            <div className="mt-6 flex flex-col items-center gap-3">
+            <div className="fl-results-pagination mt-6 flex flex-col items-center gap-3">
               <p className="text-xs text-(--text-muted)">
                 Page {pagination.current_page} of{" "}
                 {pagination.total_pages}
@@ -1029,7 +1029,7 @@ const FlightsResults = () => {
                       pagination.previous_page,
                     )
                   }
-                  className="rounded-lg border border-(--border-soft) px-3 py-2 text-sm transition hover:border-[#E6B35C]/50 disabled:cursor-not-allowed disabled:opacity-40"
+                  className="fl-result-button rounded-lg border border-(--border-soft) px-3 py-2 text-sm transition hover:border-[#E6B35C]/50 disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   Previous
                 </button>
@@ -1044,14 +1044,14 @@ const FlightsResults = () => {
                         ...
                       </span>
                     ) : (
-                      <button
+                      <button data-fl-active={pagination.current_page === page}
                         key={page}
                         type="button"
                         disabled={pageLoading}
                         onClick={() =>
                           handlePageChange(page)
                         }
-                        className={`
+                        className={`fl-result-choice fl-result-button
                         h-9 min-w-9
                         rounded-lg border
                         px-3 text-sm
@@ -1080,7 +1080,7 @@ const FlightsResults = () => {
                       pagination.next_page,
                     )
                   }
-                  className="rounded-lg border border-(--border-soft) px-3 py-2 text-sm transition hover:border-[#E6B35C]/50 disabled:cursor-not-allowed disabled:opacity-40"
+                  className="fl-result-button rounded-lg border border-(--border-soft) px-3 py-2 text-sm transition hover:border-[#E6B35C]/50 disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   {pageLoading
                     ? "Loading..."
@@ -1097,10 +1097,10 @@ const FlightsResults = () => {
   /* ---------------- FILTER UI ---------------- */
 
   const FilterContent = () => (
-    <div className="space-y-6 text-(--text-main)">
+    <div className="fl-results-filter-fields space-y-6 text-(--text-main)">
       {/* Stops */}
       <div>
-        <h4 className="text-sm font-semibold mb-3 text-(--gold-main)">Stops</h4>
+        <h4 className="fl-results-heading text-sm font-semibold mb-3 text-(--gold-main)">Stops</h4>
         {[0, 1].map((stop) => (
           <label key={stop} className="flex items-center gap-2 mb-2 text-sm">
             <input
@@ -1121,7 +1121,7 @@ const FlightsResults = () => {
 
       {/* Airlines */}
       <div>
-        <h4 className="text-sm font-semibold mb-3 text-(--gold-main)">
+        <h4 className="fl-results-heading text-sm font-semibold mb-3 text-(--gold-main)">
           Airlines
         </h4>
         {allAirlines.map((airline) => (
@@ -1144,7 +1144,7 @@ const FlightsResults = () => {
             <AirlineLogo
               airlineCode={airline.code}
               airlineName={airline.name}
-              className="h-5 w-5 shrink-0 object-contain"
+              className="fl-result-airline-logo h-5 w-5 shrink-0 object-contain"
             />
 
             <span>{airline.name}</span>
@@ -1153,7 +1153,7 @@ const FlightsResults = () => {
       </div>
 
       <div>
-        <h4 className="text-sm font-semibold mb-3 text-(--gold-main)">
+        <h4 className="fl-results-heading text-sm font-semibold mb-3 text-(--gold-main)">
           Fare Type
         </h4>
 
@@ -1162,10 +1162,10 @@ const FlightsResults = () => {
           { label: "Low Cost (LCC)", value: "lcc" },
           { label: "Full Service", value: "nonlcc" },
         ].map((type) => (
-          <button
+          <button data-fl-active={fareType === type.value}
             key={type.value}
             onClick={() => setFareType(type.value)}
-            className={`block w-full text-left px-3 py-2 rounded-lg text-sm mb-2 ${fareType === type.value
+            className={`fl-result-choice fl-result-button block w-full text-left px-3 py-2 rounded-lg text-sm mb-2 ${fareType === type.value
               ? "bg-(--gold-main) text-black"
               : "border border-(--border-soft)"
               }`}
@@ -1177,7 +1177,7 @@ const FlightsResults = () => {
 
       {/* Time Chips */}
       <div>
-        <h4 className="text-sm font-semibold mb-3 text-(--gold-main)">
+        <h4 className="fl-results-heading text-sm font-semibold mb-3 text-(--gold-main)">
           Departure Time
         </h4>
 
@@ -1191,7 +1191,7 @@ const FlightsResults = () => {
             const active = selectedTimes.includes(t.value);
 
             return (
-              <button
+              <button data-fl-active={active}
                 key={t.value}
                 onClick={() =>
                   setSelectedTimes((prev) =>
@@ -1200,7 +1200,7 @@ const FlightsResults = () => {
                       : [...prev, t.value],
                   )
                 }
-                className={`text-xs rounded-lg px-3 py-2 border transition ${active
+                className={`fl-result-choice fl-result-button text-xs rounded-lg px-3 py-2 border transition ${active
                   ? "bg-(--gold-main) text-black border-(--gold-main)"
                   : "border-(--border-soft)"
                   }`}
@@ -1217,17 +1217,17 @@ const FlightsResults = () => {
   /* ---------------- UI ---------------- */
 
   return (
-    <div className="min-h-screen bg-(--bg-main) pt-20 pb-24 text-(--text-main)">
+    <div data-fl-theme="model2" className="fl-results-page fl-flight-results min-h-screen bg-(--bg-main) pt-20 pb-24 text-(--text-main)">
       <SEO
         title="Flight Search Results"
         description="Search, compare, and book the cheapest domestic and international flights with FlyingLyte. Real-time fares and instant booking."
         canonical="https://www.flyinglyte.com/flights/results"
       />
-      <div className="max-w-6xl mx-auto px-3 lg:px-4 py-6 grid lg:grid-cols-[260px_1fr] gap-6">
+      <div className="fl-results-layout max-w-6xl mx-auto px-3 lg:px-4 py-6 grid lg:grid-cols-[260px_1fr] gap-6">
         {/* Desktop Filters */}
         {/* Desktop Filters */}
         <aside
-          className="
+          className="fl-result-surface fl-results-sidebar
     hidden lg:block
     bg-(--bg-card)
     p-6
@@ -1238,26 +1238,26 @@ const FlightsResults = () => {
     overflow-y-auto
   "
         >
-          <h3 className="font-semibold text-lg mb-4 text-(--gold-main)">
+          <h3 className="fl-results-heading font-semibold text-lg mb-4 text-(--gold-main)">
             Filters
           </h3>
 
           <FilterContent />
         </aside>
 
-        <main className="space-y-4">
+        <main className="fl-results-list space-y-4">
           {/* Sticky Top Bar */}
-          <div className="lg:hidden sticky top-16 z-40 bg-(--bg-main)/90 backdrop-blur border-b border-(--border-soft) py-3 flex gap-3">
+          <div className="fl-results-toolbar lg:hidden sticky top-16 z-40 bg-(--bg-main)/90 backdrop-blur border-b border-(--border-soft) py-3 flex gap-3">
             <button
               onClick={() => setShowFilters(true)}
-              className="flex-1 bg-(--bg-card) border border-(--border-soft) py-2 rounded-lg text-sm"
+              className="fl-result-secondary fl-result-button flex-1 bg-(--bg-card) border border-(--border-soft) py-2 rounded-lg text-sm"
             >
               Filters
             </button>
 
             <button
               onClick={() => setShowSort(!showSort)}
-              className="flex-1 bg-(--bg-card) border border-(--border-soft) py-2 rounded-lg text-sm"
+              className="fl-result-secondary fl-result-button flex-1 bg-(--bg-card) border border-(--border-soft) py-2 rounded-lg text-sm"
             >
               Sort
             </button>
@@ -1265,7 +1265,7 @@ const FlightsResults = () => {
 
           {/* Sort Dropdown */}
           {showSort && (
-            <div className="bg-(--bg-card) border border-(--border-soft) rounded-lg p-3">
+            <div className="fl-result-surface fl-results-sort bg-(--bg-card) border border-(--border-soft) rounded-lg p-3">
               {["cheapest", "fastest"].map((type) => (
                 <button
                   key={type}
@@ -1273,7 +1273,7 @@ const FlightsResults = () => {
                     setSortType(type);
                     setShowSort(false);
                   }}
-                  className="block w-full text-left py-2 text-sm hover:text-(--gold-main)"
+                  className="fl-result-button block w-full text-left py-2 text-sm hover:text-(--gold-main)"
                 >
                   {type === "cheapest" ? "Cheapest First" : "Fastest First"}
                 </button>
@@ -1286,7 +1286,7 @@ const FlightsResults = () => {
             {selectedTimes.map((t) => (
               <span
                 key={t}
-                className="bg-(--gold-soft) text-black px-3 py-1 rounded-full text-xs"
+                className="fl-result-badge bg-(--gold-soft) text-black px-3 py-1 rounded-full text-xs"
               >
                 {t}
               </span>
@@ -1307,11 +1307,11 @@ const FlightsResults = () => {
             return (
               <div
                 key={index}
-                className="bg-(--bg-card) rounded-xl border border-(--border-soft) p-5 hover:shadow-lg hover:scale-[1.01] transition-all"
+                className="fl-result-card bg-(--bg-card) rounded-xl border border-(--border-soft) p-5 hover:shadow-lg hover:scale-[1.01] transition-all"
               >
                 {/* Header */}
-                <div className="flex justify-between items-center mb-4">
-                  <div className="flex items-center gap-3">
+                <div className="fl-result-header flex justify-between items-center mb-4">
+                  <div className="fl-result-airline flex items-center gap-3">
                     {/* <img
                       src={`/airlines/${first?.Airline?.AirlineCode}.png`}
                       onError={(e) => (e.currentTarget.style.display = "none")}
@@ -1322,18 +1322,18 @@ const FlightsResults = () => {
                     <AirlineLogo
                       airlineCode={first?.Airline?.AirlineCode}
                       airlineName={first?.Airline?.AirlineName}
-                      className="h-9 w-9 shrink-0 object-contain"
+                      className="fl-result-airline-logo h-9 w-9 shrink-0 object-contain"
                     />
                     <div>
-                      <p className="font-semibold text-(--gold-main)">
+                      <p className="fl-result-airline-name font-semibold text-(--gold-main)">
                         {first.Airline.AirlineName}
                       </p>
                       <p className="text-xs text-(--text-muted)">
                         {first.Airline.AirlineCode}-{first.Airline.FlightNumber}
                       </p>
 
-                      <span
-                        className={`text-xs px-2 py-1 rounded ${flight.IsLCC
+                      <span data-fl-service={flight.IsLCC ? "lcc" : "full"}
+                        className={`fl-result-badge text-xs px-2 py-1 rounded ${flight.IsLCC
                           ? "bg-yellow-500/20 text-yellow-400"
                           : "bg-green-500/20 text-green-400"
                           }`}
@@ -1343,15 +1343,15 @@ const FlightsResults = () => {
                     </div>
                   </div>
 
-                  <p className="text-xl font-bold text-(--gold-soft)">
+                  <p className="fl-result-price text-xl font-bold text-(--gold-soft)">
                     ₹{flight.Fare.PublishedFare.toLocaleString("en-IN")}
                   </p>
                 </div>
 
                 {/* Time Row */}
-                <div className="flex justify-between items-center">
+                <div className="fl-result-journey flex justify-between items-center">
                   <div>
-                    <p className="text-xl font-bold">
+                    <p className="fl-result-time text-xl font-bold">
                       {formatTime(first.Origin.DepTime)}
                     </p>
                     <p className="text-xs text-(--text-muted)">
@@ -1370,7 +1370,7 @@ const FlightsResults = () => {
                   </div>
 
                   <div className="text-right">
-                    <p className="text-xl font-bold">
+                    <p className="fl-result-time text-xl font-bold">
                       {formatTime(last.Destination.ArrTime)}
                     </p>
                     <p className="text-xs text-(--text-muted)">
@@ -1380,10 +1380,10 @@ const FlightsResults = () => {
                 </div>
 
                 {/* Actions */}
-                <div className="flex justify-between items-center mt-4">
+                <div className="fl-result-actions flex justify-between items-center mt-4">
                   <button
                     onClick={() => setExpandedCard(isExpanded ? null : index)}
-                    className="text-xs text-(--text-muted)"
+                    className="fl-result-link fl-result-button text-xs text-(--text-muted)"
                   >
                     {isExpanded ? "Hide Details" : "View Details"}
                   </button>
@@ -1393,7 +1393,7 @@ const FlightsResults = () => {
                       setFlight(flight);
                       navigate("/fare-rule");
                     }}
-                    className="bg-linear-to-r from-start to-end text-black text-sm px-5 py-2 rounded-lg hover:opacity-90"
+                    className="fl-result-primary fl-result-button bg-linear-to-r from-start to-end text-black text-sm px-5 py-2 rounded-lg hover:opacity-90"
                   >
                     Book Now
                   </button>
@@ -1401,9 +1401,9 @@ const FlightsResults = () => {
 
                 {/* Expanded */}
                 {isExpanded && (
-                  <div className="mt-4 border-t border-(--border-soft) pt-4 space-y-2 text-sm">
+                  <div className="fl-result-details mt-4 border-t border-(--border-soft) pt-4 space-y-2 text-sm">
                     {segments.map((seg, i) => (
-                      <div key={i} className="flex justify-between">
+                      <div key={i} className="fl-result-segment flex justify-between">
                         <span>
                           {seg.Origin.Airport.AirportCode} →{" "}
                           {seg.Destination.Airport.AirportCode}
@@ -1422,13 +1422,13 @@ const FlightsResults = () => {
 
 
           {pageError && (
-            <div className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-center text-sm text-red-300">
+            <div className="fl-result-error rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-center text-sm text-red-300">
               {pageError}
             </div>
           )}
 
           {pagination?.total_pages > 1 && (
-            <div className="flex flex-col items-center gap-3 pt-6">
+            <div className="fl-results-pagination flex flex-col items-center gap-3 pt-6">
               <p className="text-xs text-(--text-muted)">
                 Showing page {pagination.current_page} of{" "}
                 {pagination.total_pages} •{" "}
@@ -1449,7 +1449,7 @@ const FlightsResults = () => {
                       pagination.previous_page,
                     )
                   }
-                  className="
+                  className="fl-result-button
           rounded-lg
           border border-(--border-soft)
           px-3 py-2
@@ -1473,14 +1473,14 @@ const FlightsResults = () => {
                       ...
                     </span>
                   ) : (
-                    <button
+                    <button data-fl-active={pagination.current_page === page}
                       key={page}
                       type="button"
                       disabled={pageLoading}
                       onClick={() =>
                         handlePageChange(page)
                       }
-                      className={`
+                      className={`fl-result-choice fl-result-button
               h-9 min-w-9 rounded-lg px-3 text-sm
               border transition
               ${pagination.current_page === page
@@ -1507,7 +1507,7 @@ const FlightsResults = () => {
                       pagination.next_page,
                     )
                   }
-                  className="
+                  className="fl-result-button
           rounded-lg
           border border-(--border-soft)
           px-3 py-2
@@ -1530,18 +1530,18 @@ const FlightsResults = () => {
 
       {/* Mobile Bottom Sheet */}
       {showFilters && (
-        <div className="fixed inset-0 z-50 bg-black/50 flex items-end lg:hidden">
-          <div className="bg-(--bg-card) w-full rounded-t-2xl p-5 max-h-[80vh] overflow-y-auto">
+        <div className="fl-results-backdrop fixed inset-0 z-50 bg-black/50 flex items-end lg:hidden">
+          <div className="fl-result-surface fl-results-sheet bg-(--bg-card) w-full rounded-t-2xl p-5 max-h-[80vh] overflow-y-auto">
             <div className="flex justify-between mb-4">
-              <h3 className="font-semibold text-(--gold-main)">Filters</h3>
-              <button onClick={() => setShowFilters(false)}>Close</button>
+              <h3 className="fl-results-heading font-semibold text-(--gold-main)">Filters</h3>
+              <button className="fl-result-button" onClick={() => setShowFilters(false)}>Close</button>
             </div>
 
             <FilterContent />
 
             <button
               onClick={() => setShowFilters(false)}
-              className="mt-4 w-full bg-linear-to-r from-start to-end text-black py-3 rounded-lg"
+              className="fl-result-primary fl-result-button mt-4 w-full bg-linear-to-r from-start to-end text-black py-3 rounded-lg"
             >
               Apply Filters
             </button>

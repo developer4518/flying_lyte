@@ -1376,7 +1376,7 @@ const FlightBookings = () => {
 
   if (isLoading) {
     return (
-      <div className="text-gray-300 py-10">
+      <div className="fl-booking-ink text-gray-300 py-10">
         Loading flights...
       </div>
     );
@@ -1384,7 +1384,7 @@ const FlightBookings = () => {
 
   if (isError) {
     return (
-      <div className="text-red-400 py-10">
+      <div className="fl-booking-danger text-red-400 py-10">
         Unable to load flight bookings.
       </div>
     );
@@ -1392,7 +1392,7 @@ const FlightBookings = () => {
 
   if (!data.length) {
     return (
-      <div className="text-gray-400 py-10">
+      <div className="fl-booking-muted text-gray-400 py-10">
         No flight bookings
       </div>
     );
@@ -1564,13 +1564,13 @@ const FlightBookings = () => {
           return (
             <div
               key={booking?.id}
-              className="bg-[#151515] border border-white/10 hover:border-[#E6B35C]/70 rounded-2xl p-5 transition"
+              className="fl-booking-inset fl-booking-line bg-[#151515] border border-white/10 hover:border-[#E6B35C]/70 rounded-2xl p-5 transition"
             >
               {/* TOP */}
 
               <div className="flex items-start justify-between gap-4 mb-5">
                 <div>
-                  <p className="text-gray-400 text-sm">
+                  <p className="fl-booking-muted text-gray-400 text-sm">
                     Booking ID
                   </p>
 
@@ -1599,18 +1599,18 @@ const FlightBookings = () => {
 
               {/* ROUTE */}
 
-              <div className="bg-black/30 rounded-xl px-4 py-5 flex items-center justify-between mb-5">
+              <div className="fl-booking-inset bg-black/30 rounded-xl px-4 py-5 flex items-center justify-between mb-5">
                 <div>
                   <p className="text-2xl font-bold">
                     {originCode}
                   </p>
 
-                  <p className="text-gray-400 text-sm mt-1">
+                  <p className="fl-booking-muted text-gray-400 text-sm mt-1">
                     {originCity}
                   </p>
                 </div>
 
-                <div className="text-yellow-400 text-xl">
+                <div className="fl-booking-accent text-yellow-400 text-xl">
                   ✈
                 </div>
 
@@ -1619,7 +1619,7 @@ const FlightBookings = () => {
                     {destinationCode}
                   </p>
 
-                  <p className="text-gray-400 text-sm mt-1">
+                  <p className="fl-booking-muted text-gray-400 text-sm mt-1">
                     {destinationCity}
                   </p>
                 </div>
@@ -1629,7 +1629,7 @@ const FlightBookings = () => {
 
               <div className="space-y-3 text-sm">
                 <p>
-                  <span className="text-yellow-400 mr-2">
+                  <span className="fl-booking-accent text-yellow-400 mr-2">
                     🎫
                   </span>
 
@@ -1641,7 +1641,7 @@ const FlightBookings = () => {
                 </p>
 
                 <p>
-                  <span className="text-yellow-400 mr-2">
+                  <span className="fl-booking-accent text-yellow-400 mr-2">
                     ✈
                   </span>
 
@@ -1654,7 +1654,7 @@ const FlightBookings = () => {
                 </p>
 
                 <p>
-                  <span className="text-yellow-400 mr-2">
+                  <span className="fl-booking-accent text-yellow-400 mr-2">
                     📅
                   </span>
 
@@ -1666,7 +1666,7 @@ const FlightBookings = () => {
                 </p>
 
                 <p>
-                  <span className="text-yellow-400 mr-2">
+                  <span className="fl-booking-accent text-yellow-400 mr-2">
                     📅
                   </span>
 
@@ -1680,9 +1680,9 @@ const FlightBookings = () => {
 
               {/* PRICE */}
 
-              <div className="border-t border-white/10 mt-5 pt-4">
+              <div className="fl-booking-line border-t border-white/10 mt-5 pt-4">
                 <p className="text-xl font-bold">
-                  <span className="text-yellow-400 mr-3">
+                  <span className="fl-booking-accent text-yellow-400 mr-3">
                     ₹
                   </span>
 
@@ -1706,7 +1706,7 @@ const FlightBookings = () => {
                     onClick={() =>
                       handleViewBookingDetails(booking)
                     }
-                    className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-2 sm:py-2.5 sm:px-3 text-xs sm:text-sm rounded-lg"
+                    className="fl-booking-ink fl-booking-notice fl-booking-button fl-booking-primary bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-2 sm:py-2.5 sm:px-3 text-xs sm:text-sm rounded-lg"
                   >
                     Booking Details
                   </button>
@@ -1727,7 +1727,7 @@ const FlightBookings = () => {
                           },
                         )
                       }
-                      className="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-2 sm:py-2.5 sm:px-3 text-xs sm:text-sm rounded-lg"
+                      className="fl-booking-ink fl-booking-button fl-booking-secondary bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-2 sm:py-2.5 sm:px-3 text-xs sm:text-sm rounded-lg"
                     >
                       Flight Amendment
                     </button>
@@ -1743,7 +1743,7 @@ const FlightBookings = () => {
                         !isTicketed ||
                         actionLoading === `invoice-${booking.id}`
                       }
-                      className={`font-semibold py-2 px-2 sm:py-2.5 sm:px-3 text-xs sm:text-sm rounded-lg transition ${isTicketed
+                      className={`fl-booking-button font-semibold py-2 px-2 sm:py-2.5 sm:px-3 text-xs sm:text-sm rounded-lg transition ${isTicketed
                         ? "bg-white/10 hover:bg-white/20 text-white"
                         : "bg-white/5 text-gray-500 cursor-not-allowed"
                         }`}
@@ -1768,7 +1768,7 @@ const FlightBookings = () => {
                         disabled={
                           actionLoading === `ticket-${booking.id}`
                         }
-                        className="bg-[#E6B35C] hover:bg-[#dca94f] text-black font-semibold py-2 px-2 sm:py-2.5 sm:px-3 text-xs sm:text-sm rounded-lg disabled:opacity-60"
+                        className="fl-booking-ink fl-booking-inset fl-booking-button fl-booking-secondary bg-[#E6B35C] hover:bg-[#dca94f] text-black font-semibold py-2 px-2 sm:py-2.5 sm:px-3 text-xs sm:text-sm rounded-lg disabled:opacity-60"
                       >
                         {actionLoading === `ticket-${booking.id}`
                           ? "Opening..."
@@ -1783,7 +1783,7 @@ const FlightBookings = () => {
                           onClick={() =>
                             handleOpenChangeRequest(booking)
                           }
-                          className="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-2 sm:py-2.5 sm:px-3 text-xs sm:text-sm rounded-lg"
+                          className="fl-booking-ink fl-booking-danger-notice fl-booking-button fl-booking-danger-button bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-2 sm:py-2.5 sm:px-3 text-xs sm:text-sm rounded-lg"
                         >
                           Send Change Request
                         </button>
@@ -1791,13 +1791,13 @@ const FlightBookings = () => {
                         <button
                           type="button"
                           disabled
-                          className="bg-gray-700 text-gray-300 font-semibold py-2 px-2 sm:py-2.5 sm:px-3 text-xs sm:text-sm rounded-lg cursor-not-allowed"
+                          className="fl-booking-ink fl-booking-inset fl-booking-button fl-booking-secondary bg-gray-700 text-gray-300 font-semibold py-2 px-2 sm:py-2.5 sm:px-3 text-xs sm:text-sm rounded-lg cursor-not-allowed"
                         >
                           <div className="flex flex-col items-center">
                             <span>Change Request Submitted</span>
 
                             {changeRequestId && (
-                              <span className="text-xs mt-1 text-gray-400">
+                              <span className="fl-booking-muted text-xs mt-1 text-gray-400">
                                 ID: {changeRequestId}
                               </span>
                             )}
@@ -1821,7 +1821,7 @@ const FlightBookings = () => {
                           disabled={
                             requestStatusLoading === booking?.id
                           }
-                          className="col-span-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-2 sm:py-2.5 sm:px-3 text-xs sm:text-sm rounded-lg disabled:opacity-60"
+                          className="fl-booking-ink fl-booking-notice fl-booking-button fl-booking-secondary col-span-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-2 sm:py-2.5 sm:px-3 text-xs sm:text-sm rounded-lg disabled:opacity-60"
                         >
                           {requestStatusLoading === booking?.id
                             ? "Checking Status..."
@@ -1846,7 +1846,7 @@ const FlightBookings = () => {
                           actionLoading ===
                           `get-ticketed-${booking.id}`
                         }
-                        className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 px-2 sm:py-2.5 sm:px-3 text-xs sm:text-sm rounded-lg disabled:opacity-60"
+                        className="fl-booking-ink fl-booking-success-notice fl-booking-button fl-booking-primary bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 px-2 sm:py-2.5 sm:px-3 text-xs sm:text-sm rounded-lg disabled:opacity-60"
                       >
                         {actionLoading ===
                           `get-ticketed-${booking.id}`
@@ -1865,7 +1865,7 @@ const FlightBookings = () => {
                           actionLoading ===
                           `release-${booking.id}`
                         }
-                        className="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-2 sm:py-2.5 sm:px-3 text-xs sm:text-sm rounded-lg disabled:opacity-60"
+                        className="fl-booking-ink fl-booking-danger-notice fl-booking-button fl-booking-danger-button bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-2 sm:py-2.5 sm:px-3 text-xs sm:text-sm rounded-lg disabled:opacity-60"
                       >
                         {actionLoading ===
                           `release-${booking.id}`
@@ -1885,12 +1885,12 @@ const FlightBookings = () => {
       {/* ================= CHANGE REQUEST MODAL ================= */}
 
       {showCancelModal && (
-        <div className="fixed inset-0 z-[200] bg-black/70 flex items-center justify-center p-4">
-          <div className="bg-white text-black w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl shadow-2xl">
+        <div className="fl-booking-inset fixed inset-0 z-[200] bg-black/70 flex items-center justify-center p-4">
+          <div className="fl-booking-ink fl-booking-surface bg-white text-black w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl shadow-2xl">
             {/* HEADER */}
 
-            <div className="flex items-center justify-between px-5 py-4 border-b">
-              <h3 className="font-bold text-lg">
+            <div className="fl-booking-line flex items-center justify-between px-5 py-4 border-b">
+              <h3 className="fl-booking-heading fl-booking-subtitle font-bold text-lg">
                 Request (PNR:{" "}
                 {selectedBooking?.ticket_pnr ||
                   cancelDetails?.PNR ||
@@ -1906,7 +1906,7 @@ const FlightBookings = () => {
                 onClick={() =>
                   setShowCancelModal(false)
                 }
-                className="text-xl"
+                className="fl-booking-button text-xl"
               >
                 ✕
               </button>
@@ -1938,7 +1938,7 @@ const FlightBookings = () => {
 
                       setSelectedTicketIds([]);
                     }}
-                    className="w-full border rounded-lg px-3 py-3"
+                    className="fl-booking-line fl-booking-field w-full border rounded-lg px-3 py-3"
                   >
                     <option value="">
                       -Select-
@@ -1961,13 +1961,13 @@ const FlightBookings = () => {
                   <>
                     {/* SECTORS */}
 
-                    <div className="border-t pt-4">
+                    <div className="fl-booking-line border-t pt-4">
                       <p className="font-semibold text-sm mb-3">
                         Please select Refund Sectors
                       </p>
 
                       <label className="flex items-center gap-2 mb-2">
-                        <input
+                        <input className="fl-booking-field"
                           type="checkbox"
                           checked={
                             cancelSegments.length >
@@ -2015,7 +2015,7 @@ const FlightBookings = () => {
                               key={index}
                               className="flex items-center gap-2 mb-2"
                             >
-                              <input
+                              <input className="fl-booking-field"
                                 type="checkbox"
                                 checked={selectedSectorIndexes.includes(
                                   index,
@@ -2053,13 +2053,13 @@ const FlightBookings = () => {
 
                     {/* PASSENGERS */}
 
-                    <div className="border-t pt-4">
+                    <div className="fl-booking-line border-t pt-4">
                       <p className="font-semibold text-sm mb-3">
                         Please select Passenger
                       </p>
 
                       <label className="flex items-center gap-2 mb-2">
-                        <input
+                        <input className="fl-booking-field"
                           type="checkbox"
                           checked={
                             cancelPassengers.length >
@@ -2132,7 +2132,7 @@ const FlightBookings = () => {
                               }
                               className="flex items-center gap-2 mb-2"
                             >
-                              <input
+                              <input className="fl-booking-field"
                                 type="checkbox"
                                 disabled={
                                   !ticketId
@@ -2176,7 +2176,7 @@ const FlightBookings = () => {
                                 "Passenger"}
 
                               {ticketId && (
-                                <span className="text-xs text-gray-500">
+                                <span className="fl-booking-muted text-xs text-gray-500">
                                   (Ticket ID:{" "}
                                   {ticketId})
                                 </span>
@@ -2191,10 +2191,10 @@ const FlightBookings = () => {
 
                 {/* REMARKS */}
 
-                <div className="border-t pt-4">
+                <div className="fl-booking-line border-t pt-4">
                   <label className="block font-semibold text-sm mb-2">
                     Please enter remarks{" "}
-                    <span className="text-red-600">
+                    <span className="fl-booking-danger text-red-600">
                       *
                     </span>
                   </label>
@@ -2208,13 +2208,13 @@ const FlightBookings = () => {
                       )
                     }
                     placeholder="Enter cancellation remarks"
-                    className="w-full border rounded-lg p-3"
+                    className="fl-booking-line fl-booking-field w-full border rounded-lg p-3"
                   />
                 </div>
 
                 {/* NOTE */}
 
-                <div className="border-t pt-4 text-xs text-gray-600">
+                <div className="fl-booking-muted fl-booking-line border-t pt-4 text-xs text-gray-600">
                   <p className="font-semibold mb-1">
                     Note:
                   </p>
@@ -2232,7 +2232,7 @@ const FlightBookings = () => {
 
                 {/* BUTTONS */}
 
-                <div className="border-t pt-4 flex justify-end gap-3">
+                <div className="fl-booking-line border-t pt-4 flex justify-end gap-3">
                   <button
                     type="button"
                     disabled={
@@ -2243,7 +2243,7 @@ const FlightBookings = () => {
                         false,
                       )
                     }
-                    className="px-5 py-2.5 bg-gray-200 rounded-lg"
+                    className="fl-booking-inset fl-booking-button fl-booking-secondary px-5 py-2.5 bg-gray-200 rounded-lg"
                   >
                     Cancel
                   </button>
@@ -2256,7 +2256,7 @@ const FlightBookings = () => {
                     onClick={
                       handleSendCancelRequest
                     }
-                    className="px-5 py-2.5 bg-blue-600 text-white rounded-lg disabled:opacity-60"
+                    className="fl-booking-ink fl-booking-notice fl-booking-button fl-booking-primary px-5 py-2.5 bg-blue-600 text-white rounded-lg disabled:opacity-60"
                   >
                     {cancelRequestLoading
                       ? "Sending..."
@@ -2272,14 +2272,14 @@ const FlightBookings = () => {
       {/* ================= CHANGE REQUEST STATUS MODAL ================= */}
 
       {showRequestStatusModal && requestStatusData && (
-        <div className="fixed inset-0 z-[250] bg-black/70 flex items-center justify-center p-4">
+        <div className="fl-booking-inset fixed inset-0 z-[250] bg-black/70 flex items-center justify-center p-4">
 
-          <div className="bg-white text-black w-full max-w-md rounded-2xl shadow-2xl">
+          <div className="fl-booking-ink fl-booking-surface bg-white text-black w-full max-w-md rounded-2xl shadow-2xl">
 
             {/* HEADER */}
 
-            <div className="flex items-center justify-between px-5 py-4 border-b">
-              <h3 className="text-lg font-bold">
+            <div className="fl-booking-line flex items-center justify-between px-5 py-4 border-b">
+              <h3 className="fl-booking-heading fl-booking-subtitle text-lg font-bold">
                 Change Request Status
               </h3>
 
@@ -2289,7 +2289,7 @@ const FlightBookings = () => {
                   setShowRequestStatusModal(false);
                   setRequestStatusData(null);
                 }}
-                className="text-xl"
+                className="fl-booking-button text-xl"
               >
                 ✕
               </button>
@@ -2302,7 +2302,7 @@ const FlightBookings = () => {
               {/* CHANGE REQUEST ID */}
 
               <div>
-                <p className="text-xs text-gray-500">
+                <p className="fl-booking-muted text-xs text-gray-500">
                   Change Request ID
                 </p>
 
@@ -2315,7 +2315,7 @@ const FlightBookings = () => {
               {/* CANCELLATION STATUS */}
 
               <div>
-                <p className="text-xs text-gray-500">
+                <p className="fl-booking-muted text-xs text-gray-500">
                   Cancellation Status
                 </p>
 
@@ -2330,7 +2330,7 @@ const FlightBookings = () => {
               {/* REQUEST STATUS */}
 
               <div>
-                <p className="text-xs text-gray-500">
+                <p className="fl-booking-muted text-xs text-gray-500">
                   Request Status
                 </p>
 
@@ -2342,21 +2342,21 @@ const FlightBookings = () => {
 
               {/* REFUND */}
 
-              <div className="border-t pt-4">
-                <p className="text-xs text-gray-500">
+              <div className="fl-booking-line border-t pt-4">
+                <p className="fl-booking-muted text-xs text-gray-500">
                   Refund Status
                 </p>
 
                 {requestStatusData?.refunded_amount !== null &&
                   requestStatusData?.refunded_amount !== undefined ? (
-                  <p className="font-semibold text-green-600">
+                  <p className="fl-booking-success font-semibold text-green-600">
                     Refunded Amount: ₹
                     {Number(
                       requestStatusData.refunded_amount,
                     ).toLocaleString("en-IN")}
                   </p>
                 ) : (
-                  <p className="font-semibold text-red-600">
+                  <p className="fl-booking-danger font-semibold text-red-600">
                     Amount not refunded yet
                   </p>
                 )}
@@ -2368,7 +2368,7 @@ const FlightBookings = () => {
                 requestStatusData?.cancellation_charge !==
                 undefined && (
                   <div>
-                    <p className="text-xs text-gray-500">
+                    <p className="fl-booking-muted text-xs text-gray-500">
                       Cancellation Charge
                     </p>
 
@@ -2387,7 +2387,7 @@ const FlightBookings = () => {
                 requestStatusData?.cancellation_status ||
                 "",
               ).toLowerCase() === "in_progress" && (
-                  <div className="bg-yellow-50 border border-yellow-200 text-yellow-800 rounded-xl p-3 text-sm">
+                  <div className="fl-booking-accent fl-booking-notice fl-booking-line bg-yellow-50 border border-yellow-200 text-yellow-800 rounded-xl p-3 text-sm">
                     Your cancellation request is currently
                     in progress. The refund amount has not
                     been processed yet.
@@ -2398,14 +2398,14 @@ const FlightBookings = () => {
 
             {/* FOOTER */}
 
-            <div className="border-t p-4 flex justify-end">
+            <div className="fl-booking-line border-t p-4 flex justify-end">
               <button
                 type="button"
                 onClick={() => {
                   setShowRequestStatusModal(false);
                   setRequestStatusData(null);
                 }}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg font-semibold"
+                className="fl-booking-ink fl-booking-notice fl-booking-button fl-booking-primary bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg font-semibold"
               >
                 OK
               </button>
@@ -2419,8 +2419,8 @@ const FlightBookings = () => {
       {/* ================= PREMIUM POPUP ================= */}
 
       {popup.show && (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 px-4 backdrop-blur-sm">
-          <div className="w-full max-w-md overflow-hidden rounded-3xl border border-white/10 bg-[#11141B] text-white shadow-2xl">
+        <div className="fl-booking-inset fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 px-4 backdrop-blur-sm">
+          <div className="fl-booking-ink fl-booking-inset fl-booking-line w-full max-w-md overflow-hidden rounded-3xl border border-white/10 bg-[#11141B] text-white shadow-2xl">
             <div className="p-7 text-center">
 
               <div
@@ -2438,18 +2438,18 @@ const FlightBookings = () => {
                     : "×"}
               </div>
 
-              <h3 className="mt-5 text-xl font-bold">
+              <h3 className="fl-booking-heading fl-booking-subtitle mt-5 text-xl font-bold">
                 {popup.title}
               </h3>
 
-              <p className="mt-3 text-sm leading-6 text-gray-400">
+              <p className="fl-booking-muted mt-3 text-sm leading-6 text-gray-400">
                 {popup.message}
               </p>
 
               <button
                 type="button"
                 onClick={closePopup}
-                className="mt-7 w-full rounded-xl bg-linear-to-r from-yellow-400 to-orange-400 px-5 py-3 font-bold text-black"
+                className="fl-booking-ink fl-booking-surface fl-booking-button fl-booking-primary mt-7 w-full rounded-xl bg-linear-to-r from-yellow-400 to-orange-400 px-5 py-3 font-bold text-black"
               >
                 {popup.actionLabel}
               </button>
