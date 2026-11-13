@@ -1,6 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { getPackageBookings } from "../services/bookingApi";
 import { motion } from "framer-motion";
+import BookingPagination from "./common/BookingPagination";
+import useBookingPagination from "./common/useBookingPagination";
 
 const PackageBookings = () => {
   const {
@@ -11,6 +13,7 @@ const PackageBookings = () => {
     queryKey: ["packageBookings"],
     queryFn: getPackageBookings,
   });
+  const pagination = useBookingPagination(data);
 
   if (isLoading)
     return (
@@ -34,9 +37,9 @@ const PackageBookings = () => {
     );
 
   return (
-    <div className="px-2 sm:px-4 md:px-6">
+    <div ref={pagination.listRef} className="scroll-mt-24 px-2 sm:px-4 md:px-6">
       <div className="grid gap-5 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {data.map((b, index) => (
+        {pagination.items.map((b, index) => (
           <motion.div
             key={b.booking_id}
             initial={{ opacity: 0, y: 40 }}
@@ -89,10 +92,11 @@ const PackageBookings = () => {
             </div>
 
             {/* Glow hover effect */}
-            <div className="fl-booking-surface absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition bg-linear-to-r from-[#E6B35C]/10 to-transparent pointer-events-none" />
+            <div aria-hidden="true" className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition bg-linear-to-r from-[#E6B35C]/10 to-transparent pointer-events-none" />
           </motion.div>
         ))}
       </div>
+      <BookingPagination {...pagination} label="Package" />
     </div>
   );
 };

@@ -10,6 +10,7 @@ import PublicFrame from "./components/common/PublicFrame";
 import NotFoundPage from "./Pages/NotFoundPage";
 import HomeIntro from "./components/Home/HomeIntro";
 import PageMotion from "./components/common/PageMotion";
+import BrandLogo from "./components/common/BrandLogo";
 
 
 // Critical / Above-fold Route
@@ -76,7 +77,7 @@ const PageLoader = () => {
   </div>
   );
   return <div className="fl-page-loader" role="status" aria-live="polite" aria-label="Loading page">
-    <img src="/images/flying_logo.png" width="174" height="56" alt="FlyingLyte" />
+    <BrandLogo />
     <div className="fl-page-loader__track" aria-hidden="true"><span /></div>
     <p>Preparing your next destination…</p>
   </div>;

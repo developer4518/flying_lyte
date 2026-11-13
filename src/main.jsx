@@ -5,6 +5,10 @@ import { ToastContainer } from "react-toastify";
 import { BrowserRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { HelmetProvider } from "react-helmet-async";
+import { reconcileSeoFallbacks } from "./components/common/seoFallbacks";
+
+const restoreSeoFallbacks = reconcileSeoFallbacks();
+if (import.meta.hot) import.meta.hot.dispose(restoreSeoFallbacks);
 
 const queryClient = new QueryClient({
   defaultOptions: {

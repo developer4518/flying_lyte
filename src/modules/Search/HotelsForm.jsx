@@ -210,6 +210,21 @@ const HotelsForm = () => {
   const cityRef = useRef(null);
   const nationalityRef = useRef(null);
   const guestRef = useRef(null);
+  const guestDialogRef = useRef(null);
+
+  useEffect(() => {
+    if (!guestOpen) return;
+    const dialog = guestDialogRef.current;
+    const previousOverflow = document.body.style.overflow;
+    const trigger = guestRef.current?.querySelector("button");
+    dialog.showModal();
+    document.body.style.overflow = "hidden";
+    return () => {
+      dialog.close();
+      document.body.style.overflow = previousOverflow;
+      trigger?.focus({ preventScroll: true });
+    };
+  }, [guestOpen]);
 
   const [formData, setFormData] = useState({
     city: search?.city || "",
@@ -1234,19 +1249,36 @@ const HotelsForm = () => {
 
           {guestOpen && (
             <>
-              <div
-                className="fl-search-backdrop fixed inset-0 z-[9998] bg-black/70 backdrop-blur-sm"
-                onClick={() => setGuestOpen(false)}
-              />
-
-              <div
-                className="fl-search-modal fixed z-[9999] left-1/2 top-1/2 flex w-[calc(100vw-24px)] max-w-2xl max-h-[calc(100svh-32px)] -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#101721]/95 shadow-[0_30px_90px_rgba(0,0,0,0.65)] backdrop-blur-xl sm:w-[calc(100vw-40px)] sm:rounded-3xl"
-                onClick={(e) => e.stopPropagation()}
+              <dialog
+                ref={guestDialogRef}
+                aria-labelledby="hotel-guest-dialog-title"
+                onCancel={() => setGuestOpen(false)}
+                onKeyDown={(e) => {
+                  if (e.key !== "Tab") return;
+                  const controls = [...e.currentTarget.querySelectorAll("button:not(:disabled), input:not(:disabled)")];
+                  const first = controls[0];
+                  const last = controls.at(-1);
+                  if ((!e.shiftKey && document.activeElement === last) ||
+                    (e.shiftKey && document.activeElement === first)) {
+                    e.preventDefault();
+                    (e.shiftKey ? last : first)?.focus();
+                  }
+                }}
+                className="fl-search-modal fixed z-[9999] left-1/2 top-1/2 m-0 flex w-[calc(100vw-24px)] max-w-2xl max-h-[calc(100svh-32px)] -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#101721]/95 shadow-[0_30px_90px_rgba(0,0,0,0.65)] backdrop-blur-xl sm:w-[calc(100vw-40px)] sm:rounded-3xl"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  const rect = e.currentTarget.getBoundingClientRect();
+                  if (e.target === e.currentTarget &&
+                    (e.clientX < rect.left || e.clientX > rect.right ||
+                      e.clientY < rect.top || e.clientY > rect.bottom)) {
+                    setGuestOpen(false);
+                  }
+                }}
               >
                 <div className="fl-search-modal-surface shrink-0 border-b border-white/10 bg-[#101721]/95 p-3 sm:p-4">
                   <div className="flex items-start justify-between gap-3">
                     <div>
-                      <h3 className="fl-search-title text-base sm:text-lg font-bold text-(--text-main)">
+                      <h3 id="hotel-guest-dialog-title" className="fl-search-title text-base sm:text-lg font-bold text-(--text-main)">
                         Rooms & Guests
                       </h3>
 
@@ -1257,6 +1289,7 @@ const HotelsForm = () => {
 
                     <button
                       type="button"
+                      aria-label="Close rooms and guests"
                       onClick={() => setGuestOpen(false)}
                       className="fl-search-secondary flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-white/[0.06] text-sm font-bold text-white/80 transition hover:border-[#E6B35C]/60 hover:bg-white/[0.10] hover:text-[#E6B35C]"
                     >
@@ -1469,7 +1502,7 @@ const HotelsForm = () => {
                     </button>
                   </div>
                 </div>
-              </div>
+              </dialog>
             </>
           )}
         </div>

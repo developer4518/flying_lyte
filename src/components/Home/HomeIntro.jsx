@@ -1,6 +1,6 @@
 import { useCallback, useLayoutEffect, useRef, useState } from "react";
 import { ArrowRight } from "lucide-react";
-import logo from "/images/flying_logo.png";
+import logo from "/images/flyinglyte-emblem.webp";
 
 const sessionKey = "flyinglyte:home-intro:v1";
 let shownInDocument = false;

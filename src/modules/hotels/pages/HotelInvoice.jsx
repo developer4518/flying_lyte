@@ -5,6 +5,43 @@ import { useMemo, useRef } from "react";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 
+// Applied only to the private PDF clone and to this invoice's print output.
+const invoiceOutputStyles = `
+  #invoice-print-area, #invoice-print-area * { animation: none !important; transition: none !important; }
+  #invoice-print-area {
+    width: 100% !important; max-width: none !important; min-width: 0 !important;
+    margin: 0 !important; border-radius: 0; overflow: visible !important;
+    box-shadow: none !important; font-size: 12px; line-height: 1.4;
+  }
+  #invoice-print-area > div { padding: 16px !important; }
+  #invoice-print-area > div:first-child { flex-direction: row; }
+  #invoice-print-area [data-invoice-columns] { display: grid; gap: 16px; }
+  #invoice-print-area [data-invoice-columns="2"] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  #invoice-print-area [data-invoice-columns="3"] { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  #invoice-print-area .text-sm { font-size: 12px; line-height: 1.4; }
+  #invoice-print-area .text-xs { font-size: 10px; line-height: 1.4; }
+  #invoice-print-area .mt-6 { margin-top: 16px; }
+  #invoice-print-area .mt-8 { margin-top: 20px; }
+  #invoice-print-area .mb-6 { margin-bottom: 16px; }
+  #invoice-print-area :is(.overflow-x-auto, .fl-booking-table-scroll) { overflow: visible !important; }
+  #invoice-print-area .fl-booking-table { table-layout: fixed; min-width: 0 !important; width: 100%; }
+  #invoice-print-area .fl-booking-table :is(td, th) { padding: 6px; font-size: 11px; }
+  #invoice-print-area .fl-booking-table td { overflow-wrap: anywhere; }
+  #invoice-print-area .fl-booking-table td:nth-child(n+4) { white-space: nowrap; overflow-wrap: normal; word-break: normal; }
+  #invoice-print-area [data-invoice-rooms] th:nth-child(1) { width: 18%; }
+  #invoice-print-area [data-invoice-rooms] th:nth-child(2) { width: 22%; }
+  #invoice-print-area [data-invoice-rooms] th:nth-child(3) { width: 13%; }
+  #invoice-print-area [data-invoice-rooms] th:nth-child(4),
+  #invoice-print-area [data-invoice-rooms] th:nth-child(5) { width: 6%; }
+  #invoice-print-area [data-invoice-rooms] th:nth-child(6) { width: 10%; }
+  #invoice-print-area [data-invoice-rooms] th:nth-child(7) { width: 9%; }
+  #invoice-print-area [data-invoice-rooms] th:nth-child(8) { width: 10%; }
+  #invoice-print-area [data-invoice-rooms] th:nth-child(9) { width: 6%; }
+  #invoice-print-area [data-invoice-keep], #invoice-print-area thead { break-inside: avoid; }
+  #invoice-print-area tr { break-inside: avoid; }
+  #invoice-print-area .no-print { display: none !important; }
+`;
+
 const safeJsonParse = (value, fallback = {}) => {
   try {
     return JSON.parse(value || "{}");
@@ -472,11 +509,46 @@ const totalAmountPaid = Number(
   const handleGeneratePdf = async () => {
     if (!invoiceRef.current) return;
 
+    const outputWidth = 1060;
+    const pageWidth = 210;
+    const pageHeight = 297;
+    const margin = 10;
+    const imageWidth = pageWidth - margin * 2;
+    const pageCapacity = ((pageHeight - margin * 2) * outputWidth) / imageWidth;
+    let protectedLines = [];
+
     const canvas = await html2canvas(invoiceRef.current, {
       scale: 2,
       useCORS: true,
       backgroundColor: "#0b0f14",
-      onclone: (clonedDocument, clonedInvoice) => {
+      windowWidth: 1280,
+      ignoreElements: element => element.classList.contains("no-print"),
+      onclone: async (clonedDocument, clonedInvoice) => {
+        const outputStyle = clonedDocument.createElement("style");
+        outputStyle.textContent = invoiceOutputStyles;
+        clonedDocument.head.appendChild(outputStyle);
+        clonedInvoice.style.setProperty("width", `${outputWidth}px`, "important");
+        await clonedDocument.fonts.ready;
+
+        // Keep text lines, ordinary table rows and the totals together when
+        // slicing the raster. Oversized descriptions may continue on a new page.
+        const top = clonedInvoice.getBoundingClientRect().top;
+        const protect = rect => {
+          if (rect.height > 0 && rect.height + 2 < pageCapacity) {
+            protectedLines.push({ top: rect.top - top - 1, bottom: rect.bottom - top + 1 });
+          }
+        };
+        const walker = clonedDocument.createTreeWalker(clonedInvoice, NodeFilter.SHOW_TEXT);
+        const range = clonedDocument.createRange();
+        while (walker.nextNode()) {
+          if (!walker.currentNode.textContent.trim()) continue;
+          range.selectNodeContents(walker.currentNode);
+          [...range.getClientRects()].forEach(protect);
+        }
+        clonedInvoice.querySelectorAll("tr, [data-invoice-keep]").forEach(element => {
+          protect(element.getBoundingClientRect());
+        });
+
         // html2canvas 1.4 cannot parse CSS Color 4. Normalize paint only,
         // in its private clone; keep the live invoice and its geometry intact.
         const pixel = clonedDocument.createElement("canvas");
@@ -526,26 +598,28 @@ const totalAmountPaid = Number(
       },
     });
 
-    const imgData = canvas.toDataURL("image/png");
-
     const pdf = new jsPDF("p", "mm", "a4");
-    const pageWidth = pdf.internal.pageSize.getWidth();
-    const pageHeight = pdf.internal.pageSize.getHeight();
-
-    const imgWidth = pageWidth;
-    const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
-    let heightLeft = imgHeight;
-    let position = 0;
-
-    pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-    heightLeft -= pageHeight;
-
-    while (heightLeft > 0) {
-      position = heightLeft - imgHeight;
-      pdf.addPage();
-      pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-      heightLeft -= pageHeight;
+    const scale = canvas.width / outputWidth;
+    const capacity = Math.floor(pageCapacity * scale);
+    const bands = protectedLines.map(line => ({
+      top: Math.floor(line.top * scale), bottom: Math.ceil(line.bottom * scale),
+    }));
+    let offset = 0;
+    while (offset < canvas.height) {
+      let end = Math.min(offset + capacity, canvas.height);
+      if (end < canvas.height) {
+        let crossing;
+        while ((crossing = bands.find(line => line.top < end && line.bottom > end && line.top > offset))) {
+          end = crossing.top;
+        }
+      }
+      const page = document.createElement("canvas");
+      page.width = canvas.width;
+      page.height = end - offset;
+      page.getContext("2d").drawImage(canvas, 0, offset, canvas.width, page.height, 0, 0, canvas.width, page.height);
+      if (offset > 0) pdf.addPage();
+      pdf.addImage(page.toDataURL("image/png"), "PNG", margin, margin, imageWidth, (page.height * imageWidth) / page.width);
+      offset = end;
     }
 
     pdf.save(`hotel-invoice-${invoiceNo}.pdf`);
@@ -589,25 +663,21 @@ const totalAmountPaid = Number(
       <style>
         {`
           @media print {
-            body * {
-              visibility: hidden;
-            }
-
-            #invoice-print-area,
-            #invoice-print-area * {
-              visibility: visible;
-            }
-
-            #invoice-print-area {
-              position: absolute;
-              left: 0;
-              top: 0;
-              width: 100%;
-            }
-
-            .no-print {
+            @page { size: A4; margin: 10mm; }
+            body:has(#invoice-print-area) *:not(#invoice-print-area):not(#invoice-print-area *):not(:has(#invoice-print-area)) {
               display: none !important;
             }
+            html:has(#invoice-print-area), body:has(#invoice-print-area),
+            body:has(#invoice-print-area) :has(#invoice-print-area) {
+              display: block !important;
+              position: static !important;
+              width: auto !important; max-width: none !important;
+              height: auto !important; min-height: 0 !important;
+              margin: 0 !important; padding: 0 !important;
+              overflow: visible !important; transform: none !important;
+              background: white !important;
+            }
+            ${invoiceOutputStyles}
           }
         `}
       </style>
@@ -680,7 +750,7 @@ const totalAmountPaid = Number(
               </h2>
             </div>
 
-            <div className="fl-booking-line grid grid-cols-1 md:grid-cols-2 gap-6 border-b border-(--border-soft) pb-6">
+            <div data-invoice-columns="2" className="fl-booking-line grid grid-cols-1 md:grid-cols-2 gap-6 border-b border-(--border-soft) pb-6">
               <div>
                 <h3 className="fl-booking-heading fl-booking-subtitle fl-booking-accent text-xl font-bold text-(--gold-main) mb-3">
                   {companyName}
@@ -757,7 +827,7 @@ const totalAmountPaid = Number(
             </div>
 
             <div className="fl-booking-line mt-6 overflow-x-auto rounded-2xl border border-(--border-soft)">
-              <div className="fl-booking-table-scroll"><table className="fl-booking-table w-full text-sm min-w-225">
+              <div className="fl-booking-table-scroll"><table data-invoice-rooms className="fl-booking-table w-full text-sm min-w-225">
                 <thead className="fl-booking-accent fl-booking-surface bg-linear-to-r from-(--bg-primary) via-(--bg-via) to-(--bg-secondary) text-(--gold-soft)">
                   <tr>
                     <th className="fl-booking-line p-3 text-left border border-(--border-soft)">
@@ -832,13 +902,13 @@ const totalAmountPaid = Number(
               </table></div>
             </div>
 
-            <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
+            <div data-invoice-columns="3" className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
               <InfoBox label="City" value={city} />
               <InfoBox label="Check In" value={formatDate(checkIn)} />
               <InfoBox label="Check Out" value={formatDate(checkOut)} />
             </div>
 
-            <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div data-invoice-columns="2" className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="text-sm text-(--text-muted) space-y-2">
                 <p>
                   <span className="fl-booking-ink text-white font-bold">Billed By:</span>{" "}
@@ -851,7 +921,7 @@ const totalAmountPaid = Number(
                 </p>
               </div>
 
-              <div className="fl-booking-line bg-(--bg-secondary) border border-(--border-soft) rounded-2xl p-5 text-sm space-y-3">
+              <div data-invoice-keep className="fl-booking-line bg-(--bg-secondary) border border-(--border-soft) rounded-2xl p-5 text-sm space-y-3">
                 <AmountRow
                   label="Gross"
                   value={gross}

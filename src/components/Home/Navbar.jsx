@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { AnimatePresence, motion, useIsPresent } from "framer-motion";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { HiMenu, HiX } from "react-icons/hi";
 import { ArrowUpRight } from "lucide-react";
-import logo from "/images/flying_logo.png";
+import BrandLogo from "../common/BrandLogo";
 import ColorModeButton from "./ColorModeButton";
 import { useAuthStore } from "../../store/authStore";
 
@@ -16,6 +17,34 @@ const navLinks = [
   { name: "Blogs", path: "/blogs" },
 ];
 
+const reducedMotionQuery = "(prefers-reduced-motion: reduce)";
+const getReducedMotion = () => window.matchMedia(reducedMotionQuery).matches;
+const subscribeReducedMotion = (listener) => {
+  const media = window.matchMedia(reducedMotionQuery);
+  media.addEventListener("change", listener);
+  return () => media.removeEventListener("change", listener);
+};
+
+function MobileMenuPanel({ children, reduced, ...props }) {
+  const present = useIsPresent();
+  return <motion.div {...props} inert={!present} aria-hidden={!present}
+    data-fl-menu-state={present ? "open" : "closing"}
+    style={{ transformOrigin: "calc(100% - 22px) -24px" }}
+    initial="closed" animate="open" exit="closed"
+    variants={{
+      closed: {
+        opacity: reduced ? 1 : 0, y: reduced ? 0 : -10, scale: reduced ? 1 : .96,
+        clipPath: reduced ? "none" : "inset(0 0 96% 92% round 20px)",
+        transition: { duration: reduced ? 0 : .2, staggerChildren: reduced ? 0 : .02, staggerDirection: -1 },
+      },
+      open: {
+        opacity: 1, y: 0, scale: 1, clipPath: reduced ? "none" : "inset(0 0 0% 0% round 20px)",
+        transition: { duration: reduced ? 0 : .3, ease: [.22, 1, .36, 1], delayChildren: reduced ? 0 : .06, staggerChildren: reduced ? 0 : .055 },
+      },
+    }}
+  >{children}</motion.div>;
+}
+
 const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -25,6 +54,13 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
+  const navRef = useRef(null);
+  const menuToggleRef = useRef(null);
+  const reducedMotion = useSyncExternalStore(subscribeReducedMotion, getReducedMotion, () => false);
+  const menuItemVariants = {
+    closed: { opacity: reducedMotion ? 1 : 0, visibility: "hidden", x: reducedMotion ? 0 : 14, y: reducedMotion ? 0 : -5, transition: { duration: reducedMotion ? 0 : .14 } },
+    open: { opacity: 1, visibility: "visible", x: 0, y: 0, transition: { duration: reducedMotion ? 0 : .22 } },
+  };
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > (location.pathname === "/" ? 8 : 60));
@@ -47,6 +83,32 @@ const Navbar = () => {
       document.body.style.overflow = "";
     };
   }, [menuOpen]);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    const outside = (event) => {
+      if (!navRef.current?.contains(event.target)) setMenuOpen(false);
+    };
+    const escape = (event) => {
+      if (event.key === "Escape") {
+        setMenuOpen(false);
+        menuToggleRef.current?.focus({ preventScroll: true });
+      }
+    };
+    document.addEventListener("pointerdown", outside);
+    document.addEventListener("keydown", escape);
+    return () => {
+      document.removeEventListener("pointerdown", outside);
+      document.removeEventListener("keydown", escape);
+    };
+  }, [menuOpen]);
+
+  useEffect(() => {
+    const desktop = window.matchMedia("(min-width: 1024px)");
+    const closeOnDesktop = () => { if (desktop.matches) setMenuOpen(false); };
+    desktop.addEventListener("change", closeOnDesktop);
+    return () => desktop.removeEventListener("change", closeOnDesktop);
+  }, []);
 
   const handleReloadNavigate = (path, state = null) => {
     setMenuOpen(false);
@@ -139,13 +201,7 @@ const Navbar = () => {
     : "fl-nav__surface--top bg-[#06111d]/75 border-white/10 shadow-[0_16px_45px_rgba(0,0,0,0.25)]";
 
   return (
-    <nav className="fl-nav fixed inset-x-0 top-0 z-50 transition-all duration-300" data-fl-theme="model2" data-fl-home={location.pathname === "/"} data-fl-scrolled={scrolled}
-      onKeyDown={event => {
-        if (event.key === "Escape" && menuOpen) {
-          setMenuOpen(false);
-          event.currentTarget.querySelector(".fl-nav__menu-toggle")?.focus();
-        }
-      }}>
+    <nav ref={navRef} className="fl-nav fixed inset-x-0 top-0 z-50 transition-all duration-300" data-fl-theme="model2" data-fl-home={location.pathname === "/"} data-fl-scrolled={scrolled}>
       {location.pathname === "/" && <div className="fl-nav__announcement">
         <span>A little less ordinary. A lot more you.</span>
         <Link to="/packages">Discover your next escape <ArrowUpRight size={13} aria-hidden="true" /></Link>
@@ -164,11 +220,7 @@ const Navbar = () => {
               className="fl-nav__brand group flex items-center"
               aria-label="Go to home"
             >
-              <img
-                src={logo}
-                alt="FlyingLyte"
-                className="fl-nav__logo h-9 w-auto max-w-[145px] select-none object-contain drop-shadow-[0_10px_20px_rgba(230,179,92,0.18)] transition duration-300 group-hover:scale-[1.03] sm:h-10 sm:max-w-[165px] md:h-12 md:max-w-[210px]"
-                loading="lazy" />
+              <BrandLogo />
             </button>
 
             {/* Desktop Menu */}
@@ -262,6 +314,7 @@ const Navbar = () => {
 
             {/* Mobile Button */}
             <button
+              ref={menuToggleRef}
               type="button"
               aria-label="Toggle menu"
               aria-expanded={menuOpen}
@@ -276,8 +329,11 @@ const Navbar = () => {
         </div>
 
         {/* Mobile Menu */}
+        <AnimatePresence>
         {menuOpen && (
-          <div
+          <MobileMenuPanel
+            key="mobile-navigation"
+            reduced={reducedMotion}
             id="fl-mobile-navigation"
             className="fl-nav__mobile-menu
   mt-2
@@ -317,8 +373,9 @@ const Navbar = () => {
             <div className="flex flex-col gap-1.5">
 
               {navLinks.map((item) => (
-                <button
+                <motion.button
                   key={item.path}
+                  variants={menuItemVariants}
                   type="button"
                   aria-current={isActive(item.path) ? "page" : undefined}
                   // onClick={() => {
@@ -335,7 +392,7 @@ const Navbar = () => {
                   onClick={() => {
                     handleReloadNavigate(item.path);
                   }}
-                  className={`fl-nav__mobile-link group flex min-h-10 items-center justify-between rounded-xl border px-3.5 py-2 text-left text-[13px] font-semibold transition-all duration-200 ${isActive(item.path)
+                  className={`fl-nav__mobile-link group flex min-h-10 items-center justify-between rounded-xl border px-3.5 py-2 text-left text-[13px] font-semibold transition-colors duration-200 ${isActive(item.path)
                     ? "fl-nav__active border-[#E6B35C]/60 bg-[#E6B35C] text-black shadow-[0_6px_18px_rgba(230,179,92,0.18)]"
                     : "fl-nav__idle border-white/5 bg-white/[0.035] text-gray-200 hover:border-[#E6B35C]/20 hover:bg-white/[0.07] hover:text-[#E6B35C]"
                     }`}
@@ -344,7 +401,7 @@ const Navbar = () => {
                   <span className="text-sm opacity-70 transition-transform duration-200 group-hover:translate-x-0.5">
                     ›
                   </span>
-                </button>
+                </motion.button>
               ))}
             </div>
 
@@ -402,8 +459,9 @@ const Navbar = () => {
                 </button>
               </div>
             )}
-          </div>
+          </MobileMenuPanel>
         )}
+        </AnimatePresence>
       </div>
     </nav>
   );

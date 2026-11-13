@@ -8,6 +8,7 @@ import {
   MapPin,
 } from "lucide-react";
 import { footerLinks } from "./footerLinks";
+import BrandLogo from "../../common/BrandLogo";
 
 import { Link, useNavigate } from "react-router-dom";
 
@@ -29,12 +30,9 @@ const Footer = () => {
         <div className="fl-footer__top">
           {/* Brand */}
           <div className="fl-footer__brand">
-            <img
-               src="/images/flying_logo.png"
-               alt="FlyingLyte Logo"
-               className="fl-footer__logo cursor-pointer"
-               onClick={() => navigate("/")}
-             loading="lazy" />
+            <button type="button" className="fl-footer__home" aria-label="Go to home" onClick={() => navigate("/")}>
+              <BrandLogo />
+            </button>
 
             <p className="fl-footer__description">
               FlyingLyte helps you book flights, hotels, and holiday packages at

@@ -14,12 +14,12 @@ const HotelBookingDetails = () => {
   const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
-  const { id } = useParams();
+  const { bookingId: routeBookingId } = useParams();
 
   useEffect(() => {
     const fetchBooking = async () => {
       try {
-        let bookingId = id;
+        let bookingId = routeBookingId;
 
         if (!bookingId) {
           const saved = JSON.parse(
@@ -46,7 +46,7 @@ const HotelBookingDetails = () => {
     };
 
     fetchBooking();
-  }, [id, navigate]);
+  }, [routeBookingId, navigate]);
 
   if (loading)
     return <div className="fl-booking-ink text-white text-center py-24">Loading...</div>;

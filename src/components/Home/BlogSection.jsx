@@ -33,7 +33,7 @@ const BlogSection = () => {
         <MobileCardDeck className="fl-blog__grid" label="blog">
           {latestBlogs.map((blog) => (
             <article
-              key={blog.id}
+              key={blog.slug}
               className="fl-blog__card group overflow-hidden transition-all duration-300 hover:-translate-y-2"
             >
               <div className="fl-blog__media">

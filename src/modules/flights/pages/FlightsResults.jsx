@@ -1247,17 +1247,20 @@ const FlightsResults = () => {
 
         <main className="fl-results-list space-y-4">
           {/* Sticky Top Bar */}
-          <div className="fl-results-toolbar lg:hidden sticky top-16 z-40 bg-(--bg-main)/90 backdrop-blur border-b border-(--border-soft) py-3 flex gap-3">
+          <div className="fl-results-toolbar sticky top-16 z-40 bg-(--bg-main)/90 backdrop-blur border-b border-(--border-soft) py-3 flex gap-3 lg:static lg:justify-end">
             <button
               onClick={() => setShowFilters(true)}
-              className="fl-result-secondary fl-result-button flex-1 bg-(--bg-card) border border-(--border-soft) py-2 rounded-lg text-sm"
+              className="fl-result-secondary fl-result-button flex-1 bg-(--bg-card) border border-(--border-soft) py-2 rounded-lg text-sm lg:hidden"
             >
               Filters
             </button>
 
             <button
+              type="button"
               onClick={() => setShowSort(!showSort)}
-              className="fl-result-secondary fl-result-button flex-1 bg-(--bg-card) border border-(--border-soft) py-2 rounded-lg text-sm"
+              aria-expanded={showSort}
+              aria-controls="flight-sort-options"
+              className="fl-result-secondary fl-result-button flex-1 bg-(--bg-card) border border-(--border-soft) py-2 rounded-lg text-sm lg:flex-none lg:px-5"
             >
               Sort
             </button>
@@ -1265,7 +1268,7 @@ const FlightsResults = () => {
 
           {/* Sort Dropdown */}
           {showSort && (
-            <div className="fl-result-surface fl-results-sort bg-(--bg-card) border border-(--border-soft) rounded-lg p-3">
+            <div id="flight-sort-options" className="fl-result-surface fl-results-sort bg-(--bg-card) border border-(--border-soft) rounded-lg p-3">
               {["cheapest", "fastest"].map((type) => (
                 <button
                   key={type}

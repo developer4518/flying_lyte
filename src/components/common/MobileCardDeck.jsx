@@ -12,7 +12,7 @@ export default function MobileCardDeck({ children, as: Container = "div", label,
   const advance = step => setActive(value => (value + step + count) % Math.max(count, 1));
 
   useLayoutEffect(() => {
-    const media = window.matchMedia("(max-width:760px)");
+    const media = window.matchMedia("(max-width:767px)");
     const update = () => setMobile(media.matches);
     update(); media.addEventListener("change", update);
     return () => media.removeEventListener("change", update);

@@ -657,6 +657,27 @@ const HotelDetails = () => {
   const [showAllAttractions, setShowAllAttractions] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const imageTriggerRef = useRef(null);
+  const lightboxCloseRef = useRef(null);
+
+  useEffect(() => {
+    if (!selectedImage) return;
+    lightboxCloseRef.current?.focus();
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        setSelectedImage(null);
+      } else if (event.key === "Tab") {
+        event.preventDefault();
+        lightboxCloseRef.current?.focus();
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      if (imageTriggerRef.current?.isConnected) imageTriggerRef.current.focus();
+    };
+  }, [selectedImage]);
 
   const touchStartX = useRef(null);
   const wasImageSwiped = useRef(false);
@@ -1044,11 +1065,21 @@ const HotelDetails = () => {
               <div
                 key={`${img}-${index}`}
                 className="fl-detail-image-slide fl-detail-inset relative w-full h-full shrink-0 flex items-center justify-center bg-[#0B0B0F] overflow-hidden cursor-pointer"
-                onClick={() => {
+                role="button"
+                tabIndex={index === currentImageIndex ? 0 : -1}
+                aria-label={`Enlarge ${hotelName} image ${index + 1}`}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    event.currentTarget.click();
+                  }
+                }}
+                onClick={(event) => {
                   if (wasImageSwiped.current) {
                     wasImageSwiped.current = false;
                     return;
                   }
+                  imageTriggerRef.current = event.currentTarget;
                   setSelectedImage(img);
                 }}
               >
@@ -1188,8 +1219,16 @@ sm:flex
       </div>
 
       {selectedImage && (
-        <div className="fl-detail-lightbox fixed inset-0 bg-black/90 flex items-center justify-center z-50 px-4">
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Hotel image preview"
+          className="fl-detail-lightbox fixed inset-0 bg-black/90 flex items-center justify-center z-50 px-4"
+        >
           <button
+            ref={lightboxCloseRef}
+            type="button"
+            aria-label="Close hotel image preview"
             onClick={() => setSelectedImage(null)}
             className="fl-detail-image-control fl-detail-ink fl-detail-button absolute top-5 right-5 text-white text-xl bg-white/10 hover:bg-white/20 w-10 h-10 rounded-full"
           >

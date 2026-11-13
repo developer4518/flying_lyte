@@ -95,9 +95,16 @@ function AnimatedSocialRail({ homepage }) {
       setExpanded(!media.matches || (waiting && shouldIntroduce.current));
     };
     const reduce = () => { if (motion.matches) { interruptSequence(); if (!rail.current?.matches(":focus-within, :hover")) setExpanded(!media.matches); } };
+    const compactScroll = () => {
+      if (media.matches && window.scrollY > 0 && !rail.current?.matches(":focus-within")) {
+        interruptSequence();
+        setExpanded(false);
+      }
+    };
     media.addEventListener("change", resize);
     motion.addEventListener("change", reduce);
-    return () => { observer.disconnect(); window.clearTimeout(timer.current); media.removeEventListener("change", resize); motion.removeEventListener("change", reduce); };
+    window.addEventListener("scroll", compactScroll, { passive: true });
+    return () => { observer.disconnect(); window.clearTimeout(timer.current); media.removeEventListener("change", resize); motion.removeEventListener("change", reduce); window.removeEventListener("scroll", compactScroll); };
   }, []);
 
   return <aside ref={rail} className="fl-social-rail" data-fl-theme="model2" data-expanded={expanded} data-ready={ready} aria-label="FlyingLyte social links" aria-hidden={!ready} inert={!ready}

@@ -8,6 +8,8 @@ import { privateApi } from "../services/api";
 
 import FlightTicketPDF from "../modules/flights/components/FlightTicketPDF";
 import FlightInvoicePDF from "../modules/flights/components/FlightInvoicePDF";
+import BookingPagination from "./common/BookingPagination";
+import useBookingPagination from "./common/useBookingPagination";
 
 /* ================= HELPERS ================= */
 
@@ -103,6 +105,7 @@ const FlightBookings = () => {
     queryKey: ["flightBookings"],
     queryFn: getFlightBookings,
   });
+  const pagination = useBookingPagination(data);
 
   /* ================= PDF LOADING ================= */
 
@@ -1402,8 +1405,8 @@ const FlightBookings = () => {
     <>
       {/* ================= CARDS ================= */}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
-        {data.map((booking) => {
+      <div ref={pagination.listRef} className="scroll-mt-24 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+        {pagination.items.map((booking) => {
           const itinerary =
             getStoredItinerary(booking);
 
@@ -1881,6 +1884,8 @@ const FlightBookings = () => {
           );
         })}
       </div>
+
+      <BookingPagination {...pagination} label="Flight" />
 
       {/* ================= CHANGE REQUEST MODAL ================= */}
 

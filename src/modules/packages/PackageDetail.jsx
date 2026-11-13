@@ -1,5 +1,5 @@
-import React, { useMemo, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import React, { useEffect, useId, useMemo, useState } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { privateApi, publicApi } from "../../services/api";
 import { motion, AnimatePresence } from "framer-motion";
@@ -48,6 +48,11 @@ const formatPrice = (price) => {
   return value.toLocaleString("en-IN");
 };
 
+const localToday = () => {
+  const now = new Date();
+  return new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+};
+
 const splitLines = (text = "") => {
   return String(text)
     .split(/\r?\n|;|•/)
@@ -89,12 +94,15 @@ const parseItinerary = (text = "") => {
 
 const PackageDetails = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { slug } = useParams();
   const token = useAuthStore((state) => state.token);
 
   const [activeTab, setActiveTab] = useState("overview");
   const [openBookingForm, setOpenBookingForm] = useState(false);
   const [openQuoteForm, setOpenQuoteForm] = useState(false);
+  const [quoteErrors, setQuoteErrors] = useState({});
+  const [bookingErrors, setBookingErrors] = useState({});
   const [selectedImage, setSelectedImage] = useState(null);
   const [openFaq, setOpenFaq] = useState(null);
 
@@ -143,10 +151,21 @@ const PackageDetails = () => {
   );
   const totalPrice = pricePerPerson * totalPassengers;
 
+  useEffect(() => {
+    if (!token || location.state?.openBooking !== true) return;
+    setOpenBookingForm(true);
+    const remainingState = { ...location.state };
+    delete remainingState.openBooking;
+    navigate(location.pathname + location.search + location.hash, {
+      replace: true,
+      state: Object.keys(remainingState).length ? remainingState : null,
+    });
+  }, [token, location, navigate]);
+
   const handleBookClick = () => {
     if (!token) {
       navigate("/login", {
-        state: { redirectTo: `/packages/${slug}`, openBooking: true },
+        state: { redirectTo: location.pathname + location.search + location.hash, openBooking: true },
       });
       return;
     }
@@ -172,11 +191,31 @@ Please share more details.`;
     window.open(url, "_blank");
   };
 
-  const handleQuoteWhatsapp = () => {
-    if (!formData.name || !formData.phone || !formData.date) {
-      toast.error("Please fill name, phone and travel date");
-      return;
+  const validateFields = (booking, container) => {
+    const errors = {};
+    if (!formData.name.trim()) errors.name = "Enter your name.";
+    const phone = formData.phone.trim().replace(/[\s().-]/g, "").replace(/^00/, "+");
+    if (!phone) errors.phone = "Enter your phone number.";
+    else if (!/^(?:[0-9]{10}|[1-9][0-9]{10,14}|\+[1-9][0-9]{6,14})$/.test(phone)) {
+      errors.phone = "Enter a 10-digit number or include the country code for an international number.";
     }
+    if (!formData.date) errors.date = "Choose your travel date.";
+    else if (!booking && formData.date < localToday()) errors.date = "Choose today or a future travel date.";
+    if (booking) {
+      if (!formData.email.trim()) errors.email = "Enter your email address.";
+      else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) errors.email = "Enter a valid email address.";
+    }
+    (booking ? setBookingErrors : setQuoteErrors)(errors);
+    const firstError = Object.keys(errors)[0];
+    if (firstError) {
+      requestAnimationFrame(() => container?.querySelector(`[name="${firstError}"]`)?.focus());
+      return false;
+    }
+    return true;
+  };
+
+  const handleQuoteWhatsapp = (event) => {
+    if (!validateFields(false, event.currentTarget.parentElement)) return;
 
     const message = `Hello FlyingLyte, I want to get a quote for this package:
 
@@ -223,6 +262,8 @@ Please share the best quote and itinerary.`;
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    setQuoteErrors(previous => ({ ...previous, [e.target.name]: undefined }));
+    setBookingErrors(previous => ({ ...previous, [e.target.name]: undefined }));
   };
 
   const updateCount = (type, value) => {
@@ -294,13 +335,8 @@ Please share the best quote and itinerary.`;
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (
-      !formData.name ||
-      !formData.email ||
-      !formData.phone ||
-      !formData.adults ||
-      !formData.date
-    ) {
+    if (!validateFields(true, e.currentTarget)) return;
+    if (!formData.adults) {
       toast.error("Please fill required details");
       return;
     }
@@ -308,7 +344,7 @@ Please share the best quote and itinerary.`;
     if (!token) {
       toast.error("Please login to book package");
       navigate("/login", {
-        state: { redirectTo: `/packages/${slug}`, openBooking: true },
+        state: { redirectTo: location.pathname + location.search + location.hash, openBooking: true },
       });
       return;
     }
@@ -614,6 +650,7 @@ Please share the best quote and itinerary.`;
                   <div className="space-y-3">
                     <QuoteInput
                       name="name"
+                      error={quoteErrors.name}
                       placeholder="Your Name"
                       value={formData.name}
                       onChange={handleChange}
@@ -621,6 +658,7 @@ Please share the best quote and itinerary.`;
 
                     <QuoteInput
                       name="phone"
+                      error={quoteErrors.phone}
                       placeholder="Phone Number"
                       value={formData.phone}
                       onChange={handleChange}
@@ -628,6 +666,7 @@ Please share the best quote and itinerary.`;
 
                     <QuoteInput
                       name="date"
+                      error={quoteErrors.date}
                       type="date"
                       value={formData.date}
                       onChange={handleChange}
@@ -1131,7 +1170,7 @@ Please share the best quote and itinerary.`;
               exit={{ y: 90, opacity: 0 }}
               transition={{ duration: 0.3 }}
               onClick={(e) => e.stopPropagation()}
-              className="fl-pkg-surface fl-pkg-quote-sheet relative w-full max-w-md bg-(--bg-card) border border-white/10 rounded-[28px] shadow-2xl overflow-hidden"
+              className="fl-pkg-surface fl-pkg-quote-sheet relative w-full max-w-md max-h-[calc(100dvh-24px)] bg-(--bg-card) border border-white/10 rounded-[28px] shadow-2xl overflow-y-auto"
             >
               <div className="fl-pkg-decor absolute top-0 right-0 w-36 h-36 bg-yellow-400/20 blur-[75px] rounded-full" />
 
@@ -1164,6 +1203,7 @@ Please share the best quote and itinerary.`;
                 <div className="space-y-3">
                   <QuoteInput
                     name="name"
+                    error={quoteErrors.name}
                     placeholder="Your Name"
                     value={formData.name}
                     onChange={handleChange}
@@ -1171,6 +1211,7 @@ Please share the best quote and itinerary.`;
 
                   <QuoteInput
                     name="phone"
+                    error={quoteErrors.phone}
                     placeholder="Phone Number"
                     value={formData.phone}
                     onChange={handleChange}
@@ -1178,6 +1219,7 @@ Please share the best quote and itinerary.`;
 
                   <QuoteInput
                     name="date"
+                    error={quoteErrors.date}
                     type="date"
                     value={formData.date}
                     onChange={handleChange}
@@ -1271,10 +1313,11 @@ Please share the best quote and itinerary.`;
                   </p>
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-5">
+                <form onSubmit={handleSubmit} noValidate className="space-y-5">
                   <InputField
                     label="Full Name"
                     name="name"
+                    error={bookingErrors.name}
                     value={formData.name}
                     onChange={handleChange}
                     placeholder="Enter your name"
@@ -1284,6 +1327,7 @@ Please share the best quote and itinerary.`;
                     <InputField
                       label="Email"
                       name="email"
+                      error={bookingErrors.email}
                       type="email"
                       value={formData.email}
                       onChange={handleChange}
@@ -1292,6 +1336,7 @@ Please share the best quote and itinerary.`;
                     <InputField
                       label="Phone"
                       name="phone"
+                      error={bookingErrors.phone}
                       type="tel"
                       value={formData.phone}
                       onChange={handleChange}
@@ -1317,6 +1362,7 @@ Please share the best quote and itinerary.`;
                   <InputField
                     label="Travel Date"
                     name="date"
+                    error={bookingErrors.date}
                     type="date"
                     value={formData.date}
                     onChange={handleChange}
@@ -1511,16 +1557,28 @@ const WhyPoint = ({ text }) => (
   </p>
 );
 
-const QuoteInput = ({ type = "text", name, value, onChange, placeholder }) => (
-  <input
-    type={type}
-    name={name}
-    value={value}
-    onChange={onChange}
-    placeholder={placeholder}
-    className="fl-pkg-input fl-pkg-muted w-full bg-black/35 border border-white/10 rounded-2xl px-4 py-3 outline-none focus:border-(--gold-main) text-sm text-white placeholder:text-gray-500 transition"
-  />
-);
+const QuoteInput = ({ type = "text", name, value, onChange, placeholder, error }) => {
+  const id = useId();
+  return (
+    <div>
+      <input
+        id={id}
+        type={name === "phone" ? "tel" : type}
+        name={name}
+        value={value}
+        onChange={onChange}
+        placeholder={placeholder}
+        required={name !== "budget"}
+        min={name === "date" ? localToday() : undefined}
+        aria-label={name === "date" ? "Travel date" : placeholder}
+        aria-invalid={Boolean(error)}
+        aria-describedby={error ? `${id}-error` : undefined}
+        className="fl-pkg-input fl-pkg-muted w-full bg-black/35 border border-white/10 rounded-2xl px-4 py-3 outline-none focus:border-(--gold-main) text-sm text-white placeholder:text-gray-500 transition"
+      />
+      {error && <p id={`${id}-error`} role="alert" className="mt-1 text-xs text-(--fl-pkg-danger)">{error}</p>}
+    </div>
+  );
+};
 
 const InputField = ({
   label,
@@ -1529,19 +1587,28 @@ const InputField = ({
   value,
   onChange,
   placeholder,
-}) => (
-  <div>
-    <label className="fl-pkg-muted text-sm text-gray-400">{label}</label>
-    <input
-      name={name}
-      value={value}
-      onChange={onChange}
-      type={type}
-      placeholder={placeholder}
-      className="fl-pkg-input fl-pkg-muted w-full mt-1 p-3 rounded-xl bg-black/30 border border-white/10 focus:border-(--gold-main) outline-none text-white placeholder:text-gray-500 transition"
-    />
-  </div>
-);
+  error,
+}) => {
+  const id = useId();
+  return (
+    <div>
+      <label htmlFor={id} className="fl-pkg-muted text-sm text-gray-400">{label}</label>
+      <input
+        id={id}
+        name={name}
+        value={value}
+        onChange={onChange}
+        type={type}
+        placeholder={placeholder}
+        required
+        aria-invalid={Boolean(error)}
+        aria-describedby={error ? `${id}-error` : undefined}
+        className="fl-pkg-input fl-pkg-muted w-full mt-1 p-3 rounded-xl bg-black/30 border border-white/10 focus:border-(--gold-main) outline-none text-white placeholder:text-gray-500 transition"
+      />
+      {error && <p id={`${id}-error`} role="alert" className="mt-1 text-xs text-(--fl-pkg-danger)">{error}</p>}
+    </div>
+  );
+};
 
 const CounterBox = ({ label, value, onMinus, onPlus }) => (
   <div className="fl-pkg-counter bg-black/30 border border-white/10 rounded-2xl p-3 flex items-center justify-between">

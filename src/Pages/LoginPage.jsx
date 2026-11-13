@@ -6,6 +6,19 @@ import { useAuthStore } from "../store/authStore";
 import { motion, useReducedMotion } from "framer-motion";
 import { Eye, EyeOff } from "lucide-react";
 
+const safeLoginDestination = (value) => {
+  if (typeof value !== "string" || !value.startsWith("/") || value.startsWith("//") || /[\\\u0000-\u001f\u007f]/.test(value)) return "/";
+  try {
+    const url = new URL(value, window.location.origin);
+    const pathname = decodeURIComponent(url.pathname);
+    if (url.origin !== window.location.origin || pathname.startsWith("//") ||
+        /[\\\u0000-\u001f\u007f]/.test(pathname) || /^\/(?:login|register)(?:\/|$)/i.test(pathname)) return "/";
+    return url.pathname + url.search + url.hash;
+  } catch {
+    return "/";
+  }
+};
+
 const LoginPage = () => {
   const navigate = useNavigate();
   const reducedMotion = useReducedMotion();
@@ -42,17 +55,15 @@ const LoginPage = () => {
       setToken(access);
       setRefreshToken(refresh);
 
-     const redirectTo = location.state?.redirectTo || "/";
-const payload = location.state?.payload || null;
+      const redirectTo = safeLoginDestination(location.state?.redirectTo);
+      const nextState = {};
+      if (location.state?.payload) nextState.payload = location.state.payload;
+      if (location.state?.openBooking === true) nextState.openBooking = true;
 
-navigate(redirectTo, {
-  replace: true,
-  state: payload
-    ? {
-        payload,
-      }
-    : undefined,
-});
+      navigate(redirectTo, {
+        replace: true,
+        state: Object.keys(nextState).length ? nextState : undefined,
+      });
 
       toast.success("Login Successful ✈️");
     } catch (error) {

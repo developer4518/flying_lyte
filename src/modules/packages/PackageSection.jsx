@@ -91,6 +91,7 @@ const PackageSection = ({ limit = 8, appearance = "default" }) => {
   }, [pageFromUrl, destinationFromUrl, isPackagesPage]);
 
   useEffect(() => {
+    if (destination.trim() === debouncedDestination) return;
     const timer = setTimeout(() => {
       const trimmedDestination = destination.trim();
 
@@ -111,7 +112,7 @@ const PackageSection = ({ limit = 8, appearance = "default" }) => {
     }, 500);
 
     return () => clearTimeout(timer);
-  }, [destination, navigate, isPackagesPage]);
+  }, [destination, debouncedDestination, navigate, isPackagesPage]);
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ["packages", page, debouncedDestination, limit],
@@ -198,7 +199,8 @@ const PackageSection = ({ limit = 8, appearance = "default" }) => {
         </motion.div>
   );
 
-  const PackageGrid = appearance === "home-model2" ? MobileCardDeck : motion.div;
+  const usesCardDeck = appearance === "home-model2" || appearance === "page-model2";
+  const PackageGrid = usesCardDeck ? MobileCardDeck : motion.div;
 
   return (
     <>
@@ -353,12 +355,13 @@ const PackageSection = ({ limit = 8, appearance = "default" }) => {
         {/* Package Grid */}
         {!isLoading && packages.length > 0 && (
           <>
-            {appearance === "home-model2" && packages.length > 1 && <p className="fl-mobile-swipe-hint">Swipe to explore <span aria-hidden="true">&rarr;</span></p>}
+            {usesCardDeck && packages.length > 1 && <p className="fl-mobile-swipe-hint">Swipe to explore <span aria-hidden="true">&rarr;</span></p>}
             <PackageGrid
-              as={appearance === "home-model2" ? motion.div : undefined}
-              label={appearance === "home-model2" ? "package" : undefined}
-              aria-label={appearance === "home-model2" ? "Holiday packages, swipe to explore" : undefined}
-              tabIndex={appearance === "home-model2" ? 0 : undefined}
+              key={`${page}:${debouncedDestination}`}
+              as={usesCardDeck ? motion.div : undefined}
+              label={usesCardDeck ? "package" : undefined}
+              aria-label={usesCardDeck ? "Holiday packages, swipe to explore" : undefined}
+              tabIndex={usesCardDeck ? 0 : undefined}
               className="
                 fl-editorial__grid
                 grid grid-cols-1

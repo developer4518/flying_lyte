@@ -1,13 +1,48 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import SEO from "../components/SEO";
 import { blogs } from "../data/blogs";
 
 import { getBlogImage, handleBlogImageError } from "../components/common/blogImages";
+import MobileCardDeck from "../components/common/MobileCardDeck";
 
 
 const Blogs = () => {
+  // This is the complete local collection; no paginated API response is sliced.
   const latestBlogs = [...blogs].reverse();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [pageSize, setPageSize] = useState(() =>
+    window.matchMedia("(max-width: 767px)").matches ? 5 : 10,
+  );
+  const totalPages = Math.max(1, Math.ceil(latestBlogs.length / pageSize));
+  const requestedPage = Number(searchParams.get("page") || 1);
+  const currentPage = Math.min(totalPages, Math.max(1,
+    Number.isFinite(requestedPage) ? Math.floor(requestedPage) : 1,
+  ));
+  const visibleBlogs = latestBlogs.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+
+  useEffect(() => {
+    const media = window.matchMedia("(max-width: 767px)");
+    const update = () => setPageSize(media.matches ? 5 : 10);
+    update();
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, []);
+
+  useEffect(() => {
+    if (!searchParams.has("page") || searchParams.get("page") === String(currentPage)) return;
+    const next = new URLSearchParams(searchParams);
+    if (currentPage === 1) next.delete("page");
+    else next.set("page", String(currentPage));
+    setSearchParams(next, { replace: true });
+  }, [searchParams, setSearchParams, currentPage]);
+
+  const changePage = (page) => {
+    const next = new URLSearchParams(searchParams);
+    if (page === 1) next.delete("page");
+    else next.set("page", String(Math.min(totalPages, Math.max(1, page))));
+    setSearchParams(next);
+  };
 
   return (
     <main className="fl-booking-ink fl-booking-base min-h-screen bg-[var(--bg-main)] text-white py-24">
@@ -85,15 +120,19 @@ const Blogs = () => {
 
         <section
           aria-labelledby="latest-travel-blogs"
-          className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3"
         >
           <h2 id="latest-travel-blogs" className="fl-booking-heading fl-booking-subtitle sr-only">
             Latest Travel Blogs and Guides
           </h2>
 
-          {latestBlogs.map((blog) => (
+          <MobileCardDeck
+            key={`${currentPage}:${pageSize}`}
+            label="blog"
+            className="fl-blogs-listing__grid grid gap-8 sm:grid-cols-2 lg:grid-cols-3"
+          >
+          {visibleBlogs.map((blog) => (
             <article
-              key={blog.id || blog.slug}
+              key={blog.slug}
               className="fl-booking-surface fl-booking-line group bg-[var(--bg-card)] border border-[var(--border-soft)] rounded-3xl overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.35)] hover:-translate-y-2 transition-all duration-300"
             >
               <Link to={`/blogs/${blog.slug}`} aria-label={blog.title}>
@@ -142,6 +181,21 @@ const Blogs = () => {
               </div>
             </article>
           ))}
+          </MobileCardDeck>
+          {visibleBlogs.length === 0 && <p className="py-12 text-center">No travel guides are available yet.</p>}
+
+          <nav className="fl-blog-pagination" aria-label="Blog pagination">
+            <p className="fl-blog-pagination__status" role="status" aria-live="polite">
+              Page {currentPage} of {totalPages} &middot; {latestBlogs.length} posts
+            </p>
+            <div className="fl-blog-pagination__controls">
+              <button type="button" onClick={() => changePage(currentPage - 1)} disabled={currentPage === 1} aria-label="Previous blog page">Previous</button>
+              {Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => (
+                <button key={page} type="button" onClick={() => changePage(page)} aria-label={`Go to blog page ${page}`} aria-current={page === currentPage ? "page" : undefined}>{page}</button>
+              ))}
+              <button type="button" onClick={() => changePage(currentPage + 1)} disabled={currentPage === totalPages} aria-label="Next blog page">Next</button>
+            </div>
+          </nav>
         </section>
 
         <section className="fl-booking-surface fl-booking-line mt-20 rounded-3xl bg-[var(--bg-card)] border border-[var(--border-soft)] p-8 md:p-10 text-center shadow-[0_20px_60px_rgba(0,0,0,0.25)]">
