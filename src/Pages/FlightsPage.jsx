@@ -8,8 +8,38 @@ import {
     BadgeIndianRupee,
     ArrowRight,
     Luggage,
+    Sparkles,
 } from "lucide-react";
-import FlightsForm from "../modules/Search/FlightsForm";
+
+const FlightComingSoonCard = () => (
+    <div className="relative flex min-h-[230px] flex-col items-center justify-center overflow-hidden rounded-2xl border border-[#E6B35C]/30 bg-[#07111c]/20 p-5 text-center shadow-[0_18px_55px_rgba(0,0,0,0.4)] backdrop-blur-[2px] sm:min-h-[260px] sm:p-6">
+        <div className="pointer-events-none absolute -right-10 -top-10 h-28 w-28 rounded-full bg-[#E6B35C]/10 blur-3xl" />
+
+        <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-[#E6B35C]/30 bg-[#E6B35C]/10 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-[#E6B35C] sm:text-xs">
+            <Sparkles size={13} aria-hidden="true" />
+            Premium Feature
+        </div>
+
+        <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-linear-to-r from-start to-end text-black shadow-[0_10px_30px_rgba(230,179,92,0.25)] sm:h-14 sm:w-14">
+            <Plane size={25} aria-hidden="true" />
+        </div>
+
+        <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#E6B35C]">
+            Flights Booking
+        </p>
+        <h2 className="mt-2 text-2xl font-bold text-[#F2D17B] sm:text-3xl">
+            Coming Soon
+        </h2>
+        <p className="mt-2 max-w-md text-sm leading-6 text-white/60">
+            We are preparing a smoother premium flight booking experience.
+        </p>
+
+        <div className="mt-4 inline-flex items-center gap-2 rounded-full bg-linear-to-r from-start to-end px-4 py-2 text-xs font-semibold text-black">
+            Launching Shortly
+            <ArrowRight size={14} aria-hidden="true" />
+        </div>
+    </div>
+);
 
 const FlightsPage = () => {
     const searchRef = useRef(null);
@@ -109,7 +139,7 @@ const FlightsPage = () => {
                         </div>
                     </div>
 
-                    {/* FLIGHT SEARCH */}
+                    {/* FLIGHT COMING SOON */}
                     <div
                         ref={searchRef}
                         className="relative mx-auto mt-9 w-full max-w-6xl overflow-visible rounded-[22px] border border-[#E6B35C]/35 bg-[#07111c] bg-[length:100%_auto] bg-[position:center_top] bg-no-repeat p-2 shadow-[0_30px_90px_rgba(0,0,0,0.55)] sm:rounded-[28px] sm:bg-[length:cover] sm:bg-center sm:p-3"
@@ -127,7 +157,7 @@ const FlightsPage = () => {
                         <div className="pointer-events-none absolute left-1/2 top-0 h-px w-48 -translate-x-1/2 bg-linear-to-r from-transparent via-[#FFE08A] to-transparent shadow-[0_0_18px_rgba(255,224,138,0.9)]" />
 
                         <div className="relative z-10 overflow-visible">
-                            <FlightsForm />
+                            <FlightComingSoonCard />
                         </div>
                     </div>
                 </div>

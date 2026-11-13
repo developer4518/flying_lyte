@@ -194,16 +194,16 @@ const SearchBox = () => {
   const renderForm = () => {
     switch (activeTab) {
       case "flights":
-        return <FlightsForm />;
+        return <ComingSoonCard />;
 
       case "hotels":
-        return <HotelsForm />;
+        return <ComingSoonCard />;
 
       case "packages":
         return renderPackageSearchCard();
 
       default:
-        return <FlightsForm />;
+        return <ComingSoonCard />;
     }
   };
 
