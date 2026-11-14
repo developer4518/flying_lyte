@@ -8,6 +8,7 @@ import PackageSection from "../modules/packages/PackageSection";
 import BlogSection from "../components/Home/BlogSection";
 import TripEnquiryPopup from "../components/common/TripEnquiryPopup";
 import SEO from "../components/SEO";
+import { TravelSteps } from "../components/Home/TravelEditorial";
 
 let popupCheckedForThisPageLoad = false;
 
@@ -30,18 +31,19 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="bg-(--bg-main)">
+    <div className="fl-parity-homepage bg-(--bg-main)" data-fl-theme="model2">
       <SEO
         title="Premium Flights, Hotels & Holiday Packages"
         description="Smart Trips. Zero hassle. Plan your journey with exclusive deals on domestic and international flights, luxury hotels, and curated holiday packages with FlyingLyte."
         canonical="https://www.flyinglyte.com/"
       />
       <HeroSection />
-      <PackageSection limit={4} />
-      <CTASection />
+      <WhyChooseUs />
+      <PackageSection limit={4} appearance="home-model2" />
       <AboutUs />
       <BlogSection />
-      <WhyChooseUs />
+      <TravelSteps />
+      <CTASection appearance="planner" />
       <TestimonialsSection />
       {showTripPopup && (
         <TripEnquiryPopup onClose={() => setShowTripPopup(false)} />

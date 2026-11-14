@@ -8,6 +8,7 @@ const TestimonialCard = ({ testimonial }) => {
       whileTap={{ scale: 0.96 }}
       transition={{ type: "spring", stiffness: 160, damping: 18 }}
       className="
+        fl-editorial__card fl-editorial__testimonial
         group
         relative
         rounded-3xl
@@ -23,6 +24,7 @@ const TestimonialCard = ({ testimonial }) => {
       {/* ✨ Gold hover glow */}
       <div
         className="
+          fl-editorial__decor
           pointer-events-none
           absolute inset-0
           opacity-0
@@ -37,6 +39,7 @@ const TestimonialCard = ({ testimonial }) => {
         src={testimonial.image}
         alt={testimonial.name}
         className="
+          fl-editorial__avatar
           w-16 h-16
           mx-auto
           rounded-full
@@ -47,13 +50,14 @@ const TestimonialCard = ({ testimonial }) => {
        loading="lazy" />
 
       {/* Feedback */}
-      <p className="text-(--text-muted) text-sm leading-relaxed mb-4">
+      <p className="fl-editorial__quote text-(--text-muted) text-sm leading-relaxed mb-4">
         “{testimonial.feedback}”
       </p>
 
       {/* Name */}
       <h3
         className="
+          fl-editorial__name
           font-semibold
           text-(--gold-main)
           text-base
@@ -63,7 +67,7 @@ const TestimonialCard = ({ testimonial }) => {
       </h3>
 
       {/* Position */}
-      <p className="text-xs text-(--text-muted) mt-1">
+      <p className="fl-editorial__meta text-xs text-(--text-muted) mt-1">
         {testimonial.position}
       </p>
     </motion.div>

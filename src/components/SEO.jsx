@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 
 const SITE_URL = "https://www.flyinglyte.com";
@@ -25,6 +25,12 @@ const SEO = ({
   const finalImage = image
     ? (image.startsWith("http") ? image : `${SITE_URL}${image.startsWith("/") ? "" : "/"}${image}`)
     : DEFAULT_IMAGE;
+
+  // Apply after outgoing effects clean up: legacy pages may restore their title
+  // after React has already hoisted this route's Helmet tags.
+  useEffect(() => {
+    document.title = finalTitle;
+  }, [finalTitle]);
 
   return (
     <Helmet>

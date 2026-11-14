@@ -394,7 +394,7 @@ const FlightBookingDetails = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-(--bg-main) text-(--text-main) flex items-center justify-center">
+      <div className="fl-booking-base min-h-screen bg-(--bg-main) text-(--text-main) flex items-center justify-center">
         <div className="animate-pulse text-lg">Fetching Booking...</div>
       </div>
     );
@@ -402,14 +402,14 @@ const FlightBookingDetails = () => {
 
   if (error || !parsed) {
     return (
-      <div className="min-h-screen bg-(--bg-main) text-(--text-main) flex flex-col items-center justify-center gap-4 px-4 text-center">
-        <p className="text-red-400">{error || "Booking not found"}</p>
+      <div className="fl-booking-base min-h-screen bg-(--bg-main) text-(--text-main) flex flex-col items-center justify-center gap-4 px-4 text-center">
+        <p className="fl-booking-danger text-red-400">{error || "Booking not found"}</p>
 
         <div className="flex gap-3">
           <button
             type="button"
             onClick={() => navigate("/booking-success")}
-            className="px-5 py-3 rounded-xl border border-(--border-soft)"
+            className="fl-booking-line fl-booking-button px-5 py-3 rounded-xl border border-(--border-soft)"
           >
             Back
           </button>
@@ -417,7 +417,7 @@ const FlightBookingDetails = () => {
           <button
             type="button"
             onClick={() => fetchBooking()}
-            className="px-5 py-3 rounded-xl bg-linear-to-r from-start to-end text-black font-semibold"
+            className="fl-booking-ink fl-booking-surface fl-booking-button fl-booking-primary px-5 py-3 rounded-xl bg-linear-to-r from-start to-end text-black font-semibold"
           >
             Retry
           </button>
@@ -463,12 +463,12 @@ const FlightBookingDetails = () => {
   const lastSeg = segments?.[segments.length - 1];
 
   return (
-    <div className="min-h-screen bg-linear-to-b from-[#0B0B0F] to-black text-white px-4 md:px-10 py-16">
+    <div className="fl-booking-ink fl-booking-surface min-h-screen bg-linear-to-b from-[#0B0B0F] to-black text-white px-4 md:px-10 py-16">
       <div className="max-w-6xl mx-auto space-y-6">
-        <div className="bg-[#15151C]/80 p-6 rounded-3xl border border-gray-800">
+        <div className="fl-booking-surface fl-booking-line bg-[#15151C]/80 p-6 rounded-3xl border border-gray-800">
           <div className="flex flex-col md:flex-row justify-between gap-5">
             <div>
-              <h2 className="text-2xl md:text-3xl font-semibold text-yellow-400">
+              <h2 className="fl-booking-heading fl-booking-subtitle fl-booking-accent text-2xl md:text-3xl font-semibold text-yellow-400">
                 {itinerary?.Origin ||
                   firstSeg?.Origin?.Airport?.AirportCode ||
                   "-"}{" "}
@@ -478,19 +478,19 @@ const FlightBookingDetails = () => {
                   "-"}
               </h2>
 
-              <p className="text-sm text-gray-400 mt-2">
+              <p className="fl-booking-muted text-sm text-gray-400 mt-2">
                 {firstSeg?.Origin?.Airport?.CityName || "-"} →{" "}
                 {lastSeg?.Destination?.Airport?.CityName || "-"}
               </p>
 
-              <p className="text-xs text-gray-500 mt-2">
+              <p className="fl-booking-muted text-xs text-gray-500 mt-2">
                 {hasTicket
                   ? "Ticket details are available."
                   : "Booking exists. Ticket may still be pending."}
               </p>
             </div>
 
-            <div className="text-sm text-gray-400 space-y-1 break-all">
+            <div className="fl-booking-muted text-sm text-gray-400 space-y-1 break-all">
               <p>PNR: {pnr}</p>
               <p>Booking ID: {bookingId}</p>
               <p>
@@ -502,7 +502,7 @@ const FlightBookingDetails = () => {
                 type="button"
                 onClick={() => fetchBooking({ silent: true })}
                 disabled={refreshing}
-                className="mt-3 rounded-lg bg-yellow-400 px-4 py-2 text-black font-semibold disabled:opacity-60"
+                className="fl-booking-ink fl-booking-notice fl-booking-button fl-booking-primary mt-3 rounded-lg bg-yellow-400 px-4 py-2 text-black font-semibold disabled:opacity-60"
               >
                 {refreshing ? "Refreshing..." : "Refresh Status"}
               </button>
@@ -514,15 +514,15 @@ const FlightBookingDetails = () => {
           segments.map((seg, index) => (
             <div
               key={index}
-              className="bg-[#15151C]/80 p-6 rounded-3xl border border-gray-800"
+              className="fl-booking-surface fl-booking-line bg-[#15151C]/80 p-6 rounded-3xl border border-gray-800"
             >
               <div className="flex flex-col md:flex-row justify-between items-center gap-5">
                 <div className="flex-1">
-                  <p className="text-yellow-300 font-medium">
+                  <p className="fl-booking-accent text-yellow-300 font-medium">
                     {seg?.Airline?.AirlineName || "Airline"}
                   </p>
 
-                  <p className="text-sm text-gray-400">
+                  <p className="fl-booking-muted text-sm text-gray-400">
                     {seg?.Airline?.AirlineCode || ""}
                     {seg?.Airline?.AirlineCode && seg?.Airline?.FlightNumber
                       ? "-"
@@ -536,24 +536,24 @@ const FlightBookingDetails = () => {
                     {formatTime(seg?.Origin?.DepTime)}
                   </p>
 
-                  <p className="text-xs text-gray-400">
+                  <p className="fl-booking-muted text-xs text-gray-400">
                     {seg?.Origin?.Airport?.AirportCode || "-"} ·{" "}
                     {seg?.Origin?.Airport?.CityName || "-"}
                   </p>
 
-                  <div className="my-2 text-gray-500">──── ✈ ────</div>
+                  <div className="fl-booking-muted my-2 text-gray-500">──── ✈ ────</div>
 
                   <p className="font-semibold">
                     {formatTime(seg?.Destination?.ArrTime)}
                   </p>
 
-                  <p className="text-xs text-gray-400">
+                  <p className="fl-booking-muted text-xs text-gray-400">
                     {seg?.Destination?.Airport?.AirportCode || "-"} ·{" "}
                     {seg?.Destination?.Airport?.CityName || "-"}
                   </p>
                 </div>
 
-                <div className="flex-1 text-right text-sm text-gray-400">
+                <div className="fl-booking-muted flex-1 text-right text-sm text-gray-400">
                   <p>Departure: {formatDateTime(seg?.Origin?.DepTime)}</p>
                   <p>Arrival: {formatDateTime(seg?.Destination?.ArrTime)}</p>
                   <p className="mt-2">🧳 {seg?.Baggage || "N/A"}</p>
@@ -563,13 +563,13 @@ const FlightBookingDetails = () => {
             </div>
           ))
         ) : (
-          <div className="bg-[#15151C]/80 p-6 rounded-3xl border border-gray-800 text-gray-400">
+          <div className="fl-booking-muted fl-booking-surface fl-booking-line bg-[#15151C]/80 p-6 rounded-3xl border border-gray-800 text-gray-400">
             No segment details available.
           </div>
         )}
 
-        <div className="bg-[#15151C]/80 p-6 rounded-3xl border border-gray-800">
-          <h3 className="text-yellow-300 mb-4 font-semibold text-lg">
+        <div className="fl-booking-surface fl-booking-line bg-[#15151C]/80 p-6 rounded-3xl border border-gray-800">
+          <h3 className="fl-booking-heading fl-booking-subtitle fl-booking-accent text-yellow-300 mb-4 font-semibold text-lg">
             Passengers
           </h3>
 
@@ -581,31 +581,31 @@ const FlightBookingDetails = () => {
                 return (
                   <div
                     key={index}
-                    className="bg-black/40 p-4 rounded-xl border border-gray-800"
+                    className="fl-booking-inset fl-booking-line bg-black/40 p-4 rounded-xl border border-gray-800"
                   >
                     <p className="font-medium">{getPassengerName(passenger)}</p>
 
-                    <p className="text-xs text-gray-400 mt-1">
+                    <p className="fl-booking-muted text-xs text-gray-400 mt-1">
                       Type: {getPaxTypeLabel(passenger?.PaxType)}
                     </p>
 
-                    <p className="text-xs text-gray-400">
+                    <p className="fl-booking-muted text-xs text-gray-400">
                       Ticket: {ticketNumber || "N/A"}
                     </p>
 
-                    <p className="text-xs text-gray-400">
+                    <p className="fl-booking-muted text-xs text-gray-400">
                       Ticket Status:{" "}
                       {passenger?.Ticket?.Status ||
                         passenger?.TicketStatus ||
                         "N/A"}
                     </p>
 
-                    <p className="text-xs text-gray-400">
+                    <p className="fl-booking-muted text-xs text-gray-400">
                       Issue Date: {formatDateTime(passenger?.Ticket?.IssueDate)}
                     </p>
 
                     {passenger?.IsLeadPax && (
-                      <span className="inline-block mt-2 text-green-400 text-xs">
+                      <span className="fl-booking-success inline-block mt-2 text-green-400 text-xs">
                         Lead Passenger
                       </span>
                     )}
@@ -614,14 +614,14 @@ const FlightBookingDetails = () => {
               })}
             </div>
           ) : (
-            <p className="text-sm text-gray-400">
+            <p className="fl-booking-muted text-sm text-gray-400">
               Passenger details are not available.
             </p>
           )}
         </div>
 
-        <div className="bg-linear-to-r from-yellow-400/10 to-yellow-500/5 p-6 rounded-3xl border border-yellow-400/20">
-          <h3 className="text-yellow-300 mb-4 font-semibold text-lg">
+        <div className="fl-booking-surface fl-booking-line bg-linear-to-r from-yellow-400/10 to-yellow-500/5 p-6 rounded-3xl border border-yellow-400/20">
+          <h3 className="fl-booking-heading fl-booking-subtitle fl-booking-accent text-yellow-300 mb-4 font-semibold text-lg">
             Price Summary
           </h3>
 
@@ -647,11 +647,11 @@ const FlightBookingDetails = () => {
               />
             )}
 
-            <div className="border-t border-gray-700 my-3" />
+            <div className="fl-booking-line border-t border-gray-700 my-3" />
 
             <div className="flex justify-between text-xl font-bold">
               <span>Total Paid</span>
-              <span className="text-yellow-400">
+              <span className="fl-booking-accent text-yellow-400">
                 ₹ {priceSummary.totalFare.toFixed(2)}
               </span>
             </div>
@@ -660,19 +660,19 @@ const FlightBookingDetails = () => {
 
 
         {paymentDetails?.status && (
-          <div className="bg-[#15151C]/80 p-6 rounded-3xl border border-gray-800">
-            <h3 className="text-yellow-300 mb-4 font-semibold text-lg">
+          <div className="fl-booking-surface fl-booking-line bg-[#15151C]/80 p-6 rounded-3xl border border-gray-800">
+            <h3 className="fl-booking-heading fl-booking-subtitle fl-booking-accent text-yellow-300 mb-4 font-semibold text-lg">
               Payment Details
             </h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
 
               <div>
-                <p className="text-gray-500">
+                <p className="fl-booking-muted text-gray-500">
                   Amount Paid
                 </p>
 
-                <p className="font-semibold text-green-400">
+                <p className="fl-booking-success font-semibold text-green-400">
                   ₹{" "}
                   {Number(
                     paymentDetails?.amount || 0,
@@ -681,11 +681,11 @@ const FlightBookingDetails = () => {
               </div>
 
               <div>
-                <p className="text-gray-500">
+                <p className="fl-booking-muted text-gray-500">
                   Payment Status
                 </p>
 
-                <p className="font-semibold capitalize text-green-400">
+                <p className="fl-booking-success font-semibold capitalize text-green-400">
                   {String(
                     paymentDetails.status,
                   ).replaceAll("_", " ")}
@@ -693,7 +693,7 @@ const FlightBookingDetails = () => {
               </div>
 
               <div className="sm:col-span-2">
-                <p className="text-gray-500">
+                <p className="fl-booking-muted text-gray-500">
                   Transaction ID
                 </p>
 
@@ -705,7 +705,7 @@ const FlightBookingDetails = () => {
 
               {paymentDetails?.action && (
                 <div>
-                  <p className="text-gray-500">
+                  <p className="fl-booking-muted text-gray-500">
                     Payment Type
                   </p>
 
@@ -719,7 +719,7 @@ const FlightBookingDetails = () => {
 
               {paymentDetails?.refundStatus && (
                 <div>
-                  <p className="text-gray-500">
+                  <p className="fl-booking-muted text-gray-500">
                     Refund Status
                   </p>
 
@@ -740,7 +740,7 @@ const FlightBookingDetails = () => {
             <button
               type="button"
               onClick={() => navigate("/booking-success")}
-              className="flex-1 rounded-xl border border-gray-700 py-3"
+              className="fl-booking-line fl-booking-button flex-1 rounded-xl border border-gray-700 py-3"
             >
               Back to Success
             </button>
@@ -749,7 +749,7 @@ const FlightBookingDetails = () => {
           <button
             type="button"
             onClick={() => window.print()}
-            className="flex-1 rounded-xl bg-yellow-400 py-3 font-semibold text-black"
+            className="fl-booking-ink fl-booking-notice fl-booking-button fl-booking-primary flex-1 rounded-xl bg-yellow-400 py-3 font-semibold text-black"
           >
             Print Details
           </button>
@@ -757,7 +757,7 @@ const FlightBookingDetails = () => {
           <button
             type="button"
             onClick={() => navigate("/")}
-            className="flex-1 rounded-xl bg-gray-800 py-3"
+            className="fl-booking-surface fl-booking-button fl-booking-secondary flex-1 rounded-xl bg-gray-800 py-3"
           >
             New Search
           </button>

@@ -1316,19 +1316,19 @@ const PassengerDetails = () => {
   /* ---------------- UI ---------------- */
 
   return (
-    <div className="bg-gray-50 min-h-screen pb-32">
+    <div className="fl-booking-base bg-gray-50 min-h-screen pb-32">
       <div className="max-w-5xl mx-auto px-4 pt-28">
-        <h2 className="text-2xl md:text-3xl font-bold text-gray-800">
+        <h2 className="fl-booking-heading fl-booking-subtitle fl-booking-ink text-2xl md:text-3xl font-bold text-gray-800">
           Passenger Details
         </h2>
 
-        <p className="text-gray-500 text-sm mt-1">Enter traveler information</p>
+        <p className="fl-booking-muted text-gray-500 text-sm mt-1">Enter traveler information</p>
 
-        <p className="text-xs mt-2 text-blue-500">
+        <p className="fl-booking-info text-xs mt-2 text-blue-500">
           {isInternational ? "International Flight ✈️" : "Domestic Flight 🇮🇳"}
         </p>
 
-        <div className="mt-3 rounded-lg border border-blue-100 bg-blue-50 px-4 py-3 text-xs text-blue-800">
+        <div className="fl-booking-info fl-booking-notice fl-booking-line mt-3 rounded-lg border border-blue-100 bg-blue-50 px-4 py-3 text-xs text-blue-800">
           <p className="font-semibold">Name rules: {airlineProfile.label}</p>
           <p className="mt-1">
             First Name: A-Z letters, spaces and dots are allowed. It cannot
@@ -1351,15 +1351,15 @@ const PassengerDetails = () => {
           return (
             <div
               key={index}
-              className="bg-white shadow-sm rounded-xl p-5 md:p-8 mb-6"
+              className="fl-booking-surface bg-white shadow-sm rounded-xl p-5 md:p-8 mb-6"
             >
-              <h3 className="text-lg font-semibold mb-4">
+              <h3 className="fl-booking-heading fl-booking-subtitle text-lg font-semibold mb-4">
                 Passenger {index + 1}
-                <span className="ml-2 text-sm font-normal text-gray-500">
+                <span className="fl-booking-muted ml-2 text-sm font-normal text-gray-500">
                   ({PAX_TYPE_LABELS[paxType] || "Adult"})
                 </span>
                 {selectedSeats?.[index] && (
-                  <span className="text-sm text-blue-600 ml-2">
+                  <span className="fl-booking-info text-sm text-blue-600 ml-2">
                     (Seat {selectedSeats[index].Code})
                   </span>
                 )}
@@ -1372,7 +1372,7 @@ const PassengerDetails = () => {
                     name="title"
                     value={passenger.title}
                     onChange={(event) => handleChange(index, event)}
-                    className={inputStyle}
+                    className={`fl-booking-field ${inputStyle}`}
                   >
                     {titleOptions.map((title) => (
                       <option key={title} value={title}>
@@ -1388,7 +1388,7 @@ const PassengerDetails = () => {
                     name="gender"
                     value={passenger.gender}
                     onChange={(event) => handleChange(index, event)}
-                    className={inputStyle}
+                    className={`fl-booking-field ${inputStyle}`}
                   >
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
@@ -1401,10 +1401,10 @@ const PassengerDetails = () => {
                     name="firstName"
                     value={passenger.firstName}
                     onChange={(event) => handleChange(index, event)}
-                    className={inputStyle}
+                    className={`fl-booking-field ${inputStyle}`}
                     placeholder="Enter first name"
                   />
-                  <p className="mt-1 text-xs text-gray-500">
+                  <p className="fl-booking-muted mt-1 text-xs text-gray-500">
                     Letters, spaces and dots only. Cannot start with a dot.
                   </p>
                 </div>
@@ -1415,10 +1415,10 @@ const PassengerDetails = () => {
                     name="lastName"
                     value={passenger.lastName}
                     onChange={(event) => handleChange(index, event)}
-                    className={inputStyle}
+                    className={`fl-booking-field ${inputStyle}`}
                     placeholder="Enter last name"
                   />
-                  <p className="mt-1 text-xs text-gray-500">
+                  <p className="fl-booking-muted mt-1 text-xs text-gray-500">
                     {lastNameHelpText}
                   </p>
                 </div>
@@ -1430,7 +1430,7 @@ const PassengerDetails = () => {
                     name="dob"
                     value={passenger.dob}
                     onChange={(event) => handleChange(index, event)}
-                    className={inputStyle}
+                    className={`fl-booking-field ${inputStyle}`}
                   />
                 </div>
 
@@ -1440,7 +1440,7 @@ const PassengerDetails = () => {
                     name="nationality"
                     value={passenger.nationality}
                     onChange={(event) => handleChange(index, event)}
-                    className={inputStyle}
+                    className={`fl-booking-field ${inputStyle}`}
                   />
                 </div>
 
@@ -1459,7 +1459,7 @@ const PassengerDetails = () => {
                       maxLength={10}
                       autoCapitalize="characters"
                       placeholder="ABCDE1234F"
-                      className={inputStyle}
+                      className={`fl-booking-field ${inputStyle}`}
                     />
                   </div>
                 )}
@@ -1478,7 +1478,7 @@ const PassengerDetails = () => {
                         maxLength={8}
                         autoCapitalize="characters"
                         placeholder="A1234567 or AB123456"
-                        className={inputStyle}
+                        className={`fl-booking-field ${inputStyle}`}
                       />
                     </div>
 
@@ -1491,7 +1491,7 @@ const PassengerDetails = () => {
                         name="passportIssueDate"
                         value={passenger.passportIssueDate}
                         onChange={(event) => handleChange(index, event)}
-                        className={inputStyle}
+                        className={`fl-booking-field ${inputStyle}`}
                       />
                     </div>
 
@@ -1504,7 +1504,7 @@ const PassengerDetails = () => {
                         name="passportExpiry"
                         value={passenger.passportExpiry}
                         onChange={(event) => handleChange(index, event)}
-                        className={inputStyle}
+                        className={`fl-booking-field ${inputStyle}`}
                       />
                     </div>
                   </>
@@ -1517,7 +1517,7 @@ const PassengerDetails = () => {
                     name="email"
                     value={passenger.email}
                     onChange={(event) => handleChange(index, event)}
-                    className={inputStyle}
+                    className={`fl-booking-field ${inputStyle}`}
                   />
                 </div>
 
@@ -1532,7 +1532,7 @@ const PassengerDetails = () => {
                     onChange={(event) => handleChange(index, event)}
                     maxLength={10}
                     autoComplete="tel"
-                    className={inputStyle}
+                    className={`fl-booking-field ${inputStyle}`}
                     placeholder="Enter 10 digit mobile number"
                   />
                 </div>
@@ -1543,7 +1543,7 @@ const PassengerDetails = () => {
                     name="address"
                     value={passenger.address}
                     onChange={(event) => handleChange(index, event)}
-                    className={inputStyle}
+                    className={`fl-booking-field ${inputStyle}`}
                   />
                 </div>
 
@@ -1553,7 +1553,7 @@ const PassengerDetails = () => {
                     name="city"
                     value={passenger.city}
                     onChange={(event) => handleChange(index, event)}
-                    className={inputStyle}
+                    className={`fl-booking-field ${inputStyle}`}
                   />
                 </div>
 
@@ -1563,7 +1563,7 @@ const PassengerDetails = () => {
                     name="country"
                     value={passenger.country}
                     onChange={(event) => handleChange(index, event)}
-                    className={inputStyle}
+                    className={`fl-booking-field ${inputStyle}`}
                   />
                 </div>
               </div>
@@ -1578,15 +1578,15 @@ const PassengerDetails = () => {
 
       {isGSTAllowed && (
         <div className="max-w-5xl mx-auto px-4 mt-2 mb-6">
-          <div className="bg-white shadow-sm rounded-xl p-5 md:p-8 border border-gray-200">
+          <div className="fl-booking-surface fl-booking-line bg-white shadow-sm rounded-xl p-5 md:p-8 border border-gray-200">
 
             <div className="flex items-center justify-between mb-5">
               <div>
-                <h3 className="text-lg font-semibold text-gray-800">
+                <h3 className="fl-booking-heading fl-booking-subtitle fl-booking-ink text-lg font-semibold text-gray-800">
                   GST Details
                 </h3>
 
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="fl-booking-muted text-xs text-gray-500 mt-1">
                   {isGSTMandatory
                     ? "GST details are mandatory for this booking."
                     : "GST details are optional for this booking."}
@@ -1594,7 +1594,7 @@ const PassengerDetails = () => {
               </div>
 
               {isGSTMandatory && (
-                <span className="text-xs px-3 py-1 rounded-full bg-red-50 text-red-600 font-medium">
+                <span className="fl-booking-danger fl-booking-danger-notice text-xs px-3 py-1 rounded-full bg-red-50 text-red-600 font-medium">
                   Required
                 </span>
               )}
@@ -1616,7 +1616,7 @@ const PassengerDetails = () => {
                   onChange={handleGSTChange}
                   maxLength={15}
                   autoCapitalize="characters"
-                  className={inputStyle}
+                  className={`fl-booking-field ${inputStyle}`}
                   placeholder="Enter GST number"
                 />
               </div>
@@ -1633,7 +1633,7 @@ const PassengerDetails = () => {
                   name="GSTCompanyName"
                   value={gstDetails.GSTCompanyName}
                   onChange={handleGSTChange}
-                  className={inputStyle}
+                  className={`fl-booking-field ${inputStyle}`}
                   placeholder="Enter company name"
                 />
               </div>
@@ -1650,7 +1650,7 @@ const PassengerDetails = () => {
                   name="GSTCompanyEmail"
                   value={gstDetails.GSTCompanyEmail}
                   onChange={handleGSTChange}
-                  className={inputStyle}
+                  className={`fl-booking-field ${inputStyle}`}
                   placeholder="Enter company email"
                 />
               </div>
@@ -1671,7 +1671,7 @@ const PassengerDetails = () => {
                   }
                   onChange={handleGSTChange}
                   maxLength={10}
-                  className={inputStyle}
+                  className={`fl-booking-field ${inputStyle}`}
                   placeholder="Enter 10 digit number"
                 />
               </div>
@@ -1688,7 +1688,7 @@ const PassengerDetails = () => {
                   name="GSTCompanyAddress"
                   value={gstDetails.GSTCompanyAddress}
                   onChange={handleGSTChange}
-                  className={inputStyle}
+                  className={`fl-booking-field ${inputStyle}`}
                   placeholder="Enter company address"
                 />
               </div>
@@ -1696,7 +1696,7 @@ const PassengerDetails = () => {
             </div>
 
             {!isGSTMandatory && (
-              <p className="mt-4 text-xs text-gray-500">
+              <p className="fl-booking-muted mt-4 text-xs text-gray-500">
                 Fill GST details only if you want GST
                 information associated with this booking.
               </p>
@@ -1706,12 +1706,12 @@ const PassengerDetails = () => {
         </div>
       )}
 
-      <div className="fixed bottom-0 left-0 w-full bg-white border-t p-4">
+      <div className="fl-booking-surface fl-booking-line fl-booking-toolbar fixed bottom-0 left-0 w-full bg-white border-t p-4">
         <div className="max-w-5xl mx-auto flex justify-end">
           <button
             type="button"
             onClick={handleContinue}
-            className="w-full md:w-auto bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg"
+            className="fl-booking-ink fl-booking-notice fl-booking-button fl-booking-primary w-full md:w-auto bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg"
           >
             Continue to Review
           </button>
