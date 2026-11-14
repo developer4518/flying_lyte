@@ -15,6 +15,8 @@ const WhatsAppFloating = () => {
       className="fixed bottom-3 right-3 z-50 sm:bottom-5 sm:right-5 md:bottom-6 md:right-6"
     >
       <button
+        type="button"
+        aria-label="Chat with FlyingLyte on WhatsApp"
         onClick={openWhatsApp}
         className="flex h-11 w-11 items-center justify-center rounded-full bg-(--gold-soft) shadow-xl transition hover:bg-(--gold-main) active:bg-(--gold-main) sm:h-12 sm:w-12 md:h-14 md:w-14"
       >

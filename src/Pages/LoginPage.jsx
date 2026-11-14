@@ -3,11 +3,25 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { publicApi } from "../services/api";
 import { useAuthStore } from "../store/authStore";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { Eye, EyeOff } from "lucide-react";
+
+const safeLoginDestination = (value) => {
+  if (typeof value !== "string" || !value.startsWith("/") || value.startsWith("//") || /[\\\u0000-\u001f\u007f]/.test(value)) return "/";
+  try {
+    const url = new URL(value, window.location.origin);
+    const pathname = decodeURIComponent(url.pathname);
+    if (url.origin !== window.location.origin || pathname.startsWith("//") ||
+        /[\\\u0000-\u001f\u007f]/.test(pathname) || /^\/(?:login|register)(?:\/|$)/i.test(pathname)) return "/";
+    return url.pathname + url.search + url.hash;
+  } catch {
+    return "/";
+  }
+};
 
 const LoginPage = () => {
   const navigate = useNavigate();
+  const reducedMotion = useReducedMotion();
   const location = useLocation();
   const { setUser, setToken, setRefreshToken } = useAuthStore();
 
@@ -41,17 +55,15 @@ const LoginPage = () => {
       setToken(access);
       setRefreshToken(refresh);
 
-     const redirectTo = location.state?.redirectTo || "/";
-const payload = location.state?.payload || null;
+      const redirectTo = safeLoginDestination(location.state?.redirectTo);
+      const nextState = {};
+      if (location.state?.payload) nextState.payload = location.state.payload;
+      if (location.state?.openBooking === true) nextState.openBooking = true;
 
-navigate(redirectTo, {
-  replace: true,
-  state: payload
-    ? {
-        payload,
-      }
-    : undefined,
-});
+      navigate(redirectTo, {
+        replace: true,
+        state: Object.keys(nextState).length ? nextState : undefined,
+      });
 
       toast.success("Login Successful ✈️");
     } catch (error) {
@@ -67,18 +79,19 @@ navigate(redirectTo, {
   };
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center px-4 bg-(--bg-main) overflow-hidden">
+    <div className="fl-public-auth fl-booking-base relative min-h-screen flex items-center justify-center px-4 bg-(--bg-main) overflow-hidden">
+      <aside className="fl-public-auth__art" data-fl-decoration="auth"><img src="/images/model2-flight.avif" alt="An aircraft wing above sunlit clouds" /><p><span>WELCOME BACK TO FLYINGLYTE</span>Your next journey starts here. ↗</p></aside>
       {/* Background Glow */}
       <div className="absolute w-150 h-150 bg-(--gold-main)/20 blur-[200px] rounded-full -top-50 -left-50" />
-      <div className="absolute w-125 h-125 bg-blue-500/20 blur-[180px] rounded-full -bottom-37.5 -right-37.5" />
+      <div className="fl-booking-notice absolute w-125 h-125 bg-blue-500/20 blur-[180px] rounded-full -bottom-37.5 -right-37.5" />
 
       <motion.div
-        initial={{ opacity: 0, y: 40, scale: 0.95 }}
+        initial={reducedMotion ? false : { opacity: 0, y: 20, scale: 1 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 0.6 }}
-        className="relative w-full max-w-md backdrop-blur-xl bg-(--bg-card)/80 border border-(--border-soft) rounded-3xl p-8 shadow-[0_40px_120px_rgba(0,0,0,0.7)]"
+        transition={{ duration: reducedMotion ? 0 : 0.6, delay: reducedMotion ? 0 : 0.1 }}
+        className="fl-booking-surface fl-booking-line relative w-full max-w-md backdrop-blur-xl bg-(--bg-card)/80 border border-(--border-soft) rounded-3xl p-8 shadow-[0_40px_120px_rgba(0,0,0,0.7)]"
       >
-        <h2 className="text-3xl font-(--font-heading) text-(--gold-main) mb-2">
+        <h2 className="fl-booking-heading fl-booking-subtitle fl-booking-accent text-3xl font-(--font-heading) text-(--gold-main) mb-2">
           Welcome Back
         </h2>
 
@@ -89,33 +102,33 @@ navigate(redirectTo, {
         <form onSubmit={handleSubmit} className="space-y-5">
           {/* Email */}
           <div className="relative">
-            <input
+            <input aria-label="Email Address"
               type="email"
               name="email"
               placeholder="Email Address"
               value={formData.email}
               onChange={handleChange}
-              className="w-full bg-(--bg-secondary) border border-(--border-soft) rounded-xl px-4 py-3 text-white focus:border-(--gold-main) outline-none transition"
+              className="fl-booking-ink fl-booking-line fl-booking-field w-full bg-(--bg-secondary) border border-(--border-soft) rounded-xl px-4 py-3 text-white focus:border-(--gold-main) outline-none transition"
               required
             />
           </div>
 
           {/* Password */}
           <div className="relative">
-            <input
+            <input aria-label="Password"
               type={showPassword ? "text" : "password"}
               name="password"
               placeholder="Password"
               value={formData.password}
               onChange={handleChange}
-              className="w-full bg-(--bg-secondary) border border-(--border-soft) rounded-xl px-4 py-3 text-white focus:border-(--gold-main) outline-none pr-12 transition"
+              className="fl-booking-ink fl-booking-line fl-booking-field w-full bg-(--bg-secondary) border border-(--border-soft) rounded-xl px-4 py-3 text-white focus:border-(--gold-main) outline-none pr-12 transition"
               required
             />
 
-            <button
+            <button aria-label="Toggle password visibility"
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-3 text-gray-400 hover:text-white"
+              className="fl-booking-muted fl-booking-button absolute right-3 top-3 text-gray-400 hover:text-white"
             >
               {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
             </button>
@@ -123,10 +136,10 @@ navigate(redirectTo, {
 
           {/* Button */}
           <motion.button
-            whileTap={{ scale: 0.95 }}
-            whileHover={{ scale: 1.02 }}
+            whileTap={reducedMotion ? undefined : { scale: 0.98 }}
+            whileHover={reducedMotion ? undefined : { scale: 1.02 }}
             disabled={loading}
-            className="w-full mt-2 py-3 rounded-full font-semibold bg-linear-to-r from-start to-end text-black shadow-[0_14px_40px_rgba(234,168,42,0.45)] transition disabled:opacity-60"
+            className="fl-booking-ink fl-booking-surface fl-booking-button fl-booking-primary w-full mt-2 py-3 rounded-full font-semibold bg-linear-to-r from-start to-end text-black shadow-[0_14px_40px_rgba(234,168,42,0.45)] transition disabled:opacity-60"
           >
             {loading ? "Logging in..." : "Login"}
           </motion.button>
@@ -135,12 +148,12 @@ navigate(redirectTo, {
         {/* Register Link */}
         <p className="mt-6 text-center text-sm text-(--text-muted)">
           Don't have an account?{" "}
-          <span
+          <button type="button" data-fl-auth-link="true"
             onClick={() => navigate("/register")}
-            className="text-(--gold-main) cursor-pointer hover:underline"
+            className="fl-booking-accent text-(--gold-main) cursor-pointer hover:underline"
           >
             Register
-          </span>
+          </button>
         </p>
       </motion.div>
     </div>

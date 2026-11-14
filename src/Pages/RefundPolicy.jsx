@@ -32,7 +32,7 @@ const sections = [
           fare rules.
         </p>
         <p className="mt-2 font-medium">
-          Typical refund processing time: <span className="text-blue-600">7–21 business days</span>
+          Typical refund processing time: <span className="fl-booking-info text-blue-600">7–21 business days</span>
         </p>
       </>
     ),
@@ -109,26 +109,26 @@ const RefundPolicy = () => {
   };
 
   return (
-    <div className="bg-gray-50 min-h-screen py-24 px-4">
+    <div className="fl-booking-base bg-gray-50 min-h-screen py-24 px-4">
       <SEO
         title="Refund & Cancellation Policy"
         description="Understand FlyingLyte's flight, hotel, and holiday package refund and cancellation policies, timelines, service fees, and terms."
         canonical="https://www.flyinglyte.com/refund-policy"
       />
-      <div className="max-w-4xl mx-auto bg-white shadow-xl rounded-2xl p-6 md:p-10">
+      <div className="fl-booking-surface max-w-4xl mx-auto bg-white shadow-xl rounded-2xl p-6 md:p-10">
         
         {/* Header */}
         <div className="mb-8 text-center">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-800">
+          <h1 className="fl-booking-heading fl-booking-title fl-booking-ink text-3xl md:text-4xl font-bold text-gray-800">
             Refund & Cancellation Policy
           </h1>
-          <p className="text-gray-500 mt-2">
+          <p className="fl-booking-muted text-gray-500 mt-2">
             Last Updated: <span className="font-medium">January 2026</span>
           </p>
         </div>
 
         {/* Intro */}
-        <p className="text-gray-600 mb-8 leading-relaxed">
+        <p className="fl-booking-muted text-gray-600 mb-8 leading-relaxed">
           Refund and cancellation policies depend on the travel service provider
           and fare rules associated with your booking. Please review the
           applicable policies carefully before making a reservation.
@@ -139,23 +139,24 @@ const RefundPolicy = () => {
           {sections.map((sec, index) => (
             <div
               key={index}
-              className="border rounded-xl overflow-hidden hover:shadow-md transition"
+              className="fl-booking-line border rounded-xl overflow-hidden hover:shadow-md transition"
             >
               <button
+                aria-expanded={openIndex === index}
                 onClick={() => toggle(index)}
-                className="w-full flex items-center justify-between p-4 bg-gray-100 hover:bg-gray-200 transition"
+                className="fl-booking-surface fl-booking-button fl-booking-secondary w-full flex items-center justify-between p-4 bg-gray-100 hover:bg-gray-200 transition"
               >
-                <div className="flex items-center gap-3 font-semibold text-gray-700">
+                <div className="fl-booking-ink flex items-center gap-3 font-semibold text-gray-700">
                   {sec.icon}
                   {sec.title}
                 </div>
-                <span className="text-gray-500 text-xl">
+                <span className="fl-booking-muted text-gray-500 text-xl">
                   {openIndex === index ? "−" : "+"}
                 </span>
               </button>
 
               {openIndex === index && (
-                <div className="p-4 text-gray-600 leading-relaxed bg-white">
+                <div className="fl-booking-muted fl-booking-surface p-4 text-gray-600 leading-relaxed bg-white">
                   {sec.content}
                 </div>
               )}
@@ -164,12 +165,12 @@ const RefundPolicy = () => {
         </div>
 
         {/* Contact */}
-        <div className="mt-10 bg-blue-50 border border-blue-200 rounded-xl p-6">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">
+        <div className="fl-booking-notice fl-booking-line mt-10 bg-blue-50 border border-blue-200 rounded-xl p-6">
+          <h2 className="fl-booking-heading fl-booking-subtitle fl-booking-ink text-xl font-semibold text-gray-800 mb-4">
             Contact Support
           </h2>
 
-          <div className="space-y-3 text-gray-700">
+          <div className="fl-booking-ink space-y-3 text-gray-700">
             <p className="flex items-center gap-2">
               <FaEnvelope className="text-blue-500" />
               Email: <span className="font-medium">info@flyinglyte.com</span>
@@ -183,19 +184,19 @@ const RefundPolicy = () => {
         </div>
 
         {/* Legal Disclaimer */}
-        <div className="mt-10 border-t pt-6">
-          <h2 className="text-xl font-semibold text-gray-800 mb-3">
+        <div className="fl-booking-line mt-10 border-t pt-6">
+          <h2 className="fl-booking-heading fl-booking-subtitle fl-booking-ink text-xl font-semibold text-gray-800 mb-3">
             Legal Disclaimer
           </h2>
 
-          <p className="text-gray-600 leading-relaxed">
+          <p className="fl-booking-muted text-gray-600 leading-relaxed">
             Flyinglyte provides access to travel services offered by independent
             third-party providers including airlines, hotels, and
             transportation companies. Flyinglyte does not own, operate, or
             control these services.
           </p>
 
-          <p className="text-gray-600 mt-3 leading-relaxed">
+          <p className="fl-booking-muted text-gray-600 mt-3 leading-relaxed">
             Users acknowledge that travel services are subject to the terms and
             conditions of the respective providers. Flyinglyte shall not be
             responsible for service disruptions, operational changes, or

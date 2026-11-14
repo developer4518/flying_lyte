@@ -5,6 +5,189 @@ import { useMemo, useRef, useState } from "react";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 
+const voucherPdfStyles = `
+
+  [data-voucher-pdf], [data-voucher-pdf] * {
+    box-sizing: border-box !important;
+    font-family: Arial, Helvetica, sans-serif !important;
+    color: #26313f !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    border-color: #e4dfd3 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    filter: none !important;
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+    text-align: left !important;
+    letter-spacing: normal !important;
+    word-spacing: normal !important;
+    overflow-wrap: anywhere !important;
+    text-overflow: clip !important;
+    -webkit-line-clamp: unset !important;
+    max-height: none !important;
+  }
+  [data-voucher-pdf] {
+    --bg-main: #fffefb; --bg-card: #ffffff; --text-main: #26313f;
+    --text-muted: #59616f; --gold-main: #705426; --gold-soft: #705426;
+    width: 794px !important; min-width: 794px !important; max-width: 794px !important;
+    margin: 0 !important; padding: 0 !important; border: 0 !important;
+    background: #fffefb !important; font-size: 15px !important; line-height: 22px !important;
+    overflow: visible !important;
+  }
+  [data-voucher-pdf] .no-print, [data-voucher-pdf] .voucher-top { display: none !important; }
+  [data-voucher-pdf] :is(.voucher-row, section) { border: 0 !important; border-bottom: 1px solid #e4dfd3 !important; }
+  [data-voucher-pdf] .voucher-cell { padding: 14px 16px !important; font-size: 15px !important; line-height: 22px !important; }
+  [data-voucher-pdf] :is(p, li, td, .room-description, .guest-cell, .room-name) { font-size: 15px !important; line-height: 22px !important; }
+  [data-voucher-pdf] :is(.voucher-heading, h2) {
+    margin: 0 0 11px !important; padding: 0 0 8px !important;
+    border: 0 !important; border-bottom: 2px solid #d9b66f !important;
+    font-size: 16px !important; line-height: 24px !important; font-weight: 700 !important;
+    color: #141a23 !important;
+  }
+  [data-voucher-pdf] .voucher-heading { margin: 0 !important; padding: 12px 16px !important; background: #f4f0e7 !important; }
+  [data-voucher-pdf] .voucher-gold { color: #705426 !important; font-weight: 700 !important; }
+  [data-voucher-pdf] :is(strong, b, .room-name) { color: #141a23 !important; font-weight: 700 !important; }
+  [data-voucher-pdf] .voucher-grid-2 { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 0 !important; }
+  [data-voucher-pdf] .voucher-grid-2 > div:first-child { border: 0 !important; border-right: 1px solid #e4dfd3 !important; }
+  [data-voucher-pdf] .voucher-grid-2 > div:only-child { grid-column: 1 / -1 !important; border-right: 0 !important; }
+  [data-voucher-pdf] :is(.date-grid, .info-grid) { display: grid !important; grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 16px !important; }
+  [data-voucher-pdf] :is(.date-item, .info-item) { display: block !important; min-width: 0 !important; }
+  [data-voucher-pdf] :is(.date-item, .info-item) > span { display: block !important; }
+  [data-voucher-pdf] :is(.date-item, .info-item) > .voucher-gold { font-size: 12px !important; line-height: 18px !important; margin-bottom: 4px !important; }
+  [data-voucher-pdf] :is(.table-scroll, .fl-booking-table-scroll) { width: 100% !important; max-width: 100% !important; overflow: visible !important; }
+  [data-voucher-pdf] table { width: 100% !important; min-width: 0 !important; max-width: 100% !important; table-layout: fixed !important; border-collapse: collapse !important; }
+  [data-voucher-pdf] :is(th, td) { border: 1px solid #e4dfd3 !important; padding: 11px !important; vertical-align: top !important; white-space: normal !important; overflow: visible !important; }
+  [data-voucher-pdf] th { font-size: 13px !important; line-height: 20px !important; font-weight: 700 !important; color: #141a23 !important; background: #f4f0e7 !important; }
+  [data-voucher-pdf] .sno-col { width: 58px !important; }
+  [data-voucher-pdf] .guest-col { width: 220px !important; }
+  [data-voucher-pdf] .sno-cell { text-align: center !important; }
+  [data-voucher-pdf] .room-name { margin: 0 !important; }
+  [data-voucher-pdf] .room-description { margin-top: 22px !important; }
+  [data-voucher-pdf] .room-description p { margin: 0 0 22px !important; }
+  [data-voucher-pdf] .room-description p:last-child { margin-bottom: 0 !important; }
+  [data-voucher-pdf] .red-text { color: #8c3730 !important; }
+  [data-voucher-pdf] :is(.terms-list, .policy-list, .rate-list) { margin: 11px 0 0 !important; padding: 0 0 0 24px !important; }
+  [data-voucher-pdf] li { margin: 0 0 11px !important; padding: 0 !important; }
+  [data-voucher-pdf] li p { margin: 0 0 11px !important; }
+  [data-voucher-pdf] .amount-box { max-width: 100% !important; border: 1px solid #d9b66f !important; background: #f8f5ee !important; overflow: visible !important; }
+  [data-voucher-pdf] .amount-row { display: flex !important; align-items: flex-start !important; justify-content: space-between !important; gap: 20px !important; padding: 12px 14px !important; border-bottom: 1px solid #e4dfd3 !important; }
+  [data-voucher-pdf] .amount-row > span { min-width: 0 !important; }
+  [data-voucher-pdf] .amount-row strong { flex: 0 0 auto !important; max-width: 48% !important; text-align: right !important; font-size: 16px !important; line-height: 22px !important; }
+  [data-voucher-pdf] .amount-row small { display: block !important; color: #59616f !important; font-size: 11px !important; line-height: 16px !important; }
+  [data-voucher-pdf] .amount-row.total { border-bottom: 0 !important; background: #eee6d5 !important; }
+  [data-voucher-pdf] .amount-row.total strong { font-size: 18px !important; }
+  [data-voucher-pdf] .gold-link { color: #705426 !important; text-decoration: underline !important; }
+  [data-voucher-pdf] img { max-width: 100% !important; max-height: 900px !important; object-fit: contain !important; }
+  [data-voucher-pdf] :is(pre, code) { white-space: pre-wrap !important; }
+
+`;
+
+
+function measureVoucherPdfPages(element, capacity) {
+  const origin = element.getBoundingClientRect().top;
+  const height = Math.ceil(element.getBoundingClientRect().height);
+  const lines = [];
+  const protectedBands = [];
+  const addBand = (top, bottom, keepTogether = false) => {
+    const band = { top: Math.max(0, top), bottom: Math.min(height, bottom) };
+    if (band.bottom > band.top && (!keepTogether || band.bottom - band.top < capacity - 2)) {
+      protectedBands.push(band);
+    }
+  };
+
+  const walker = element.ownerDocument.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+  const range = element.ownerDocument.createRange();
+  while (walker.nextNode()) {
+    if (!walker.currentNode.textContent.trim()) continue;
+    range.selectNodeContents(walker.currentNode);
+    for (const rect of range.getClientRects()) {
+      if (rect.width <= 0 || rect.height <= 0) continue;
+      const line = { top: rect.top - origin, bottom: rect.bottom - origin };
+      lines.push(line);
+      addBand(line.top - 1, line.bottom + 1);
+    }
+  }
+
+  lines.sort((a, b) => a.top - b.top);
+  element.querySelectorAll("tr, li, .amount-box, .date-grid, .info-grid, .voucher-grid-2, img").forEach(node => {
+    const rect = node.getBoundingClientRect();
+    // Leave the border itself as a legal break between consecutive rows.
+    addBand(rect.top - origin + 0.5, rect.bottom - origin - 0.5, true);
+  });
+  element.querySelectorAll("h2, .voucher-heading, thead").forEach(node => {
+    const rect = node.getBoundingClientRect();
+    const nextLine = lines.find(line => line.top >= rect.bottom - origin - 0.25);
+    addBand(rect.top - origin, nextLine?.bottom ?? rect.bottom - origin, true);
+  });
+
+  // Merge overlaps so a break never bisects a line in another table column.
+  const bands = [];
+  protectedBands.sort((a, b) => a.top - b.top);
+  protectedBands.forEach(band => {
+    const previous = bands.at(-1);
+    if (previous && band.top < previous.bottom) previous.bottom = Math.max(previous.bottom, band.bottom);
+    else bands.push({ ...band });
+  });
+
+  const pages = [];
+  let start = 0;
+  while (start < height - 0.01) {
+    let end = Math.min(start + capacity, height);
+    const crossing = bands.find(band => band.top < end && band.bottom > end);
+    if (crossing && end < height) end = crossing.top;
+    if (end <= start + 0.5) throw new Error("Voucher content cannot be paginated without clipping.");
+    pages.push({ start, end });
+    start = end;
+  }
+  return { height, pages };
+}
+
+function drawVoucherPdfFrame(pdf, logo, page, total) {
+  const width = pdf.internal.pageSize.getWidth();
+  const height = pdf.internal.pageSize.getHeight();
+  pdf.setFillColor("#FFFEFB");
+  pdf.rect(0, 0, width, height, "F");
+  pdf.setFillColor("#141A23");
+  pdf.rect(0, 0, width, 30, "F");
+  pdf.setFillColor("#D9B66F");
+  pdf.rect(0, 29.5, width, 0.5, "F");
+
+  if (logo) {
+    pdf.setFillColor("#FFFEFB");
+    pdf.roundedRect(12, 6, 48, 18, 1, 1, "F");
+    const imageWidth = Math.min(44, 14 * logo.naturalWidth / logo.naturalHeight);
+    const imageHeight = imageWidth * logo.naturalHeight / logo.naturalWidth;
+    pdf.addImage(logo, "PNG", 14 + (44 - imageWidth) / 2, 8 + (14 - imageHeight) / 2, imageWidth, imageHeight);
+  } else {
+    pdf.setFont("helvetica", "bold");
+    pdf.setFontSize(19);
+    pdf.setTextColor("#D9B66F");
+    pdf.text("FlyingLyte", 12, 18);
+  }
+  pdf.setFont("helvetica", "bold");
+  pdf.setFontSize(14);
+  pdf.setTextColor("#FFFEFB");
+  pdf.text("HOTEL VOUCHER", width - 12, 13, { align: "right" });
+  pdf.setFont("helvetica", "normal");
+  pdf.setFontSize(8);
+  pdf.setTextColor("#D9B66F");
+  pdf.text("ACCOMMODATION DETAILS", width - 12, 21, { align: "right" });
+
+  pdf.setFillColor("#141A23");
+  pdf.rect(0, height - 16, width, 16, "F");
+  pdf.setFillColor("#D9B66F");
+  pdf.rect(0, height - 16.5, width, 0.5, "F");
+  pdf.setFontSize(8);
+  pdf.setTextColor("#FFFEFB");
+  pdf.text("FLYINGLYTE  /  HOTEL VOUCHER", 12, height - 6);
+  pdf.setTextColor("#D9B66F");
+  pdf.text("Page " + page + " of " + total, width - 12, height - 6, { align: "right" });
+}
+
+
 const safeJsonParse = (value, fallback = {}) => {
   try {
     return JSON.parse(value || "{}");
@@ -761,59 +944,91 @@ Lead Guest: ${leadGuestName || "N/A"}`,
   };
 
   const handleGeneratePdf = async () => {
-    if (!voucherRef.current) return;
+    if (!voucherRef.current || pdfLoading) return;
 
     try {
       setPdfLoading(true);
-      setPdfCaptureMode(true);
-
       await document.fonts?.ready;
       await waitForPaint();
 
       const voucherElement = voucherRef.current;
+      const captureWidth = 794;
+      const scale = 2;
+      const margin = 12;
+      const bodyTop = 38;
+      const pdf = new jsPDF({ orientation: "p", unit: "mm", format: "a4", compress: true });
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      const usableWidth = pageWidth - margin * 2;
+      const bodyHeight = pageHeight - bodyTop - 22;
+      const capacity = bodyHeight * captureWidth / usableWidth;
+      let layout;
 
-      const canvas = await html2canvas(voucherElement, {
-        scale: 2,
+      const prepareClone = async (clonedDocument, clonedVoucher) => {
+        // All redesign styles exist only inside html2canvas's private document.
+        clonedVoucher.setAttribute("data-voucher-pdf", "");
+        const style = clonedDocument.createElement("style");
+        style.textContent = voucherPdfStyles;
+        clonedDocument.head.appendChild(style);
+        clonedDocument.documentElement.style.setProperty("background", "#fffefb", "important");
+        clonedDocument.body.style.setProperty("background", "#fffefb", "important");
+        await clonedDocument.fonts?.ready;
+        const nextLayout = measureVoucherPdfPages(clonedVoucher, capacity);
+        if (!layout) layout = nextLayout;
+        else if (Math.abs(layout.height - nextLayout.height) > 1) {
+          throw new Error("Voucher layout changed during PDF capture.");
+        }
+      };
+
+      const capture = (start, height) => html2canvas(voucherElement, {
+        scale,
         useCORS: true,
-        allowTaint: true,
-        backgroundColor: "#0b0f14",
+        allowTaint: false,
+        backgroundColor: "#fffefb",
         logging: false,
         scrollX: 0,
         scrollY: 0,
-        windowWidth: voucherElement.scrollWidth,
-        windowHeight: voucherElement.scrollHeight,
+        windowWidth: 1200,
+        windowHeight: 1400,
+        width: captureWidth,
+        height,
+        x: 0,
+        y: start,
+        ignoreElements: element => element.classList.contains("no-print"),
+        onclone: prepareClone,
       });
 
-      const imgData = canvas.toDataURL("image/png", 1.0);
-      const pdf = new jsPDF("p", "mm", "a4");
+      let logo = null;
+      try {
+        const image = new Image();
+        image.src = new URL("/images/flying_logo.png", window.location.origin).href;
+        await image.decode();
+        if (image.naturalWidth && image.naturalHeight) logo = image;
+      } catch {
+        // Keep export usable if the static brand asset is unavailable.
+      }
 
-      const pageWidth = pdf.internal.pageSize.getWidth();
-      const pageHeight = pdf.internal.pageSize.getHeight();
-
-      const margin = 6;
-      const usableWidth = pageWidth - margin * 2;
-      const usableHeight = pageHeight - margin * 2;
-
-      const imgHeight = (canvas.height * usableWidth) / canvas.width;
-
-      let remainingHeight = imgHeight;
-      let yPosition = margin;
-
-      pdf.setFillColor(11, 15, 20);
-      pdf.rect(0, 0, pageWidth, pageHeight, "F");
-      pdf.addImage(imgData, "PNG", margin, yPosition, usableWidth, imgHeight);
-
-      remainingHeight -= usableHeight;
-
-      while (remainingHeight > 0) {
-        pdf.addPage();
-        yPosition = margin - (imgHeight - remainingHeight);
-
-        pdf.setFillColor(11, 15, 20);
-        pdf.rect(0, 0, pageWidth, pageHeight, "F");
-        pdf.addImage(imgData, "PNG", margin, yPosition, usableWidth, imgHeight);
-
-        remainingHeight -= usableHeight;
+      // Only one A4-sized canvas is rendered at a time, even for long vouchers.
+      const firstCanvas = await capture(0, capacity);
+      if (!layout?.pages.length) throw new Error("Voucher has no printable content.");
+      for (let index = 0; index < layout.pages.length; index++) {
+        const { start, end } = layout.pages[index];
+        const canvas = index === 0 ? firstCanvas : await capture(start, end - start);
+        const requiredHeight = Math.min(canvas.height, Math.ceil((end - start) * scale));
+        let pageImage = canvas;
+        if (requiredHeight < canvas.height) {
+          pageImage = document.createElement("canvas");
+          pageImage.width = canvas.width;
+          pageImage.height = requiredHeight;
+          const context = pageImage.getContext("2d");
+          if (!context) throw new Error("PDF canvas is unavailable.");
+          context.drawImage(canvas, 0, 0);
+        }
+        if (index > 0) pdf.addPage();
+        drawVoucherPdfFrame(pdf, logo, index + 1, layout.pages.length);
+        pdf.addImage(pageImage, "PNG", margin, bodyTop, usableWidth, pageImage.height * usableWidth / pageImage.width, undefined, "FAST");
+        canvas.width = canvas.height = 0;
+        if (pageImage !== canvas) pageImage.width = pageImage.height = 0;
       }
 
       pdf.save(`Hotel-Voucher-${confirmationNo || "Booking"}.pdf`);
@@ -827,7 +1042,7 @@ Lead Guest: ${leadGuestName || "N/A"}`,
   };
 
   return (
-    <div className="min-h-screen bg-(--bg-main) px-3 py-10 font-(--font-body) text-(--text-main) md:py-24">
+    <div className="fl-booking-base min-h-screen bg-(--bg-main) px-3 py-10 font-(--font-body) text-(--text-main) md:py-24">
       <style>
         {`
           .voucher-wrapper {
@@ -1228,19 +1443,19 @@ Lead Guest: ${leadGuestName || "N/A"}`,
 
       <div
         ref={voucherRef}
-        className={`voucher-wrapper ${pdfCaptureMode ? "pdf-capture" : ""}`}
+        className={`fl-booking-paper voucher-wrapper ${pdfCaptureMode ? "pdf-capture" : ""}`}
       >
         <div className="voucher-top">
           <div className="voucher-title">Hotel Voucher</div>
 
           <div className="voucher-actions no-print">
-            <button onClick={handleEmail}>Email Voucher</button>
+            <button className="fl-booking-button" onClick={handleEmail}>Email Voucher</button>
             <span className="text-(--text-muted)">|</span>
 
-            <button onClick={handlePrint}>Print Voucher</button>
+            <button className="fl-booking-button" onClick={handlePrint}>Print Voucher</button>
             <span className="text-(--text-muted)">|</span>
 
-            <button onClick={handleGeneratePdf} disabled={pdfLoading}>
+            <button className="fl-booking-button" onClick={handleGeneratePdf} disabled={pdfLoading}>
               {pdfLoading ? "Generating..." : "Generate PDF 🧾"}
             </button>
           </div>
@@ -1253,21 +1468,21 @@ Lead Guest: ${leadGuestName || "N/A"}`,
             {confirmationNo && (
               <div className="info-item">
                 <span className="voucher-gold">Confirmation No:</span>
-                <span className="text-white">{confirmationNo}</span>
+                <span className="fl-booking-ink text-white">{confirmationNo}</span>
               </div>
             )}
 
             {bookingReference && (
               <div className="info-item">
                 <span className="voucher-gold">Booking Ref:</span>
-                <span className="text-white">{bookingReference}</span>
+                <span className="fl-booking-ink text-white">{bookingReference}</span>
               </div>
             )}
 
             {bookingStatus && (
               <div className="info-item">
                 <span className="voucher-gold">Status:</span>
-                <span className="text-white">{bookingStatus}</span>
+                <span className="fl-booking-ink text-white">{bookingStatus}</span>
               </div>
             )}
           </div>
@@ -1279,7 +1494,7 @@ Lead Guest: ${leadGuestName || "N/A"}`,
               <div className="voucher-gold">Hotel Address Details</div>
 
               {hotelName && (
-                <div className="mt-1 font-semibold text-white">
+                <div className="fl-booking-ink mt-1 font-semibold text-white">
                   {hotelName}
                   {hotelRating ? ` (${hotelRating} Star)` : ""}
                 </div>
@@ -1311,7 +1526,7 @@ Lead Guest: ${leadGuestName || "N/A"}`,
                 <div className="voucher-gold">Agency Address Details</div>
 
                 {agencyName && (
-                  <div className="mt-1 font-semibold text-white">
+                  <div className="fl-booking-ink mt-1 font-semibold text-white">
                     {agencyName}
                   </div>
                 )}
@@ -1345,7 +1560,7 @@ Lead Guest: ${leadGuestName || "N/A"}`,
           {leadGuestName && (
             <div>
               <span className="voucher-gold">Lead Passenger Name:</span>{" "}
-              <span className="text-white">{leadGuestName}</span>
+              <span className="fl-booking-ink text-white">{leadGuestName}</span>
             </div>
           )}
 
@@ -1353,28 +1568,28 @@ Lead Guest: ${leadGuestName || "N/A"}`,
             {checkIn && (
               <div className="date-item">
                 <span className="voucher-gold">Check In Date:</span>
-                <span className="text-white">{formatDate(checkIn)}</span>
+                <span className="fl-booking-ink text-white">{formatDate(checkIn)}</span>
               </div>
             )}
 
             {checkOut && (
               <div className="date-item">
                 <span className="voucher-gold">Check Out Date:</span>
-                <span className="text-white">{formatDate(checkOut)}</span>
+                <span className="fl-booking-ink text-white">{formatDate(checkOut)}</span>
               </div>
             )}
 
             {nights !== "N/A" && (
               <div className="date-item">
                 <span className="voucher-gold">No of Nights:</span>
-                <span className="text-white">{nights}</span>
+                <span className="fl-booking-ink text-white">{nights}</span>
               </div>
             )}
           </div>
         </section>
 
         <section className="table-scroll">
-          <table className="voucher-table">
+          <div className="fl-booking-table-scroll"><table className="fl-booking-table voucher-table">
             <thead>
               <tr>
                 <th className="sno-col">S.No</th>
@@ -1466,7 +1681,7 @@ Lead Guest: ${leadGuestName || "N/A"}`,
 
                     <td className="guest-cell">
                       {(roomAdults.length > 0 || roomChildren.length > 0) && (
-                        <div className="font-semibold text-white">
+                        <div className="fl-booking-ink font-semibold text-white">
                           {roomAdults.length > 0
                             ? `${roomAdults.length} Adult(s)`
                             : ""}
@@ -1485,7 +1700,7 @@ Lead Guest: ${leadGuestName || "N/A"}`,
                 );
               })}
             </tbody>
-          </table>
+          </table></div>
         </section>
 
         {(roomPromotions.length > 0 || supplements.length > 0) && (
@@ -1493,7 +1708,7 @@ Lead Guest: ${leadGuestName || "N/A"}`,
             <div className="voucher-cell">
               {roomPromotions.length > 0 && (
                 <>
-                  <h2 className="voucher-gold mb-2 text-lg">Room Promotions</h2>
+                  <h2 className="fl-booking-heading fl-booking-subtitle voucher-gold mb-2 text-lg">Room Promotions</h2>
 
                   <ul className="terms-list list-disc">
                     {roomPromotions.map((promotion, index) => (
@@ -1505,7 +1720,7 @@ Lead Guest: ${leadGuestName || "N/A"}`,
 
               {supplements.length > 0 && (
                 <>
-                  <h2 className="voucher-gold mb-2 mt-4 text-lg">
+                  <h2 className="fl-booking-heading fl-booking-subtitle voucher-gold mb-2 mt-4 text-lg">
                     Supplements
                   </h2>
 
@@ -1525,10 +1740,10 @@ Lead Guest: ${leadGuestName || "N/A"}`,
         {cancelPolicies.length > 0 && (
           <section className="voucher-row">
             <div className="voucher-cell">
-              <h2 className="voucher-gold mb-3 text-lg">Cancellation Policy</h2>
+              <h2 className="fl-booking-heading fl-booking-subtitle voucher-gold mb-3 text-lg">Cancellation Policy</h2>
 
               <div className="table-scroll">
-                <table className="voucher-table">
+                <div className="fl-booking-table-scroll"><table className="fl-booking-table voucher-table">
                   <thead>
                     <tr>
                       <th>Cancelled On or After</th>
@@ -1556,7 +1771,7 @@ Lead Guest: ${leadGuestName || "N/A"}`,
                       </tr>
                     ))}
                   </tbody>
-                </table>
+                </table></div>
               </div>
             </div>
           </section>
@@ -1565,7 +1780,7 @@ Lead Guest: ${leadGuestName || "N/A"}`,
         {(netAmount || convenienceFee || totalPaid) && (
   <section className="voucher-row">
     <div className="voucher-cell">
-      <h2 className="voucher-gold mb-3 text-lg">
+      <h2 className="fl-booking-heading fl-booking-subtitle voucher-gold mb-3 text-lg">
         Amount Details
       </h2>
 
@@ -1613,7 +1828,7 @@ Lead Guest: ${leadGuestName || "N/A"}`,
         {specialRequest && (
           <section className="voucher-row">
             <div className="voucher-cell">
-              <h2 className="voucher-gold mb-4 text-lg">Package Details:</h2>
+              <h2 className="fl-booking-heading fl-booking-subtitle voucher-gold mb-4 text-lg">Package Details:</h2>
 
               <div className="voucher-gold text-sm">
                 Special Service Request:
@@ -1627,7 +1842,7 @@ Lead Guest: ${leadGuestName || "N/A"}`,
         {remarks && (
           <section className="voucher-row">
             <div className="voucher-cell">
-              <h2 className="voucher-gold mb-2 text-lg">Remarks</h2>
+              <h2 className="fl-booking-heading fl-booking-subtitle voucher-gold mb-2 text-lg">Remarks</h2>
               <p>{remarks}</p>
             </div>
           </section>
@@ -1636,7 +1851,7 @@ Lead Guest: ${leadGuestName || "N/A"}`,
         {agentRemarks && (
           <section className="voucher-row">
             <div className="voucher-cell">
-              <h2 className="voucher-gold mb-2 text-lg">Agent Remarks</h2>
+              <h2 className="fl-booking-heading fl-booking-subtitle voucher-gold mb-2 text-lg">Agent Remarks</h2>
               <p>{agentRemarks}</p>
             </div>
           </section>
@@ -1644,7 +1859,7 @@ Lead Guest: ${leadGuestName || "N/A"}`,
         {rateConditions.length > 0 && (
           <section className="voucher-row">
             <div className="voucher-cell">
-              <h2 className="voucher-gold text-lg">Rate Conditions</h2>
+              <h2 className="fl-booking-heading fl-booking-subtitle voucher-gold text-lg">Rate Conditions</h2>
 
               <ol className="rate-list">
                 {rateConditions.map((condition, index) => (
@@ -1663,7 +1878,7 @@ Lead Guest: ${leadGuestName || "N/A"}`,
         {bookingTerms.length > 0 && (
           <section className="voucher-row">
             <div className="voucher-cell">
-              <h2 className="voucher-gold text-lg">
+              <h2 className="fl-booking-heading fl-booking-subtitle voucher-gold text-lg">
                 Booking Terms & Conditions
               </h2>
 
@@ -1679,7 +1894,7 @@ Lead Guest: ${leadGuestName || "N/A"}`,
         {hotelNorms.length > 0 && (
           <section className="voucher-row">
             <div className="voucher-cell">
-              <h2 className="voucher-gold text-lg">Hotel Policies</h2>
+              <h2 className="fl-booking-heading fl-booking-subtitle voucher-gold text-lg">Hotel Policies</h2>
 
               <ul className="policy-list list-disc">
                 {hotelNorms.map((norm, index) => (
@@ -1693,7 +1908,7 @@ Lead Guest: ${leadGuestName || "N/A"}`,
         {hotelFacilities.length > 0 && (
           <section className="voucher-row">
             <div className="voucher-cell">
-              <h2 className="voucher-gold text-lg">Hotel Facilities</h2>
+              <h2 className="fl-booking-heading fl-booking-subtitle voucher-gold text-lg">Hotel Facilities</h2>
 
               <ul className="policy-list list-disc">
                 {hotelFacilities.map((facility, index) => (
@@ -1706,7 +1921,7 @@ Lead Guest: ${leadGuestName || "N/A"}`,
 
         {(contactPhone || contactEmail) && (
           <section className="voucher-cell">
-            <h2 className="voucher-gold mb-2 text-lg">Contact Details:</h2>
+            <h2 className="fl-booking-heading fl-booking-subtitle voucher-gold mb-2 text-lg">Contact Details:</h2>
 
             {contactPhone && (
               <div>
@@ -1730,7 +1945,7 @@ Lead Guest: ${leadGuestName || "N/A"}`,
       </div>
 
       <div className="no-print mx-auto mt-5 flex max-w-262.5 justify-end">
-        <button onClick={() => navigate(-1)} className="back-btn">
+        <button onClick={() => navigate(-1)} className="fl-booking-button back-btn">
           Back
         </button>
       </div>

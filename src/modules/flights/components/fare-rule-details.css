@@ -1,0 +1,121 @@
+.fl-fare-rule[data-fl-theme="model2"] .fl-fare-details {
+  display: grid;
+  gap: 14px;
+  width: 100%;
+  max-width: 100%;
+  margin-top: 16px;
+  min-width: 0;
+  font-size: 14px;
+  line-height: 1.85;
+  color: var(--text-main);
+  overflow-wrap: anywhere;
+  text-align: start;
+}
+.fl-fare-rule[data-fl-theme="model2"] .fl-fare-details__fields {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+  margin: 0;
+  border: 1px solid var(--border-soft);
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--bg-main);
+}
+.fl-fare-rule[data-fl-theme="model2"] .fl-fare-details__fields > div { min-width: 0; padding: 14px 18px; border-bottom: 1px solid var(--border-soft); }
+.fl-fare-rule[data-fl-theme="model2"] .fl-fare-details dt { font-size: 12px; color: var(--text-muted); }
+.fl-fare-rule[data-fl-theme="model2"] .fl-fare-details dd { margin: 4px 0 0; font-weight: 600; }
+.fl-fare-rule[data-fl-theme="model2"] .fl-fare-details__condition {
+  margin: 0;
+  padding: 16px 20px;
+  border: 1px solid var(--border-soft);
+  border-left: 3px solid var(--fl-model2-accent);
+  border-radius: 0 12px 12px 0;
+  background: var(--bg-main);
+  white-space: normal;
+  text-align: start;
+  word-spacing: normal;
+  letter-spacing: normal;
+}
+.fl-fare-rule[data-fl-theme="model2"] .fl-fare-details__rich { min-width: 0; overflow-x: auto; padding: 18px; border: 1px solid var(--border-soft); border-radius: 14px; background: var(--bg-main); }
+.fl-fare-rule[data-fl-theme="model2"] .fl-fare-details__rich :is(p, ul, ol, pre, table) { margin-block: 0 16px; }
+.fl-fare-rule[data-fl-theme="model2"] .fl-fare-details__rich :is(h1, h2, h3, h4) { margin-block: 20px 10px; font-weight: 600; }
+.fl-fare-rule[data-fl-theme="model2"] .fl-fare-details__rich :is(ul, ol) { padding-left: 22px; }
+.fl-fare-rule[data-fl-theme="model2"] .fl-fare-details__rich ul { list-style: disc; }
+.fl-fare-rule[data-fl-theme="model2"] .fl-fare-details__rich ol { list-style: decimal; }
+.fl-fare-rule[data-fl-theme="model2"] .fl-fare-details__rich :is(td, th) { padding: 10px; border: 1px solid var(--border-soft); }
+.fl-fare-rule[data-fl-theme="model2"] .fl-fare-details__rich pre { white-space: pre-wrap; }
+.fl-fare-rule[data-fl-theme="model2"] .fl-fare-details__rich a { text-decoration: underline; }
+.fl-fare-rule[data-fl-theme="model2"] .fl-fare-details__body > p {
+  margin: 0;
+  color: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  white-space: normal;
+  text-align: start;
+  word-spacing: normal;
+  letter-spacing: normal;
+  overflow-wrap: anywhere;
+}
+.fl-fare-rule[data-fl-theme="model2"] .fl-fare-details__body > p + p { margin-top: 12px; }
+.fl-fare-rule[data-fl-theme="model2"] :is(.fl-fare-details__section, .fl-fare-details__note, .fl-fare-details__point) {
+  min-width: 0;
+  border: 1px solid var(--border-soft);
+  border-radius: 12px;
+  background: var(--bg-main);
+}
+.fl-fare-rule[data-fl-theme="model2"] .fl-fare-details__section { overflow: hidden; }
+.fl-fare-rule[data-fl-theme="model2"] .fl-fare-details__section h4 {
+  margin: 0;
+  padding: 13px 20px;
+  border-bottom: 1px solid var(--border-soft);
+  background: var(--bg-card);
+  color: var(--text-main);
+  font-size: 13px;
+  font-weight: 650;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+.fl-fare-rule[data-fl-theme="model2"] .fl-fare-details__section > .fl-fare-details__body:not(:empty) { padding: 16px 20px; }
+.fl-fare-rule[data-fl-theme="model2"] .fl-fare-details__note {
+  padding: 16px 20px;
+  border-inline-start: 3px solid var(--fl-model2-accent);
+}
+.fl-fare-rule[data-fl-theme="model2"] .fl-fare-details__note-label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 650;
+  line-height: 1.7;
+  letter-spacing: .06em;
+}
+.fl-fare-rule[data-fl-theme="model2"] .fl-fare-details__note-label:only-child { margin-bottom: 0; }
+.fl-fare-rule[data-fl-theme="model2"] .fl-fare-details__point {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  gap: 12px;
+  padding: 16px 20px;
+}
+.fl-fare-rule[data-fl-theme="model2"] .fl-fare-details__point-marker { font-weight: 650; font-variant-numeric: tabular-nums; }
+.fl-fare-rule[data-fl-theme="model2"] .fl-fare-details__divider { width: 100%; height: 0; margin: 2px 0; border: 0; border-top: 1px solid var(--border-soft); }
+.fl-fare-rule[data-fl-theme="model2"] .fl-fare-details__rich { max-width: 100%; text-align: start; white-space: normal; }
+.fl-fare-rule[data-fl-theme="model2"] .fl-fare-details__rich table { width: 100%; border-collapse: collapse; }
+.fl-fare-rule[data-fl-theme="model2"] .fl-fare-details__rich :is(td, th) { vertical-align: top; text-align: start; white-space: normal; overflow-wrap: anywhere; }
+.fl-fare-rule[data-fl-theme="model2"] .fl-fare-details__rich th { background: var(--bg-card); }
+.fl-fare-rule[data-fl-theme="model2"] .fl-fare-details__rich img { max-width: 100%; height: auto; }
+.fl-fare-rule[data-fl-theme="model2"] .fl-fare-details__rich li + li { margin-top: 7px; }
+.fl-fare-rule[data-fl-theme="model2"] .fl-fare-details__rich :last-child { margin-bottom: 0; }
+.fl-fare-rule[data-fl-theme="model2"] .fl-fare-details__rich:focus-visible { outline: 2px solid var(--gold-main); outline-offset: 3px; }
+@media (max-width: 639px) {
+  .fl-fare-rule[data-fl-theme="model2"] .fl-fare-details { gap: 10px; font-size: 13px; }
+  .fl-fare-rule[data-fl-theme="model2"] .fl-fare-details__fields { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .fl-fare-rule[data-fl-theme="model2"] .fl-fare-details__fields > div { padding: 12px; }
+  .fl-fare-rule[data-fl-theme="model2"] .fl-fare-details__condition { padding: 12px 14px; }
+  .fl-fare-rule[data-fl-theme="model2"] :is(.fl-fare-details__note, .fl-fare-details__point, .fl-fare-details__rich) { padding: 12px 14px; }
+  .fl-fare-rule[data-fl-theme="model2"] .fl-fare-details__section h4 { padding: 12px 14px; }
+  .fl-fare-rule[data-fl-theme="model2"] .fl-fare-details__section > .fl-fare-details__body:not(:empty) { padding: 14px; }
+}
+@media (max-width: 479px) {
+  .fl-fare-rule[data-fl-theme="model2"] .fl-fare-details__fields { grid-template-columns: minmax(0, 1fr); }
+}

@@ -5,6 +5,43 @@ import { useMemo, useRef } from "react";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 
+// Applied only to the private PDF clone and to this invoice's print output.
+const invoiceOutputStyles = `
+  #invoice-print-area, #invoice-print-area * { animation: none !important; transition: none !important; }
+  #invoice-print-area {
+    width: 100% !important; max-width: none !important; min-width: 0 !important;
+    margin: 0 !important; border-radius: 0; overflow: visible !important;
+    box-shadow: none !important; font-size: 12px; line-height: 1.4;
+  }
+  #invoice-print-area > div { padding: 16px !important; }
+  #invoice-print-area > div:first-child { flex-direction: row; }
+  #invoice-print-area [data-invoice-columns] { display: grid; gap: 16px; }
+  #invoice-print-area [data-invoice-columns="2"] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  #invoice-print-area [data-invoice-columns="3"] { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  #invoice-print-area .text-sm { font-size: 12px; line-height: 1.4; }
+  #invoice-print-area .text-xs { font-size: 10px; line-height: 1.4; }
+  #invoice-print-area .mt-6 { margin-top: 16px; }
+  #invoice-print-area .mt-8 { margin-top: 20px; }
+  #invoice-print-area .mb-6 { margin-bottom: 16px; }
+  #invoice-print-area :is(.overflow-x-auto, .fl-booking-table-scroll) { overflow: visible !important; }
+  #invoice-print-area .fl-booking-table { table-layout: fixed; min-width: 0 !important; width: 100%; }
+  #invoice-print-area .fl-booking-table :is(td, th) { padding: 6px; font-size: 11px; }
+  #invoice-print-area .fl-booking-table td { overflow-wrap: anywhere; }
+  #invoice-print-area .fl-booking-table td:nth-child(n+4) { white-space: nowrap; overflow-wrap: normal; word-break: normal; }
+  #invoice-print-area [data-invoice-rooms] th:nth-child(1) { width: 18%; }
+  #invoice-print-area [data-invoice-rooms] th:nth-child(2) { width: 22%; }
+  #invoice-print-area [data-invoice-rooms] th:nth-child(3) { width: 13%; }
+  #invoice-print-area [data-invoice-rooms] th:nth-child(4),
+  #invoice-print-area [data-invoice-rooms] th:nth-child(5) { width: 6%; }
+  #invoice-print-area [data-invoice-rooms] th:nth-child(6) { width: 10%; }
+  #invoice-print-area [data-invoice-rooms] th:nth-child(7) { width: 9%; }
+  #invoice-print-area [data-invoice-rooms] th:nth-child(8) { width: 10%; }
+  #invoice-print-area [data-invoice-rooms] th:nth-child(9) { width: 6%; }
+  #invoice-print-area [data-invoice-keep], #invoice-print-area thead { break-inside: avoid; }
+  #invoice-print-area tr { break-inside: avoid; }
+  #invoice-print-area .no-print { display: none !important; }
+`;
+
 const safeJsonParse = (value, fallback = {}) => {
   try {
     return JSON.parse(value || "{}");
@@ -472,32 +509,117 @@ const totalAmountPaid = Number(
   const handleGeneratePdf = async () => {
     if (!invoiceRef.current) return;
 
+    const outputWidth = 1060;
+    const pageWidth = 210;
+    const pageHeight = 297;
+    const margin = 10;
+    const imageWidth = pageWidth - margin * 2;
+    const pageCapacity = ((pageHeight - margin * 2) * outputWidth) / imageWidth;
+    let protectedLines = [];
+
     const canvas = await html2canvas(invoiceRef.current, {
       scale: 2,
       useCORS: true,
       backgroundColor: "#0b0f14",
+      windowWidth: 1280,
+      ignoreElements: element => element.classList.contains("no-print"),
+      onclone: async (clonedDocument, clonedInvoice) => {
+        const outputStyle = clonedDocument.createElement("style");
+        outputStyle.textContent = invoiceOutputStyles;
+        clonedDocument.head.appendChild(outputStyle);
+        clonedInvoice.style.setProperty("width", `${outputWidth}px`, "important");
+        await clonedDocument.fonts.ready;
+
+        // Keep text lines, ordinary table rows and the totals together when
+        // slicing the raster. Oversized descriptions may continue on a new page.
+        const top = clonedInvoice.getBoundingClientRect().top;
+        const protect = rect => {
+          if (rect.height > 0 && rect.height + 2 < pageCapacity) {
+            protectedLines.push({ top: rect.top - top - 1, bottom: rect.bottom - top + 1 });
+          }
+        };
+        const walker = clonedDocument.createTreeWalker(clonedInvoice, NodeFilter.SHOW_TEXT);
+        const range = clonedDocument.createRange();
+        while (walker.nextNode()) {
+          if (!walker.currentNode.textContent.trim()) continue;
+          range.selectNodeContents(walker.currentNode);
+          [...range.getClientRects()].forEach(protect);
+        }
+        clonedInvoice.querySelectorAll("tr, [data-invoice-keep]").forEach(element => {
+          protect(element.getBoundingClientRect());
+        });
+
+        // html2canvas 1.4 cannot parse CSS Color 4. Normalize paint only,
+        // in its private clone; keep the live invoice and its geometry intact.
+        const pixel = clonedDocument.createElement("canvas");
+        pixel.width = pixel.height = 1;
+        const context = pixel.getContext("2d", { willReadFrequently: true });
+        const normalizeColors = (value) => {
+          const colors = /\b(?:oklab|oklch|lab|lch|color(?:-mix)?)\(/g;
+          let result = "";
+          let previous = 0;
+          let match;
+          while ((match = colors.exec(value))) {
+            let end = colors.lastIndex;
+            let depth = 1;
+            while (depth && end < value.length) {
+              const character = value[end++];
+              if (character === "(") depth++;
+              if (character === ")") depth--;
+            }
+            context.clearRect(0, 0, 1, 1);
+            context.fillStyle = value.slice(match.index, end);
+            context.fillRect(0, 0, 1, 1);
+            const [red, green, blue, alpha] = context.getImageData(0, 0, 1, 1).data;
+            result += value.slice(previous, match.index) +
+              `rgba(${red}, ${green}, ${blue}, ${alpha / 255})`;
+            previous = end;
+            colors.lastIndex = end;
+          }
+          return (result + value.slice(previous)).replace(
+            /\s+in\s+(?:oklab|oklch|lab|lch)(?:\s+(?:shorter|longer|increasing|decreasing)\s+hue)?/g,
+            "",
+          );
+        };
+        const properties = [
+          "color", "background-color", "background-image", "box-shadow",
+          "text-shadow", "border-top-color", "border-right-color",
+          "border-bottom-color", "border-left-color", "outline-color",
+          "text-decoration-color", "fill", "stroke",
+        ];
+        const paint = [clonedInvoice, ...clonedInvoice.querySelectorAll("*")].map(element => {
+          const computed = clonedDocument.defaultView.getComputedStyle(element);
+          return { element, values: properties.map(property => [property, computed.getPropertyValue(property)]) };
+        });
+        paint.forEach(({ element, values }) => values.forEach(([property, value]) => {
+          const compatible = normalizeColors(value);
+          if (compatible !== value) element.style.setProperty(property, compatible, "important");
+        }));
+      },
     });
 
-    const imgData = canvas.toDataURL("image/png");
-
     const pdf = new jsPDF("p", "mm", "a4");
-    const pageWidth = pdf.internal.pageSize.getWidth();
-    const pageHeight = pdf.internal.pageSize.getHeight();
-
-    const imgWidth = pageWidth;
-    const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
-    let heightLeft = imgHeight;
-    let position = 0;
-
-    pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-    heightLeft -= pageHeight;
-
-    while (heightLeft > 0) {
-      position = heightLeft - imgHeight;
-      pdf.addPage();
-      pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-      heightLeft -= pageHeight;
+    const scale = canvas.width / outputWidth;
+    const capacity = Math.floor(pageCapacity * scale);
+    const bands = protectedLines.map(line => ({
+      top: Math.floor(line.top * scale), bottom: Math.ceil(line.bottom * scale),
+    }));
+    let offset = 0;
+    while (offset < canvas.height) {
+      let end = Math.min(offset + capacity, canvas.height);
+      if (end < canvas.height) {
+        let crossing;
+        while ((crossing = bands.find(line => line.top < end && line.bottom > end && line.top > offset))) {
+          end = crossing.top;
+        }
+      }
+      const page = document.createElement("canvas");
+      page.width = canvas.width;
+      page.height = end - offset;
+      page.getContext("2d").drawImage(canvas, 0, offset, canvas.width, page.height, 0, 0, canvas.width, page.height);
+      if (offset > 0) pdf.addPage();
+      pdf.addImage(page.toDataURL("image/png"), "PNG", margin, margin, imageWidth, (page.height * imageWidth) / page.width);
+      offset = end;
     }
 
     pdf.save(`hotel-invoice-${invoiceNo}.pdf`);
@@ -521,14 +643,14 @@ const totalAmountPaid = Number(
 
   if (!booking || Object.keys(booking).length === 0) {
     return (
-      <div className="min-h-screen bg-(--bg-main) flex flex-col items-center justify-center text-center px-4 font-(--font-body)">
-        <h1 className="text-2xl font-bold text-red-400 mb-4">
+      <div className="fl-booking-base min-h-screen bg-(--bg-main) flex flex-col items-center justify-center text-center px-4 font-(--font-body)">
+        <h1 className="fl-booking-heading fl-booking-title fl-booking-danger text-2xl font-bold text-red-400 mb-4">
           Invoice data not found
         </h1>
 
         <button
           onClick={() => navigate(-1)}
-          className="px-6 py-3 rounded-xl bg-linear-to-r from-start to-end text-black font-bold"
+          className="fl-booking-ink fl-booking-surface fl-booking-button fl-booking-primary px-6 py-3 rounded-xl bg-linear-to-r from-start to-end text-black font-bold"
         >
           Go Back
         </button>
@@ -537,29 +659,25 @@ const totalAmountPaid = Number(
   }
 
   return (
-    <div className="min-h-screen bg-(--bg-main) text-(--text-main) py-24 px-3 md:px-8 font-(--font-body)">
+    <div className="fl-booking-base min-h-screen bg-(--bg-main) text-(--text-main) py-24 px-3 md:px-8 font-(--font-body)">
       <style>
         {`
           @media print {
-            body * {
-              visibility: hidden;
-            }
-
-            #invoice-print-area,
-            #invoice-print-area * {
-              visibility: visible;
-            }
-
-            #invoice-print-area {
-              position: absolute;
-              left: 0;
-              top: 0;
-              width: 100%;
-            }
-
-            .no-print {
+            @page { size: A4; margin: 10mm; }
+            body:has(#invoice-print-area) *:not(#invoice-print-area):not(#invoice-print-area *):not(:has(#invoice-print-area)) {
               display: none !important;
             }
+            html:has(#invoice-print-area), body:has(#invoice-print-area),
+            body:has(#invoice-print-area) :has(#invoice-print-area) {
+              display: block !important;
+              position: static !important;
+              width: auto !important; max-width: none !important;
+              height: auto !important; min-height: 0 !important;
+              margin: 0 !important; padding: 0 !important;
+              overflow: visible !important; transform: none !important;
+              background: white !important;
+            }
+            ${invoiceOutputStyles}
           }
         `}
       </style>
@@ -568,7 +686,7 @@ const totalAmountPaid = Number(
         <div className="no-print mb-5 flex flex-wrap items-center justify-between gap-3">
           <button
             onClick={() => navigate(-1)}
-            className="px-5 py-2 rounded-xl border border-(--border-soft) text-(--gold-soft) hover:bg-white/5 transition font-bold"
+            className="fl-booking-accent fl-booking-surface fl-booking-line fl-booking-button fl-booking-secondary px-5 py-2 rounded-xl border border-(--border-soft) text-(--gold-soft) hover:bg-white/5 transition font-bold"
           >
             ← Back To Booking
           </button>
@@ -591,13 +709,13 @@ const totalAmountPaid = Number(
         <div
           ref={invoiceRef}
           id="invoice-print-area"
-          className="bg-(--bg-card) border border-(--border-soft) rounded-3xl overflow-hidden shadow-2xl shadow-black/30"
+          className="fl-booking-surface fl-booking-line fl-booking-paper bg-(--bg-card) border border-(--border-soft) rounded-3xl overflow-hidden shadow-2xl shadow-black/30"
         >
-          <div className="bg-linear-to-r from-(--bg-primary) via-(--bg-via) to-(--bg-secondary) px-5 py-5 border-b border-(--border-soft) flex flex-col md:flex-row justify-between gap-4">
+          <div className="fl-booking-surface fl-booking-line bg-linear-to-r from-(--bg-primary) via-(--bg-via) to-(--bg-secondary) px-5 py-5 border-b border-(--border-soft) flex flex-col md:flex-row justify-between gap-4">
             <div>
-              <h1 className="font-(--font-logo) text-3xl md:text-4xl tracking-wide">
-                <span className="text-(--gold-main)">FLYING</span>
-                <span className="text-(--gold-soft)">LYTE</span>
+              <h1 className="fl-booking-heading fl-booking-title font-(--font-logo) text-3xl md:text-4xl tracking-wide">
+                <span className="fl-booking-accent text-(--gold-main)">FLYING</span>
+                <span className="fl-booking-accent text-(--gold-soft)">LYTE</span>
               </h1>
 
               <p className="text-(--text-muted) text-sm mt-1">Hotel Invoice</p>
@@ -606,35 +724,35 @@ const totalAmountPaid = Number(
             <div className="text-sm md:text-right space-y-1">
               <p>
                 <span className="text-(--text-muted)">Invoice No:</span>{" "}
-                <span className="font-bold text-(--gold-soft)">
+                <span className="fl-booking-accent font-bold text-(--gold-soft)">
                   {invoiceNo}
                 </span>
               </p>
 
               <p>
                 <span className="text-(--text-muted)">Invoice Date:</span>{" "}
-                <span className="font-bold text-white">
+                <span className="fl-booking-ink font-bold text-white">
                   {formatDate(invoiceDate)}
                 </span>
               </p>
 
               <p>
                 <span className="text-(--text-muted)">Confirmation No:</span>{" "}
-                <span className="font-bold text-white">{confirmationNo}</span>
+                <span className="fl-booking-ink font-bold text-white">{confirmationNo}</span>
               </p>
             </div>
           </div>
 
           <div className="p-5 md:p-7">
             <div className="text-center mb-6">
-              <h2 className="text-2xl font-var[(--font-heading) text-(--gold-main) font-(--font-heading)">
+              <h2 className="fl-booking-heading fl-booking-subtitle fl-booking-accent text-2xl font-var[(--font-heading) text-(--gold-main) font-(--font-heading)">
                 Invoice
               </h2>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 border-b border-(--border-soft) pb-6">
+            <div data-invoice-columns="2" className="fl-booking-line grid grid-cols-1 md:grid-cols-2 gap-6 border-b border-(--border-soft) pb-6">
               <div>
-                <h3 className="text-xl font-bold text-(--gold-main) mb-3">
+                <h3 className="fl-booking-heading fl-booking-subtitle fl-booking-accent text-xl font-bold text-(--gold-main) mb-3">
                   {companyName}
                 </h3>
 
@@ -642,48 +760,48 @@ const totalAmountPaid = Number(
                   <p>{companyAddress}</p>
 
                   <p>
-                    <span className="font-bold text-white">Email:</span>{" "}
+                    <span className="fl-booking-ink font-bold text-white">Email:</span>{" "}
                     <a
                       href={`mailto:${companyEmail}`}
-                      className="hover:text-(--gold-main)"
+                      className="fl-booking-accent hover:text-(--gold-main)"
                     >
                       {companyEmail}
                     </a>
                   </p>
 
                   <p>
-                    <span className="font-bold text-white">Mobile:</span>{" "}
+                    <span className="fl-booking-ink font-bold text-white">Mobile:</span>{" "}
                     <a
                       href={`tel:+91${companyMobile}`}
-                      className="hover:text-(--gold-main)"
+                      className="fl-booking-accent hover:text-(--gold-main)"
                     >
                       {companyMobile}
                     </a>
                   </p>
 
                   <p>
-                    <span className="font-bold text-white">Website:</span>{" "}
+                    <span className="fl-booking-ink font-bold text-white">Website:</span>{" "}
                     <a
                       href={companyWebsite}
                       target="_blank"
                       rel="noreferrer"
-                      className="hover:text-(--gold-main)"
+                      className="fl-booking-accent hover:text-(--gold-main)"
                     >
                       {companyWebsite}
                     </a>
                   </p>
 
-                  <p className="text-white font-semibold">PAN: {companyPan}</p>
+                  <p className="fl-booking-ink text-white font-semibold">PAN: {companyPan}</p>
                 </div>
               </div>
 
               <div className="md:text-right">
-                <h3 className="text-xl font-bold text-(--gold-main) mb-3">
+                <h3 className="fl-booking-heading fl-booking-subtitle fl-booking-accent text-xl font-bold text-(--gold-main) mb-3">
                   Invoice To
                 </h3>
 
                 <div className="text-sm text-(--text-muted) leading-relaxed">
-                  <p className="text-white font-bold">{invoiceToName}</p>
+                  <p className="fl-booking-ink text-white font-bold">{invoiceToName}</p>
 
                   {invoiceToAddress !== "N/A" && <p>{invoiceToAddress}</p>}
                   {invoiceToCity !== "N/A" && <p>{invoiceToCity}</p>}
@@ -691,119 +809,119 @@ const totalAmountPaid = Number(
                   {invoiceToPin && <p>PIN - {invoiceToPin}</p>}
 
                   <p>
-                    <span className="font-bold text-white">Phone:</span>{" "}
+                    <span className="fl-booking-ink font-bold text-white">Phone:</span>{" "}
                     {invoiceToPhone}
                   </p>
 
                   <p>
-                    <span className="font-bold text-white">Email:</span>{" "}
+                    <span className="fl-booking-ink font-bold text-white">Email:</span>{" "}
                     {invoiceToEmail}
                   </p>
 
                   <p>
-                    <span className="font-bold text-white">PAN:</span>{" "}
+                    <span className="fl-booking-ink font-bold text-white">PAN:</span>{" "}
                     {invoiceToPan}
                   </p>
                 </div>
               </div>
             </div>
 
-            <div className="mt-6 overflow-x-auto rounded-2xl border border-(--border-soft)">
-              <table className="w-full text-sm min-w-225">
-                <thead className="bg-linear-to-r from-(--bg-primary) via-(--bg-via) to-(--bg-secondary) text-(--gold-soft)">
+            <div className="fl-booking-line mt-6 overflow-x-auto rounded-2xl border border-(--border-soft)">
+              <div className="fl-booking-table-scroll"><table data-invoice-rooms className="fl-booking-table w-full text-sm min-w-225">
+                <thead className="fl-booking-accent fl-booking-surface bg-linear-to-r from-(--bg-primary) via-(--bg-via) to-(--bg-secondary) text-(--gold-soft)">
                   <tr>
-                    <th className="p-3 text-left border border-(--border-soft)">
+                    <th className="fl-booking-line p-3 text-left border border-(--border-soft)">
                       Hotel Name
                     </th>
-                    <th className="p-3 text-left border border-(--border-soft)">
+                    <th className="fl-booking-line p-3 text-left border border-(--border-soft)">
                       Room Type
                     </th>
-                    <th className="p-3 text-left border border-(--border-soft)">
+                    <th className="fl-booking-line p-3 text-left border border-(--border-soft)">
                       PAX Name
                     </th>
-                    <th className="p-3 text-center border border-(--border-soft)">
+                    <th className="fl-booking-line p-3 text-center border border-(--border-soft)">
                       Rooms
                     </th>
-                    <th className="p-3 text-center border border-(--border-soft)">
+                    <th className="fl-booking-line p-3 text-center border border-(--border-soft)">
                       Nights
                     </th>
-                    <th className="p-3 text-right border border-(--border-soft)">
+                    <th className="fl-booking-line p-3 text-right border border-(--border-soft)">
                       Rate
                     </th>
-                    <th className="p-3 text-right border border-(--border-soft)">
+                    <th className="fl-booking-line p-3 text-right border border-(--border-soft)">
                       Tax
                     </th>
-                    <th className="p-3 text-right border border-(--border-soft)">
+                    <th className="fl-booking-line p-3 text-right border border-(--border-soft)">
                       Service Charges
                     </th>
-                    <th className="p-3 text-center border border-(--border-soft)">
+                    <th className="fl-booking-line p-3 text-center border border-(--border-soft)">
                       Currency
                     </th>
                   </tr>
                 </thead>
 
                 <tbody>
-                  <tr className="text-white">
-                    <td className="p-3 border border-(--border-soft)">
+                  <tr className="fl-booking-ink text-white">
+                    <td className="fl-booking-line p-3 border border-(--border-soft)">
                       {hotelName}
                     </td>
 
-                    <td className="p-3 border border-(--border-soft)">
+                    <td className="fl-booking-line p-3 border border-(--border-soft)">
                       {roomName}
                     </td>
 
-                    <td className="p-3 border border-(--border-soft)">
+                    <td className="fl-booking-line p-3 border border-(--border-soft)">
                       {guestName}
                     </td>
 
-                    <td className="p-3 text-center border border-(--border-soft)">
+                    <td className="fl-booking-line p-3 text-center border border-(--border-soft)">
                       {rooms}
                     </td>
 
-                    <td className="p-3 text-center border border-(--border-soft)">
+                    <td className="fl-booking-line p-3 text-center border border-(--border-soft)">
                       {nights}
                     </td>
 
-                    <td className="p-3 text-t border border(--border-soft)">
+                    <td className="fl-booking-line p-3 text-t border border(--border-soft)">
                       {formatAmount(rate || gross)}
                     </td>
 
-                    <td className="p-3 text-right border border-(--border-soft)">
+                    <td className="fl-booking-line p-3 text-right border border-(--border-soft)">
                       {formatAmount(tax)}
                     </td>
 
-                    <td className="p-3 text-right border border-(--border-soft)">
+                    <td className="fl-booking-line p-3 text-right border border-(--border-soft)">
                       {formatAmount(serviceCharges)}
                     </td>
 
-                    <td className="p-3 text-center border border-(--border-soft)">
+                    <td className="fl-booking-line p-3 text-center border border-(--border-soft)">
                       {currency}
                     </td>
                   </tr>
                 </tbody>
-              </table>
+              </table></div>
             </div>
 
-            <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
+            <div data-invoice-columns="3" className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
               <InfoBox label="City" value={city} />
               <InfoBox label="Check In" value={formatDate(checkIn)} />
               <InfoBox label="Check Out" value={formatDate(checkOut)} />
             </div>
 
-            <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div data-invoice-columns="2" className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="text-sm text-(--text-muted) space-y-2">
                 <p>
-                  <span className="text-white font-bold">Billed By:</span>{" "}
+                  <span className="fl-booking-ink text-white font-bold">Billed By:</span>{" "}
                   {billedBy}
                 </p>
 
                 <p>
-                  <span className="text-white font-bold">Issued By:</span>{" "}
+                  <span className="fl-booking-ink text-white font-bold">Issued By:</span>{" "}
                   {issuedBy}
                 </p>
               </div>
 
-              <div className="bg-(--bg-secondary) border border-(--border-soft) rounded-2xl p-5 text-sm space-y-3">
+              <div data-invoice-keep className="fl-booking-line bg-(--bg-secondary) border border-(--border-soft) rounded-2xl p-5 text-sm space-y-3">
                 <AmountRow
                   label="Gross"
                   value={gross}
@@ -834,7 +952,7 @@ const totalAmountPaid = Number(
                   currency={currency}
                 />
 
-                <div className="border-t border-(--border-soft) pt-3 space-y-3">
+                <div className="fl-booking-line border-t border-(--border-soft) pt-3 space-y-3">
   <AmountRow
     label="Net Amount"
     value={netAmount}
@@ -848,8 +966,8 @@ const totalAmountPaid = Number(
     currency={currency}
   />
 
-  <div className="border-t border-(--border-soft) pt-3">
-    <div className="flex justify-between gap-4 text-lg font-bold text-(--gold-main)">
+  <div className="fl-booking-line border-t border-(--border-soft) pt-3">
+    <div className="fl-booking-accent flex justify-between gap-4 text-lg font-bold text-(--gold-main)">
       <span>Total Amount</span>
 
       <span>
@@ -866,70 +984,70 @@ const totalAmountPaid = Number(
             </div>
 
             <div className="mt-8">
-              <h3 className="text-lg font-bold text-(--gold-main) mb-3">
+              <h3 className="fl-booking-heading fl-booking-subtitle fl-booking-accent text-lg font-bold text-(--gold-main) mb-3">
                 GST Details
               </h3>
 
-              <div className="overflow-x-auto rounded-2xl border border-(--border-soft)">
-                <table className="w-full text-sm min-w-187.5">
-                  <thead className="bg-linear-to-r from-(--bg-primary) via-(--bg-via) to-(--bg-secondary) text-(--gold-soft)">
+              <div className="fl-booking-line overflow-x-auto rounded-2xl border border-(--border-soft)">
+                <div className="fl-booking-table-scroll"><table className="fl-booking-table w-full text-sm min-w-187.5">
+                  <thead className="fl-booking-accent fl-booking-surface bg-linear-to-r from-(--bg-primary) via-(--bg-via) to-(--bg-secondary) text-(--gold-soft)">
                     <tr>
-                      <th className="p-3 text-left border border-(--border-soft)">
+                      <th className="fl-booking-line p-3 text-left border border-(--border-soft)">
                         Service Description
                       </th>
-                      <th className="p-3 text-left border border-(--border-soft)">
+                      <th className="fl-booking-line p-3 text-left border border-(--border-soft)">
                         SAC
                       </th>
-                      <th className="p-3 text-right border border-(--border-soft)">
+                      <th className="fl-booking-line p-3 text-right border border-(--border-soft)">
                         Taxable Value
                       </th>
-                      <th className="p-3 text-right border border-(--border-soft)">
+                      <th className="fl-booking-line p-3 text-right border border-(--border-soft)">
                         CGST @ 0%
                       </th>
-                      <th className="p-3 text-right border border-(--border-soft)">
+                      <th className="fl-booking-line p-3 text-right border border-(--border-soft)">
                         SGST @ 0%
                       </th>
-                      <th className="p-3 text-right border border-(--border-soft)">
+                      <th className="fl-booking-line p-3 text-right border border-(--border-soft)">
                         IGST @ 18
                       </th>
-                      <th className="p-3 text-right border border-(--border-soft)">
+                      <th className="fl-booking-line p-3 text-right border border-(--border-soft)">
                         Total
                       </th>
                     </tr>
                   </thead>
 
                   <tbody>
-                    <tr className="text-white">
-                      <td className="p-3 border border-(--border-soft)">
+                    <tr className="fl-booking-ink text-white">
+                      <td className="fl-booking-line p-3 border border-(--border-soft)">
                         Transaction Fees
                       </td>
 
-                      <td className="p-3 border border-(--border-soft)">
+                      <td className="fl-booking-line p-3 border border-(--border-soft)">
                         {sacCode}
                       </td>
 
-                      <td className="p-3 text-right border border-(--border-soft)">
+                      <td className="fl-booking-line p-3 text-right border border-(--border-soft)">
                         {formatAmount(taxableValue)}
                       </td>
 
-                      <td className="p-3 text-right border border-(--border-soft)">
+                      <td className="fl-booking-line p-3 text-right border border-(--border-soft)">
                         {formatAmount(cgst)}
                       </td>
 
-                      <td className="p-3 text-right border border-(--border-soft)">
+                      <td className="fl-booking-line p-3 text-right border border-(--border-soft)">
                         {formatAmount(sgst)}
                       </td>
 
-                      <td className="p-3 text-right border border-(--border-soft)">
+                      <td className="fl-booking-line p-3 text-right border border-(--border-soft)">
                         {formatAmount(igst)}
                       </td>
 
-                      <td className="p-3 text-right border border-(--border-soft)">
+                      <td className="fl-booking-line p-3 text-right border border-(--border-soft)">
                         {formatAmount(gstTotal)}
                       </td>
                     </tr>
                   </tbody>
-                </table>
+                </table></div>
               </div>
             </div>
 
@@ -944,21 +1062,21 @@ const totalAmountPaid = Number(
             <div className="no-print mt-6 flex flex-wrap justify-end gap-4">
               <button
                 onClick={handleGeneratePdf}
-                className="text-(--gold-main) underline underline-offset-4 font-bold"
+                className="fl-booking-accent fl-booking-button text-(--gold-main) underline underline-offset-4 font-bold"
               >
                 Generate PDF
               </button>
 
               <button
                 onClick={handleEmail}
-                className="text-(--gold-main) underline underline-offset-4 font-bold"
+                className="fl-booking-accent fl-booking-button text-(--gold-main) underline underline-offset-4 font-bold"
               >
                 Email
               </button>
 
               <button
                 onClick={handlePrint}
-                className="text-(--gold-main) underline underline-offset-4 font-bold"
+                className="fl-booking-accent fl-booking-button text-(--gold-main) underline underline-offset-4 font-bold"
               >
                 Print
               </button>
@@ -974,7 +1092,7 @@ const InvoiceActionButton = ({ children, onClick }) => {
   return (
     <button
       onClick={onClick}
-      className="px-4 py-2 rounded-xl bg-linear-to-r from-start to-end text-black font-bold text-sm shadow-lg shadow-black/20 hover:scale-[1.02] active:scale-[0.98] transition"
+      className="fl-booking-ink fl-booking-surface fl-booking-button fl-booking-primary px-4 py-2 rounded-xl bg-linear-to-r from-start to-end text-black font-bold text-sm shadow-lg shadow-black/20 hover:scale-[1.02] active:scale-[0.98] transition"
     >
       {children}
     </button>
@@ -983,9 +1101,9 @@ const InvoiceActionButton = ({ children, onClick }) => {
 
 const InfoBox = ({ label, value }) => {
   return (
-    <div className="bg-(--bg-secondary) border border-(--border-soft) rounded-2xl p-4">
-      <span className="font-bold text-(--gold-soft)">{label}:</span>{" "}
-      <span className="text-white">{value || "N/A"}</span>
+    <div className="fl-booking-line bg-(--bg-secondary) border border-(--border-soft) rounded-2xl p-4">
+      <span className="fl-booking-accent font-bold text-(--gold-soft)">{label}:</span>{" "}
+      <span className="fl-booking-ink text-white">{value || "N/A"}</span>
     </div>
   );
 };
@@ -1005,13 +1123,13 @@ const AmountRow = ({ label, value, currency = "INR", highlight = false }) => {
 
 const ResponseDataBox = ({ title = "Response Data", data }) => {
   return (
-    <details className="no-print mt-8 bg-(--bg-card) border border-(--border-soft) rounded-3xl overflow-hidden shadow-xl shadow-black/20">
-      <summary className="cursor-pointer px-5 py-4 text-(--gold-main) font-bold bg-linear-to-r from-(--bg-primary) via-(--bg-via) to-(--bg-secondary)">
+    <details className="fl-booking-surface fl-booking-line no-print mt-8 bg-(--bg-card) border border-(--border-soft) rounded-3xl overflow-hidden shadow-xl shadow-black/20">
+      <summary className="fl-booking-accent fl-booking-surface cursor-pointer px-5 py-4 text-(--gold-main) font-bold bg-linear-to-r from-(--bg-primary) via-(--bg-via) to-(--bg-secondary)">
         {title}
       </summary>
 
-      <div className="border-t border-(--border-soft) p-4">
-        <pre className="max-h-150 overflow-auto rounded-2xl bg-black/50 p-4 text-xs leading-relaxed text-green-300 whitespace-pre-wrap">
+      <div className="fl-booking-line border-t border-(--border-soft) p-4">
+        <pre className="fl-booking-success fl-booking-inset max-h-150 overflow-auto rounded-2xl bg-black/50 p-4 text-xs leading-relaxed text-green-300 whitespace-pre-wrap">
           {JSON.stringify(data, null, 2)}
         </pre>
       </div>

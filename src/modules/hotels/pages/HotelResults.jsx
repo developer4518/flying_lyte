@@ -538,7 +538,7 @@ const HotelImageSlider = ({
 
   return (
     <div
-      className="relative w-full h-full overflow-hidden"
+      className="fl-hotel-slider relative w-full h-full overflow-hidden"
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
       onClick={(e) => {
@@ -555,7 +555,7 @@ const HotelImageSlider = ({
       {/* IMAGES */}
 
       <div
-        className="flex w-full h-full transition-transform duration-500 ease-in-out"
+        className="fl-hotel-slider-track flex w-full h-full transition-transform duration-500 ease-in-out"
         style={{
           transform: `translateX(-${currentSlide * 100}%)`,
         }}
@@ -565,7 +565,7 @@ const HotelImageSlider = ({
             key={`${image}-${index}`}
             src={image}
             alt={`${alt} ${index + 1}`}
-            className="w-full h-full object-cover shrink-0"
+            className="fl-hotel-image w-full h-full object-cover shrink-0"
             loading="lazy"
             referrerPolicy="no-referrer"
             onError={(e) => {
@@ -584,7 +584,7 @@ const HotelImageSlider = ({
             type="button"
             aria-label="Previous hotel image"
             onClick={previousSlide}
-            className="
+            className="fl-hotel-image-control fl-result-button
               absolute
               left-2
               top-1/2
@@ -612,7 +612,7 @@ md:group-hover:opacity-100
             type="button"
             aria-label="Next hotel image"
             onClick={nextSlide}
-            className="
+            className="fl-hotel-image-control fl-result-button
               absolute
               right-2
               top-1/2
@@ -642,7 +642,7 @@ md:group-hover:opacity-100
 
       {slides.length > 1 && (
         <div
-          className="
+          className="fl-hotel-image-dots
             absolute
             bottom-3
             right-3
@@ -658,7 +658,7 @@ md:group-hover:opacity-100
           onClick={(e) => e.stopPropagation()}
         >
           {slides.map((_, index) => (
-            <button
+            <button data-fl-active={currentSlide === index}
               key={index}
               type="button"
               aria-label={`Show hotel image ${index + 1}`}
@@ -666,7 +666,7 @@ md:group-hover:opacity-100
                 e.stopPropagation();
                 setCurrentSlide(index);
               }}
-              className={`rounded-full transition-all ${currentSlide === index
+              className={`fl-hotel-image-dot fl-result-button rounded-full transition-all ${currentSlide === index
                 ? "w-5 h-1.5 bg-yellow-400"
                 : "w-1.5 h-1.5 bg-white/60 hover:bg-white"
                 }`}
@@ -1394,24 +1394,24 @@ const HotelResults = () => {
   );
 
   return (
-    <div className="min-h-screen bg-[#0B0B0F] text-white pb-20 md:pb-0 pt-20">
+    <div data-fl-theme="model2" className="fl-results-page fl-hotel-results min-h-screen bg-[#0B0B0F] text-white pb-20 md:pb-0 pt-20">
       <SEO
         title={`Hotels in ${displayCity || "Top Destinations"}`}
         description={`Find and book luxury and budget hotels in ${displayCity || "top destinations"}. Exclusive hotel deals, best rates, and instant booking confirmation with FlyingLyte.`}
         canonical="https://www.flyinglyte.com/hotels"
       />
-      <div className="bg-[#0B0B0F]/95 backdrop-blur border-b border-gray-800 px-4 md:px-10 py-10 md:py-6">
+      <div className="fl-results-summary bg-[#0B0B0F]/95 backdrop-blur border-b border-gray-800 px-4 md:px-10 py-10 md:py-6">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-2">
           <div>
-            <p className="text-xs uppercase tracking-[0.35em] text-yellow-300">
+            <p className="fl-results-eyebrow text-xs uppercase tracking-[0.35em] text-yellow-300">
               Hotel Search Results
             </p>
 
-            <h1 className="mt-1 text-xl md:text-3xl font-bold text-yellow-400">
+            <h1 className="fl-results-heading mt-1 text-xl md:text-3xl font-bold text-yellow-400">
               Hotels in {displayCity}
             </h1>
 
-            <p className="text-xs md:text-sm text-gray-400 mt-1">
+            <p className="fl-result-muted text-xs md:text-sm text-gray-400 mt-1">
               {checkIn || "Check-in"} → {checkOut || "Check-out"} •{" "}
               {totalGuests || 1} Guest{totalGuests > 1 ? "s" : ""} •{" "}
               {guests?.rooms || 1} Room
@@ -1419,7 +1419,7 @@ const HotelResults = () => {
             </p>
 
             {childAges.length > 0 && (
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="fl-result-muted text-xs text-gray-500 mt-1">
                 Child age{childAges.length > 1 ? "s" : ""}:{" "}
                 {childAges.join(", ")}
               </p>
@@ -1427,19 +1427,19 @@ const HotelResults = () => {
           </div>
 
           <div className="flex flex-wrap gap-2 text-xs">
-            <span className="px-3 py-1 rounded-full bg-green-500/10 text-green-300 border border-green-500/20">
+            <span className="fl-result-badge px-3 py-1 rounded-full bg-green-500/10 text-green-300 border border-green-500/20">
               {totalHotels} Hotels Found
             </span>
 
-            <span className="px-3 py-1 rounded-full bg-yellow-500/10 text-yellow-300 border border-yellow-500/20">
+            <span className="fl-result-badge px-3 py-1 rounded-full bg-yellow-500/10 text-yellow-300 border border-yellow-500/20">
               Page {currentPage} of {totalPages}
             </span>
           </div>
         </div>
       </div>
 
-      <div className="px-4 md:px-10 py-6 grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="hidden md:block bg-[#15151C] p-5 rounded-2xl sticky top-28 border border-gray-800 h-fit">
+      <div className="fl-results-layout px-4 md:px-10 py-6 grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div className="fl-result-surface fl-results-sidebar hidden md:block bg-[#15151C] p-5 rounded-2xl sticky top-28 border border-gray-800 h-fit">
           <FiltersUI
             hotelSearch={hotelSearch}
             setHotelSearch={setHotelSearch}
@@ -1464,7 +1464,7 @@ const HotelResults = () => {
           />
         </div>
 
-        <div className="md:col-span-3 space-y-5">
+        <div className="fl-results-list md:col-span-3 space-y-5">
           {totalHotels > 0 && (
             <PaginationBar
               currentPage={currentPage}
@@ -1481,28 +1481,28 @@ const HotelResults = () => {
           )}
 
           {paginationError && (
-            <div className="text-sm text-red-400 bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3">
+            <div className="fl-result-error text-sm text-red-400 bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3">
               {paginationError}
             </div>
           )}
 
           {restoreLoading ? (
-            <div className="bg-[#15151C] min-h-64 p-10 rounded-2xl border border-gray-800 flex flex-col items-center justify-center">
-              <div className="w-10 h-10 rounded-full border-4 border-gray-700 border-t-yellow-400 animate-spin" />
+            <div className="fl-result-surface fl-result-state bg-[#15151C] min-h-64 p-10 rounded-2xl border border-gray-800 flex flex-col items-center justify-center">
+              <div className="fl-result-loader w-10 h-10 rounded-full border-4 border-gray-700 border-t-yellow-400 animate-spin" />
 
-              <p className="mt-4 text-base font-semibold text-yellow-300">
+              <p className="fl-result-ink mt-4 text-base font-semibold text-yellow-300">
                 Loading hotels...
               </p>
 
-              <p className="mt-1 text-sm text-gray-500">
+              <p className="fl-result-muted mt-1 text-sm text-gray-500">
                 Please wait while we restore your hotel search.
               </p>
             </div>
           ) : filteredHotels.length === 0 ? (
-            <div className="bg-[#15151C] p-10 rounded-2xl text-center border border-gray-800">
-              <p className="text-lg text-gray-300">No hotels found</p>
+            <div className="fl-result-surface fl-result-state bg-[#15151C] p-10 rounded-2xl text-center border border-gray-800">
+              <p className="fl-result-ink text-lg text-gray-300">No hotels found</p>
 
-              <p className="text-sm text-gray-500 mt-2">
+              <p className="fl-result-muted text-sm text-gray-500 mt-2">
                 Try changing price, rating or refundable filters.
               </p>
             </div>
@@ -1559,7 +1559,7 @@ const HotelResults = () => {
                   }}
                   tabIndex={hasBookingCode ? 0 : -1}
                   aria-label={`View details for ${hotel.hotel_name || "hotel"}`}
-                  className={`
+                  className={`fl-result-card fl-hotel-card
     group
     bg-[#15151C]
     rounded-2xl
@@ -1578,8 +1578,8 @@ const HotelResults = () => {
                     }
   `}
                 >
-                  <div className="flex flex-col lg:flex-row">
-                    <div className="relative w-full lg:w-60 h-44 sm:h-48 lg:h-52 shrink-0 bg-[#0B0B0F]">
+                  <div className="fl-hotel-card-layout flex flex-col lg:flex-row">
+                    <div className="fl-hotel-image-surface relative w-full lg:w-60 h-44 sm:h-48 lg:h-52 shrink-0 bg-[#0B0B0F]">
                       <HotelImageSlider
                         images={hotelImages}
                         alt={hotel.hotel_name || "Hotel"}
@@ -1587,24 +1587,24 @@ const HotelResults = () => {
                       />
 
                       {hotel.has_image && (
-                        <div className="absolute bottom-3 left-3 bg-black/70 backdrop-blur text-white text-[10px] px-2 py-1 rounded-full border border-white/10">
+                        <div className="fl-hotel-image-label absolute bottom-3 left-3 bg-black/70 backdrop-blur text-white text-[10px] px-2 py-1 rounded-full border border-white/10">
                           Real Image
                         </div>
                       )}
 
-                      <div className="absolute top-3 left-3 bg-yellow-400 text-black text-xs font-bold px-2 py-1 rounded-full">
+                      <div className="fl-result-rating absolute top-3 left-3 bg-yellow-400 text-black text-xs font-bold px-2 py-1 rounded-full">
                         ⭐ {hotel.rating || 4}
                       </div>
                     </div>
 
-                    <div className="flex-1 p-4">
-                      <div className="flex flex-col xl:flex-row xl:items-start xl:justify-between gap-4">
+                    <div className="fl-hotel-card-body flex-1 p-4">
+                      <div className="fl-result-wrap flex flex-col xl:flex-row xl:items-start xl:justify-between gap-4">
                         <div className="min-w-0">
-                          <h2 className="text-base md:text-lg font-semibold text-yellow-300 line-clamp-2">
+                          <h2 className="fl-results-heading text-base md:text-lg font-semibold text-yellow-300 line-clamp-2">
                             {hotel.hotel_name || "Hotel"}
                           </h2>
 
-                          <p className="text-xs text-gray-400 mt-1 wrap-break-word line-clamp-2">
+                          <p className="fl-result-muted text-xs text-gray-400 mt-1 wrap-break-word line-clamp-2">
                             🛏{" "}
                             {defaultRoom?.room_name ||
                               hotel.room ||
@@ -1619,7 +1619,7 @@ const HotelResults = () => {
                                 .map((item, i) => (
                                   <span
                                     key={i}
-                                    className="px-2 py-1 rounded-full text-[11px]
+                                    className="fl-result-badge px-2 py-1 rounded-full text-[11px]
           bg-emerald-500/10 border border-emerald-500/20
           text-emerald-300"
                                   >
@@ -1633,9 +1633,9 @@ const HotelResults = () => {
                             {getRoomBadges(defaultRoom)
                               .slice(0, 3)
                               .map((badge, i) => (
-                                <span
+                                <span data-fl-tone={badge.label === "Non-refundable" ? "warning" : "info"}
                                   key={i}
-                                  className={`text-[10px] px-2 py-1 rounded-full border ${badge.className}`}
+                                  className={`fl-result-badge text-[10px] px-2 py-1 rounded-full border ${badge.className}`}
                                 >
                                   {badge.label}
                                 </span>
@@ -1643,14 +1643,14 @@ const HotelResults = () => {
                           </div>
                         </div>
 
-                        <div className="xl:text-right shrink-0">
-                          <p className="text-xs text-gray-500">Starting from</p>
+                        <div className="fl-result-price-group xl:text-right shrink-0">
+                          <p className="fl-result-muted text-xs text-gray-500">Starting from</p>
 
-                          <p className="text-xl md:text-2xl font-bold text-yellow-400">
+                          <p className="fl-result-price text-xl md:text-2xl font-bold text-yellow-400">
                             ₹ {formatPrice(hotel.price)}
                           </p>
 
-                          <p className="text-xs text-gray-400">
+                          <p className="fl-result-muted text-xs text-gray-400">
                             inclusive of all taxes
                           </p>
 
@@ -1660,7 +1660,7 @@ const HotelResults = () => {
                               handleView(hotel, defaultRoom);
                             }}
                             disabled={!hasBookingCode}
-                            className="mt-3 px-4 py-2 rounded-lg bg-linear-to-r from-yellow-400 to-orange-400 text-black text-xs md:text-sm font-bold hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 transition"
+                            className="fl-result-primary fl-result-button mt-3 px-4 py-2 rounded-lg bg-linear-to-r from-yellow-400 to-orange-400 text-black text-xs md:text-sm font-bold hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 transition"
                           >
                             View Details →
                           </button>
@@ -1690,31 +1690,31 @@ const HotelResults = () => {
         </div>
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 md:hidden bg-[#15151C] border-t border-gray-800 flex z-40">
+      <div className="fl-results-toolbar fixed bottom-0 left-0 right-0 md:hidden bg-[#15151C] border-t border-gray-800 flex z-40">
         <button
           onClick={() => setShowFilters(true)}
-          className="flex-1 py-3 text-sm border-r border-gray-800"
+          className="fl-result-button flex-1 py-3 text-sm border-r border-gray-800"
         >
           Filters
         </button>
 
         <button
           onClick={() => setSort(sort === "price" ? "rating" : "price")}
-          className="flex-1 py-3 text-sm"
+          className="fl-result-button flex-1 py-3 text-sm"
         >
           Sort: {sort === "price" ? "Price" : "Rating"}
         </button>
       </div>
 
       {showFilters && (
-        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm md:hidden">
-          <div className="absolute bottom-0 left-0 right-0 bg-[#15151C] border-t border-gray-800 rounded-t-3xl p-5 max-h-[80vh] overflow-y-auto">
+        <div className="fl-results-backdrop fixed inset-0 z-50 bg-black/70 backdrop-blur-sm md:hidden">
+          <div className="fl-result-surface fl-results-sheet absolute bottom-0 left-0 right-0 bg-[#15151C] border-t border-gray-800 rounded-t-3xl p-5 max-h-[80vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-5">
-              <h3 className="text-lg font-bold text-yellow-300">Filters</h3>
+              <h3 className="fl-results-heading text-lg font-bold text-yellow-300">Filters</h3>
 
               <button
                 onClick={() => setShowFilters(false)}
-                className="w-9 h-9 rounded-full bg-[#0B0B0F] border border-gray-800"
+                className="fl-result-secondary fl-result-button w-9 h-9 rounded-full bg-[#0B0B0F] border border-gray-800"
               >
                 ✕
               </button>
@@ -1745,7 +1745,7 @@ const HotelResults = () => {
 
             <button
               onClick={() => setShowFilters(false)}
-              className="w-full mt-5 py-3 rounded-xl bg-yellow-400 text-black font-bold"
+              className="fl-result-primary fl-result-button w-full mt-5 py-3 rounded-xl bg-yellow-400 text-black font-bold"
             >
               Apply Filters
             </button>
@@ -1782,7 +1782,7 @@ const PaginationBar = ({
   );
 
   return (
-    <div className="bg-[#15151C] border border-gray-800 rounded-2xl px-4 py-4 md:px-5">
+    <div className="fl-result-surface fl-results-pagination bg-[#15151C] border border-gray-800 rounded-2xl px-4 py-4 md:px-5">
 
       {/* =========================
           MOBILE PAGINATION
@@ -1790,24 +1790,24 @@ const PaginationBar = ({
       <div className="md:hidden">
         <div className="flex items-center justify-between gap-3 mb-4">
           <div>
-            <p className="text-sm text-gray-300">
+            <p className="fl-result-ink text-sm text-gray-300">
               Showing{" "}
-              <span className="text-yellow-400 font-semibold">
+              <span className="fl-result-accent text-yellow-400 font-semibold">
                 {startHotelNumber}-{endHotelNumber}
               </span>{" "}
               of{" "}
-              <span className="text-yellow-400 font-semibold">
+              <span className="fl-result-accent text-yellow-400 font-semibold">
                 {totalHotels}
               </span>
             </p>
 
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="fl-result-muted text-xs text-gray-500 mt-1">
               Page {currentPage} of {totalPages}
             </p>
           </div>
 
           {pageLoading && (
-            <div className="w-5 h-5 rounded-full border-2 border-gray-700 border-t-yellow-400 animate-spin shrink-0" />
+            <div className="fl-result-loader w-5 h-5 rounded-full border-2 border-gray-700 border-t-yellow-400 animate-spin shrink-0" />
           )}
         </div>
 
@@ -1818,7 +1818,7 @@ const PaginationBar = ({
             aria-label="Previous page"
             disabled={!hasPrevious || pageLoading}
             onClick={() => onPageChange(currentPage - 1)}
-            className="
+            className="fl-result-secondary fl-result-ink fl-result-button
               w-10 h-10
               rounded-xl
               border border-gray-700
@@ -1835,12 +1835,12 @@ const PaginationBar = ({
 
           {/* Page Numbers */}
           {mobilePageNumbers.map((pageNumber) => (
-            <button
+            <button data-fl-active={currentPage === pageNumber}
               key={pageNumber}
               type="button"
               disabled={pageLoading}
               onClick={() => onPageChange(pageNumber)}
-              className={`
+              className={`fl-result-choice fl-result-secondary fl-result-button
                 w-10 h-10
                 rounded-xl
                 border
@@ -1865,7 +1865,7 @@ const PaginationBar = ({
             aria-label="Next page"
             disabled={!hasNext || pageLoading}
             onClick={() => onPageChange(currentPage + 1)}
-            className="
+            className="fl-result-secondary fl-result-ink fl-result-button
               w-10 h-10
               rounded-xl
               border border-gray-700
@@ -1886,32 +1886,32 @@ const PaginationBar = ({
           DESKTOP PAGINATION
       ========================== */}
       <div className="hidden md:block">
-        <div className="flex items-center justify-between gap-4">
+        <div className="fl-results-pagination-row flex items-center justify-between gap-4">
 
           <div>
-            <p className="text-base text-gray-300">
+            <p className="fl-result-ink text-base text-gray-300">
               Showing{" "}
-              <span className="text-yellow-400 font-semibold">
+              <span className="fl-result-accent text-yellow-400 font-semibold">
                 {startHotelNumber} - {endHotelNumber}
               </span>{" "}
               of{" "}
-              <span className="text-yellow-400 font-semibold">
+              <span className="fl-result-accent text-yellow-400 font-semibold">
                 {totalHotels}
               </span>{" "}
               hotels
             </p>
 
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="fl-result-muted text-xs text-gray-500 mt-1">
               Page {currentPage} of {totalPages}
             </p>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="fl-results-pagination-controls flex items-center gap-2">
             <button
               type="button"
               disabled={!hasPrevious || pageLoading}
               onClick={() => onPageChange(currentPage - 1)}
-              className="
+              className="fl-result-secondary fl-result-ink fl-result-button
                 min-h-10 px-4 rounded-xl
                 border border-gray-700
                 text-sm text-gray-300
@@ -1926,12 +1926,12 @@ const PaginationBar = ({
             </button>
 
             {visiblePageNumbers.map((pageNumber) => (
-              <button
+              <button data-fl-active={currentPage === pageNumber}
                 type="button"
                 key={pageNumber}
                 disabled={pageLoading}
                 onClick={() => onPageChange(pageNumber)}
-                className={`
+                className={`fl-result-choice fl-result-secondary fl-result-button
                   min-w-10 h-10 px-3 rounded-xl
                   border text-sm font-medium transition
 
@@ -1949,7 +1949,7 @@ const PaginationBar = ({
               type="button"
               disabled={!hasNext || pageLoading}
               onClick={() => onPageChange(currentPage + 1)}
-              className="
+              className="fl-result-secondary fl-result-ink fl-result-button
                 min-h-10 px-4 rounded-xl
                 border border-gray-700
                 text-sm text-gray-300
@@ -1966,7 +1966,7 @@ const PaginationBar = ({
         </div>
 
         {pageLoading && (
-          <p className="text-xs text-yellow-300 mt-3">
+          <p className="fl-result-muted text-xs text-yellow-300 mt-3">
             Loading hotels...
           </p>
         )}
@@ -1999,9 +1999,9 @@ const FiltersUI = ({
   mealType,
   setMealType,
 }) => (
-  <div className="space-y-5">
+  <div className="fl-results-filter-fields space-y-5">
     <div className="relative">
-      <label className="text-sm text-gray-400">Hotel Name</label>
+      <label className="fl-result-muted text-sm text-gray-400">Hotel Name</label>
 
       <div className="relative mt-1">
         <input
@@ -2025,7 +2025,7 @@ const FiltersUI = ({
 
             setHotelDropdownOpen(Boolean(value.trim()));
           }}
-          className="
+          className="fl-result-control
         w-full
         p-2.5 pr-10
         rounded-xl
@@ -2039,7 +2039,7 @@ const FiltersUI = ({
 
         {hotelFilterLoading ? (
           <span
-            className="
+            className="fl-result-loader
           absolute
           right-3 top-1/2
           -translate-y-1/2
@@ -2055,7 +2055,7 @@ const FiltersUI = ({
           <button
             type="button"
             onClick={handleClearHotelFilter}
-            className="
+            className="fl-result-link fl-result-muted fl-result-button
           absolute
           right-3 top-1/2
           -translate-y-1/2
@@ -2070,7 +2070,7 @@ const FiltersUI = ({
 
       {hotelDropdownOpen && hotelSearch.trim() && !hotelFilterLoading && (
         <div
-          className="
+          className="fl-result-surface fl-results-options
           absolute
           left-0 right-0
           top-full
@@ -2090,7 +2090,7 @@ const FiltersUI = ({
                 key={hotel.hotel_code}
                 type="button"
                 onClick={() => handleHotelSelect(hotel)}
-                className="
+                className="fl-result-option fl-result-ink fl-result-button
                 block
                 w-full
                 px-3 py-3
@@ -2108,7 +2108,7 @@ const FiltersUI = ({
               </button>
             ))
           ) : (
-            <div className="px-3 py-3 text-sm text-gray-500">
+            <div className="fl-result-muted px-3 py-3 text-sm text-gray-500">
               No matching hotel found
             </div>
           )}
@@ -2116,12 +2116,12 @@ const FiltersUI = ({
       )}
     </div>
     <div>
-      <label className="text-sm text-gray-400">Sort</label>
+      <label className="fl-result-muted text-sm text-gray-400">Sort</label>
 
       <select
         value={sort}
         onChange={(e) => setSort(e.target.value)}
-        className="w-full mt-1 p-2 rounded-xl bg-[#0B0B0F] border border-gray-800 outline-none"
+        className="fl-result-control w-full mt-1 p-2 rounded-xl bg-[#0B0B0F] border border-gray-800 outline-none"
       >
         <option value="price">Price: Low to High</option>
         <option value="rating">Rating: High to Low</option>
@@ -2129,7 +2129,7 @@ const FiltersUI = ({
     </div>
 
     <div>
-      <label className="text-sm text-gray-400">
+      <label className="fl-result-muted text-sm text-gray-400">
         Max ₹{formatPrice(priceRange[1])}
       </label>
 
@@ -2145,12 +2145,12 @@ const FiltersUI = ({
     </div>
 
     <div>
-      <label className="text-sm text-gray-400">Rating</label>
+      <label className="fl-result-muted text-sm text-gray-400">Rating</label>
 
       <select
         value={minRating}
         onChange={(e) => setMinRating(Number(e.target.value))}
-        className="w-full mt-1 p-2 rounded-xl bg-[#0B0B0F] border border-gray-800 outline-none"
+        className="fl-result-control w-full mt-1 p-2 rounded-xl bg-[#0B0B0F] border border-gray-800 outline-none"
       >
         <option value="0">All</option>
         <option value="3">3+</option>
@@ -2160,12 +2160,12 @@ const FiltersUI = ({
     </div>
 
     <div>
-      <label className="text-sm text-gray-400">Meal Type</label>
+      <label className="fl-result-muted text-sm text-gray-400">Meal Type</label>
 
       <select
         value={mealType}
         onChange={(e) => setMealType(e.target.value)}
-        className="w-full mt-1 p-2 rounded-xl bg-[#0B0B0F] border border-gray-800 outline-none"
+        className="fl-result-control w-full mt-1 p-2 rounded-xl bg-[#0B0B0F] border border-gray-800 outline-none"
       >
         <option value="all">All</option>
         <option value="room_only">Room Only</option>
@@ -2175,7 +2175,7 @@ const FiltersUI = ({
       </select>
     </div>
 
-    <label className="flex gap-3 items-center text-sm text-gray-300 cursor-pointer">
+    <label className="fl-result-ink flex gap-3 items-center text-sm text-gray-300 cursor-pointer">
       <input
         type="checkbox"
         checked={onlyRefundable}

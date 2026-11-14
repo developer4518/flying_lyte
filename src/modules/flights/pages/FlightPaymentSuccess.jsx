@@ -664,8 +664,8 @@ const FlightPaymentSuccess = () => {
     const uiConfig = {
         verifying: {
             icon: (
-                <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full border border-yellow-400/20 bg-yellow-400/10">
-                    <div className="h-10 w-10 animate-spin rounded-full border-4 border-gray-700 border-t-yellow-400" />
+                <div className="fl-booking-notice fl-booking-line mx-auto flex h-20 w-20 items-center justify-center rounded-full border border-yellow-400/20 bg-yellow-400/10">
+                    <div className="fl-booking-line fl-booking-spinner h-10 w-10 animate-spin rounded-full border-4 border-gray-700 border-t-yellow-400" />
                 </div>
             ),
             eyebrow: "Secure Payment Verification",
@@ -682,10 +682,10 @@ const FlightPaymentSuccess = () => {
 
         ticketing: {
             icon: (
-                <div className="relative mx-auto flex h-20 w-20 items-center justify-center rounded-full border border-cyan-400/20 bg-cyan-400/10">
+                <div className="fl-booking-notice fl-booking-line relative mx-auto flex h-20 w-20 items-center justify-center rounded-full border border-cyan-400/20 bg-cyan-400/10">
                     <Plane className="h-9 w-9 text-cyan-300" />
 
-                    <span className="absolute inset-0 animate-ping rounded-full border border-cyan-400/20" />
+                    <span className="fl-booking-line absolute inset-0 animate-ping rounded-full border border-cyan-400/20" />
                 </div>
             ),
             eyebrow: "Payment Verified",
@@ -702,7 +702,7 @@ const FlightPaymentSuccess = () => {
 
         success: {
             icon: (
-                <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full border border-green-400/20 bg-green-400/10">
+                <div className="fl-booking-success-notice fl-booking-line mx-auto flex h-20 w-20 items-center justify-center rounded-full border border-green-400/20 bg-green-400/10">
                     <CheckCircle2 className="h-11 w-11 text-green-400" />
                 </div>
             ),
@@ -720,7 +720,7 @@ const FlightPaymentSuccess = () => {
 
         verification_pending: {
             icon: (
-                <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full border border-amber-400/20 bg-amber-400/10">
+                <div className="fl-booking-notice fl-booking-line mx-auto flex h-20 w-20 items-center justify-center rounded-full border border-amber-400/20 bg-amber-400/10">
                     <Clock3 className="h-10 w-10 text-amber-300" />
                 </div>
             ),
@@ -738,7 +738,7 @@ const FlightPaymentSuccess = () => {
 
         ticket_failed: {
             icon: (
-                <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full border border-red-400/20 bg-red-400/10">
+                <div className="fl-booking-danger-notice fl-booking-line mx-auto flex h-20 w-20 items-center justify-center rounded-full border border-red-400/20 bg-red-400/10">
                     <AlertTriangle className="h-10 w-10 text-red-300" />
                 </div>
             ),
@@ -756,7 +756,7 @@ const FlightPaymentSuccess = () => {
 
         payment_failed: {
             icon: (
-                <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full border border-red-400/20 bg-red-400/10">
+                <div className="fl-booking-danger-notice fl-booking-line mx-auto flex h-20 w-20 items-center justify-center rounded-full border border-red-400/20 bg-red-400/10">
                     <XCircle className="h-11 w-11 text-red-400" />
                 </div>
             ),
@@ -774,7 +774,7 @@ const FlightPaymentSuccess = () => {
 
         error: {
             icon: (
-                <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full border border-red-400/20 bg-red-400/10">
+                <div className="fl-booking-danger-notice fl-booking-line mx-auto flex h-20 w-20 items-center justify-center rounded-full border border-red-400/20 bg-red-400/10">
                     <AlertTriangle className="h-10 w-10 text-red-300" />
                 </div>
             ),
@@ -803,9 +803,9 @@ const FlightPaymentSuccess = () => {
     // ============================================================
 
     return (
-        <div className="relative min-h-screen overflow-hidden bg-[#07090D] px-4 pb-16 pt-28 text-white sm:px-6">
+        <div className="fl-booking-ink fl-booking-inset relative min-h-screen overflow-hidden bg-[#07090D] px-4 pb-16 pt-28 text-white sm:px-6">
             {/* Background decoration */}
-            <div className="pointer-events-none absolute left-1/2 top-10 h-100 w-100 -translate-x-1/2 rounded-full bg-yellow-400/5 blur-3xl" />
+            <div className="fl-booking-notice pointer-events-none absolute left-1/2 top-10 h-100 w-100 -translate-x-1/2 rounded-full bg-yellow-400/5 blur-3xl" />
 
             <div className="relative mx-auto max-w-2xl">
                 {/* Progress */}
@@ -850,23 +850,23 @@ const FlightPaymentSuccess = () => {
                 </div>
 
                 <div
-                    className={`overflow-hidden rounded-3xl border bg-[#11141B]/95 shadow-2xl backdrop-blur-xl ${config.borderClass} ${config.glowClass}`}
+                    className={`fl-booking-inset fl-booking-line overflow-hidden rounded-3xl border bg-[#11141B]/95 shadow-2xl backdrop-blur-xl ${config.borderClass} ${config.glowClass}`}
                 >
                     {/* Header */}
-                    <div className="border-b border-white/6 px-6 py-8 text-center sm:px-10 sm:py-10">
+                    <div className="fl-booking-line border-b border-white/6 px-6 py-8 text-center sm:px-10 sm:py-10">
                         {config.icon}
 
-                        <p className="mt-6 text-xs font-semibold uppercase tracking-[0.24em] text-gray-500">
+                        <p className="fl-booking-muted mt-6 text-xs font-semibold uppercase tracking-[0.24em] text-gray-500">
                             {config.eyebrow}
                         </p>
 
                         <h1
-                            className={`mt-2 text-2xl font-bold sm:text-3xl ${config.titleClass}`}
+                            className={`fl-booking-heading fl-booking-title mt-2 text-2xl font-bold sm:text-3xl ${config.titleClass}`}
                         >
                             {config.title}
                         </h1>
 
-                        <p className="mx-auto mt-4 max-w-xl text-sm leading-7 text-gray-400 sm:text-base">
+                        <p className="fl-booking-muted mx-auto mt-4 max-w-xl text-sm leading-7 text-gray-400 sm:text-base">
                             {config.description}
                         </p>
                     </div>
@@ -874,14 +874,14 @@ const FlightPaymentSuccess = () => {
                     {/* Information */}
                     <div className="space-y-4 p-5 sm:p-8">
                         {/* Transaction */}
-                        <div className="rounded-2xl border border-white/8 bg-black/20 p-4">
+                        <div className="fl-booking-inset fl-booking-line rounded-2xl border border-white/8 bg-black/20 p-4">
                             <div className="flex items-center justify-between gap-4">
                                 <div className="min-w-0">
-                                    <p className="text-xs uppercase tracking-wider text-gray-500">
+                                    <p className="fl-booking-muted text-xs uppercase tracking-wider text-gray-500">
                                         Transaction ID
                                     </p>
 
-                                    <p className="mt-1 break-all font-mono text-sm font-semibold text-white">
+                                    <p className="fl-booking-ink mt-1 break-all font-mono text-sm font-semibold text-white">
                                         {txnid || "N/A"}
                                     </p>
                                 </div>
@@ -890,7 +890,7 @@ const FlightPaymentSuccess = () => {
                                     <button
                                         type="button"
                                         onClick={handleCopyTxn}
-                                        className="flex shrink-0 items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs font-semibold text-gray-300 transition hover:border-yellow-400/30 hover:bg-yellow-400/10 hover:text-yellow-200"
+                                        className="fl-booking-ink fl-booking-accent fl-booking-surface fl-booking-notice fl-booking-line fl-booking-button fl-booking-primary flex shrink-0 items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs font-semibold text-gray-300 transition hover:border-yellow-400/30 hover:bg-yellow-400/10 hover:text-yellow-200"
                                     >
                                         <Copy className="h-3.5 w-3.5" />
 
@@ -904,18 +904,18 @@ const FlightPaymentSuccess = () => {
 
                         {/* Payment amount */}
                         {paymentData?.amount && (
-                            <div className="flex items-center justify-between rounded-2xl border border-white/8 bg-black/20 p-4">
+                            <div className="fl-booking-inset fl-booking-line flex items-center justify-between rounded-2xl border border-white/8 bg-black/20 p-4">
                                 <div>
-                                    <p className="text-xs uppercase tracking-wider text-gray-500">
+                                    <p className="fl-booking-muted text-xs uppercase tracking-wider text-gray-500">
                                         Payment Amount
                                     </p>
 
-                                    <p className="mt-1 text-sm text-gray-400">
+                                    <p className="fl-booking-muted mt-1 text-sm text-gray-400">
                                         PayU verified amount
                                     </p>
                                 </div>
 
-                                <p className="text-xl font-bold text-yellow-300">
+                                <p className="fl-booking-accent text-xl font-bold text-yellow-300">
                                     ₹{" "}
                                     {Number(
                                         paymentData.amount || 0,
@@ -932,15 +932,15 @@ const FlightPaymentSuccess = () => {
 
                         {/* Security note */}
                         {isBusy && (
-                            <div className="flex items-start gap-3 rounded-2xl border border-blue-400/15 bg-blue-400/5 p-4">
+                            <div className="fl-booking-notice fl-booking-line flex items-start gap-3 rounded-2xl border border-blue-400/15 bg-blue-400/5 p-4">
                                 <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-blue-300" />
 
                                 <div>
-                                    <p className="text-sm font-semibold text-blue-200">
+                                    <p className="fl-booking-info text-sm font-semibold text-blue-200">
                                         Please keep this page open
                                     </p>
 
-                                    <p className="mt-1 text-xs leading-5 text-gray-400">
+                                    <p className="fl-booking-muted mt-1 text-xs leading-5 text-gray-400">
                                         Do not refresh, close this page,
                                         or make another payment while
                                         your ticket is being processed.
@@ -952,16 +952,16 @@ const FlightPaymentSuccess = () => {
                         {/* Pending verification */}
                         {status ===
                             "verification_pending" && (
-                                <div className="rounded-2xl border border-amber-400/20 bg-amber-400/8 p-5">
+                                <div className="fl-booking-notice fl-booking-line rounded-2xl border border-amber-400/20 bg-amber-400/8 p-5">
                                     <div className="flex items-start gap-3">
                                         <Clock3 className="mt-0.5 h-6 w-6 shrink-0 text-amber-300" />
 
                                         <div>
-                                            <p className="font-semibold text-amber-200">
+                                            <p className="fl-booking-accent font-semibold text-amber-200">
                                                 What should you do now?
                                             </p>
 
-                                            <p className="mt-2 text-sm leading-6 text-gray-300">
+                                            <p className="fl-booking-ink mt-2 text-sm leading-6 text-gray-300">
                                                 Please check{" "}
                                                 <b>My Bookings</b> after
                                                 around 5 minutes. If your
@@ -970,7 +970,7 @@ const FlightPaymentSuccess = () => {
                                                 Transaction ID.
                                             </p>
 
-                                            <p className="mt-3 text-xs font-semibold text-red-300">
+                                            <p className="fl-booking-danger mt-3 text-xs font-semibold text-red-300">
                                                 Do not make another payment.
                                             </p>
                                         </div>
@@ -980,16 +980,16 @@ const FlightPaymentSuccess = () => {
 
                         {/* Manual refund */}
                         {status === "ticket_failed" && (
-                            <div className="rounded-2xl border border-red-400/20 bg-red-400/8 p-5">
+                            <div className="fl-booking-danger-notice fl-booking-line rounded-2xl border border-red-400/20 bg-red-400/8 p-5">
                                 <div className="flex items-start gap-3">
                                     <AlertTriangle className="mt-0.5 h-6 w-6 shrink-0 text-red-300" />
 
                                     <div>
-                                        <p className="font-semibold text-red-200">
+                                        <p className="fl-booking-danger font-semibold text-red-200">
                                             Payment received, ticket failed
                                         </p>
 
-                                        <p className="mt-2 text-sm leading-6 text-gray-300">
+                                        <p className="fl-booking-ink mt-2 text-sm leading-6 text-gray-300">
                                             Your payment was successful,
                                             but the ticket could not be
                                             generated. The amount will be
@@ -997,7 +997,7 @@ const FlightPaymentSuccess = () => {
                                             original payment method.
                                         </p>
 
-                                        <p className="mt-3 text-xs text-gray-400">
+                                        <p className="fl-booking-muted mt-3 text-xs text-gray-400">
                                             Please keep your Transaction
                                             ID for support reference.
                                         </p>
@@ -1014,7 +1014,7 @@ const FlightPaymentSuccess = () => {
                                     onClick={() =>
                                         navigate("/bookings")
                                     }
-                                    className="flex items-center justify-center gap-2 rounded-xl bg-linear-to-r from-yellow-400 to-orange-400 px-5 py-3 font-bold text-black transition hover:scale-[1.01]"
+                                    className="fl-booking-ink fl-booking-surface fl-booking-button fl-booking-primary flex items-center justify-center gap-2 rounded-xl bg-linear-to-r from-yellow-400 to-orange-400 px-5 py-3 font-bold text-black transition hover:scale-[1.01]"
                                 >
                                     View My Bookings
 
@@ -1029,7 +1029,7 @@ const FlightPaymentSuccess = () => {
                                         onClick={() =>
                                             navigate("/")
                                         }
-                                        className="flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-5 py-3 font-semibold text-gray-200 transition hover:bg-white/10"
+                                        className="fl-booking-ink fl-booking-surface fl-booking-line fl-booking-button fl-booking-secondary flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-5 py-3 font-semibold text-gray-200 transition hover:bg-white/10"
                                     >
                                         Back to Home
                                     </button>
@@ -1045,7 +1045,7 @@ const FlightPaymentSuccess = () => {
                                             status ===
                                             "ticket_failed"
                                         }
-                                        className="flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-5 py-3 font-semibold text-gray-200 transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-40"
+                                        className="fl-booking-ink fl-booking-surface fl-booking-line fl-booking-button fl-booking-secondary flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-5 py-3 font-semibold text-gray-200 transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-40"
                                     >
                                         <RefreshCcw className="h-4 w-4" />
 
@@ -1056,18 +1056,18 @@ const FlightPaymentSuccess = () => {
                         )}
 
                         {ticketData?.booking_id && (
-                            <div className="rounded-xl border border-white/8 bg-white/3 p-4 text-xs text-gray-400">
+                            <div className="fl-booking-muted fl-booking-surface fl-booking-line rounded-xl border border-white/8 bg-white/3 p-4 text-xs text-gray-400">
                                 Booking ID:{" "}
-                                <span className="font-semibold text-white">
+                                <span className="fl-booking-ink font-semibold text-white">
                                     {ticketData.booking_id}
                                 </span>
                             </div>
                         )}
 
                         {ticketData?.pnr && (
-                            <div className="rounded-xl border border-white/8 bg-white/3 p-4 text-xs text-gray-400">
+                            <div className="fl-booking-muted fl-booking-surface fl-booking-line rounded-xl border border-white/8 bg-white/3 p-4 text-xs text-gray-400">
                                 PNR:{" "}
-                                <span className="font-semibold text-white">
+                                <span className="fl-booking-ink font-semibold text-white">
                                     {ticketData.pnr}
                                 </span>
                             </div>
@@ -1075,7 +1075,7 @@ const FlightPaymentSuccess = () => {
                     </div>
                 </div>
 
-                <p className="mt-5 text-center text-xs leading-5 text-gray-600">
+                <p className="fl-booking-muted mt-5 text-center text-xs leading-5 text-gray-600">
                     FlyingLyte secure flight payment and
                     ticket processing
                 </p>

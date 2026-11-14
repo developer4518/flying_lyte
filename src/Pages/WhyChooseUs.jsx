@@ -26,28 +26,28 @@ const features = [
 
 const WhyChooseUs = () => {
   return (
-    <section className="relative py-20 bg-[var(--bg-main)] overflow-hidden">
+    <section className="fl-wcu" data-fl-theme="model2">
       {/* Gold ambient glow */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(234,168,42,0.12),transparent_60%)]" />
+      <div className="fl-wcu__ambient" />
 
-      <div className="relative max-w-7xl mx-auto px-4">
+      <div className="fl-wcu__wrap">
         {/* Heading */}
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="fl-wcu__heading"
         >
-          <h2 className="font-[var(--font-heading)] text-3xl sm:text-4xl text-[var(--gold-main)] mb-3">
+          <h2 className="fl-wcu__title">
             Why Choose Us
           </h2>
-          <p className="text-[var(--text-muted)] max-w-xl mx-auto">
+          <p className="fl-wcu__subtitle">
             Travel crafted with trust, comfort and premium service
           </p>
         </motion.div>
 
         {/* Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="fl-wcu__features">
           {features.map((item, index) => {
             const Icon = item.icon;
             return (
@@ -59,37 +59,19 @@ const WhyChooseUs = () => {
                 transition={{ delay: index * 0.1 }}
                 whileHover={{ y: -8 }}
                 whileTap={{ scale: 0.97 }}
-                className="
-                  bg-[var(--bg-card)]
-                  border border-[var(--border-soft)]
-                  rounded-3xl
-                  p-8
-                  text-center
-                  shadow-[0_25px_70px_rgba(0,0,0,0.7)]
-                  cursor-pointer
-                  group
-                "
+                className="fl-wcu__feature cursor-pointer group"
               >
                 <div
-                  className="
-                    w-16 h-16 mx-auto mb-6
-                    flex items-center justify-center
-                    rounded-full
-                    bg-linear-to-r from-[var(--color-start)] to-[var(--color-end)]
-                    text-black
-                    shadow-[0_10px_30px_rgba(234,168,42,0.5)]
-                    group-hover:scale-110
-                    transition
-                  "
+                  className="fl-wcu__icon group-hover:scale-110 transition"
                 >
-                  <Icon className="w-8 h-8" />
+                  <Icon className="fl-wcu__symbol" />
                 </div>
 
-                <h3 className="text-lg font-semibold text-[var(--text-main)] mb-2">
+                <h3 className="fl-wcu__feature-title">
                   {item.title}
                 </h3>
 
-                <p className="text-sm text-[var(--text-muted)] leading-relaxed">
+                <p className="fl-wcu__description">
                   {item.desc}
                 </p>
               </motion.div>
