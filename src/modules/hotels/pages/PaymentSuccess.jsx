@@ -1,15 +1,38 @@
+
 "use client";
 
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 import { publicApi, privateApi } from "../../../services/api";
-
 import { useHotelStore } from "../../../store/hotelStore";
+
+// Safely read saved booking data.
+const readStoredJSON = (key) => {
+  try {
+    return JSON.parse(localStorage.getItem(key) || "null");
+  } catch {
+    return null;
+  }
+};
+
+// Compare amounts in paise to avoid floating-point errors.
+const toPaise = (value) => {
+  if (value === null || value === undefined || value === "") {
+    return null;
+  }
+
+  const amount = Number(value);
+
+  if (!Number.isFinite(amount) || amount <= 0) {
+    return null;
+  }
+
+  return Math.round(amount * 100);
+};
 
 const PaymentSuccess = () => {
   const navigate = useNavigate();
-
   const [searchParams] = useSearchParams();
 
   const { setGuestDetails } = useHotelStore();
@@ -18,142 +41,227 @@ const PaymentSuccess = () => {
 
   const [status, setStatus] = useState("verifying");
   const [error, setError] = useState("");
+  const [canRetry, setCanRetry] = useState(true);
 
-  /*
-   * IMPORTANT:
-   * Prevent React StrictMode or rerenders
-   * from calling the hotel booking API twice.
-   */
-  const hasStartedRef = useRef(false);
+  // Prevent duplicate effect execution for the same transaction.
+  const startedForTransactionRef = useRef(null);
 
   useEffect(() => {
-    if (hasStartedRef.current) return;
+    const transactionKey = txnid || "__missing_txnid__";
 
-    hasStartedRef.current = true;
+    if (startedForTransactionRef.current === transactionKey) {
+      return;
+    }
+
+    startedForTransactionRef.current = transactionKey;
 
     const verifyAndBookHotel = async () => {
       if (!txnid) {
         setStatus("error");
         setError("Transaction ID missing.");
+        setCanRetry(false);
         return;
       }
 
+      const bookingLockKey = `hotelBookingStarted_${txnid}`;
+
+      let bookingRequestAttempted = false;
+
       try {
-        // =====================================================
-        // STEP 1 - VERIFY PAYMENT
-        // =====================================================
+        // ==============================================
+        // STEP 1 - VERIFY HOTEL PAYMENT
+        // ==============================================
 
         setStatus("verifying");
         setError("");
+        setCanRetry(true);
 
-        console.log("VERIFYING PAYMENT:", txnid);
+        const verifyResponse = await publicApi.get(
+          `/payment/hotels/verify/${encodeURIComponent(txnid)}/`
+        );
 
-        const verifyResponse = await publicApi.get(`/payment/verify/${txnid}/`);
-
-        console.log("PAYMENT VERIFY RESPONSE:", verifyResponse.data);
-
-        const paidAmount = Number(
-  verifyResponse.data?.amount || 0,
-);
-
-console.log("ACTUAL PAID AMOUNT:", paidAmount);
+        const payment = verifyResponse.data;
 
         const paymentIsValid =
-          verifyResponse.data?.success === true &&
-          verifyResponse.data?.paid === true &&
-          String(verifyResponse.data?.status || "").toLowerCase() === "success";
+          payment?.success === true &&
+          payment?.paid === true &&
+          String(payment?.status || "").toLowerCase() ===
+            "success" &&
+          (!payment?.txnid || String(payment.txnid) === txnid);
 
         if (!paymentIsValid) {
-          throw new Error("Payment could not be verified.");
+          throw new Error(
+            "Hotel payment could not be verified."
+          );
         }
 
-        // =====================================================
-        // STEP 2 - GET SAVED BOOKING DATA
-        // =====================================================
+        const paidAmount = Number(payment.amount);
+        const paidPaise = toPaise(payment.amount);
+
+        if (paidPaise === null) {
+          throw new Error(
+            "Invalid payment amount received from the server."
+          );
+        }
+
+        // ==============================================
+        // STEP 2 - CHECK EXISTING BOOKING
+        // ==============================================
+
+        const bookingState = localStorage.getItem(
+          bookingLockKey
+        );
+
+        const existingBookingData =
+          readStoredJSON(`hotelBookingData_${txnid}`) ||
+          readStoredJSON("hotelBookingData");
+
+        // Completed booking: reopen success page.
+        if (bookingState === "completed") {
+          const existingPaidPaise = toPaise(
+            existingBookingData?.paidAmount ??
+              existingBookingData?.paymentAmount
+          );
+
+          if (
+            existingBookingData?.paymentTransactionId ===
+              txnid &&
+            existingPaidPaise === paidPaise
+          ) {
+            setGuestDetails(
+              existingBookingData.guestList || []
+            );
+
+            setStatus("success");
+
+            navigate("/hotel-booking-success", {
+              replace: true,
+              state: {
+                booking:
+                  existingBookingData.bookingResponse,
+                savedData: existingBookingData,
+              },
+            });
+
+            return;
+          }
+
+          setCanRetry(false);
+
+          throw new Error(
+            "This transaction was already marked as booked, " +
+              "but its saved details are unavailable. " +
+              "Contact support with the transaction ID."
+          );
+        }
+
+        // Do not automatically repeat an uncertain supplier booking.
+        if (
+          bookingState === "processing" ||
+          bookingState === "needs_review"
+        ) {
+          setCanRetry(false);
+
+          throw new Error(
+            "A hotel booking request may already have been " +
+              "submitted. To avoid duplicate bookings, " +
+              "contact support with the transaction ID."
+          );
+        }
+
+        // ==============================================
+        // STEP 3 - GET SAVED HOTEL BOOKING DATA
+        // ==============================================
 
         setStatus("booking");
 
-        const pendingData = JSON.parse(
-          localStorage.getItem("pendingHotelBooking") || "null",
+        const pendingData = readStoredJSON(
+          "pendingHotelBooking"
         );
 
         if (!pendingData) {
-          throw new Error("Pending hotel booking data not found.");
+          throw new Error(
+            "Pending hotel booking data not found."
+          );
         }
 
         const {
-  reviewData,
-  bookingPayload,
-  gstForms,
-  paymentAmount,
-} = pendingData;
+          reviewData,
+          bookingPayload,
+          gstForms,
+          paymentAmount,
+        } = pendingData;
 
         if (!reviewData) {
-          throw new Error("Review booking data missing.");
+          throw new Error(
+            "Review booking data missing."
+          );
         }
 
         if (!bookingPayload) {
-          throw new Error("Hotel booking payload missing.");
+          throw new Error(
+            "Hotel booking payload missing."
+          );
         }
 
-        // =====================================================
-        // STEP 3 - PREVENT DOUBLE BOOKING
-        // =====================================================
+        // ==============================================
+        // STEP 4 - VERIFY PAYMENT AMOUNT
+        // ==============================================
 
-        const bookingLockKey = `hotelBookingStarted_${txnid}`;
+        const expectedPaise = toPaise(paymentAmount);
 
-        const alreadyStarted = localStorage.getItem(bookingLockKey);
+        if (
+          expectedPaise === null ||
+          expectedPaise !== paidPaise
+        ) {
+          throw new Error(
+            "Payment amount does not match the hotel booking amount."
+          );
+        }
 
-        /*
-         * If this transaction already produced booking data,
-         * simply continue to success page.
-         */
-        const existingBookingData = JSON.parse(
-          localStorage.getItem("hotelBookingData") || "null",
+        // ==============================================
+        // STEP 5 - HOTEL BOOK API
+        // ==============================================
+
+        setCanRetry(false);
+
+        // Mark processing before contacting supplier.
+        localStorage.setItem(
+          bookingLockKey,
+          "processing"
         );
 
-        if (alreadyStarted === "completed" && existingBookingData) {
-          navigate("/hotel-booking-success", {
-            replace: true,
-
-            state: {
-              booking: existingBookingData.bookingResponse,
-
-              savedData: existingBookingData,
-            },
-          });
-
-          return;
-        }
-
-        /*
-         * Set processing lock BEFORE third-party booking API.
-         */
-        localStorage.setItem(bookingLockKey, "processing");
-
-        console.log("PAYMENT VERIFIED:", txnid);
-
-        console.log("FINAL HOTEL BOOKING PAYLOAD:", bookingPayload);
-
-        // =====================================================
-        // STEP 4 - HOTEL BOOK API
-        // =====================================================
+        bookingRequestAttempted = true;
 
         const bookingResponse = await privateApi.post(
           "/api/hotels/hotels/book/",
-          bookingPayload,
+          bookingPayload
         );
 
-        console.log("HOTEL BOOKING RESPONSE:", bookingResponse.data);
+        const bookingResult = bookingResponse?.data;
 
-        // =====================================================
-        // STEP 5 - BUILD SUCCESS DATA
-        // =====================================================
+        // Reject explicit application-level failures.
+        // Exact supplier confirmation still needs backend verification.
+        if (
+          !bookingResult ||
+          typeof bookingResult !== "object" ||
+          bookingResult.success === false ||
+          bookingResult.IsError === true
+        ) {
+          throw new Error(
+            bookingResult?.message ||
+              "Hotel booking was not confirmed by the booking API."
+          );
+        }
+
+        // ==============================================
+        // STEP 6 - BUILD SUCCESS DATA
+        // ==============================================
 
         const bookingSuccessData = {
           ...reviewData,
 
-          bookingResponse: bookingResponse.data,
+          bookingResponse: bookingResult,
 
           guestList: reviewData.guestList || [],
 
@@ -165,7 +273,8 @@ console.log("ACTUAL PAID AMOUNT:", paidAmount);
 
           hotelResult: reviewData.hotelResult || {},
 
-          hotelAddress: reviewData.hotelAddress || "",
+          hotelAddress:
+            reviewData.hotelAddress || "",
 
           checkIn: reviewData.checkIn,
 
@@ -179,67 +288,91 @@ console.log("ACTUAL PAID AMOUNT:", paidAmount);
 
           finalPayload: bookingPayload,
 
-          cancellationPolicies: reviewData.cancellationPolicies || [],
+          cancellationPolicies:
+            reviewData.cancellationPolicies || [],
 
-          roomPromotions: reviewData.roomPromotions || [],
+          roomPromotions:
+            reviewData.roomPromotions || [],
 
-          supplements: reviewData.supplements || [],
+          supplements:
+            reviewData.supplements || [],
 
-          roomAmenities: reviewData.roomAmenities || [],
+          roomAmenities:
+            reviewData.roomAmenities || [],
 
-          rateConditions: reviewData.rateConditions || [],
+          rateConditions:
+            reviewData.rateConditions || [],
 
-          hotelFacilities: reviewData.hotelFacilities || [],
+          hotelFacilities:
+            reviewData.hotelFacilities || [],
 
-          hotelNorms: reviewData.hotelNorms || [],
+          hotelNorms:
+            reviewData.hotelNorms || [],
 
           gstDetails: gstForms || [],
 
+          // ============================================
           // PAYMENT INFORMATION
-         // PAYMENT INFORMATION
+          // ============================================
 
-// ✅ Actual amount paid through PayU
-paidAmount,
+          paidAmount,
 
-paymentAmount: paidAmount || Number(paymentAmount || 0),
+          paymentAmount: paidAmount,
 
-convenienceFee: Number(
-  reviewData?.convenienceFee ??
-    reviewData?.prebookData?.convenience_fee ??
-    0,
-),
+          convenienceFee: Number(
+            reviewData?.convenienceFee ??
+              reviewData?.prebookData
+                ?.convenience_fee ??
+              0
+          ),
 
-totalAmount: paidAmount,
+          totalAmount: paidAmount,
 
-paymentTransactionId: txnid,
+          paymentTransactionId: txnid,
 
-paymentStatus: "success",
+          paymentStatus: "success",
 
-paymentVerified: true,
+          paymentVerified: true,
         };
 
-        // =====================================================
-        // STEP 6 - SAVE BOOKING
-        // =====================================================
+        // ==============================================
+        // STEP 7 - SAVE BOOKING DATA
+        // ==============================================
 
+        // Transaction-specific backup for refresh recovery.
         localStorage.setItem(
-          "hotelBookingData",
-          JSON.stringify(bookingSuccessData),
+          `hotelBookingData_${txnid}`,
+          JSON.stringify(bookingSuccessData)
         );
 
-        setGuestDetails(reviewData.guestList || []);
+        // Preserve the existing success page storage key.
+        localStorage.setItem(
+          "hotelBookingData",
+          JSON.stringify(bookingSuccessData)
+        );
 
-        // Mark transaction booking as completed.
-        localStorage.setItem(bookingLockKey, "completed");
+        // Mark completed only after saving booking data.
+        localStorage.setItem(
+          bookingLockKey,
+          "completed"
+        );
 
-        // Temporary data is no longer needed.
-        localStorage.removeItem("pendingHotelBooking");
+        setGuestDetails(
+          reviewData.guestList || []
+        );
 
-        localStorage.removeItem("reviewBookingData");
+        // Remove temporary checkout data.
+        localStorage.removeItem(
+          "pendingHotelBooking"
+        );
 
-        // =====================================================
-        // STEP 7 - EXISTING SUCCESS PAGE
-        // =====================================================
+        localStorage.removeItem(
+          "reviewBookingData"
+        );
+
+        // ==============================================
+        // STEP 8 - NAVIGATE TO SUCCESS PAGE
+        // ==============================================
 
         setStatus("success");
 
@@ -247,37 +380,43 @@ paymentVerified: true,
           replace: true,
 
           state: {
-            booking: bookingResponse.data,
-
+            booking: bookingResult,
             savedData: bookingSuccessData,
           },
         });
       } catch (err) {
         console.error(
-          "PAYMENT / HOTEL BOOKING ERROR:",
-          err?.response?.data || err,
+          "HOTEL PAYMENT / BOOKING ERROR:",
+          err?.response?.data || err
         );
 
-        /*
-         * If third-party booking failed,
-         * remove processing lock so you can retry safely.
-         */
-        if (txnid) {
-          const bookingLockKey = `hotelBookingStarted_${txnid}`;
+        if (bookingRequestAttempted) {
+          // Supplier may have received the request even
+          // when the browser received an error or timeout.
+          // Do not automatically submit a second booking.
+          localStorage.setItem(
+            bookingLockKey,
+            "needs_review"
+          );
 
-          if (localStorage.getItem(bookingLockKey) === "processing") {
-            localStorage.removeItem(bookingLockKey);
-          }
+          setCanRetry(false);
+
+          setError(
+            "The hotel booking result needs confirmation. " +
+              "Do not pay again or retry booking. " +
+              "Please contact support with your transaction ID."
+          );
+        } else {
+          setError(
+            err?.response?.data?.message ||
+              err?.response?.data?.Error
+                ?.ErrorMessage ||
+              err?.message ||
+              "Unable to generate hotel voucher."
+          );
         }
 
         setStatus("error");
-
-        setError(
-          err?.response?.data?.message ||
-            err?.response?.data?.Error?.ErrorMessage ||
-            err?.message ||
-            "Unable to generate hotel voucher.",
-        );
       }
     };
 
@@ -287,6 +426,7 @@ paymentVerified: true,
   return (
     <div className="fl-booking-ink fl-booking-base flex min-h-screen items-center justify-center bg-[#0B0B0F] px-4 text-white">
       <div className="fl-booking-surface fl-booking-line w-full max-w-md rounded-3xl border border-yellow-400/20 bg-[#15151C] p-8 text-center shadow-2xl">
+
         {status === "verifying" && (
           <>
             <div className="fl-booking-line fl-booking-spinner mx-auto h-14 w-14 animate-spin rounded-full border-4 border-gray-700 border-t-yellow-400" />
@@ -314,8 +454,8 @@ paymentVerified: true,
             </h1>
 
             <p className="fl-booking-muted mt-2 text-sm text-gray-400">
-              Payment verified successfully. We are now confirming your hotel
-              booking.
+              Payment verified successfully. We are now
+              confirming your hotel booking.
             </p>
 
             <p className="fl-booking-accent mt-4 text-xs text-yellow-300">
@@ -326,7 +466,9 @@ paymentVerified: true,
 
         {status === "success" && (
           <>
-            <div className="mb-4 text-6xl">✅</div>
+            <div className="mb-4 text-6xl">
+              ✅
+            </div>
 
             <h1 className="fl-booking-heading fl-booking-title fl-booking-success text-2xl font-bold text-green-400">
               Booking Successful
@@ -340,17 +482,23 @@ paymentVerified: true,
 
         {status === "error" && (
           <>
-            <div className="mb-4 text-6xl">❌</div>
+            <div className="mb-4 text-6xl">
+              ❌
+            </div>
 
             <h1 className="fl-booking-heading fl-booking-title fl-booking-danger text-2xl font-bold text-red-400">
               Unable To Generate Voucher
             </h1>
 
-            <p className="fl-booking-muted mt-3 text-sm text-gray-400">{error}</p>
+            <p className="fl-booking-muted mt-3 text-sm text-gray-400">
+              {error}
+            </p>
 
             {txnid && (
               <div className="fl-booking-base fl-booking-line mt-5 rounded-xl border border-gray-800 bg-[#0B0B0F] p-4">
-                <p className="fl-booking-muted text-xs text-gray-500">Transaction ID</p>
+                <p className="fl-booking-muted text-xs text-gray-500">
+                  Transaction ID
+                </p>
 
                 <p className="fl-booking-ink mt-1 break-all text-sm font-semibold text-white">
                   {txnid}
@@ -358,13 +506,17 @@ paymentVerified: true,
               </div>
             )}
 
-            <button
-              type="button"
-              onClick={() => window.location.reload()}
-              className="fl-booking-ink fl-booking-surface fl-booking-button fl-booking-primary mt-6 w-full rounded-xl bg-linear-to-r from-yellow-400 to-orange-400 py-3 font-bold text-black"
-            >
-              Retry Voucher Generation
-            </button>
+            {canRetry && (
+              <button
+                type="button"
+                onClick={() =>
+                  window.location.reload()
+                }
+                className="fl-booking-ink fl-booking-surface fl-booking-button fl-booking-primary mt-6 w-full rounded-xl bg-linear-to-r from-yellow-400 to-orange-400 py-3 font-bold text-black"
+              >
+                Retry Payment Verification
+              </button>
+            )}
           </>
         )}
       </div>

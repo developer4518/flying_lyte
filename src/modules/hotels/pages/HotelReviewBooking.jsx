@@ -449,29 +449,29 @@ const findDeepArrayByKeys = (obj, keywords = [], maxDepth = 7) => {
 const getHotelFacilitiesFromReviewData = (data = {}) => {
   const directFacilities = normalizeTextList(
     data?.hotelFacilities ||
-      data?.hotelResult?.HotelFacilities ||
-      data?.hotelResult?.Facilities ||
-      data?.hotelResult?.HotelFacility ||
-      data?.hotelResult?.Amenities ||
-      data?.hotel?.HotelFacilities ||
-      data?.hotel?.Facilities ||
-      data?.hotel?.facilities ||
-      data?.hotel?.hotel_facilities ||
-      data?.hotel?.Amenities ||
-      data?.hotel?.amenities ||
-      data?.hotel?.hotel_raw?.HotelFacilities ||
-      data?.hotel?.hotel_raw?.Facilities ||
-      data?.hotel?.hotel_raw?.Amenities ||
-      data?.roomData?.HotelFacilities ||
-      data?.roomData?.Facilities ||
-      data?.prebookData?.HotelFacilities ||
-      data?.prebookData?.Facilities ||
-      data?.prebookData?.raw?.HotelResult?.[0]?.HotelFacilities ||
-      data?.prebookData?.raw?.HotelResult?.[0]?.Facilities ||
-      data?.prebookData?.raw?.HotelResult?.[0]?.Amenities ||
-      data?.prebookData?.raw?.Response?.HotelResult?.[0]?.HotelFacilities ||
-      data?.prebookData?.raw?.Response?.HotelResult?.[0]?.Facilities ||
-      data?.prebookData?.raw?.Response?.HotelResult?.[0]?.Amenities,
+    data?.hotelResult?.HotelFacilities ||
+    data?.hotelResult?.Facilities ||
+    data?.hotelResult?.HotelFacility ||
+    data?.hotelResult?.Amenities ||
+    data?.hotel?.HotelFacilities ||
+    data?.hotel?.Facilities ||
+    data?.hotel?.facilities ||
+    data?.hotel?.hotel_facilities ||
+    data?.hotel?.Amenities ||
+    data?.hotel?.amenities ||
+    data?.hotel?.hotel_raw?.HotelFacilities ||
+    data?.hotel?.hotel_raw?.Facilities ||
+    data?.hotel?.hotel_raw?.Amenities ||
+    data?.roomData?.HotelFacilities ||
+    data?.roomData?.Facilities ||
+    data?.prebookData?.HotelFacilities ||
+    data?.prebookData?.Facilities ||
+    data?.prebookData?.raw?.HotelResult?.[0]?.HotelFacilities ||
+    data?.prebookData?.raw?.HotelResult?.[0]?.Facilities ||
+    data?.prebookData?.raw?.HotelResult?.[0]?.Amenities ||
+    data?.prebookData?.raw?.Response?.HotelResult?.[0]?.HotelFacilities ||
+    data?.prebookData?.raw?.Response?.HotelResult?.[0]?.Facilities ||
+    data?.prebookData?.raw?.Response?.HotelResult?.[0]?.Amenities,
   );
 
   const deepFacilities = findDeepArrayByKeys(data, [
@@ -606,65 +606,65 @@ const HotelReviewBooking = () => {
 
   const reviewDataSource = baseReviewData
     ? {
-        ...baseReviewData,
-        hotel: mergedHotel,
-        roomData: mergedRoomData,
-        prebookData: mergedPrebookData,
-        hotelResult: mergedHotelResult,
-      }
+      ...baseReviewData,
+      hotel: mergedHotel,
+      roomData: mergedRoomData,
+      prebookData: mergedPrebookData,
+      hotelResult: mergedHotelResult,
+    }
     : null;
 
   const reviewData = reviewDataSource
     ? {
-        ...reviewDataSource,
+      ...reviewDataSource,
 
-        hotelAddress:
-          reviewDataSource?.hotelAddress ||
-          getHotelAddressFromReviewData(reviewDataSource),
+      hotelAddress:
+        reviewDataSource?.hotelAddress ||
+        getHotelAddressFromReviewData(reviewDataSource),
 
-        hotelFacilities:
-          reviewDataSource?.hotelFacilities ||
-          getHotelFacilitiesFromReviewData(reviewDataSource),
+      hotelFacilities:
+        reviewDataSource?.hotelFacilities ||
+        getHotelFacilitiesFromReviewData(reviewDataSource),
 
-        hotelNorms:
-          reviewDataSource?.hotelNorms ||
-          getHotelNormsFromReviewData(reviewDataSource),
+      hotelNorms:
+        reviewDataSource?.hotelNorms ||
+        getHotelNormsFromReviewData(reviewDataSource),
 
-        supplements: getSupplementsFromReviewData(reviewDataSource),
-      }
+      supplements: getSupplementsFromReviewData(reviewDataSource),
+    }
     : null;
 
   const [loading, setLoading] = useState(false);
 
   const [showCorporateConsent, setShowCorporateConsent] = useState(false);
 
-const [corporateConsentAccepted, setCorporateConsentAccepted] =
-  useState(false);
+  const [corporateConsentAccepted, setCorporateConsentAccepted] =
+    useState(false);
 
   const packageFareFlags = getPackageFareFlags(reviewData || {});
   const gstAllowed = getGSTAllowed(reviewData || {});
 
   // =====================================================
-// PAYMENT AMOUNTS FROM PREBOOK BACKEND
-// No frontend calculation here.
-// =====================================================
+  // PAYMENT AMOUNTS FROM PREBOOK BACKEND
+  // No frontend calculation here.
+  // =====================================================
 
-const hotelAmount = Number(
-  reviewData?.net ??
+  const hotelAmount = Number(
+    reviewData?.net ??
     reviewData?.prebookData?.net_amount ??
     reviewData?.prebookData?.NetAmount ??
     0,
-);
+  );
 
-const convenienceFee = Number(
-  reviewData?.convenienceFee ??
+  const convenienceFee = Number(
+    reviewData?.convenienceFee ??
     reviewData?.prebookData?.convenience_fee ??
     0,
-);
+  );
 
-const totalPayable = Number(
-  (hotelAmount + convenienceFee).toFixed(2),
-);
+  const totalPayable = Number(
+    (hotelAmount + convenienceFee).toFixed(2),
+  );
 
   const [transportForm, setTransportForm] = useState(() => {
     const payload = reviewData?.finalPayload || {};
@@ -700,47 +700,47 @@ const totalPayable = Number(
   });
 
   const isCorporateBooking =
-  toBoolean(
-    pickFirstValue(
-      reviewData?.IsCorporate,
-      reviewData?.isCorporate,
+    toBoolean(
+      pickFirstValue(
+        reviewData?.IsCorporate,
+        reviewData?.isCorporate,
 
-      reviewData?.CorporateBooking,
-      reviewData?.corporateBooking,
+        reviewData?.CorporateBooking,
+        reviewData?.corporateBooking,
 
-      reviewData?.finalPayload?.IsCorporate,
-      reviewData?.finalPayload?.isCorporate,
+        reviewData?.finalPayload?.IsCorporate,
+        reviewData?.finalPayload?.isCorporate,
 
-      reviewData?.finalPayload?.CorporateBooking,
-      reviewData?.finalPayload?.corporateBooking,
+        reviewData?.finalPayload?.CorporateBooking,
+        reviewData?.finalPayload?.corporateBooking,
 
-      Number(reviewData?.finalPayload?.RequestedBookingMode) === 5
-        ? true
-        : undefined,
-    ),
-  ) ||
-  Boolean(
-    String(
-      reviewData?.corporatePAN ||
+        Number(reviewData?.finalPayload?.RequestedBookingMode) === 5
+          ? true
+          : undefined,
+      ),
+    ) ||
+    Boolean(
+      String(
+        reviewData?.corporatePAN ||
         reviewData?.finalPayload?.CorporatePAN ||
         "",
-    ).trim(),
-  );
+      ).trim(),
+    );
 
-const corporateCompanyName =
-  pickFirst(
-    reviewData?.companyName,
-    reviewData?.CompanyName,
+  const corporateCompanyName =
+    pickFirst(
+      reviewData?.companyName,
+      reviewData?.CompanyName,
 
-    reviewData?.corporateCompanyName,
-    reviewData?.CorporateCompanyName,
+      reviewData?.corporateCompanyName,
+      reviewData?.CorporateCompanyName,
 
-    reviewData?.finalPayload?.CompanyName,
-    reviewData?.finalPayload?.CorporateCompanyName,
+      reviewData?.finalPayload?.CompanyName,
+      reviewData?.finalPayload?.CorporateCompanyName,
 
-    gstForms.find((gst) => String(gst?.GSTCompanyName || "").trim())
-      ?.GSTCompanyName,
-  ) || "Company";
+      gstForms.find((gst) => String(gst?.GSTCompanyName || "").trim())
+        ?.GSTCompanyName,
+    ) || "Company";
 
   const updateTransportField = (field, value) => {
     setTransportForm((prev) => ({
@@ -884,8 +884,7 @@ const corporateCompanyName =
 
       if (hasAnyGSTValue(gst) && !hasAllGSTValues(gst)) {
         alert(
-          `Please fill all GST details for Guest ${
-            index + 1
+          `Please fill all GST details for Guest ${index + 1
           }, or leave all GST fields empty.`,
         );
         return false;
@@ -989,224 +988,227 @@ const corporateCompanyName =
 
 
     // Payment amount details
-payload.hotel_amount = hotelAmount;
-payload.convenience_fee = convenienceFee;
-payload.total_amount = totalPayable;
+    payload.hotel_amount = hotelAmount;
+    payload.convenience_fee = convenienceFee;
+    payload.total_amount = totalPayable;
 
-payload.HotelAmount = hotelAmount;
-payload.ConvenienceFee = convenienceFee;
-payload.TotalAmount = totalPayable;
+    payload.HotelAmount = hotelAmount;
+    payload.ConvenienceFee = convenienceFee;
+    payload.TotalAmount = totalPayable;
 
     return payload;
   };
 
-const performBooking = async () => {
-  try {
-    setLoading(true);
+  const performBooking = async () => {
+    try {
+      setLoading(true);
 
-    const finalHotelFacilities =
-      getHotelFacilitiesFromReviewData(reviewData);
+      const finalHotelFacilities =
+        getHotelFacilitiesFromReviewData(reviewData);
 
-    const finalHotelNorms =
-      getHotelNormsFromReviewData(reviewData);
+      const finalHotelNorms =
+        getHotelNormsFromReviewData(reviewData);
 
-    const finalSupplements =
-      getSupplementsFromReviewData(reviewData);
+      const finalSupplements =
+        getSupplementsFromReviewData(reviewData);
 
-    const bookingPayload = buildFinalBookingPayload();
+      const bookingPayload = buildFinalBookingPayload();
 
-    console.log("FINAL BOOK PAYLOAD:", bookingPayload);
-    console.log("PACKAGE FARE FLAGS:", packageFareFlags);
-    console.log("GST ALLOWED:", gstAllowed);
-    console.log("GST DETAILS:", gstForms);
+      console.log("FINAL BOOK PAYLOAD:", bookingPayload);
+      console.log("PACKAGE FARE FLAGS:", packageFareFlags);
+      console.log("GST ALLOWED:", gstAllowed);
+      console.log("GST DETAILS:", gstForms);
 
-    const res = await privateApi.post(
-      "/api/hotels/hotels/book/",
-      bookingPayload,
-    );
+      const res = await privateApi.post(
+        "/api/hotels/hotels/book/",
+        bookingPayload,
+      );
 
-    const bookingSuccessData = {
-      ...reviewData,
+      const bookingSuccessData = {
+        ...reviewData,
 
-      bookingResponse: res.data,
+        bookingResponse: res.data,
 
-      guestList: reviewData.guestList || [],
-      bookingCode: reviewData.bookingCode,
+        guestList: reviewData.guestList || [],
+        bookingCode: reviewData.bookingCode,
 
-      hotel: reviewData.hotel || {},
-      roomData: reviewData.roomData || {},
-      hotelResult: reviewData.hotelResult || {},
+        hotel: reviewData.hotel || {},
+        roomData: reviewData.roomData || {},
+        hotelResult: reviewData.hotelResult || {},
 
-      hotelAddress:
-        reviewData?.hotelAddress ||
-        getHotelAddressFromReviewData(reviewData) ||
-        reviewData?.hotel?.city_name ||
-        reviewData?.hotel?.CityName ||
-        "",
+        hotelAddress:
+          reviewData?.hotelAddress ||
+          getHotelAddressFromReviewData(reviewData) ||
+          reviewData?.hotel?.city_name ||
+          reviewData?.hotel?.CityName ||
+          "",
 
-      checkIn: reviewData.checkIn,
-      checkOut: reviewData.checkOut,
-      net: reviewData.net,
+        checkIn: reviewData.checkIn,
+        checkOut: reviewData.checkOut,
+        net: reviewData.net,
 
-      isPANRequired: reviewData.isPANRequired,
-      corporatePAN: reviewData.corporatePAN,
+        isPANRequired: reviewData.isPANRequired,
+        corporatePAN: reviewData.corporatePAN,
 
-      finalPayload: bookingPayload,
+        finalPayload: bookingPayload,
 
-      isPackageFare: packageFareFlags.isPackageFare,
+        isPackageFare: packageFareFlags.isPackageFare,
 
-      isPackageDetailsMandatory:
-        packageFareFlags.isPackageDetailsMandatory,
+        isPackageDetailsMandatory:
+          packageFareFlags.isPackageDetailsMandatory,
 
-      departureDetailsMandatory:
-        packageFareFlags.isDepartureDetailsMandatory,
+        departureDetailsMandatory:
+          packageFareFlags.isDepartureDetailsMandatory,
 
-      gstAllowed,
-      gstDetails: gstForms,
+        gstAllowed,
+        gstDetails: gstForms,
 
-      cancellationPolicies:
-        reviewData.cancellationPolicies || [],
+        cancellationPolicies:
+          reviewData.cancellationPolicies || [],
 
-      roomPromotions:
-        reviewData.roomPromotions || [],
+        roomPromotions:
+          reviewData.roomPromotions || [],
 
-      supplements: finalSupplements,
+        supplements: finalSupplements,
 
-      roomAmenities:
-        reviewData.roomAmenities || [],
+        roomAmenities:
+          reviewData.roomAmenities || [],
 
-      rateConditions:
-        reviewData.rateConditions || [],
+        rateConditions:
+          reviewData.rateConditions || [],
 
-      hotelFacilities: finalHotelFacilities,
-      hotelNorms: finalHotelNorms,
+        hotelFacilities: finalHotelFacilities,
+        hotelNorms: finalHotelNorms,
 
-      corporateConsentAccepted: isCorporateBooking,
+        corporateConsentAccepted: isCorporateBooking,
 
-      corporateConsentAcceptedAt: isCorporateBooking
-        ? new Date().toISOString()
-        : null,
-    };
+        corporateConsentAcceptedAt: isCorporateBooking
+          ? new Date().toISOString()
+          : null,
+      };
 
-    localStorage.setItem(
-      "hotelBookingData",
-      JSON.stringify(bookingSuccessData),
-    );
+      localStorage.setItem(
+        "hotelBookingData",
+        JSON.stringify(bookingSuccessData),
+      );
 
-    setGuestDetails(reviewData.guestList || []);
+      setGuestDetails(reviewData.guestList || []);
 
-    navigate("/hotel-booking-success", {
-      state: {
-        booking: res.data,
-        savedData: bookingSuccessData,
-      },
-    });
+      navigate("/hotel-booking-success", {
+        state: {
+          booking: res.data,
+          savedData: bookingSuccessData,
+        },
+      });
 
-    localStorage.removeItem("reviewBookingData");
-  } catch (err) {
-    console.log("BOOK ERROR:", err?.response?.data || err);
+      localStorage.removeItem("reviewBookingData");
+    } catch (err) {
+      console.log("BOOK ERROR:", err?.response?.data || err);
 
-    alert(
-      err?.response?.data?.message ||
+      alert(
+        err?.response?.data?.message ||
         err?.response?.data?.Error?.ErrorMessage ||
         err?.message ||
         "Booking failed",
-    );
-  } finally {
-    setLoading(false);
-  }
-};
-
-const initiatePayment = () => {
-  const leadGuest =
-    reviewData?.guestList?.find((guest) => guest.LeadPassenger) ||
-    reviewData?.guestList?.[0];
-
-  if (!leadGuest) {
-    alert("Lead passenger details missing");
-    return;
-  }
-
-  const paymentAmount = Number(totalPayable || 0);
-
-  if (!paymentAmount || paymentAmount <= 0) {
-    alert("Payment amount missing");
-    return;
-  }
-
-  const bookingPayload = buildFinalBookingPayload();
-
-  console.log("PAYMENT AMOUNT:", paymentAmount);
-  console.log("PENDING HOTEL BOOKING PAYLOAD:", bookingPayload);
-
-  localStorage.setItem(
-    "pendingHotelBooking",
-    JSON.stringify({
-      reviewData,
-      bookingPayload,
-      transportForm,
-      gstForms,
-      paymentAmount,
-    }),
-  );
-
-  const form = document.createElement("form");
-
-  form.method = "POST";
-
-  form.action = `${
-    import.meta.env.VITE_API_BASE_URL
-  }/payment/initiate/`;
-
-  const paymentData = {
-    amount: paymentAmount,
-    firstname: leadGuest.FirstName,
-    email: leadGuest.Email,
-    phone: leadGuest.Phoneno,
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
-  Object.entries(paymentData).forEach(([key, value]) => {
-    const input = document.createElement("input");
+  const initiatePayment = () => {
+    const leadGuest =
+      reviewData?.guestList?.find((guest) => guest.LeadPassenger) ||
+      reviewData?.guestList?.[0];
 
-    input.type = "hidden";
-    input.name = key;
-    input.value = value || "";
+    if (!leadGuest) {
+      alert("Lead passenger details missing");
+      return;
+    }
 
-    form.appendChild(input);
-  });
+    const paymentAmount = Number(totalPayable || 0);
 
-  document.body.appendChild(form);
+    if (!paymentAmount || paymentAmount <= 0) {
+      alert("Payment amount missing");
+      return;
+    }
 
-  form.submit();
-};
+    const bookingPayload = buildFinalBookingPayload();
 
-const handleConfirmBooking = () => {
-  if (!reviewData?.finalPayload) {
-    alert("Booking payload missing");
-    return;
-  }
+    console.log("PAYMENT AMOUNT:", paymentAmount);
+    console.log("PENDING HOTEL BOOKING PAYLOAD:", bookingPayload);
 
-  if (!validatePackageTransportDetails()) return;
+    localStorage.setItem(
+      "pendingHotelBooking",
+      JSON.stringify({
+        reviewData,
+        bookingPayload,
+        transportForm,
+        gstForms,
+        paymentAmount,
+      }),
+    );
 
-  if (!validateGSTDetails()) return;
+    const form = document.createElement("form");
 
-  if (isCorporateBooking) {
-    setCorporateConsentAccepted(false);
-    setShowCorporateConsent(true);
-    return;
-  }
+    form.method = "POST";
 
-  initiatePayment();
-};
+    const API_BASE_URL = String(
+      import.meta.env.VITE_API_BASE_URL || ""
+    ).replace(/\/+$/, "");
+
+    form.action = `${API_BASE_URL}/payment/hotels/initiate/`;
+
+    const paymentData = {
+      amount: paymentAmount.toFixed(2),
+      firstname: leadGuest.FirstName,
+      email: leadGuest.Email,
+      phone: leadGuest.Phoneno,
+      frontend_origin: window.location.origin,
+    };
+
+    Object.entries(paymentData).forEach(([key, value]) => {
+      const input = document.createElement("input");
+
+      input.type = "hidden";
+      input.name = key;
+      input.value = value || "";
+
+      form.appendChild(input);
+    });
+
+    document.body.appendChild(form);
+
+    form.submit();
+  };
+
+  const handleConfirmBooking = () => {
+    if (!reviewData?.finalPayload) {
+      alert("Booking payload missing");
+      return;
+    }
+
+    if (!validatePackageTransportDetails()) return;
+
+    if (!validateGSTDetails()) return;
+
+    if (isCorporateBooking) {
+      setCorporateConsentAccepted(false);
+      setShowCorporateConsent(true);
+      return;
+    }
+
+    initiatePayment();
+  };
 
 
-const handleAcceptCorporateConsent = () => {
-  if (!corporateConsentAccepted || loading) return;
+  const handleAcceptCorporateConsent = () => {
+    if (!corporateConsentAccepted || loading) return;
 
-  setShowCorporateConsent(false);
+    setShowCorporateConsent(false);
 
-  initiatePayment();
-};
+    initiatePayment();
+  };
 
 
 
@@ -1336,146 +1338,146 @@ const handleAcceptCorporateConsent = () => {
 
                 {(packageFareFlags.isPackageDetailsMandatory ||
                   packageFareFlags.isDepartureDetailsMandatory) && (
-                  <div className="mt-5 grid grid-cols-1 gap-5">
-                    {packageFareFlags.isPackageDetailsMandatory && (
-                      <div className="fl-booking-base fl-booking-line rounded-xl border border-gray-800 bg-[#0B0B0F] p-4">
-                        <h4 className="fl-booking-heading fl-booking-subtitle fl-booking-ink mb-4 font-semibold text-white">
-                          Arrival Transport
-                        </h4>
+                    <div className="mt-5 grid grid-cols-1 gap-5">
+                      {packageFareFlags.isPackageDetailsMandatory && (
+                        <div className="fl-booking-base fl-booking-line rounded-xl border border-gray-800 bg-[#0B0B0F] p-4">
+                          <h4 className="fl-booking-heading fl-booking-subtitle fl-booking-ink mb-4 font-semibold text-white">
+                            Arrival Transport
+                          </h4>
 
-                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-                          <div>
-                            <label className="fl-booking-muted mb-1 block text-xs text-gray-400">
-                              Transport Type
-                            </label>
+                          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                            <div>
+                              <label className="fl-booking-muted mb-1 block text-xs text-gray-400">
+                                Transport Type
+                              </label>
 
-                            <select
-                              value={transportForm.arrivalTransportType}
-                              onChange={(e) =>
-                                updateTransportField(
-                                  "arrivalTransportType",
-                                  e.target.value,
-                                )
-                              }
-                              className="fl-booking-ink fl-booking-surface fl-booking-line fl-booking-field w-full rounded-lg border border-gray-700 bg-[#15151C] px-3 py-2 text-sm text-white outline-none focus:border-yellow-400"
-                            >
-                              <option value={0}>Flight</option>
-                              <option value={1}>Surface</option>
-                            </select>
-                          </div>
+                              <select
+                                value={transportForm.arrivalTransportType}
+                                onChange={(e) =>
+                                  updateTransportField(
+                                    "arrivalTransportType",
+                                    e.target.value,
+                                  )
+                                }
+                                className="fl-booking-ink fl-booking-surface fl-booking-line fl-booking-field w-full rounded-lg border border-gray-700 bg-[#15151C] px-3 py-2 text-sm text-white outline-none focus:border-yellow-400"
+                              >
+                                <option value={0}>Flight</option>
+                                <option value={1}>Surface</option>
+                              </select>
+                            </div>
 
-                          <div>
-                            <label className="fl-booking-muted mb-1 block text-xs text-gray-400">
-                              Transport Info ID / Flight No.
-                            </label>
+                            <div>
+                              <label className="fl-booking-muted mb-1 block text-xs text-gray-400">
+                                Transport Info ID / Flight No.
+                              </label>
 
-                            <input
-                              type="text"
-                              value={transportForm.arrivalTransportInfoId}
-                              onChange={(e) =>
-                                updateTransportField(
-                                  "arrivalTransportInfoId",
-                                  e.target.value,
-                                )
-                              }
-                              placeholder="Example: AB 777"
-                              className="fl-booking-muted fl-booking-surface fl-booking-line fl-booking-field w-full rounded-lg border border-gray-700 bg-[#15151C] px-3 py-2 text-sm text-white outline-none placeholder:text-gray-600 focus:border-yellow-400"
-                            />
-                          </div>
+                              <input
+                                type="text"
+                                value={transportForm.arrivalTransportInfoId}
+                                onChange={(e) =>
+                                  updateTransportField(
+                                    "arrivalTransportInfoId",
+                                    e.target.value,
+                                  )
+                                }
+                                placeholder="Example: AB 777"
+                                className="fl-booking-muted fl-booking-surface fl-booking-line fl-booking-field w-full rounded-lg border border-gray-700 bg-[#15151C] px-3 py-2 text-sm text-white outline-none placeholder:text-gray-600 focus:border-yellow-400"
+                              />
+                            </div>
 
-                          <div>
-                            <label className="fl-booking-muted mb-1 block text-xs text-gray-400">
-                              Arrival Time
-                            </label>
+                            <div>
+                              <label className="fl-booking-muted mb-1 block text-xs text-gray-400">
+                                Arrival Time
+                              </label>
 
-                            <input
-                              type="datetime-local"
-                              value={String(
-                                transportForm.arrivalTime || "",
-                              ).slice(0, 16)}
-                              onChange={(e) =>
-                                updateTransportField(
-                                  "arrivalTime",
-                                  e.target.value,
-                                )
-                              }
-                              className="fl-booking-ink fl-booking-surface fl-booking-line fl-booking-field w-full rounded-lg border border-gray-700 bg-[#15151C] px-3 py-2 text-sm text-white outline-none focus:border-yellow-400"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    )}
-
-                    {packageFareFlags.isDepartureDetailsMandatory && (
-                      <div className="fl-booking-base fl-booking-line rounded-xl border border-gray-800 bg-[#0B0B0F] p-4">
-                        <h4 className="fl-booking-heading fl-booking-subtitle fl-booking-ink mb-4 font-semibold text-white">
-                          Departure Transport
-                        </h4>
-
-                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-                          <div>
-                            <label className="fl-booking-muted mb-1 block text-xs text-gray-400">
-                              Transport Type
-                            </label>
-
-                            <select
-                              value={transportForm.departureTransportType}
-                              onChange={(e) =>
-                                updateTransportField(
-                                  "departureTransportType",
-                                  e.target.value,
-                                )
-                              }
-                              className="fl-booking-ink fl-booking-surface fl-booking-line fl-booking-field w-full rounded-lg border border-gray-700 bg-[#15151C] px-3 py-2 text-sm text-white outline-none focus:border-yellow-400"
-                            >
-                              <option value={0}>Flight</option>
-                              <option value={1}>Surface</option>
-                            </select>
-                          </div>
-
-                          <div>
-                            <label className="fl-booking-muted mb-1 block text-xs text-gray-400">
-                              Transport Info ID / Flight No.
-                            </label>
-
-                            <input
-                              type="text"
-                              value={transportForm.departureTransportInfoId}
-                              onChange={(e) =>
-                                updateTransportField(
-                                  "departureTransportInfoId",
-                                  e.target.value,
-                                )
-                              }
-                              placeholder="Example: AB 777"
-                              className="fl-booking-muted fl-booking-surface fl-booking-line fl-booking-field w-full rounded-lg border border-gray-700 bg-[#15151C] px-3 py-2 text-sm text-white outline-none placeholder:text-gray-600 focus:border-yellow-400"
-                            />
-                          </div>
-
-                          <div>
-                            <label className="fl-booking-muted mb-1 block text-xs text-gray-400">
-                              Departure Time
-                            </label>
-
-                            <input
-                              type="datetime-local"
-                              value={String(
-                                transportForm.departureTime || "",
-                              ).slice(0, 16)}
-                              onChange={(e) =>
-                                updateTransportField(
-                                  "departureTime",
-                                  e.target.value,
-                                )
-                              }
-                              className="fl-booking-ink fl-booking-surface fl-booking-line fl-booking-field w-full rounded-lg border border-gray-700 bg-[#15151C] px-3 py-2 text-sm text-white outline-none focus:border-yellow-400"
-                            />
+                              <input
+                                type="datetime-local"
+                                value={String(
+                                  transportForm.arrivalTime || "",
+                                ).slice(0, 16)}
+                                onChange={(e) =>
+                                  updateTransportField(
+                                    "arrivalTime",
+                                    e.target.value,
+                                  )
+                                }
+                                className="fl-booking-ink fl-booking-surface fl-booking-line fl-booking-field w-full rounded-lg border border-gray-700 bg-[#15151C] px-3 py-2 text-sm text-white outline-none focus:border-yellow-400"
+                              />
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    )}
-                  </div>
-                )}
+                      )}
+
+                      {packageFareFlags.isDepartureDetailsMandatory && (
+                        <div className="fl-booking-base fl-booking-line rounded-xl border border-gray-800 bg-[#0B0B0F] p-4">
+                          <h4 className="fl-booking-heading fl-booking-subtitle fl-booking-ink mb-4 font-semibold text-white">
+                            Departure Transport
+                          </h4>
+
+                          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                            <div>
+                              <label className="fl-booking-muted mb-1 block text-xs text-gray-400">
+                                Transport Type
+                              </label>
+
+                              <select
+                                value={transportForm.departureTransportType}
+                                onChange={(e) =>
+                                  updateTransportField(
+                                    "departureTransportType",
+                                    e.target.value,
+                                  )
+                                }
+                                className="fl-booking-ink fl-booking-surface fl-booking-line fl-booking-field w-full rounded-lg border border-gray-700 bg-[#15151C] px-3 py-2 text-sm text-white outline-none focus:border-yellow-400"
+                              >
+                                <option value={0}>Flight</option>
+                                <option value={1}>Surface</option>
+                              </select>
+                            </div>
+
+                            <div>
+                              <label className="fl-booking-muted mb-1 block text-xs text-gray-400">
+                                Transport Info ID / Flight No.
+                              </label>
+
+                              <input
+                                type="text"
+                                value={transportForm.departureTransportInfoId}
+                                onChange={(e) =>
+                                  updateTransportField(
+                                    "departureTransportInfoId",
+                                    e.target.value,
+                                  )
+                                }
+                                placeholder="Example: AB 777"
+                                className="fl-booking-muted fl-booking-surface fl-booking-line fl-booking-field w-full rounded-lg border border-gray-700 bg-[#15151C] px-3 py-2 text-sm text-white outline-none placeholder:text-gray-600 focus:border-yellow-400"
+                              />
+                            </div>
+
+                            <div>
+                              <label className="fl-booking-muted mb-1 block text-xs text-gray-400">
+                                Departure Time
+                              </label>
+
+                              <input
+                                type="datetime-local"
+                                value={String(
+                                  transportForm.departureTime || "",
+                                ).slice(0, 16)}
+                                onChange={(e) =>
+                                  updateTransportField(
+                                    "departureTime",
+                                    e.target.value,
+                                  )
+                                }
+                                className="fl-booking-ink fl-booking-surface fl-booking-line fl-booking-field w-full rounded-lg border border-gray-700 bg-[#15151C] px-3 py-2 text-sm text-white outline-none focus:border-yellow-400"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
               </div>
             )}
 
@@ -1724,12 +1726,11 @@ const handleAcceptCorporateConsent = () => {
                             </td>
 
                             <td
-                              className={`px-4 py-3 font-semibold ${
-                                getCancellationChargeText(policy) ===
+                              className={`px-4 py-3 font-semibold ${getCancellationChargeText(policy) ===
                                 "Free Cancellation"
-                                  ? "text-green-300"
-                                  : "text-red-300"
-                              }`}
+                                ? "text-green-300"
+                                : "text-red-300"
+                                }`}
                             >
                               {getCancellationChargeText(policy)}
                             </td>
@@ -1761,9 +1762,9 @@ const handleAcceptCorporateConsent = () => {
                       {typeof promotion === "string"
                         ? promotion
                         : promotion?.Description ||
-                          promotion?.Name ||
-                          promotion?.PromotionName ||
-                          "Promotion available"}
+                        promotion?.Name ||
+                        promotion?.PromotionName ||
+                        "Promotion available"}
                     </div>
                   ))}
                 </div>
@@ -1937,49 +1938,49 @@ const handleAcceptCorporateConsent = () => {
 
             <div className="space-y-3 text-sm">
 
-  {/* Hotel Amount */}
-  <div className="fl-booking-ink flex justify-between text-gray-300">
-    <span>
-      Total Amount
+              {/* Hotel Amount */}
+              <div className="fl-booking-ink flex justify-between text-gray-300">
+                <span>
+                  Total Amount
 
-      <p className="fl-booking-ink text-xs text-gray-200">
-        Inclusive of all taxes and TDS
-      </p>
-    </span>
+                  <p className="fl-booking-ink text-xs text-gray-200">
+                    Inclusive of all taxes and TDS
+                  </p>
+                </span>
 
-    <span>
-      ₹ {formatPrice(hotelAmount)}
-    </span>
-  </div>
-
-
-  {/* Convenience Fee */}
-  <div className="fl-booking-ink flex justify-between text-gray-300">
-    <span>
-      Convenience Fee
-    </span>
-
-    <span>
-      ₹ {formatPrice(convenienceFee)}
-    </span>
-  </div>
+                <span>
+                  ₹ {formatPrice(hotelAmount)}
+                </span>
+              </div>
 
 
-  <hr className="fl-booking-line border-gray-700" />
+              {/* Convenience Fee */}
+              <div className="fl-booking-ink flex justify-between text-gray-300">
+                <span>
+                  Convenience Fee
+                </span>
+
+                <span>
+                  ₹ {formatPrice(convenienceFee)}
+                </span>
+              </div>
 
 
-  {/* Backend Total Amount */}
-  <div className="flex justify-between text-lg font-bold">
-    <span>
-      Total Payable
-    </span>
+              <hr className="fl-booking-line border-gray-700" />
 
-    <span className="fl-booking-accent text-yellow-400">
-      ₹ {formatPrice(totalPayable)}
-    </span>
-  </div>
 
-</div>
+              {/* Backend Total Amount */}
+              <div className="flex justify-between text-lg font-bold">
+                <span>
+                  Total Payable
+                </span>
+
+                <span className="fl-booking-accent text-yellow-400">
+                  ₹ {formatPrice(totalPayable)}
+                </span>
+              </div>
+
+            </div>
 
             {packageFareFlags.isPackageFare && (
               <div className="fl-booking-accent fl-booking-notice fl-booking-line mt-5 rounded-xl border border-yellow-400/20 bg-yellow-400/10 p-4 text-xs text-yellow-100">
@@ -2009,196 +2010,196 @@ const handleAcceptCorporateConsent = () => {
           </div>
         </div>
       </div>
-      
+
       {showCorporateConsent && (
-  <div
-    className="fl-booking-inset fixed inset-0 z-9999 flex items-center justify-center bg-black/80 px-3 py-4 backdrop-blur-sm sm:px-6"
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="corporate-consent-title"
-    onMouseDown={() => {
-      if (!loading) {
-        setShowCorporateConsent(false);
-      }
-    }}
-  >
-    <div
-      className="fl-booking-ink fl-booking-inset fl-booking-line flex max-h-[92vh] w-full max-w-3xl flex-col overflow-hidden rounded-3xl border border-sky-300/30 bg-[#F8FBFF] text-slate-800 shadow-[0_30px_100px_rgba(0,0,0,0.55)]"
-      onMouseDown={(event) => event.stopPropagation()}
-    >
-      {/* Header */}
-      <div className="fl-booking-surface fl-booking-line flex items-center justify-between gap-4 border-b border-sky-200 bg-linear-to-r from-sky-100 via-blue-50 to-indigo-100 px-5 py-4 sm:px-7">
-        <div className="flex min-w-0 items-center gap-3">
-          <div className="fl-booking-ink fl-booking-inset flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#276A9D] text-white shadow-lg shadow-sky-900/20">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              className="h-6 w-6"
-              aria-hidden="true"
-            >
-              <circle cx="12" cy="12" r="9" />
-              <path d="M12 10v6" />
-              <path d="M12 7h.01" />
-            </svg>
-          </div>
-
-          <div className="min-w-0">
-            <h2
-              id="corporate-consent-title"
-              className="fl-booking-heading fl-booking-subtitle text-lg font-bold text-[#245F8F] sm:text-2xl"
-            >
-              Corporate Consent Declaration
-            </h2>
-
-            <p className="fl-booking-muted mt-0.5 text-xs text-slate-500 sm:text-sm">
-              Review and accept the declaration before generating the voucher.
-            </p>
-          </div>
-        </div>
-
-        <button
-          type="button"
-          disabled={loading}
-          onClick={() => setShowCorporateConsent(false)}
-          className="fl-booking-muted fl-booking-surface fl-booking-button fl-booking-secondary flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-2xl text-slate-600 transition hover:bg-white/80 hover:text-slate-950 disabled:cursor-not-allowed disabled:opacity-50"
-          aria-label="Close corporate consent declaration"
+        <div
+          className="fl-booking-inset fixed inset-0 z-9999 flex items-center justify-center bg-black/80 px-3 py-4 backdrop-blur-sm sm:px-6"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="corporate-consent-title"
+          onMouseDown={() => {
+            if (!loading) {
+              setShowCorporateConsent(false);
+            }
+          }}
         >
-          ×
-        </button>
-      </div>
+          <div
+            className="fl-booking-ink fl-booking-inset fl-booking-line flex max-h-[92vh] w-full max-w-3xl flex-col overflow-hidden rounded-3xl border border-sky-300/30 bg-[#F8FBFF] text-slate-800 shadow-[0_30px_100px_rgba(0,0,0,0.55)]"
+            onMouseDown={(event) => event.stopPropagation()}
+          >
+            {/* Header */}
+            <div className="fl-booking-surface fl-booking-line flex items-center justify-between gap-4 border-b border-sky-200 bg-linear-to-r from-sky-100 via-blue-50 to-indigo-100 px-5 py-4 sm:px-7">
+              <div className="flex min-w-0 items-center gap-3">
+                <div className="fl-booking-ink fl-booking-inset flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#276A9D] text-white shadow-lg shadow-sky-900/20">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    className="h-6 w-6"
+                    aria-hidden="true"
+                  >
+                    <circle cx="12" cy="12" r="9" />
+                    <path d="M12 10v6" />
+                    <path d="M12 7h.01" />
+                  </svg>
+                </div>
 
-      {/* Scrollable declaration */}
-      <div className="overflow-y-auto px-5 py-5 sm:px-8 sm:py-6">
-        <div className="fl-booking-surface fl-booking-line rounded-2xl border border-blue-100 bg-white p-4 shadow-sm sm:p-6">
-          <p className="fl-booking-ink text-sm leading-7 text-slate-700 sm:text-base sm:leading-8">
-            By proceeding to make this booking for{" "}
-            <strong className="font-bold text-slate-950">
-              {corporateCompanyName}
-            </strong>{" "}
-            (the “Company”), I,{" "}
-            <strong className="font-bold text-slate-950">
-              FLYINGLYTE
-            </strong>{" "}
-            (the “Travel Agency”), hereby declare, represent, and undertake as
-            follows:
-          </p>
+                <div className="min-w-0">
+                  <h2
+                    id="corporate-consent-title"
+                    className="fl-booking-heading fl-booking-subtitle text-lg font-bold text-[#245F8F] sm:text-2xl"
+                  >
+                    Corporate Consent Declaration
+                  </h2>
 
-          <ul className="fl-booking-ink mt-5 space-y-4 pl-5 text-sm leading-7 text-slate-700 marker:text-[#276A9D] sm:text-base sm:leading-8">
-            <li className="list-disc pl-1">
-              I confirm that I have been authorised by the Company to make this
-              booking on its behalf for the Company’s Members for its business
-              purposes only.
-            </li>
+                  <p className="fl-booking-muted mt-0.5 text-xs text-slate-500 sm:text-sm">
+                    Review and accept the declaration before generating the voucher.
+                  </p>
+                </div>
+              </div>
 
-            <li className="list-disc pl-1">
-              I am competent to make this declaration and undertaking, and I am
-              duly authorised to bind the Travel Agency and the Company,
-              including its employees, agents, consultants, and other
-              representatives (collectively, the “Company’s Members”), by the
-              terms set out below.
-            </li>
+              <button
+                type="button"
+                disabled={loading}
+                onClick={() => setShowCorporateConsent(false)}
+                className="fl-booking-muted fl-booking-surface fl-booking-button fl-booking-secondary flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-2xl text-slate-600 transition hover:bg-white/80 hover:text-slate-950 disabled:cursor-not-allowed disabled:opacity-50"
+                aria-label="Close corporate consent declaration"
+              >
+                ×
+              </button>
+            </div>
 
-            <li className="list-disc pl-1">
-              I confirm that I have been authorised by the Company to make this
-              booking on its behalf for the Company’s Members for its business
-              purposes only.
-            </li>
+            {/* Scrollable declaration */}
+            <div className="overflow-y-auto px-5 py-5 sm:px-8 sm:py-6">
+              <div className="fl-booking-surface fl-booking-line rounded-2xl border border-blue-100 bg-white p-4 shadow-sm sm:p-6">
+                <p className="fl-booking-ink text-sm leading-7 text-slate-700 sm:text-base sm:leading-8">
+                  By proceeding to make this booking for{" "}
+                  <strong className="font-bold text-slate-950">
+                    {corporateCompanyName}
+                  </strong>{" "}
+                  (the “Company”), I,{" "}
+                  <strong className="font-bold text-slate-950">
+                    FLYINGLYTE
+                  </strong>{" "}
+                  (the “Travel Agency”), hereby declare, represent, and undertake as
+                  follows:
+                </p>
 
-            <li className="list-disc pl-1">
-              I have complied and shall continue to comply with all applicable
-              laws, rules, regulations, and directions, including (but not
-              limited to) the Foreign Exchange Management Act, 1999 (FEMA), the
-              Liberalised Remittance Scheme (LRS), Current Account Rules, and
-              directions issued by authorised dealer (AD) banks and/or the
-              Reserve Bank of India (RBI).
-            </li>
+                <ul className="fl-booking-ink mt-5 space-y-4 pl-5 text-sm leading-7 text-slate-700 marker:text-[#276A9D] sm:text-base sm:leading-8">
+                  <li className="list-disc pl-1">
+                    I confirm that I have been authorised by the Company to make this
+                    booking on its behalf for the Company’s Members for its business
+                    purposes only.
+                  </li>
 
-            <li className="list-disc pl-1">
-              I have obtained, and where required, will submit to the relevant
-              authorities, all necessary KYC and supporting documents pertaining
-              to the Company and the Company’s Members in connection with the
-              proposed travel.
-            </li>
+                  <li className="list-disc pl-1">
+                    I am competent to make this declaration and undertaking, and I am
+                    duly authorised to bind the Travel Agency and the Company,
+                    including its employees, agents, consultants, and other
+                    representatives (collectively, the “Company’s Members”), by the
+                    terms set out below.
+                  </li>
 
-            <li className="list-disc pl-1">
-              These documents include, without limitation and subject to the
-              requirements of the relevant AD bank: authorisation from the
-              Company for the travel of the Company’s Members; applicable
-              purpose code; Company’s PAN, address proof, and certificate of
-              incorporation; copies of the Company Members’ documents, such as
-              passports, visas, air tickets, employment details, and travel
-              itinerary; and relevant communications evidencing the purpose of
-              travel.
-            </li>
+                  <li className="list-disc pl-1">
+                    I confirm that I have been authorised by the Company to make this
+                    booking on its behalf for the Company’s Members for its business
+                    purposes only.
+                  </li>
 
-            <li className="list-disc pl-1">
-              I shall indemnify, defend, and hold harmless TBO, its directors,
-              officers, employees, agents, and representatives, from and against
-              any and all claims, liabilities, penalties, losses, or expenses,
-              including legal fees, arising directly or indirectly from any
-              breach of applicable laws, or any inaccuracy or breach of the
-              representations, warranties, or undertakings provided herein.
-            </li>
-          </ul>
+                  <li className="list-disc pl-1">
+                    I have complied and shall continue to comply with all applicable
+                    laws, rules, regulations, and directions, including (but not
+                    limited to) the Foreign Exchange Management Act, 1999 (FEMA), the
+                    Liberalised Remittance Scheme (LRS), Current Account Rules, and
+                    directions issued by authorised dealer (AD) banks and/or the
+                    Reserve Bank of India (RBI).
+                  </li>
 
-          <div className="fl-booking-notice fl-booking-line mt-6 rounded-xl border border-amber-200 bg-amber-50 p-4">
-            <div className="flex items-start gap-3">
-              <span className="mt-0.5 text-lg">⚠️</span>
+                  <li className="list-disc pl-1">
+                    I have obtained, and where required, will submit to the relevant
+                    authorities, all necessary KYC and supporting documents pertaining
+                    to the Company and the Company’s Members in connection with the
+                    proposed travel.
+                  </li>
 
-              <p className="fl-booking-accent text-xs leading-6 text-amber-900 sm:text-sm">
-                The booking will not be submitted until this declaration has
-                been accepted.
-              </p>
+                  <li className="list-disc pl-1">
+                    These documents include, without limitation and subject to the
+                    requirements of the relevant AD bank: authorisation from the
+                    Company for the travel of the Company’s Members; applicable
+                    purpose code; Company’s PAN, address proof, and certificate of
+                    incorporation; copies of the Company Members’ documents, such as
+                    passports, visas, air tickets, employment details, and travel
+                    itinerary; and relevant communications evidencing the purpose of
+                    travel.
+                  </li>
+
+                  <li className="list-disc pl-1">
+                    I shall indemnify, defend, and hold harmless TBO, its directors,
+                    officers, employees, agents, and representatives, from and against
+                    any and all claims, liabilities, penalties, losses, or expenses,
+                    including legal fees, arising directly or indirectly from any
+                    breach of applicable laws, or any inaccuracy or breach of the
+                    representations, warranties, or undertakings provided herein.
+                  </li>
+                </ul>
+
+                <div className="fl-booking-notice fl-booking-line mt-6 rounded-xl border border-amber-200 bg-amber-50 p-4">
+                  <div className="flex items-start gap-3">
+                    <span className="mt-0.5 text-lg">⚠️</span>
+
+                    <p className="fl-booking-accent text-xs leading-6 text-amber-900 sm:text-sm">
+                      The booking will not be submitted until this declaration has
+                      been accepted.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="fl-booking-surface fl-booking-line border-t border-slate-200 bg-white px-5 py-4 sm:px-7">
+              <label className="fl-booking-inset fl-booking-line flex cursor-pointer items-start gap-3 rounded-xl border border-slate-200 bg-slate-50 p-3 transition hover:border-sky-300 hover:bg-sky-50/60">
+                <input
+                  type="checkbox"
+                  checked={corporateConsentAccepted}
+                  disabled={loading}
+                  onChange={(event) =>
+                    setCorporateConsentAccepted(event.target.checked)
+                  }
+                  className="fl-booking-field mt-1 h-4 w-4 shrink-0 accent-[#276A9D]"
+                />
+
+                <span className="fl-booking-ink text-sm leading-6 text-slate-700">
+                  I have read, understood, and agree to the declaration provided
+                  above.
+                </span>
+              </label>
+
+              <div className="mt-4 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+                <button
+                  type="button"
+                  disabled={loading}
+                  onClick={() => setShowCorporateConsent(false)}
+                  className="fl-booking-ink fl-booking-inset fl-booking-line fl-booking-button fl-booking-secondary rounded-xl border border-slate-300 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  Cancel
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleAcceptCorporateConsent}
+                  disabled={!corporateConsentAccepted || loading}
+                  className="fl-booking-ink fl-booking-inset fl-booking-button fl-booking-secondary rounded-xl bg-[#276A9D] px-7 py-3 text-sm font-bold text-white shadow-lg shadow-blue-900/20 transition hover:bg-[#1F5A88] disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  {loading ? "Generating..." : "I accept and agree"}
+                </button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
 
-      {/* Footer */}
-      <div className="fl-booking-surface fl-booking-line border-t border-slate-200 bg-white px-5 py-4 sm:px-7">
-        <label className="fl-booking-inset fl-booking-line flex cursor-pointer items-start gap-3 rounded-xl border border-slate-200 bg-slate-50 p-3 transition hover:border-sky-300 hover:bg-sky-50/60">
-          <input
-            type="checkbox"
-            checked={corporateConsentAccepted}
-            disabled={loading}
-            onChange={(event) =>
-              setCorporateConsentAccepted(event.target.checked)
-            }
-            className="fl-booking-field mt-1 h-4 w-4 shrink-0 accent-[#276A9D]"
-          />
-
-          <span className="fl-booking-ink text-sm leading-6 text-slate-700">
-            I have read, understood, and agree to the declaration provided
-            above.
-          </span>
-        </label>
-
-        <div className="mt-4 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
-          <button
-            type="button"
-            disabled={loading}
-            onClick={() => setShowCorporateConsent(false)}
-            className="fl-booking-ink fl-booking-inset fl-booking-line fl-booking-button fl-booking-secondary rounded-xl border border-slate-300 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            Cancel
-          </button>
-
-          <button
-            type="button"
-            onClick={handleAcceptCorporateConsent}
-            disabled={!corporateConsentAccepted || loading}
-            className="fl-booking-ink fl-booking-inset fl-booking-button fl-booking-secondary rounded-xl bg-[#276A9D] px-7 py-3 text-sm font-bold text-white shadow-lg shadow-blue-900/20 transition hover:bg-[#1F5A88] disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            {loading ? "Generating..." : "I accept and agree"}
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-)}
-      
     </div>
   );
 };
