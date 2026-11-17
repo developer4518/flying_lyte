@@ -368,6 +368,17 @@ input[type="number"] {
   .fl-about[data-fl-theme="model2"] .fl-hanging-tag p { font-size:clamp(13px,3.5vw,15px); letter-spacing:-.3px; }
   .fl-about[data-fl-theme="model2"] .fl-hanging-tag > span { margin-top:8px; font-size:5.5px; letter-spacing:.14em; }
 }
+@media (min-width:761px) {
+  .fl-parity-homepage[data-fl-theme="model2"] .fl-about .fl-hanging-tag {
+    width:min(210px,48%); padding:16px 18px;
+  }
+  .fl-parity-homepage[data-fl-theme="model2"] .fl-about .fl-hanging-tag p {
+    font-size:clamp(17px,1.5vw,22px); letter-spacing:-.4px;
+  }
+  .fl-parity-homepage[data-fl-theme="model2"] .fl-about .fl-hanging-tag > span {
+    margin-top:12px; font-size:7px; letter-spacing:.17em;
+  }
+}
 @media (prefers-reduced-motion:reduce) {
   .fl-about[data-fl-theme="model2"] .fl-hanging-tag { animation:none!important; opacity:1; transform:none; }
 }
@@ -3946,27 +3957,37 @@ dialog.fl-search-modal::backdrop {
 :is(.fl-parity-home, .fl-parity-landing)[data-fl-theme="model2"] :is(.fl-hero__emphasis, .fl-inner-emphasis) {
   font-family: Georgia, serif; font-style: italic; font-weight: 400; letter-spacing: -.045em;
 }
+.fl-parity-home[data-fl-theme="model2"] .fl-hero__rotator { display:block; min-height:1.2em; }
+.fl-parity-home[data-fl-theme="model2"] .fl-hero__phrase {
+  display:inline-block; white-space:nowrap; color:var(--fl-phrase-light);
+}
+:where([data-fl-color-mode="dark"]) .fl-parity-home[data-fl-theme="model2"] .fl-hero__phrase {
+  color:var(--fl-phrase-dark);
+}
 :is(.fl-parity-home, .fl-parity-landing)[data-fl-theme="model2"] .fl-parity-eyebrow {
   font-size: 10px; font-weight: 600; letter-spacing: .16em;
   text-transform: uppercase; color: var(--fl-model2-text); margin-bottom: 24px; max-width: 340px;
 }
 .fl-parity-home[data-fl-theme="model2"] .fl-hero__divider { justify-content: flex-start; margin-top: 25px; }
 .fl-parity-home[data-fl-theme="model2"] .fl-hero__note {
-  position:relative; isolation:isolate; overflow:hidden; display:table; width:fit-content;
+  position:relative; isolation:isolate; overflow:hidden; display:block; width:fit-content; max-width:100%;
   margin-top:15px; padding:10px 16px; border:1px solid var(--fl-model2-accent); border-radius:999px;
   background:var(--fl-model2-soft); color:var(--fl-model2-text); font-weight:700; letter-spacing:.01em;
   box-shadow:0 0 0 3px #e88d7310;
 }
-.fl-parity-home[data-fl-theme="model2"] .fl-hero__note::after { content:""; position:absolute; inset:0; z-index:-1; background:linear-gradient(110deg,transparent 25%,#e88d7355 50%,transparent 75%); transform:translateX(-120%); }
 @media (prefers-reduced-motion:no-preference) {
-  .fl-parity-home[data-fl-theme="model2"] .fl-hero__note::after { animation:fl-cash-highlight 4.5s ease-in-out infinite; }
+  .fl-parity-home[data-fl-theme="model2"] .fl-hero__note {
+    background-image:linear-gradient(110deg,transparent 40%,#e88d7355 50%,transparent 60%);
+    background-size:250% 100%; background-repeat:no-repeat; background-position:100% 0;
+    background-clip:padding-box; animation:fl-cash-highlight 4.5s ease-in-out infinite;
+  }
   .fl-parity-art__draw-line { animation:fl-arrow-draw 2s .5s ease-in-out both; }
   .fl-parity-art__draw-tip { animation:fl-arrow-draw .35s 2.45s ease-out both; }
 }
-@keyframes fl-cash-highlight { 0%,20% { transform:translateX(-120%); } 65%,100% { transform:translateX(120%); } }
+@keyframes fl-cash-highlight { 0%,20% { background-position:100% 0; } 65%,100% { background-position:0% 0; } }
 @keyframes fl-arrow-draw { from { stroke-dashoffset:1; } to { stroke-dashoffset:0; } }
 main:has(> .fl-brand-intro) .fl-hero[data-fl-theme="model2"] :is(.fl-parity-art__draw-line,.fl-parity-art__draw-tip),
-main:has(> .fl-brand-intro) .fl-hero[data-fl-theme="model2"] .fl-hero__note::after { animation-play-state:paused; }
+main:has(> .fl-brand-intro) .fl-hero[data-fl-theme="model2"] .fl-hero__note { animation-play-state:paused; }
 @media (prefers-reduced-motion:reduce) {
   .fl-nav[data-fl-theme="model2"] .fl-nav__announcement { transition:none; }
 }
@@ -4027,6 +4048,12 @@ main:has(> .fl-brand-intro) .fl-hero[data-fl-theme="model2"] .fl-hero__note::aft
 }
 .fl-parity-landing[data-fl-theme="model2"] button.fl-inner-card:has(.fl-parity-destination-image) .fl-inner-badge { display: none; }
 .fl-parity-landing[data-fl-theme="model2"] button.fl-inner-card:has(.fl-parity-destination-image):hover img { scale: 1.02; }
+@media (max-width:639px) {
+  .fl-hotels-page[data-fl-theme="model2"] .fl-hotels-destination-grid button.fl-inner-card {
+    grid-template-columns:minmax(0,1fr) auto; gap:10px; min-width:0;
+  }
+  .fl-hotels-page[data-fl-theme="model2"] .fl-hotels-destination-grid .fl-inner-card-title { font-size:15px; }
+}
 .fl-parity-landing[data-fl-theme="model2"] .fl-inner-cta {
   background: #294c3e; color: #f7f5e9; border-radius: 8px; padding: 55px 60px; box-shadow: none;
 }

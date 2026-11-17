@@ -1,0 +1,135 @@
+.fl-seasonal-welcome {
+  --sw-surface: #f7f4eb; --sw-ink: #243e35; --sw-muted: #667369;
+  --sw-gold: #ad8849; --sw-gold-light: #ecd5a2; --sw-halo: #e8cf9666;
+  --sw-tree: #315645; --sw-tree-light: #54755a; --sw-tree-shadow: #18382c; --sw-tree-edge: #82957a;
+  --sw-silver: #b3bdb6; --sw-snow: #ffffff; --sw-shadow: #203c2c24;
+  --sw-drift-back: #e5e9df; --sw-drift-front: #eef0e8; --sw-pine: #a6b7a6;
+  width: 100vw; max-width: 100%; height: 100vh; height: 100dvh;
+  isolation: isolate; contain: layout paint; font-family: "DM Sans",Arial,sans-serif;
+}
+[data-fl-color-mode="dark"] .fl-seasonal-welcome {
+  --sw-surface: #101e22; --sw-ink: #f5f0e4; --sw-muted: #bec7bf;
+  --sw-gold: #d9b66f; --sw-gold-light: #f4dfae; --sw-halo: #8c754d30;
+  --sw-tree: #284b3c; --sw-tree-light: #56795a; --sw-tree-shadow: #102b22; --sw-tree-edge: #879779;
+  --sw-silver: #d4ddd7; --sw-snow: #f8f6eb; --sw-shadow: #0000005c;
+  --sw-drift-back: #1b3032; --sw-drift-front: #233b3a; --sw-pine: #36504b;
+}
+.fl-seasonal-welcome, .fl-seasonal-welcome * { pointer-events: none; box-sizing: border-box; }
+.fl-seasonal-welcome .fl-seasonal__stage {
+  position: absolute; inset: 0; width: 100%; height: 100%; overflow: hidden;
+  color: var(--sw-ink); background: radial-gradient(ellipse at 32% 46%,var(--sw-halo),transparent 52%),var(--sw-surface);
+  box-shadow: 0 -18px 55px #091b2433;
+  perspective: 1400px; animation: fl-seasonal-life var(--sw-duration) linear var(--sw-delay) both;
+}
+.fl-seasonal-welcome[data-phase="waiting"] .fl-seasonal__stage,
+.fl-seasonal-welcome[data-phase="waiting"] .fl-seasonal__stage * { animation-play-state: paused; }
+.fl-seasonal-welcome .fl-seasonal__stage::before {
+  content: ""; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 85% 12%,var(--sw-halo),transparent 42%);
+}
+.fl-seasonal-welcome .fl-seasonal__halo {
+  position: absolute; left: 4%; bottom: 12%; width: 49%; height: 70%; border-radius: 50%;
+  background: radial-gradient(ellipse,var(--sw-halo),transparent 68%);
+}
+.fl-seasonal-welcome .fl-seasonal__wordmark {
+  position: absolute; z-index: 4; top: 6%; left: 50%; transform: translateX(-50%);
+  color: var(--sw-ink); text-align: center; font-size: 17px; font-weight: 600; letter-spacing: .3em;
+}
+.fl-seasonal-welcome .fl-seasonal__wordmark span { display: block; margin-top: 9px; font-size: 8px; letter-spacing: .21em; font-weight: 400; color: var(--sw-muted); }
+.fl-seasonal-welcome .fl-seasonal__tree {
+  position: absolute; z-index: 2; left: 6%; bottom: 6%; width: 43%; height: 80%;
+  overflow: visible; transform-style: preserve-3d; transform-origin: 50% 85%;
+  filter: drop-shadow(14px 18px 15px var(--sw-shadow));
+  animation: fl-seasonal-tree var(--sw-duration) cubic-bezier(.2,.65,.3,1) var(--sw-delay) both;
+}
+.fl-seasonal-welcome .fl-seasonal__star { filter: drop-shadow(0 0 9px #e6cc8c8c); }
+.fl-seasonal-welcome .fl-seasonal__tree-lights { filter: drop-shadow(0 0 5px #ffe7a6); }
+.fl-seasonal-welcome .fl-seasonal__sleigh {
+  position: absolute; z-index: 3; top: 16%; left: 49%; width: 42%; max-height: 23%;
+  color: var(--sw-gold); overflow: visible;
+  animation: fl-seasonal-sleigh var(--sw-duration) cubic-bezier(.2,.6,.3,1) var(--sw-delay) both;
+}
+.fl-seasonal-welcome .fl-seasonal__landscape { position: absolute; left: 0; bottom: 0; width: 100%; height: 28%; }
+.fl-seasonal-welcome .fl-seasonal__copy {
+  position: absolute; z-index: 4; left: 54%; top: 46%; width: 39%; max-width: 650px; min-width: 0;
+  transform: translateY(-32%); animation: fl-seasonal-copy var(--sw-duration) ease-out var(--sw-delay) both;
+}
+.fl-seasonal-welcome .fl-seasonal__eyebrow { margin: 0 0 22px; color: var(--sw-muted); font-size: clamp(9px,.8vw,12px); font-weight: 500; letter-spacing: .24em; line-height: 1.6; }
+.fl-seasonal-welcome h2 { margin: 0; color: var(--sw-ink); font: 400 clamp(38px,4.7vw,88px)/1.12 "Manrope","DM Sans",Arial,sans-serif; letter-spacing: -.055em; }
+.fl-seasonal-welcome h2 strong { display: block; margin-top: 3px; color: var(--sw-gold); font-size: clamp(48px,6.7vw,124px); font-weight: 400; line-height: 1.15; letter-spacing: -.065em; }
+.fl-seasonal-welcome .fl-seasonal__message { margin: 26px 0 0; max-width: 350px; color: var(--sw-muted); font-size: clamp(12px,1.1vw,17px); line-height: 1.8; font-weight: 400; }
+.fl-seasonal-welcome .fl-seasonal__signature { position: absolute; z-index: 4; bottom: 3.5%; left: 16px; right: 16px; margin: 0; color: var(--sw-muted); text-align: center; font-size: 10px; line-height: 1.5; letter-spacing: .12em; }
+.fl-seasonal-welcome .fl-seasonal__particles, .fl-seasonal-welcome .fl-seasonal__stars { position: absolute; z-index: 3; inset: 0; overflow: hidden; }
+.fl-seasonal-welcome .fl-seasonal__particles i { position: absolute; left: var(--sw-x); top: -16px; width: 3px; height: 3px; border-radius: 50%; background: var(--sw-snow); opacity: .75; animation: fl-seasonal-snow calc(var(--sw-duration) * 1.8) linear calc(var(--sw-delay) - var(--sw-n) * 137ms) infinite; }
+.fl-seasonal-welcome .fl-seasonal__particles i:nth-child(3n) { width: 5px; height: 5px; opacity: .45; filter: blur(.6px); }
+.fl-seasonal-welcome .fl-seasonal__particles i:nth-child(3n + 1) { width: 2px; height: 2px; opacity: .6; }
+.fl-seasonal-welcome .fl-seasonal__stars i { position: absolute; left: var(--sw-x); top: var(--sw-y); width: 2px; height: 2px; border-radius: 50%; background: var(--sw-gold); opacity: .45; box-shadow: 0 0 5px var(--sw-gold-light); }
+.fl-seasonal-welcome .fl-seasonal__stars i:nth-child(4n) { width: 5px; height: 5px; clip-path: polygon(50% 0,60% 40%,100% 50%,60% 60%,50% 100%,40% 60%,0 50%,40% 40%); }
+.fl-seasonal-welcome[data-festival="newYear"] .fl-seasonal__particles i { width: 3px; height: 9px; border-radius: 1px; background: var(--sw-gold-light); opacity: .65; filter: none; }
+.fl-seasonal-welcome[data-festival="newYear"] .fl-seasonal__particles i:nth-child(even) { background: var(--sw-silver); }
+.fl-seasonal-welcome .fl-seasonal__fireworks { position: absolute; inset: 0; width: 100%; height: 100%; }
+.fl-seasonal-welcome .fl-seasonal__firework { transform-box: fill-box; transform-origin: center; animation: fl-seasonal-burst var(--sw-duration) ease-out calc(var(--sw-delay) - var(--sw-burst) * 130ms) both; }
+.fl-seasonal-welcome .fl-seasonal__new-year { position: absolute; z-index: 2; left: 6%; top: 34%; width: 43%; height: 40%; perspective: 1000px; }
+.fl-seasonal-welcome .fl-seasonal__year { position: relative; width: 100%; height: 80%; transform-style: preserve-3d; animation: fl-seasonal-year var(--sw-duration) ease-out var(--sw-delay) both; }
+.fl-seasonal-welcome .fl-seasonal__year :is(span,strong) { position: absolute; inset: 0; display: grid; place-items: center; font: 600 clamp(90px,15.8vw,290px)/1 "Manrope",Arial,sans-serif; letter-spacing: -.085em; }
+.fl-seasonal-welcome .fl-seasonal__year span { color: #927440; transform: translate3d(0,9px,-12px); text-shadow: 1px 1px #927440,2px 2px #927440,3px 3px #927440,4px 4px #927440,5px 5px #927440,6px 6px #927440; }
+.fl-seasonal-welcome .fl-seasonal__year strong { color: var(--sw-gold-light); text-shadow: 0 -1px #fff2d3,1px 1px #ae8845; }
+.fl-seasonal-welcome .fl-seasonal__new-year > p { margin: 14px 0 0; color: var(--sw-muted); text-align: center; font-size: 9px; letter-spacing: .28em; }
+.fl-seasonal-welcome[data-festival="newYear"] .fl-seasonal__landscape { opacity: .45; }
+@keyframes fl-seasonal-life {
+  0%,60% { opacity: 1; transform: translate3d(0,0,0); visibility: visible; animation-timing-function: cubic-bezier(.65,0,.25,1); }
+  100% { opacity: 1; transform: translate3d(0,100%,0); visibility: hidden; }
+}
+@keyframes fl-seasonal-tree { from { transform: translate3d(-12px,16px,0) rotateY(-9deg); } to { transform: translate3d(2px,-3px,0) rotateY(3deg); } }
+@keyframes fl-seasonal-sleigh { from { opacity: .85; transform: translate3d(-55px,14px,0) rotate(-4deg); } to { opacity: .85; transform: translate3d(28px,-9px,0) rotate(-4deg); } }
+@keyframes fl-seasonal-copy { from { translate: 0 8px; } to { translate: 0 0; } }
+@keyframes fl-seasonal-snow { from { transform: translate3d(-8px,-10px,var(--sw-depth)) rotate(0); } to { transform: translate3d(36px,110vh,var(--sw-depth)) rotate(150deg); } }
+@keyframes fl-seasonal-burst { from { opacity: .15; scale: .65; } 45%,100% { opacity: .65; scale: 1; } }
+@keyframes fl-seasonal-year { from { transform: rotateX(9deg) rotateY(-13deg) translateZ(20px); } to { transform: rotateX(4deg) rotateY(3deg) translateZ(20px); } }
+@media (max-width: 600px) and (orientation: portrait) {
+  .fl-seasonal-welcome .fl-seasonal__wordmark { top: 5%; font-size: 14px; }
+  .fl-seasonal-welcome .fl-seasonal__wordmark span { margin-top: 7px; font-size: 7px; }
+  .fl-seasonal-welcome .fl-seasonal__copy { top: 15%; left: 6%; width: 88%; max-width: none; transform: none; text-align: center; }
+  .fl-seasonal-welcome .fl-seasonal__eyebrow { margin-bottom: 10px; font-size: 8px; letter-spacing: .2em; }
+  .fl-seasonal-welcome h2 { font-size: clamp(28px,8.4vw,38px); }
+  .fl-seasonal-welcome h2 strong { font-size: clamp(43px,12.5vw,62px); }
+  .fl-seasonal-welcome .fl-seasonal__message { margin: 12px auto 0; max-width: 250px; font-size: 11px; line-height: 1.6; }
+  .fl-seasonal-welcome .fl-seasonal__tree { left: 12%; bottom: 6%; width: 76%; height: 49%; }
+  .fl-seasonal-welcome .fl-seasonal__halo { left: -10%; bottom: 3%; width: 120%; height: 60%; }
+  .fl-seasonal-welcome .fl-seasonal__sleigh { top: 43%; left: 39%; width: 56%; max-height: 12%; }
+  .fl-seasonal-welcome .fl-seasonal__signature { bottom: 2.5%; font-size: 8px; letter-spacing: .06em; }
+  .fl-seasonal-welcome .fl-seasonal__new-year { left: 8%; top: 46%; width: 84%; height: 31%; }
+  .fl-seasonal-welcome .fl-seasonal__year :is(span,strong) { font-size: clamp(100px,30vw,160px); }
+  .fl-seasonal-welcome .fl-seasonal__new-year > p { font-size: 7px; margin-top: 16px; letter-spacing: .17em; }
+}
+@media (max-height: 600px) and (orientation: landscape) {
+  .fl-seasonal-welcome .fl-seasonal__wordmark { top: 5%; font-size: 12px; }
+  .fl-seasonal-welcome .fl-seasonal__wordmark span { font-size: 6px; margin-top: 5px; }
+  .fl-seasonal-welcome .fl-seasonal__copy { top: 43%; }
+  .fl-seasonal-welcome .fl-seasonal__eyebrow { font-size: 8px; margin-bottom: 10px; }
+  .fl-seasonal-welcome h2 { font-size: clamp(27px,4vw,45px); }
+  .fl-seasonal-welcome h2 strong { font-size: clamp(36px,6vw,66px); }
+  .fl-seasonal-welcome .fl-seasonal__message { font-size: 11px; margin-top: 12px; max-width: 260px; }
+  .fl-seasonal-welcome .fl-seasonal__signature { font-size: 8px; bottom: 3%; }
+  .fl-seasonal-welcome .fl-seasonal__sleigh { top: 7%; max-height: 18%; }
+  .fl-seasonal-welcome .fl-seasonal__tree { height: 82%; bottom: 8%; }
+  .fl-seasonal-welcome .fl-seasonal__new-year { top: 37%; }
+}
+@media (max-height: 700px) and (orientation: portrait) and (max-width: 600px) {
+  .fl-seasonal-welcome .fl-seasonal__copy { top: 16%; }
+  .fl-seasonal-welcome h2 { font-size: 27px; }
+  .fl-seasonal-welcome h2 strong { font-size: 42px; }
+  .fl-seasonal-welcome .fl-seasonal__eyebrow { margin-bottom: 6px; font-size: 7px; }
+  .fl-seasonal-welcome .fl-seasonal__message { margin-top: 8px; max-width: 220px; font-size: 10px; }
+  .fl-seasonal-welcome .fl-seasonal__sleigh { top: 39%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fl-seasonal-welcome .fl-seasonal__stage { animation-name: fl-seasonal-still; }
+  .fl-seasonal-welcome .fl-seasonal__visual, .fl-seasonal-welcome .fl-seasonal__sleigh,
+  .fl-seasonal-welcome .fl-seasonal__copy, .fl-seasonal-welcome .fl-seasonal__year,
+  .fl-seasonal-welcome .fl-seasonal__firework { animation: none; opacity: 1; }
+  .fl-seasonal-welcome .fl-seasonal__particles { display: none; }
+  .fl-seasonal-welcome .fl-seasonal__year { transform: none; }
+}
+@keyframes fl-seasonal-still { 0%,80% { opacity: 1; visibility: visible; } 100% { opacity: 0; visibility: hidden; } }
+@media print { .fl-seasonal-welcome { display: none; } }

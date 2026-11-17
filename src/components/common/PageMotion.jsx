@@ -1,9 +1,15 @@
 import { useLayoutEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
+import usePublicScrollReveal from "./usePublicScrollReveal";
+import TravelKeywords from "../Home/TravelKeywords";
+
+// Public landing pages only; transaction and search-results routes stay excluded.
+const KEYWORD_PAGES = new Set(["/flights", "/hotels", "/about", "/contact", "/blogs"]);
 
 export default function PageMotion({ children }) {
   const { pathname } = useLocation();
   const mask = useRef(null);
+  usePublicScrollReveal(pathname, mask);
 
   useLayoutEffect(() => {
     const root = document.documentElement;
@@ -17,12 +23,18 @@ export default function PageMotion({ children }) {
     let observer;
     const enter = () => {
       if (pathname.replace(/\/+$/, "") === "/plan-your-trip" || reduced.matches || !mask.current?.animate) return;
-      // Reveal from the top without transforming/remounting forms or fixed popups.
-      animation = mask.current.animate([
+      // Only editorial/public pages use the softer reveal. Protected journeys
+      // retain their existing transition, scroll rules and component identity.
+      const editorial = /^\/(?:about|contact|hotels|blogs(?:\/[^/]+)?|packages(?:\/[^/]+)?|terms|privacy-policy|refund-policy|cancellation)?\/?$/.test(pathname);
+      // Reveal without transforming/remounting forms or fixed popups.
+      animation = mask.current.animate(editorial ? [
+        { opacity: 1, clipPath: "inset(0% 0 0 0)" },
+        { opacity: 0, clipPath: "inset(100% 0 0 0)" },
+      ] : [
         { opacity: 1, clipPath: "inset(0% 0 0 0)" },
         { opacity: 1, clipPath: "inset(100% 0 0 0)" },
       ], {
-        duration: 650, easing: "cubic-bezier(.22,.61,.36,1)",
+        duration: editorial ? 480 : 650, easing: "cubic-bezier(.22,.61,.36,1)",
       });
       animation.finished.catch(() => {}).finally(() => animation.cancel());
     };
@@ -44,5 +56,5 @@ export default function PageMotion({ children }) {
   }, [pathname]);
 
   // No pathname key or page wrapper: route state and DOM identity are preserved.
-  return <><div ref={mask} className="fl-page-transition-mask" aria-hidden="true" />{children}</>;
+  return <><div ref={mask} className="fl-page-transition-mask" aria-hidden="true" />{children}{KEYWORD_PAGES.has(pathname.replace(/\/+$/, "")) && <TravelKeywords />}</>;
 }

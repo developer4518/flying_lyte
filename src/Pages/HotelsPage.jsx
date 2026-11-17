@@ -9,12 +9,12 @@ const HotelsPage = () => {
     const searchRef = useRef(null);
 
     const recommendedDestinations = [
-        { name: "Goa", subtitle: "Beaches & Resorts" },
-        { name: "Manali", subtitle: "Mountain Stays" },
-        { name: "Kashmir", subtitle: "Scenic Hotels" },
-        { name: "Jaipur", subtitle: "Heritage Stays" },
-        { name: "Delhi", subtitle: "City Hotels" },
-        { name: "Dubai", subtitle: "Luxury Stays" },
+        { name: "Goa", subtitle: "Beaches & Resorts", image: "/images/hotel-destinations/goa-beach-resort.webp", alt: "Beachfront pool and tropical palms at Fort Aguada Beach Resort, Goa" },
+        { name: "Manali", subtitle: "Mountain Stays", image: "/images/hotel-destinations/manali-mountain-resort.webp", alt: "Mastiff Grand Manali Resort with Himalayan mountains behind it" },
+        { name: "Kashmir", subtitle: "Scenic Hotels", image: "/images/hotel-destinations/kashmir-houseboats.webp", alt: "Butts Clermont houseboats reflected in Dal Lake, Srinagar" },
+        { name: "Jaipur", subtitle: "Heritage Stays", image: "/images/hotel-destinations/jaipur-palace-hotel.webp", alt: "Heritage facade and gardens of Rambagh Palace hotel, Jaipur" },
+        { name: "Delhi", subtitle: "City Hotels", image: "/images/hotel-destinations/delhi-city-hotel.webp", alt: "Radisson Blu Hotel New Delhi Dwarka illuminated at dusk" },
+        { name: "Dubai", subtitle: "Luxury Stays", image: "/images/hotel-destinations/dubai-skyline-resort.webp", alt: "Resort grounds and Dubai skyline viewed from Le Royal Meridien Beach Resort and Spa" },
     ];
 
     const scrollToSearch = () => {
@@ -112,7 +112,7 @@ const HotelsPage = () => {
                         </button>
                     </div>
 
-                    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                    <div className="fl-hotels-destination-grid grid grid-cols-2 gap-3 lg:grid-cols-3">
                         {recommendedDestinations.map((destination) => (
                             <button
                                 key={destination.name}
@@ -131,7 +131,16 @@ const HotelsPage = () => {
     hover:shadow-[0_14px_35px_rgba(0,0,0,0.35)]
   "
                             >
-                                <img className="fl-parity-destination-image" src={{ Goa: "/images/delhi-goa.webp", Manali: "/images/hotelspagebackground1.webp", Kashmir: "/images/delhi-srinagar.webp", Jaipur: "/images/delhi-jaipur.webp", Delhi: "/images/hotelspagebackground1.webp", Dubai: "/images/delhi-dubai.webp" }[destination.name]} alt={`Stay inspiration for ${destination.name}`} loading="lazy" />
+                                <img
+                                    className="fl-parity-destination-image"
+                                    src={destination.image}
+                                    alt={destination.alt}
+                                    width={1024}
+                                    height={640}
+                                    style={{ aspectRatio: "8 / 5", height: "auto", objectFit: "cover" }}
+                                    loading="lazy"
+                                    decoding="async"
+                                />
                                 {/* subtle full border */}
                                 <div className="fl-inner-decor pointer-events-none absolute inset-0 rounded-2xl border border-white/[0.03]" />
 
@@ -194,6 +203,11 @@ const HotelsPage = () => {
                             </button>
                         ))}
                     </div>
+                    <p className="fl-inner-muted mt-4 text-xs text-white/45">
+                        <a href="/images/hotel-destinations/CREDITS.txt" target="_blank" rel="noopener noreferrer" className="underline underline-offset-4">
+                            Photo credits
+                        </a>
+                    </p>
                 </div>
             </section>
 

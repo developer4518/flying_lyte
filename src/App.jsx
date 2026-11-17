@@ -29,6 +29,7 @@ const Register = lazy(() => import("./Pages/Register"));
 const LoginPage = lazy(() => import("./Pages/LoginPage"));
 const ContactPage = lazy(() => import("./Pages/ContactPage"));
 const AboutPage = lazy(() => import("./Pages/AboutPage"));
+const GalleryPage = lazy(() => import("./Pages/GalleryPage"));
 const MyBookings = lazy(() => import("./components/Home/Mybookings"));
 const Blogs = lazy(() => import("./Pages/Blogs"));
 const BlogDetails = lazy(() => import("./Pages/BlogDetails"));
@@ -126,6 +127,7 @@ const App = () => {
           <Route path="/login" element={<PublicFrame kind="auth"><LoginPage /></PublicFrame>} />
           <Route path="/bookings" element={<PublicFrame kind="account"><MyBookings /></PublicFrame>} />
           <Route path="/about" element={<PublicFrame kind="about"><AboutPage /></PublicFrame>} />
+          <Route path="/gallery" element={<PublicFrame kind="gallery"><GalleryPage /></PublicFrame>} />
           <Route path="/contact" element={<PublicFrame kind="contact"><ContactPage /></PublicFrame>} />
           <Route path="/blogs" element={<PublicFrame kind="journal"><Blogs /></PublicFrame>} />
           <Route path="/blogs/:slug" element={<PublicFrame kind="story"><BlogDetails /></PublicFrame>} />
