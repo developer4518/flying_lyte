@@ -5,21 +5,37 @@ import { blogs } from "../data/blogs";
 
 import { getBlogImage, handleBlogImageError } from "../components/common/blogImages";
 import MobileCardDeck from "../components/common/MobileCardDeck";
+import { normalizeBlogSearch } from "../components/Blog/blogFormatting";
+import { Search, X } from "lucide-react";
+import "./Blogs.css";
 
+const latestBlogs = [...blogs].reverse();
+const searchIndex = new Map(latestBlogs.map(blog => [blog.slug, normalizeBlogSearch(
+  [blog.title, blog.category, blog.shortDescription, blog.description, blog.author].filter(Boolean).join(" "),
+)]));
 
 const Blogs = () => {
   // This is the complete local collection; no paginated API response is sliced.
-  const latestBlogs = [...blogs].reverse();
   const [searchParams, setSearchParams] = useSearchParams();
+  // Local filtering avoids the app's URL-change scroll reset on every keystroke.
+  const [query, setQuery] = useState("");
+  const [searchPage, setSearchPage] = useState(1);
+  const keywords = normalizeBlogSearch(query).split(" ").filter(Boolean);
+  const searching = keywords.length > 0;
+  const filteredBlogs = latestBlogs.filter(blog => keywords.every(word => searchIndex.get(blog.slug).includes(word)));
   const [pageSize, setPageSize] = useState(() =>
     window.matchMedia("(max-width: 767px)").matches ? 5 : 10,
   );
-  const totalPages = Math.max(1, Math.ceil(latestBlogs.length / pageSize));
-  const requestedPage = Number(searchParams.get("page") || 1);
+  const totalPages = Math.max(1, Math.ceil(filteredBlogs.length / pageSize));
+  const requestedPage = searching ? searchPage : Number(searchParams.get("page") || 1);
   const currentPage = Math.min(totalPages, Math.max(1,
     Number.isFinite(requestedPage) ? Math.floor(requestedPage) : 1,
   ));
-  const visibleBlogs = latestBlogs.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+  const visibleBlogs = filteredBlogs.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+  const changeSearch = value => {
+    setQuery(value);
+    setSearchPage(1);
+  };
 
   useEffect(() => {
     const media = window.matchMedia("(max-width: 767px)");
@@ -30,14 +46,16 @@ const Blogs = () => {
   }, []);
 
   useEffect(() => {
+    if (searching) return;
     if (!searchParams.has("page") || searchParams.get("page") === String(currentPage)) return;
     const next = new URLSearchParams(searchParams);
     if (currentPage === 1) next.delete("page");
     else next.set("page", String(currentPage));
     setSearchParams(next, { replace: true });
-  }, [searchParams, setSearchParams, currentPage]);
+  }, [searchParams, setSearchParams, currentPage, searching]);
 
   const changePage = (page) => {
+    if (searching) { setSearchPage(Math.min(totalPages, Math.max(1, page))); return; }
     const next = new URLSearchParams(searchParams);
     if (page === 1) next.delete("page");
     else next.set("page", String(Math.min(totalPages, Math.max(1, page))));
@@ -45,7 +63,7 @@ const Blogs = () => {
   };
 
   return (
-    <main className="fl-booking-ink fl-booking-base min-h-screen bg-[var(--bg-main)] text-white py-24">
+    <main className="fl-blog-shell fl-blog-index fl-booking-ink fl-booking-base min-h-screen bg-[var(--bg-main)] text-white py-24">
       <SEO
         title="Travel Blogs, Guides & Tips"
         description="Read FlyingLyte travel blogs for destination guides, flight booking tips, hotel booking advice, honeymoon packages, group tours, international trips, and travel planning ideas."
@@ -53,72 +71,66 @@ const Blogs = () => {
       />
 
       <div className="max-w-7xl mx-auto px-4">
-        <section className="text-center mb-14">
-          <p className="font-body text-sm md:text-base tracking-[0.3em] uppercase text-[var(--gold-soft)]">
-            FlyingLyte Travel Blog
-          </p>
+        <div className="fl-blog-index__top" data-fl-scroll-reveal="off">
+          <section className="fl-blog-index__intro" aria-labelledby="blog-page-title">
+            <p className="fl-blog-eyebrow">FLYINGLYTE TRAVEL BLOG</p>
+            <h1 id="blog-page-title">Travel Blogs, Guides &amp; Tips</h1>
+            <p>Destination guides, travel tips and thoughtful ideas for your next journey. Search a place, experience or keyword to find a guide that fits your plans.</p>
+          </section>
+          <form className="fl-blog-search" role="search" onSubmit={event => event.preventDefault()}>
+            <label htmlFor="blog-keyword">Find your next travel read</label>
+            <div className="fl-blog-search__field">
+              <Search size={20} aria-hidden="true" />
+              <input id="blog-keyword" type="search" value={query} onChange={event => changeSearch(event.target.value)} placeholder="Search destinations, experiences or any keyword…" autoComplete="off" aria-controls="blog-results" />
+              {query && <button type="button" onClick={() => changeSearch("")} aria-label="Clear blog search"><X size={18} aria-hidden="true" /></button>}
+            </div>
+            <p role="status" aria-live="polite">{filteredBlogs.length} {filteredBlogs.length === 1 ? "guide" : "guides"}{keywords.length ? ` matching “${query.trim()}”` : " to inspire your next journey"}</p>
+          </form>
+        </div>
 
-          <h1 className="fl-booking-heading fl-booking-title mt-4 font-heading text-4xl md:text-7xl text-[var(--gold-main)] leading-tight">
-            Travel Blogs, Guides & Tips
-          </h1>
-
-          <p className="mt-5 max-w-3xl mx-auto font-body text-lg leading-8 text-[var(--text-muted)]">
-            Explore helpful travel blogs from FlyingLyte, including destination
-            guides, hotel booking tips, flight booking advice, festival travel
-            updates, honeymoon ideas, group tour guides, and smart travel
-            planning suggestions for Indian travelers.
-          </p>
-
-          <p className="mt-4 max-w-3xl mx-auto font-body text-base leading-8 text-[var(--text-muted)]">
-            Whether you are planning a family vacation, a romantic getaway, a
-            budget-friendly trip, a luxury holiday, or an international tour,
-            our travel stories and guides help you choose the right destination,
-            understand the best time to visit, compare travel options, and plan
-            your journey with confidence.
-          </p>
-
-          <nav
-            aria-label="Important travel links"
-            className="mt-8 flex flex-wrap justify-center gap-4"
+        <nav
+          aria-label="Important travel links"
+          className="mt-8 flex flex-wrap justify-center gap-4"
+        >
+          <Link
+            to="/"
+            className="fl-booking-line fl-booking-button rounded-full border border-[var(--border-soft)] px-5 py-2 font-body text-sm text-[var(--gold-soft)] hover:border-[var(--gold-main)] hover:text-[var(--gold-main)] transition"
           >
-            <Link
-              to="/"
-              className="fl-booking-line fl-booking-button rounded-full border border-[var(--border-soft)] px-5 py-2 font-body text-sm text-[var(--gold-soft)] hover:border-[var(--gold-main)] hover:text-[var(--gold-main)] transition"
-            >
-              Home
-            </Link>
+            Home
+          </Link>
 
-            <Link
-              to="/flights"
-              className="fl-booking-line fl-booking-button rounded-full border border-[var(--border-soft)] px-5 py-2 font-body text-sm text-[var(--gold-soft)] hover:border-[var(--gold-main)] hover:text-[var(--gold-main)] transition"
-            >
-              Book Flights
-            </Link>
+          <Link
+            to="/flights"
+            className="fl-booking-line fl-booking-button rounded-full border border-[var(--border-soft)] px-5 py-2 font-body text-sm text-[var(--gold-soft)] hover:border-[var(--gold-main)] hover:text-[var(--gold-main)] transition"
+          >
+            Book Flights
+          </Link>
 
-            <Link
-              to="/hotels"
-              className="fl-booking-line fl-booking-button rounded-full border border-[var(--border-soft)] px-5 py-2 font-body text-sm text-[var(--gold-soft)] hover:border-[var(--gold-main)] hover:text-[var(--gold-main)] transition"
-            >
-              Book Hotels
-            </Link>
+          <Link
+            to="/hotels"
+            className="fl-booking-line fl-booking-button rounded-full border border-[var(--border-soft)] px-5 py-2 font-body text-sm text-[var(--gold-soft)] hover:border-[var(--gold-main)] hover:text-[var(--gold-main)] transition"
+          >
+            Book Hotels
+          </Link>
 
-            <Link
-              to="/packages"
-              className="fl-booking-line fl-booking-button rounded-full border border-[var(--border-soft)] px-5 py-2 font-body text-sm text-[var(--gold-soft)] hover:border-[var(--gold-main)] hover:text-[var(--gold-main)] transition"
-            >
-              Tour Packages
-            </Link>
+          <Link
+            to="/packages"
+            className="fl-booking-line fl-booking-button rounded-full border border-[var(--border-soft)] px-5 py-2 font-body text-sm text-[var(--gold-soft)] hover:border-[var(--gold-main)] hover:text-[var(--gold-main)] transition"
+          >
+            Tour Packages
+          </Link>
 
-            <Link
-              to="/contact"
-              className="fl-booking-line fl-booking-button rounded-full border border-[var(--border-soft)] px-5 py-2 font-body text-sm text-[var(--gold-soft)] hover:border-[var(--gold-main)] hover:text-[var(--gold-main)] transition"
-            >
-              Contact FlyingLyte
-            </Link>
-          </nav>
-        </section>
+          <Link
+            to="/contact"
+            className="fl-booking-line fl-booking-button rounded-full border border-[var(--border-soft)] px-5 py-2 font-body text-sm text-[var(--gold-soft)] hover:border-[var(--gold-main)] hover:text-[var(--gold-main)] transition"
+          >
+            Contact FlyingLyte
+          </Link>
+        </nav>
+
 
         <section
+          id="blog-results"
           aria-labelledby="latest-travel-blogs"
         >
           <h2 id="latest-travel-blogs" className="fl-booking-heading fl-booking-subtitle sr-only">
@@ -126,7 +138,7 @@ const Blogs = () => {
           </h2>
 
           <MobileCardDeck
-            key={`${currentPage}:${pageSize}`}
+            key={`${query}:${currentPage}:${pageSize}`}
             label="blog"
             className="fl-blogs-listing__grid grid gap-8 sm:grid-cols-2 lg:grid-cols-3"
           >
@@ -182,11 +194,11 @@ const Blogs = () => {
             </article>
           ))}
           </MobileCardDeck>
-          {visibleBlogs.length === 0 && <p className="py-12 text-center">No travel guides are available yet.</p>}
+          {visibleBlogs.length === 0 && <div className="fl-blog-search__empty"><h3>No matching travel guides</h3><p>Try a destination such as Goa, a travel experience, or a different keyword.</p><button type="button" onClick={() => changeSearch("")}>Show all guides</button></div>}
 
-          <nav className="fl-blog-pagination" aria-label="Blog pagination">
+          {visibleBlogs.length > 0 && <nav className="fl-blog-pagination" aria-label="Blog pagination">
             <p className="fl-blog-pagination__status" role="status" aria-live="polite">
-              Page {currentPage} of {totalPages} &middot; {latestBlogs.length} posts
+              Page {currentPage} of {totalPages} &middot; {filteredBlogs.length} posts
             </p>
             <div className="fl-blog-pagination__controls">
               <button type="button" onClick={() => changePage(currentPage - 1)} disabled={currentPage === 1} aria-label="Previous blog page">Previous</button>
@@ -195,7 +207,7 @@ const Blogs = () => {
               ))}
               <button type="button" onClick={() => changePage(currentPage + 1)} disabled={currentPage === totalPages} aria-label="Next blog page">Next</button>
             </div>
-          </nav>
+          </nav>}
         </section>
 
         <section className="fl-booking-surface fl-booking-line mt-20 rounded-3xl bg-[var(--bg-card)] border border-[var(--border-soft)] p-8 md:p-10 text-center shadow-[0_20px_60px_rgba(0,0,0,0.25)]">

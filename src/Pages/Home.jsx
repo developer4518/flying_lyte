@@ -9,6 +9,7 @@ import BlogSection from "../components/Home/BlogSection";
 import TripEnquiryPopup from "../components/common/TripEnquiryPopup";
 import SEO from "../components/SEO";
 import { TravelSteps } from "../components/Home/TravelEditorial";
+import TravelKeywords from "../components/Home/TravelKeywords";
 
 let popupCheckedForThisPageLoad = false;
 
@@ -40,6 +41,7 @@ const Home = () => {
       <HeroSection />
       <WhyChooseUs />
       <PackageSection limit={4} appearance="home-model2" />
+      <TravelKeywords />
       <AboutUs />
       <BlogSection />
       <TravelSteps />

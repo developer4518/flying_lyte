@@ -6,15 +6,13 @@ import { ArrowUpRight } from "lucide-react";
 import BrandLogo from "../common/BrandLogo";
 import ColorModeButton from "./ColorModeButton";
 import { useAuthStore } from "../../store/authStore";
+import MoreNavigation from "./MoreNavigation";
 
 const navLinks = [
   { name: "Home", path: "/" },
   { name: "Packages", path: "/packages" },
   { name: "Flights", path: "/flights" },
   { name: "Hotels", path: "/hotels" },
-  { name: "About Us", path: "/about" },
-  { name: "Contact", path: "/contact" },
-  { name: "Blogs", path: "/blogs" },
 ];
 
 const reducedMotionQuery = "(prefers-reduced-motion: reduce)";
@@ -240,6 +238,7 @@ const Navbar = () => {
                   </Link>
                 </li>
               ))}
+              <MoreNavigation key={"desktop-more-" + location.pathname} onNavigate={handleReloadNavigate} />
             </ul>
 
             {/* Desktop Auth */}
@@ -403,6 +402,7 @@ const Navbar = () => {
                   </span>
                 </motion.button>
               ))}
+              <MoreNavigation key={"mobile-more-" + location.pathname} mobile onNavigate={handleReloadNavigate} />
             </div>
 
             <div className="fl-nav__divider my-2.5 h-px bg-linear-to-r from-transparent via-white/10 to-transparent" />

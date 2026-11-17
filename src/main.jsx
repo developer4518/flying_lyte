@@ -6,6 +6,7 @@ import { BrowserRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { HelmetProvider } from "react-helmet-async";
 import { reconcileSeoFallbacks } from "./components/common/seoFallbacks";
+import SeasonalWelcome from "./components/seasonal/SeasonalWelcome";
 
 const restoreSeoFallbacks = reconcileSeoFallbacks();
 if (import.meta.hot) import.meta.hot.dispose(restoreSeoFallbacks);
@@ -24,6 +25,7 @@ const RootApp = (
   <QueryClientProvider client={queryClient}>
     <HelmetProvider>
       <BrowserRouter>
+        <SeasonalWelcome />
         <App />
         <ToastContainer />
       </BrowserRouter>

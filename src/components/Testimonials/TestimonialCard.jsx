@@ -1,77 +1,29 @@
-import React from "react";
-import { motion } from "framer-motion";
+import { ArrowUpRight, Quote, Star } from "lucide-react";
 
-const TestimonialCard = ({ testimonial }) => {
+export default function TestimonialCard({ testimonial, compact = false }) {
+  const initials = testimonial.name.replace(/[^\p{L}\p{N}\s]/gu, "")
+    .trim().split(/\s+/).slice(0, 2).map(word => word[0]).join("").toUpperCase();
+
   return (
-    <motion.div
-      whileHover={{ y: -6 }}
-      whileTap={{ scale: 0.96 }}
-      transition={{ type: "spring", stiffness: 160, damping: 18 }}
-      className="
-        fl-editorial__card fl-editorial__testimonial
-        group
-        relative
-        rounded-3xl
-        p-7
-        text-center
-        bg-(--bg-card)
-        border border-(--border-soft)
-        shadow-[0_20px_60px_-20px_rgba(0,0,0,0.9)]
-        hover:border-(--gold-main)
-        transition-all
-      "
-    >
-      {/* ✨ Gold hover glow */}
-      <div
-        className="
-          fl-editorial__decor
-          pointer-events-none
-          absolute inset-0
-          opacity-0
-          group-hover:opacity-100
-          transition
-          bg-[radial-gradient(circle_at_top,rgba(201,162,77,0.18),transparent_65%)]
-        "
-      />
-
-      {/* Avatar */}
-      <img
-        src={testimonial.image}
-        alt={testimonial.name}
-        className="
-          fl-editorial__avatar
-          w-16 h-16
-          mx-auto
-          rounded-full
-          mb-4
-          border-2 border-(--gold-main)
-          object-cover
-        "
-       loading="lazy" />
-
-      {/* Feedback */}
-      <p className="fl-editorial__quote text-(--text-muted) text-sm leading-relaxed mb-4">
-        “{testimonial.feedback}”
-      </p>
-
-      {/* Name */}
-      <h3
-        className="
-          fl-editorial__name
-          font-semibold
-          text-(--gold-main)
-          text-base
-        "
-      >
-        {testimonial.name}
-      </h3>
-
-      {/* Position */}
-      <p className="fl-editorial__meta text-xs text-(--text-muted) mt-1">
-        {testimonial.position}
-      </p>
-    </motion.div>
+    <article className={`fl-traveler-reviews__card${compact ? " fl-traveler-reviews__card--compact" : ""}`}>
+      <div className="fl-traveler-reviews__card-top">
+        <span className="fl-traveler-reviews__avatar" aria-hidden="true">{initials}</span>
+        <Quote size={24} strokeWidth={1.3} aria-hidden="true" />
+      </div>
+      <div className="fl-traveler-reviews__stars" role="img" aria-label={`${testimonial.rating} out of 5 stars`}>
+        {Array.from({ length: testimonial.rating }, (_, index) => <Star key={index} size={15} fill="currentColor" strokeWidth={0} aria-hidden="true" />)}
+      </div>
+      {testimonial.feedback ? (
+        <blockquote className="fl-traveler-reviews__quote">{testimonial.feedback}</blockquote>
+      ) : (
+        <p className="fl-traveler-reviews__rating-only">5-star rating</p>
+      )}
+      {testimonial.excerpt && <span className="fl-traveler-reviews__excerpt">Review excerpt</span>}
+      <footer className="fl-traveler-reviews__author">
+        <p>{testimonial.name}</p>
+        <span>{testimonial.feedback ? "Traveler review" : "Rating only"}</span>
+      </footer>
+      {compact && <span className="fl-traveler-reviews__read-label">Read review <ArrowUpRight size={12} aria-hidden="true" /></span>}
+    </article>
   );
-};
-
-export default TestimonialCard;
+}
