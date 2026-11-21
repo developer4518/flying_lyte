@@ -1,4 +1,4 @@
-import React, { useEffect, useId, useMemo, useState } from "react";
+import React, { useEffect, useId, useMemo, useRef, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { privateApi, publicApi } from "../../services/api";
@@ -15,6 +15,9 @@ import {
   CalendarDays,
   Building2,
   Camera,
+  Play,
+  ChevronLeft,
+  ChevronRight,
   Car,
   ShieldCheck,
   Tag,
@@ -74,11 +77,12 @@ const parseItinerary = (text = "") => {
   if (parts.length) {
     return parts.map((item, index) => {
       const titleMatch = item.match(/^(Day\s*\d+\s*:?[^\n]*)/i);
+      const dayNumber = Number(titleMatch?.[1].match(/^Day\s*(\d+)/i)?.[1]);
       const title = titleMatch ? titleMatch[1].trim() : `Day ${index + 1}`;
       const description = item.replace(title, "").trim();
 
       return {
-        day: index + 1,
+        day: Number.isSafeInteger(dayNumber) && dayNumber >= 0 ? dayNumber : index + 1,
         title,
         description,
       };
@@ -92,6 +96,47 @@ const parseItinerary = (text = "") => {
   }));
 };
 
+const normalizePackageMedia = (pkg) => [
+  ...(Array.isArray(pkg?.images) ? pkg.images : []).map((item, index) => ({
+    id: `image-${item?.id ?? index}`,
+    type: "image",
+    src: item?.image,
+  })),
+  ...(Array.isArray(pkg?.videos) ? pkg.videos : []).map((item, index) => ({
+    id: `video-${item?.id ?? index}`,
+    type: "video",
+    src: item?.video,
+  })),
+].filter(({ src }) => typeof src === "string" && /^(https?:\/\/|\/(?!\/))/i.test(src.trim()));
+
+const PackageVideoThumbnail = ({ src, className }) => {
+  const [failedSrc, setFailedSrc] = useState(null);
+
+  return (
+    <div className="relative w-full h-full flex items-center justify-center bg-black/60 text-white">
+      {failedSrc !== src && (
+        <video
+          src={src}
+          muted
+          playsInline
+          preload="metadata"
+          tabIndex={-1}
+          aria-hidden="true"
+          className={`pointer-events-none w-full h-full object-cover ${className}`}
+          onLoadedMetadata={(e) => {
+            const video = e.currentTarget;
+            if (Number.isFinite(video.duration) && video.duration > 0) {
+              video.currentTime = Math.min(0.1, video.duration / 2);
+            }
+          }}
+          onError={() => setFailedSrc(src)}
+        />
+      )}
+      <Play size={40} aria-hidden="true" className="absolute drop-shadow-lg" />
+    </div>
+  );
+};
+
 const PackageDetails = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -103,8 +148,12 @@ const PackageDetails = () => {
   const [openQuoteForm, setOpenQuoteForm] = useState(false);
   const [quoteErrors, setQuoteErrors] = useState({});
   const [bookingErrors, setBookingErrors] = useState({});
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [mediaSelection, setMediaSelection] = useState(null);
+  const [videoStatus, setVideoStatus] = useState("loading");
+  const videoRef = useRef(null);
   const [openFaq, setOpenFaq] = useState(null);
+  const [openItineraryDay, setOpenItineraryDay] = useState(null);
+  const itineraryId = useId();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -127,8 +176,27 @@ const PackageDetails = () => {
     enabled: !!slug,
   });
 
-  const images = pkg?.images || [];
-  const heroImage = images?.[0]?.image || "/images/package-placeholder.jpg";
+  const media = useMemo(() => normalizePackageMedia(pkg), [pkg]);
+  const previewMedia = media.slice(0, 4);
+  const firstVideo = media.find((item) => item.type === "video");
+  if (firstVideo && !previewMedia.includes(firstVideo)) {
+    previewMedia[previewMedia.length - 1] = firstVideo;
+  }
+  const selectedMediaIndex = mediaSelection?.slug === slug ? mediaSelection.index : null;
+  const selectedMedia = selectedMediaIndex === null ? null : media[selectedMediaIndex];
+  const heroImage = media.find((item) => item.type === "image")?.src || "/images/package-placeholder.jpg";
+
+  const selectMedia = (index) => {
+    if (index === selectedMediaIndex) return;
+    videoRef.current?.pause();
+    setVideoStatus("loading");
+    setMediaSelection(index === null ? null : { slug, index });
+  };
+
+  useEffect(() => {
+    const video = videoRef.current;
+    return () => video?.pause();
+  }, [selectedMediaIndex, selectedMedia?.src]);
 
   const packageTitle = pkg?.tour_name || pkg?.title || "Holiday Package";
   const destination = pkg?.Country_City_Multicity || "India";
@@ -592,7 +660,7 @@ Please share the best quote and itinerary.`;
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 gap-2.5 md:min-w-57.5">
+                  <div className="fl-pkg-hero-actions grid grid-cols-3 sm:grid-cols-1 gap-2 sm:gap-2.5 md:min-w-57.5">
                     <PackageItineraryDownload pkg={pkg} />
                     <button
                       onClick={handleBookClick}
@@ -730,38 +798,46 @@ Please share the best quote and itinerary.`;
             </button>
           </div>
 
-          {images.length > 0 ? (
-            <div className="fl-pkg-gallery-mosaic" data-count={Math.min(images.length, 4)}>
-              {images.slice(0, 4).map((img, index) => (
+          {media.length > 0 ? (
+            <div className="fl-pkg-gallery-mosaic" data-count={previewMedia.length}>
+              {previewMedia.map((item, index) => (
                 <motion.button
-                  key={img.id || index}
+                  key={`${item.id}-${index}`}
                   type="button"
-                  onClick={() => setSelectedImage(img.image)}
+                  onClick={() => selectMedia(media.indexOf(item))}
                   whileTap={{ scale: 0.97 }}
-                  aria-label={`Open ${packageTitle} photo ${index + 1}`}
-                  className="fl-pkg-gallery-card relative overflow-hidden group border border-white/10 bg-black/30 shadow-xl rounded-2xl sm:rounded-3xl"
+                  aria-label={`Open ${packageTitle} ${item.type === "video" ? "video" : "photo"} ${media.indexOf(item) + 1}`}
+                  aria-pressed={selectedMedia === item}
+                  className={`fl-pkg-gallery-card relative overflow-hidden group border border-white/10 bg-black/30 shadow-xl rounded-2xl sm:rounded-3xl ${selectedMedia === item ? "ring-2 ring-(--gold-main)" : ""}`}
                 >
-                  <img
-                    src={img.image}
-                    alt={`Package ${index + 1}`}
-                    className="w-full h-full object-cover group-hover:scale-110 transition duration-700"
-                   loading="lazy" />
+                  {item.type === "image" ? (
+                    <img
+                      src={item.src}
+                      alt={`Package ${index + 1}`}
+                      className="w-full h-full object-cover group-hover:scale-110 transition duration-700"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <PackageVideoThumbnail src={item.src} className="group-hover:scale-110 transition duration-700" />
+                  )}
 
                   <div className="fl-pkg-photo-gradient absolute inset-0 bg-linear-to-t from-black/90 via-black/25 to-transparent" />
 
                   <div className="fl-pkg-photo-icon absolute top-3 right-3 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-black/60 border border-white/15 backdrop-blur-md flex items-center justify-center text-(--gold-main)">
-                    <Camera size={16} />
+                    {item.type === "video" ? <Play size={16} /> : <Camera size={16} />}
                   </div>
 
                   <div className="absolute bottom-3 left-3 right-3 text-left">
                     <p className="fl-pkg-photo-caption fl-pkg-ink text-white font-bold text-xs sm:text-base leading-tight">
-                      {index === 0
-                        ? "Destination View"
-                        : index === 1
-                          ? "Sightseeing"
-                          : index === 2
-                            ? "Tour Highlight"
-                            : "Memorable Trip"}
+                      {item.type === "video"
+                        ? "Trip Video"
+                        : index === 0
+                          ? "Destination View"
+                          : index === 1
+                            ? "Sightseeing"
+                            : index === 2
+                              ? "Tour Highlight"
+                              : "Memorable Trip"}
                     </p>
                   </div>
                 </motion.button>
@@ -769,7 +845,7 @@ Please share the best quote and itinerary.`;
             </div>
           ) : (
             <div className="fl-pkg-inset fl-pkg-muted fl-pkg-surface bg-(--bg-card) border border-white/10 rounded-2xl p-6 sm:p-8 text-center text-gray-400 text-sm">
-              No gallery images available.
+              No gallery media available.
             </div>
           )}
         </div>
@@ -777,7 +853,7 @@ Please share the best quote and itinerary.`;
 
       {/* FEATURE STRIP */}
       <section className="max-w-7xl mx-auto px-4 sm:px-5 md:px-6 lg:px-8 mt-6 sm:mt-8 md:mt-10">
-        <div className="fl-pkg-surface grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 bg-(--bg-card) border border-white/10 rounded-3xl sm:rounded-[26px] p-3.5 sm:p-4 md:p-5 shadow-xl">
+        <div className="fl-pkg-surface grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 bg-(--bg-card) border border-white/10 rounded-3xl sm:rounded-[26px] p-3.5 sm:p-4 md:p-5 shadow-xl">
           <FeatureCard
             icon={<Building2 />}
             title="Hotels Included"
@@ -891,11 +967,24 @@ Please share the best quote and itinerary.`;
                           </div>
 
                           <div className="fl-pkg-itinerary-card bg-black/25 border border-white/10 rounded-2xl p-4 sm:p-5 hover:border-yellow-400/30 transition min-w-0">
-                            <h3 className="fl-pkg-heading fl-pkg-ink font-semibold text-white mb-2 text-sm sm:text-base md:text-lg leading-snug">
-                              {item.title}
+                            <h3 className="fl-pkg-heading fl-pkg-ink font-semibold text-white mb-0 md:mb-2 text-sm sm:text-base md:text-lg leading-snug">
+                              <span className="hidden md:inline">{item.title}</span>
+                              <button
+                                type="button"
+                                aria-expanded={openItineraryDay === index}
+                                aria-controls={`${itineraryId}-day-${index}`}
+                                onClick={() => setOpenItineraryDay((current) => current === index ? null : index)}
+                                className="flex md:hidden w-full min-h-11 items-center justify-between gap-3 text-left"
+                              >
+                                <span>{item.title}</span>
+                                <ChevronDown size={18} aria-hidden="true" className={`shrink-0 transition-transform ${openItineraryDay === index ? "rotate-180" : ""}`} />
+                              </button>
                             </h3>
 
-                            <p className="fl-pkg-body fl-pkg-ink text-gray-300 leading-7 text-sm sm:text-base wrap-break-words">
+                            <p
+                              id={`${itineraryId}-day-${index}`}
+                              className={`fl-pkg-body fl-pkg-ink text-gray-300 leading-7 text-sm sm:text-base wrap-break-words ${openItineraryDay === index ? "mt-2 md:mt-0" : "hidden md:block"}`}
+                            >
                               {item.description}
                             </p>
                           </div>
@@ -932,7 +1021,7 @@ Please share the best quote and itinerary.`;
                 <div>
                   <div className="mb-5 sm:mb-6">
                     <p className="fl-pkg-eyebrow text-[11px] sm:text-xs uppercase tracking-[0.22em] sm:tracking-[0.25em] text-(--gold-main) mb-2">
-                      Trip Photos
+                      Trip Photos & Videos
                     </p>
 
                     <h2 className="fl-pkg-section-title fl-pkg-heading text-xl sm:text-2xl md:text-3xl font-(--font-heading) text-(--gold-main)">
@@ -940,28 +1029,36 @@ Please share the best quote and itinerary.`;
                     </h2>
                   </div>
 
-                  {images.length > 0 ? (
+                  {media.length > 0 ? (
                     <div className="grid grid-cols-2 lg:grid-cols-3 gap-2.5 sm:gap-4">
-                      {images.map((img, index) => (
+                      {media.map((item, index) => (
                         <button
-                          key={img.id || index}
-                          onClick={() => setSelectedImage(img.image)}
+                          key={`${item.id}-${index}`}
+                          type="button"
+                          onClick={() => selectMedia(index)}
+                          aria-label={`Open ${packageTitle} ${item.type === "video" ? "video" : "photo"} ${index + 1}`}
+                          aria-pressed={selectedMediaIndex === index}
                           className={`fl-pkg-gallery-card fl-pkg-button relative overflow-hidden border border-white/10 bg-black/30 group shadow-lg ${
                             index === 0
                               ? "col-span-2 h-44 sm:h-72 lg:h-80 rounded-2xl sm:rounded-3xl"
                               : "h-32 sm:h-56 lg:h-64 rounded-2xl sm:rounded-3xl"
-                          }`}
+                          } ${selectedMediaIndex === index ? "ring-2 ring-(--gold-main)" : ""}`}
                         >
-                          <img
-                            src={img.image}
-                            alt={`Gallery ${index + 1}`}
-                            className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
-                           loading="lazy" />
+                          {item.type === "image" ? (
+                            <img
+                              src={item.src}
+                              alt={`Gallery ${index + 1}`}
+                              className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
+                              loading="lazy"
+                            />
+                          ) : (
+                            <PackageVideoThumbnail src={item.src} className="group-hover:scale-110 transition duration-500" />
+                          )}
 
                           <div className="fl-pkg-photo-gradient absolute inset-0 bg-linear-to-t from-black/70 via-transparent to-transparent opacity-80" />
 
                           <div className="fl-pkg-photo-icon absolute top-3 right-3 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-black/60 border border-white/15 backdrop-blur-md flex items-center justify-center text-(--gold-main)">
-                            <Camera size={16} />
+                            {item.type === "video" ? <Play size={16} /> : <Camera size={16} />}
                           </div>
                         </button>
                       ))}
@@ -969,7 +1066,7 @@ Please share the best quote and itinerary.`;
                   ) : (
                     <div className="fl-pkg-inset bg-black/20 border border-white/10 rounded-2xl p-5 text-center">
                       <p className="fl-pkg-muted text-gray-400 text-sm">
-                        No gallery images available.
+                        No gallery media available.
                       </p>
                     </div>
                   )}
@@ -1416,32 +1513,94 @@ Please share the best quote and itinerary.`;
         )}
       </AnimatePresence>
 
-      {/* IMAGE PREVIEW */}
+      {/* MEDIA PREVIEW */}
       <AnimatePresence>
-        {selectedImage && (
+        {selectedMedia && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={() => setSelectedImage(null)}
+            onClick={() => selectMedia(null)}
+            role="dialog"
+            aria-modal="true"
+            aria-label={`${packageTitle} media preview`}
             className="fl-pkg-lightbox fixed inset-0 z-50 bg-black/90 p-4 flex items-center justify-center"
           >
             <button
-              onClick={() => setSelectedImage(null)}
+              type="button"
+              aria-label="Close media preview"
+              onClick={() => selectMedia(null)}
               className="fl-pkg-photo-control fl-pkg-ink fl-pkg-button absolute top-5 right-5 bg-white/10 hover:bg-white/20 w-11 h-11 rounded-full text-white"
             >
               ✕
             </button>
 
-            <motion.img
-              initial={{ scale: 0.9 }}
-              animate={{ scale: 1 }}
-              exit={{ scale: 0.9 }}
-              src={selectedImage}
-              alt="Selected package"
-              className="max-w-full max-h-[86vh] object-contain rounded-2xl"
-              onClick={(e) => e.stopPropagation()}
-            />
+            {selectedMedia.type === "image" ? (
+              <motion.img
+                initial={{ scale: 0.9 }}
+                animate={{ scale: 1 }}
+                exit={{ scale: 0.9 }}
+                src={selectedMedia.src}
+                alt="Selected package"
+                className="max-w-full max-h-[86vh] object-contain rounded-2xl"
+                onClick={(e) => e.stopPropagation()}
+              />
+            ) : (
+              <div className="relative w-full max-w-5xl min-w-0" onClick={(e) => e.stopPropagation()}>
+                {videoStatus === "error" ? (
+                  <div role="alert" className="rounded-2xl bg-black/60 p-8 text-center text-white">
+                    Unable to load this video. Please try again later or choose another gallery item.
+                  </div>
+                ) : (
+                  <>
+                    <video
+                      key={`${selectedMedia.src}-${selectedMediaIndex}`}
+                      ref={videoRef}
+                      src={selectedMedia.src}
+                      controls
+                      playsInline
+                      preload="metadata"
+                      aria-label={`${packageTitle} video`}
+                      className="w-full max-w-full max-h-[86vh] object-contain rounded-2xl bg-black"
+                      onLoadedMetadata={() => setVideoStatus("ready")}
+                      onError={() => setVideoStatus("error")}
+                    />
+                    {videoStatus === "loading" && (
+                      <p role="status" className="pointer-events-none absolute inset-0 flex items-center justify-center text-white">
+                        Loading video…
+                      </p>
+                    )}
+                  </>
+                )}
+              </div>
+            )}
+
+            {media.length > 1 && (
+              <>
+                <button
+                  type="button"
+                  aria-label="Previous media"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    selectMedia((selectedMediaIndex - 1 + media.length) % media.length);
+                  }}
+                  className="fl-pkg-photo-control absolute left-2 sm:left-5 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-black/60 text-white flex items-center justify-center"
+                >
+                  <ChevronLeft size={24} />
+                </button>
+                <button
+                  type="button"
+                  aria-label="Next media"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    selectMedia((selectedMediaIndex + 1) % media.length);
+                  }}
+                  className="fl-pkg-photo-control absolute right-2 sm:right-5 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-black/60 text-white flex items-center justify-center"
+                >
+                  <ChevronRight size={24} />
+                </button>
+              </>
+            )}
           </motion.div>
         )}
       </AnimatePresence>
