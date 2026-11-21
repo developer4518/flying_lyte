@@ -10,6 +10,8 @@ import { publicApi } from "../../services/api";
 import SEO from "../../components/SEO";
 import { PackageHero } from "../../components/Home/TravelEditorial";
 import CTASection from "../../components/Home/CTASection";
+import TrendingDestinations from "../../components/Home/TrendingDestinations";
+import { packageDestinations } from "../../data/packageDestinations";
 
 const PACKAGE_BG_IMAGE = "/images/travel-pattern-bg.jpeg";
 
@@ -20,12 +22,16 @@ const fetchPackages = async (page = 1, limit = 8, destination = "") => {
     destination: destination || "",
   }).toString();
 
-  const { data } = await publicApi.get(`/api/package/packages/?${query}`);
+  const { data } = await publicApi.get(`/api/package/packages/?${query}`, {
+    // Vite forwards local catalogue requests to the configured public API.
+    ...(import.meta.env.DEV ? { baseURL: "" } : {}),
+  });
 
   const packages = data?.data || data?.results || [];
 
   return {
     packages,
+    count: data?.count ?? packages.length,
     totalPages: data?.total_pages || Math.ceil((data?.count || 0) / limit),
     currentPage: data?.current_page || page,
     next: data?.next,
@@ -114,7 +120,7 @@ const PackageSection = ({ limit = 8, appearance = "default" }) => {
     return () => clearTimeout(timer);
   }, [destination, debouncedDestination, navigate, isPackagesPage]);
 
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ["packages", page, debouncedDestination, limit],
     queryFn: () => fetchPackages(page, limit, debouncedDestination),
     keepPreviousData: true,
@@ -128,6 +134,22 @@ const PackageSection = ({ limit = 8, appearance = "default" }) => {
 
   const packages = data?.packages ?? [];
   const totalPages = data?.totalPages ?? 1;
+  const destinationLabel = packageDestinations.find(item => item.query.toLowerCase() === debouncedDestination.toLowerCase())?.name || debouncedDestination;
+
+  const clearDestination = () => {
+    setDestination("");
+    setDebouncedDestination("");
+    setPage(1);
+    if (isPackagesPage) navigate("/packages#package-results");
+  };
+
+  useEffect(() => {
+    if (!isPackagesPage || location.hash !== "#package-results") return;
+    const frame = requestAnimationFrame(() => {
+      document.getElementById("package-results")?.scrollIntoView({ block: "start", behavior: "instant" });
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [isPackagesPage, location.hash, location.key]);
 
   const containerVariants = {
     hidden: {},
@@ -260,7 +282,12 @@ const PackageSection = ({ limit = 8, appearance = "default" }) => {
       >
         {isPackagesPage && packageSearch}
         {isPackagesPage && appearance === "page-model2" && <PackageHero />}
-        <div className={isPackagesPage && appearance === "page-model2" ? "fl-package-collection" : undefined}>
+        {isPackagesPage && appearance === "page-model2" && <TrendingDestinations placement="packages" selected={debouncedDestination} />}
+        <div id={isPackagesPage ? "package-results" : undefined} aria-busy={isLoading} className={isPackagesPage && appearance === "page-model2" ? "fl-package-collection" : undefined}>
+        {isPackagesPage && debouncedDestination && <div className="fl-package-results-context">
+          <p role="status">{isLoading ? `Finding packages for ${destinationLabel}…` : isError ? `Packages for ${destinationLabel}` : `${data?.count ?? 0} ${(data?.count ?? 0) === 1 ? "package" : "packages"} for ${destinationLabel}`}</p>
+          <button type="button" onClick={clearDestination}>Clear destination</button>
+        </div>}
         {/* Heading */}
         <motion.div
           initial={reducedMotion ? false : { opacity: 0, y: 24 }}
@@ -462,18 +489,17 @@ const PackageSection = ({ limit = 8, appearance = "default" }) => {
             </div>
 
             <h3 className="fl-editorial__card-title text-xl font-bold text-white sm:text-2xl">
-              No packages found
+              {isError ? "Packages could not be loaded" : debouncedDestination ? `No packages available for ${destinationLabel}` : "No packages found"}
             </h3>
 
             <p className="fl-editorial__meta mt-3 text-sm leading-6 text-gray-300 sm:text-base">
-              We could not find any package for this destination. Try searching
-              another city, country, or travel place.
+              {isError ? "Please try again to check the latest available packages." : debouncedDestination ? "There are no matching packages available right now. Explore another destination or see all packages." : "Try searching another city, country, or travel place."}
             </p>
 
-            {destination && (
+            {(destination || isError) && (
               <button
                 type="button"
-                onClick={() => setDestination("")}
+                onClick={isError ? () => refetch() : clearDestination}
                 className="
                   fl-editorial__action
                   mt-5 rounded-xl bg-(--gold-main)
@@ -482,7 +508,7 @@ const PackageSection = ({ limit = 8, appearance = "default" }) => {
                   sm:mt-6 sm:px-6 sm:py-3
                 "
               >
-                Clear Search
+                {isError ? "Try again" : "See all packages"}
               </button>
             )}
           </motion.div>

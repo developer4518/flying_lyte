@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { footerLinks } from "./footerLinks";
 import BrandLogo from "../../common/BrandLogo";
+import OfficeMap from "../../common/OfficeMap";
 
 import { Link, useNavigate } from "react-router-dom";
 
@@ -65,6 +66,12 @@ const Footer = () => {
               >
                 <Phone size={16} /> +91 9667455591
               </a>
+              <a
+                href="tel:+917303055591"
+                className="fl-footer__contact-link transition"
+              >
+                <Phone size={16} /> +91 7303055591
+              </a>
 
               {/* WhatsApp Chat */}
               <a
@@ -108,6 +115,8 @@ const Footer = () => {
           ))}
         </div>
 
+
+        <OfficeMap compact />
 
         {/* We Accept */}
         <div className="fl-footer__payments">
