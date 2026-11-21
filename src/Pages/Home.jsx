@@ -10,6 +10,7 @@ import TripEnquiryPopup from "../components/common/TripEnquiryPopup";
 import SEO from "../components/SEO";
 import { TravelSteps } from "../components/Home/TravelEditorial";
 import TravelKeywords from "../components/Home/TravelKeywords";
+import TrendingDestinations from "../components/Home/TrendingDestinations";
 
 let popupCheckedForThisPageLoad = false;
 
@@ -39,6 +40,7 @@ const Home = () => {
         canonical="https://www.flyinglyte.com/"
       />
       <HeroSection />
+      <TrendingDestinations />
       <WhyChooseUs />
       <PackageSection limit={4} appearance="home-model2" />
       <TravelKeywords />

@@ -47,7 +47,7 @@ function AboutImage({ label, reducedMotion, ...imageProps }) {
         viewport={{ once: true, amount: 0.15 }}
         transition={{ duration: reducedMotion ? 0 : 1.1, ease: [0.22, 1, 0.36, 1] }}
       />
-      <span className="fl-about-studio__photo-label"><Compass size={13} aria-hidden="true" />{label}</span>
+      {label && <span className="fl-about-studio__photo-label"><Compass size={13} aria-hidden="true" />{label}</span>}
     </div>
   );
 }
@@ -71,7 +71,7 @@ export default function AboutPage() {
       <header className="fl-about-studio__hero fl-about-studio__wrap">
         <Motion.div {...reveal} className="fl-about-studio__hero-copy">
           <p className="fl-about-studio__eyebrow"><span /> ABOUT FLYINGLYTE</p>
-          <h1 className="fl-about-studio__title">A world to explore.<br /><em>A journey<br />that's yours.</em></h1>
+          <h1 className="fl-about-studio__title">A world to explore.<br /> <em>A journey<br /> that's yours.</em></h1>
           <p className="fl-about-studio__intro">Thoughtful travel starts with understanding what matters to you.</p>
           <p>We bring flights, stays and holiday experiences together, with space for your preferences and a team you can talk to along the way.</p>
           <div className="fl-about-studio__actions">
@@ -80,9 +80,9 @@ export default function AboutPage() {
           </div>
           <div className="fl-about-studio__hero-foot"><Compass size={18} aria-hidden="true" /><span>More curiosity. More possibility.</span></div>
         </Motion.div>
-        <Motion.figure {...reveal} className="fl-about-studio__hero-photo">
-          <AboutImage label="01 / A FRESH PERSPECTIVE" reducedMotion={reducedMotion} src="/images/about-journey/alpine-perspective.webp" alt="Lauterbrunnen Valley and Alpine peaks viewed from Wengen, Switzerland" width="1600" height="1076" fetchPriority="high" decoding="async" />
-          <figcaption><span>THE JOY OF GOING SOMEWHERE NEW</span><span>Wengen, Switzerland <ArrowUpRight size={15} aria-hidden="true" /></span></figcaption>
+        <Motion.figure {...reveal} className="fl-about-studio__hero-photo fl-about-studio__hero-artwork">
+          <AboutImage reducedMotion={reducedMotion} src="/images/about-journey/world-travel-collage.png" alt="A coral suitcase and sunhat surrounded by the Eiffel Tower, Statue of Liberty, Big Ben, pyramids and other world landmarks" width="1254" height="1254" fetchPriority="high" decoding="async" />
+          <figcaption><span>THE JOY OF GOING SOMEWHERE NEW</span><span>A world of possibilities <Globe size={15} aria-hidden="true" /></span></figcaption>
         </Motion.figure>
       </header>
 
