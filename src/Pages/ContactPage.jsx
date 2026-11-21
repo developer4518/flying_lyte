@@ -4,6 +4,7 @@ import axios from "axios";
 import { Mail, Phone, MapPin } from "lucide-react";
 import { motion } from "framer-motion";
 import SEO from "../components/SEO";
+import OfficeMap from "../components/common/OfficeMap";
 
 const ContactPage = () => {
   const [loading, setLoading] = useState(false);
@@ -200,9 +201,15 @@ const ContactPage = () => {
                 <h4 className="fl-booking-heading fl-booking-subtitle fl-booking-ink text-white font-semibold">Phone</h4>
                 <a
                   href="tel:+919667455591"
-                  className="fl-booking-accent text-(--text-muted) hover:text-(--gold-main) hover:underline transition"
+                  className="fl-booking-accent block text-(--text-muted) hover:text-(--gold-main) hover:underline transition"
                 >
                   +91 9667455591
+                </a>
+                <a
+                  href="tel:+917303055591"
+                  className="fl-booking-accent block text-(--text-muted) hover:text-(--gold-main) hover:underline transition"
+                >
+                  +91 7303055591
                 </a>
               </div>
             </motion.div>
@@ -220,6 +227,8 @@ const ContactPage = () => {
                 </p>
               </div>
             </motion.div>
+
+            <OfficeMap />
 
             <div className="fl-booking-line pt-4 border-t border-(--border-soft) text-(--text-muted)">
               Our team usually responds within 24 hours.

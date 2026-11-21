@@ -1,0 +1,69 @@
+DESTINATION PHOTOGRAPHY
+Local 960px Wikimedia Commons thumbnails. Circular crops are applied with CSS.
+
+paris.jpg
+File:Tour Eiffel Wikimedia Commons.jpg
+Author: Benh LIEU SONG
+Source: https://commons.wikimedia.org/wiki/File:Tour_Eiffel_Wikimedia_Commons.jpg
+License: Public domain
+License URL: undefined
+
+singapore.jpg
+File:Singapore Marina Bay Dusk 2018-02-27.jpg
+Author: Benh LIEU SONG (Flickr)
+Source: https://commons.wikimedia.org/wiki/File:Singapore_Marina_Bay_Dusk_2018-02-27.jpg
+License: CC BY-SA 4.0
+License URL: https://creativecommons.org/licenses/by-sa/4.0
+
+rome.jpg
+File:Colosseum in Rome, Italy - April 2007.jpg
+Author: Diliff
+Source: https://commons.wikimedia.org/wiki/File:Colosseum_in_Rome,_Italy_-_April_2007.jpg
+License: CC BY-SA 2.5
+License URL: https://creativecommons.org/licenses/by-sa/2.5
+
+bangkok.jpg
+File:Templo Wat Arun, Bangkok, Tailandia, 2013-08-22, DD 30.jpg
+Author: Diego Delso
+Source: https://commons.wikimedia.org/wiki/File:Templo_Wat_Arun,_Bangkok,_Tailandia,_2013-08-22,_DD_30.jpg
+License: CC BY-SA 3.0
+License URL: https://creativecommons.org/licenses/by-sa/3.0
+
+bali.jpg
+File:Pura Ulun Danu Bratan 3.JPG
+Author: Manuae
+Source: https://commons.wikimedia.org/wiki/File:Pura_Ulun_Danu_Bratan_3.JPG
+License: CC BY-SA 3.0
+License URL: https://creativecommons.org/licenses/by-sa/3.0
+
+phuket.jpg
+File:Phuket Thailand Wat-Chalong-01.jpg
+Author: CEphoto, Uwe Aranas
+Source: https://commons.wikimedia.org/wiki/File:Phuket_Thailand_Wat-Chalong-01.jpg
+License: CC BY-SA 4.0
+License URL: https://creativecommons.org/licenses/by-sa/4.0
+
+tokyo.jpg
+File:Tokyo Tower, Minato City.jpg
+Author: David Kernan
+Source: https://commons.wikimedia.org/wiki/File:Tokyo_Tower,_Minato_City.jpg
+License: CC BY 4.0
+License URL: https://creativecommons.org/licenses/by/4.0
+
+kerala.jpg
+File:Tea plantation and road ,munnar.jpg
+Author: Shino jacob koottanad
+Source: https://commons.wikimedia.org/wiki/File:Tea_plantation_and_road_,munnar.jpg
+License: CC BY-SA 4.0
+License URL: https://creativecommons.org/licenses/by-sa/4.0
+
+vietnam.jpg
+File:Hạ Long Bay Panorama, Vietnam.jpg
+Author: Mustang Joe
+Source: https://commons.wikimedia.org/wiki/File:H%E1%BA%A1_Long_Bay_Panorama,_Vietnam.jpg
+License: CC0
+License URL: http://creativecommons.org/publicdomain/zero/1.0/deed.en
+
+Additional existing photographs:
+Kashmir, Dubai, Goa, Manali, Jaipur: /images/hotel-destinations/
+Full authors, sources and licences: /images/hotel-destinations/CREDITS.txt
